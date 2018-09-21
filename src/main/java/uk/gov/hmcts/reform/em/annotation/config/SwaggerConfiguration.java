@@ -13,7 +13,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-@ComponentScan("uk.gov.hmcts.reform.em.annotation.controller")
+@ComponentScan("uk.gov.hmcts.reform.em.annotation.rest")
 public class SwaggerConfiguration {
 
     private final static String apiVersion = "0.0.1";
