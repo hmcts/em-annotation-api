@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <include file="./changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="true"/>
+    <include file="./changelog/20180917100756_added_entity_AnnotationSet.xml" relativeToChangelogFile="true"/>
+    <include file="./changelog/20180917100757_added_entity_Annotation.xml" relativeToChangelogFile="true"/>
+    <include file="./changelog/20180917100758_added_entity_Comment.xml" relativeToChangelogFile="true"/>
+    <include file="./changelog/20180917101255_added_entity_Rectangle.xml" relativeToChangelogFile="true"/>
+    <include file="./changelog/20180917112342_added_entity_EntityAuditEvent.xml" relativeToChangelogFile="true"/>
+    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="./changelog/20180917100757_added_entity_constraints_AnnotationSet.xml" relativeToChangelogFile="true"/>
+    <include file="./changelog/20180917100757_added_entity_constraints_Annotation.xml" relativeToChangelogFile="true"/>
+    <include file="./changelog/20180917100758_added_entity_constraints_Comment.xml" relativeToChangelogFile="true"/>
+    <include file="./changelog/20180917101255_added_entity_constraints_Rectangle.xml" relativeToChangelogFile="true"/>
+    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+</databaseChangeLog>
