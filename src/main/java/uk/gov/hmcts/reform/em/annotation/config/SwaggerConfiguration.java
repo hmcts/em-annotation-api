@@ -26,16 +26,15 @@ public class SwaggerConfiguration {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.regex("/continuous-online-hearings(.*)"))
+                .paths(PathSelectors.regex("/em-annotation-app(.*)"))
                 .build()
                 .apiInfo(apiInfo());
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Continuous Online Hearing API")
-                .description("Documented API for continuous online hearing."
-                        + "To use the API calls generate an Authorization JWT Tokens (user and service) which is required in the header.")
+                .title("EM Annotation App")
+                .description("API to store and retrieve annotations for DM Store")
                 .version(apiVersion)
                 .build();
     }
