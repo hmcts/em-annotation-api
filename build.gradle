@@ -159,7 +159,7 @@ dependencies {
 }
 
 bootJar {
-    baseName 'continuous-online-hearing'
+    baseName 'em-annotation-app'
     archiveName = "$baseName"+".jar"
     destinationDir = file("$rootDir/build/libs")
     manifest {
