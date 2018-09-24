@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
 import uk.gov.hmcts.reform.em.annotation.domain.AnnotationSet;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationSetRepository;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationSetService;
@@ -89,7 +90,7 @@ public class AnnotationSetServiceImpl implements AnnotationSetService {
     @Override
     public Optional<AnnotationSetDTO> findOneByDocumentId(String documentId) {
         return annotationSetRepository
-            .findByDocumentIdAndCreatedBy(documentId, "anonymousUser")
+            .findByDocumentIdAndCreatedBy(documentId, SecurityUtils.getCurrentUserLogin().get())
             .map(annotationSetMapper::toDto);
     }
 }
