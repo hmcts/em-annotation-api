@@ -29,19 +29,19 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="x" type="integer">
+            <column name="x" type="decimal(10,3)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="y" type="integer">
+            <column name="y" type="decimal(10,3)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="width" type="integer">
+            <column name="width" type="decimal(10,3)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="height" type="integer">
+            <column name="height" type="decimal(10,3)">
                 <constraints nullable="true" />
             </column>
 

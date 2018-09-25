@@ -31,17 +31,17 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
     @Column(name = "page")
     private Integer page;
 
-    @Column(name = "x")
-    private Integer x;
+    @Column(name = "x", precision=10, scale=3)
+    private Float x;
 
-    @Column(name = "y")
-    private Integer y;
+    @Column(name = "y", precision=10, scale=3)
+    private Float y;
 
-    @Column(name = "width")
-    private Integer width;
+    @Column(name = "width", precision=10, scale=3)
+    private Float width;
 
-    @Column(name = "height")
-    private Integer height;
+    @Column(name = "height", precision=10, scale=3)
+    private Float height;
 
     @OneToMany(mappedBy = "annotation", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
@@ -88,55 +88,55 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
         this.page = page;
     }
 
-    public Integer getX() {
+    public Float getX() {
         return x;
     }
 
-    public Annotation x(Integer x) {
+    public Annotation x(Float x) {
         this.x = x;
         return this;
     }
 
-    public void setX(Integer x) {
+    public void setX(Float x) {
         this.x = x;
     }
 
-    public Integer getY() {
+    public Float getY() {
         return y;
     }
 
-    public Annotation y(Integer y) {
+    public Annotation y(Float y) {
         this.y = y;
         return this;
     }
 
-    public void setY(Integer y) {
+    public void setY(Float y) {
         this.y = y;
     }
 
-    public Integer getWidth() {
+    public Float getWidth() {
         return width;
     }
 
-    public Annotation width(Integer width) {
+    public Annotation width(Float width) {
         this.width = width;
         return this;
     }
 
-    public void setWidth(Integer width) {
+    public void setWidth(Float width) {
         this.width = width;
     }
 
-    public Integer getHeight() {
+    public Float getHeight() {
         return height;
     }
 
-    public Annotation height(Integer height) {
+    public Annotation height(Float height) {
         this.height = height;
         return this;
     }
 
-    public void setHeight(Integer height) {
+    public void setHeight(Float height) {
         this.height = height;
     }
 
