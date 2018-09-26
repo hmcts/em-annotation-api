@@ -32,16 +32,16 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
     private Integer page;
 
     @Column(name = "x", precision=10, scale=3)
-    private Float x;
+    private Double x;
 
     @Column(name = "y", precision=10, scale=3)
-    private Float y;
+    private Double y;
 
     @Column(name = "width", precision=10, scale=3)
-    private Float width;
+    private Double width;
 
     @Column(name = "height", precision=10, scale=3)
-    private Float height;
+    private Double height;
 
     @OneToMany(mappedBy = "annotation", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
@@ -88,55 +88,55 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
         this.page = page;
     }
 
-    public Float getX() {
+    public Double getX() {
         return x;
     }
 
-    public Annotation x(Float x) {
+    public Annotation x(Double x) {
         this.x = x;
         return this;
     }
 
-    public void setX(Float x) {
+    public void setX(Double x) {
         this.x = x;
     }
 
-    public Float getY() {
+    public Double getY() {
         return y;
     }
 
-    public Annotation y(Float y) {
+    public Annotation y(Double y) {
         this.y = y;
         return this;
     }
 
-    public void setY(Float y) {
+    public void setY(Double y) {
         this.y = y;
     }
 
-    public Float getWidth() {
+    public Double getWidth() {
         return width;
     }
 
-    public Annotation width(Float width) {
+    public Annotation width(Double width) {
         this.width = width;
         return this;
     }
 
-    public void setWidth(Float width) {
+    public void setWidth(Double width) {
         this.width = width;
     }
 
-    public Float getHeight() {
+    public Double getHeight() {
         return height;
     }
 
-    public Annotation height(Float height) {
+    public Annotation height(Double height) {
         this.height = height;
         return this;
     }
 
-    public void setHeight(Float height) {
+    public void setHeight(Double height) {
         this.height = height;
     }
 

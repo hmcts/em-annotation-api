@@ -19,13 +19,13 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
 
     private Integer page;
 
-    private Float x;
+    private Double x;
 
-    private Float y;
+    private Double y;
 
-    private Float width;
+    private Double width;
 
-    private Float height;
+    private Double height;
 
     private Long annotationSetId;
 
@@ -57,35 +57,35 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
         this.page = page;
     }
 
-    public Float getX() {
+    public Double getX() {
         return x;
     }
 
-    public void setX(Float x) {
+    public void setX(Double x) {
         this.x = x;
     }
 
-    public Float getY() {
+    public Double getY() {
         return y;
     }
 
-    public void setY(Float y) {
+    public void setY(Double y) {
         this.y = y;
     }
 
-    public Float getWidth() {
+    public Double getWidth() {
         return width;
     }
 
-    public void setWidth(Float width) {
+    public void setWidth(Double width) {
         this.width = width;
     }
 
-    public Float getHeight() {
+    public Double getHeight() {
         return height;
     }
 
-    public void setHeight(Float height) {
+    public void setHeight(Double height) {
         this.height = height;
     }
 
