@@ -29,19 +29,23 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="x" type="decimal(10,3)">
+            <column name="color" type="varchar(10)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="y" type="decimal(10,3)">
+            <column name="x" type="decimal(10,6)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="width" type="decimal(10,3)">
+            <column name="y" type="decimal(10,6)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="height" type="decimal(10,3)">
+            <column name="width" type="decimal(10,6)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="height" type="decimal(10,6)">
                 <constraints nullable="true" />
             </column>
 
