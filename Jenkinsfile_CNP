@@ -3,8 +3,8 @@
 properties([
     [
         $class: 'GithubProjectProperty',
-        displayName: 'Evidence Management Store App',
-        projectUrlStr: 'https://github.com/hmcts/em-annotation-app'
+        displayName: 'Evidence Annotation App',
+        projectUrlStr: 'https://github.com/hmcts/rpa-em-annotation-api'
     ],
     pipelineTriggers([
         [$class: 'GitHubPushTrigger']
