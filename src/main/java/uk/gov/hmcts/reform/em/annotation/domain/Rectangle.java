@@ -22,16 +22,16 @@ public class Rectangle extends AbstractAuditingEntity implements Serializable {
     private Long id;
 
     @Column(name = "x")
-    private Float x;
+    private Double x;
 
     @Column(name = "y")
-    private Float y;
+    private Double y;
 
     @Column(name = "width")
-    private Float width;
+    private Double width;
 
     @Column(name = "height")
-    private Float height;
+    private Double height;
 
     @ManyToOne
     @JsonIgnoreProperties("rectangles")
@@ -46,55 +46,55 @@ public class Rectangle extends AbstractAuditingEntity implements Serializable {
         this.id = id;
     }
 
-    public Float getX() {
+    public Double getX() {
         return x;
     }
 
-    public Rectangle x(Float x) {
+    public Rectangle x(Double x) {
         this.x = x;
         return this;
     }
 
-    public void setX(Float x) {
+    public void setX(Double x) {
         this.x = x;
     }
 
-    public Float getY() {
+    public Double getY() {
         return y;
     }
 
-    public Rectangle y(Float y) {
+    public Rectangle y(Double y) {
         this.y = y;
         return this;
     }
 
-    public void setY(Float y) {
+    public void setY(Double y) {
         this.y = y;
     }
 
-    public Float getWidth() {
+    public Double getWidth() {
         return width;
     }
 
-    public Rectangle width(Float width) {
+    public Rectangle width(Double width) {
         this.width = width;
         return this;
     }
 
-    public void setWidth(Float width) {
+    public void setWidth(Double width) {
         this.width = width;
     }
 
-    public Float getHeight() {
+    public Double getHeight() {
         return height;
     }
 
-    public Rectangle height(Float height) {
+    public Rectangle height(Double height) {
         this.height = height;
         return this;
     }
 
-    public void setHeight(Float height) {
+    public void setHeight(Double height) {
         this.height = height;
     }
 

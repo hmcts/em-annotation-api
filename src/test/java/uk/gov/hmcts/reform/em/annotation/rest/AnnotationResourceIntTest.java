@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -47,17 +48,17 @@ public class AnnotationResourceIntTest {
     private static final Integer DEFAULT_PAGE = 1;
     private static final Integer UPDATED_PAGE = 2;
 
-    private static final Integer DEFAULT_X = 1;
-    private static final Integer UPDATED_X = 2;
+    private static final Double DEFAULT_X = 1d;
+    private static final Double UPDATED_X = 2d;
 
-    private static final Integer DEFAULT_Y = 1;
-    private static final Integer UPDATED_Y = 2;
+    private static final Double DEFAULT_Y = 1d;
+    private static final Double UPDATED_Y = 2d;
 
-    private static final Integer DEFAULT_WIDTH = 1;
-    private static final Integer UPDATED_WIDTH = 2;
+    private static final Double DEFAULT_WIDTH = 1d;
+    private static final Double UPDATED_WIDTH = 2d;
 
-    private static final Integer DEFAULT_HEIGHT = 1;
-    private static final Integer UPDATED_HEIGHT = 2;
+    private static final Double DEFAULT_HEIGHT = 1d;
+    private static final Double UPDATED_HEIGHT = 2d;
 
     @Autowired
     private AnnotationRepository annotationRepository;
@@ -174,7 +175,7 @@ public class AnnotationResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(annotation.getId().intValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_ANNOTATION_TYPE.toString())))
             .andExpect(jsonPath("$.[*].page").value(hasItem(DEFAULT_PAGE)))
-            .andExpect(jsonPath("$.[*].x").value(hasItem(DEFAULT_X)))
+            .andExpect(jsonPath("$.[*].x").value(hasItem(Matchers.is(DEFAULT_X))))
             .andExpect(jsonPath("$.[*].y").value(hasItem(DEFAULT_Y)))
             .andExpect(jsonPath("$.[*].width").value(hasItem(DEFAULT_WIDTH)))
             .andExpect(jsonPath("$.[*].height").value(hasItem(DEFAULT_HEIGHT)));

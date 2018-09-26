@@ -39,17 +39,17 @@ import static uk.gov.hmcts.reform.em.annotation.rest.TestUtil.createFormattingCo
 @SpringBootTest(classes = Application.class)
 public class RectangleResourceIntTest {
 
-    private static final Integer DEFAULT_X = 1;
-    private static final Integer UPDATED_X = 2;
+    private static final Double DEFAULT_X = 1d;
+    private static final Double UPDATED_X = 2d;
 
-    private static final Integer DEFAULT_Y = 1;
-    private static final Integer UPDATED_Y = 2;
+    private static final Double DEFAULT_Y = 1d;
+    private static final Double UPDATED_Y = 2d;
 
-    private static final Integer DEFAULT_WIDTH = 1;
-    private static final Integer UPDATED_WIDTH = 2;
+    private static final Double DEFAULT_WIDTH = 1d;
+    private static final Double UPDATED_WIDTH = 2d;
 
-    private static final Integer DEFAULT_HEIGHT = 1;
-    private static final Integer UPDATED_HEIGHT = 2;
+    private static final Double DEFAULT_HEIGHT = 1d;
+    private static final Double UPDATED_HEIGHT = 2d;
 
     @Autowired
     private RectangleRepository rectangleRepository;
