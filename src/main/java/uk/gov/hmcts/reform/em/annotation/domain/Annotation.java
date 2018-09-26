@@ -31,6 +31,9 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
     @Column(name = "page")
     private Integer page;
 
+    @Column(name = "color")
+    private String color;
+
     @Column(name = "x", precision=10, scale=3)
     private Double x;
 

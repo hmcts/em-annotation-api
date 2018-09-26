@@ -19,6 +19,8 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
 
     private Integer page;
 
+    private String color;
+
     private Double x;
 
     private Double y;
@@ -111,6 +113,14 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
 
     public void setRectangles(Set<RectangleDTO> rectangles) {
         this.rectangles = rectangles;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     @Override
