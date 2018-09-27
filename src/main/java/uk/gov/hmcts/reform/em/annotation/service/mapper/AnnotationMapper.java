@@ -8,6 +8,7 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
 
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Mapper for the entity Annotation and its DTO AnnotationDTO.
@@ -23,7 +24,7 @@ public interface AnnotationMapper extends EntityMapper<AnnotationDTO, Annotation
     @Mapping(source = "annotationSetId", target = "annotationSet")
     Annotation toEntity(AnnotationDTO annotationDTO);
 
-    default Annotation fromId(Long id) {
+    default Annotation fromId(UUID id) {
         if (id == null) {
             return null;
         }

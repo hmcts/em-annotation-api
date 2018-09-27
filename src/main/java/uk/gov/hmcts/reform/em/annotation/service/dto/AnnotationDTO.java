@@ -6,13 +6,14 @@ import uk.gov.hmcts.reform.em.annotation.domain.enumeration.AnnotationType;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * A DTO for the Annotation entity.
  */
 public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
 
-    private Long id;
+    private UUID id;
 
     @JsonProperty("type")
     private AnnotationType annotationType;
@@ -35,11 +36,11 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
 
     private Set<RectangleDTO> rectangles;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

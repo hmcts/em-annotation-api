@@ -23,6 +23,7 @@ import uk.gov.hmcts.reform.em.annotation.rest.errors.ExceptionTranslator;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -120,7 +121,7 @@ public class CommentResourceIntTest {
         int databaseSizeBeforeCreate = commentRepository.findAll().size();
 
         // Create the Comment with an existing ID
-        comment.setId(1L);
+        comment.setId(UUID.randomUUID());
         CommentDTO commentDTO = commentMapper.toDto(comment);
 
         // An entity with an existing ID cannot be created, so this API call must fail
@@ -144,7 +145,7 @@ public class CommentResourceIntTest {
         restCommentMockMvc.perform(get("/api/comments?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(comment.getId().intValue())))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(comment.getId())))
             .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())));
     }
     
@@ -158,7 +159,7 @@ public class CommentResourceIntTest {
         restCommentMockMvc.perform(get("/api/comments/{id}", comment.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(comment.getId().intValue()))
+            .andExpect(jsonPath("$.id").value(comment.getId()))
             .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT.toString()));
     }
 
@@ -240,11 +241,11 @@ public class CommentResourceIntTest {
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Comment.class);
         Comment comment1 = new Comment();
-        comment1.setId(1L);
+        comment1.setId(UUID.randomUUID());
         Comment comment2 = new Comment();
         comment2.setId(comment1.getId());
         assertThat(comment1).isEqualTo(comment2);
-        comment2.setId(2L);
+        comment2.setId(UUID.randomUUID());
         assertThat(comment1).isNotEqualTo(comment2);
         comment1.setId(null);
         assertThat(comment1).isNotEqualTo(comment2);
@@ -255,12 +256,12 @@ public class CommentResourceIntTest {
     public void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(CommentDTO.class);
         CommentDTO commentDTO1 = new CommentDTO();
-        commentDTO1.setId(1L);
+        commentDTO1.setId(UUID.randomUUID());
         CommentDTO commentDTO2 = new CommentDTO();
         assertThat(commentDTO1).isNotEqualTo(commentDTO2);
         commentDTO2.setId(commentDTO1.getId());
         assertThat(commentDTO1).isEqualTo(commentDTO2);
-        commentDTO2.setId(2L);
+        commentDTO2.setId(UUID.randomUUID());
         assertThat(commentDTO1).isNotEqualTo(commentDTO2);
         commentDTO1.setId(null);
         assertThat(commentDTO1).isNotEqualTo(commentDTO2);
@@ -269,7 +270,8 @@ public class CommentResourceIntTest {
     @Test
     @Transactional
     public void testEntityFromId() {
-        assertThat(commentMapper.fromId(42L).getId()).isEqualTo(42);
+        UUID uuid = UUID.randomUUID();
+        assertThat(commentMapper.fromId(uuid).getId()).isEqualTo(uuid);
         assertThat(commentMapper.fromId(null)).isNull();
     }
 }

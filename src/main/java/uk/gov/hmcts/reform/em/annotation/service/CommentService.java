@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Service Interface for managing Comment.
@@ -34,12 +35,12 @@ public interface CommentService {
      * @param id the id of the entity
      * @return the entity
      */
-    Optional<CommentDTO> findOne(Long id);
+    Optional<CommentDTO> findOne(UUID id);
 
     /**
      * Delete the "id" comment.
      *
      * @param id the id of the entity
      */
-    void delete(Long id);
+    void delete(UUID id);
 }

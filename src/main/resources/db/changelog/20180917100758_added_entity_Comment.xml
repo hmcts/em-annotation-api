@@ -18,14 +18,14 @@
     -->
     <changeSet id="20180917100758-1" author="pawel">
         <createTable tableName="comment">
-            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+            <column name="id" type="uuid" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="content" type="varchar(5000)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="annotation_id" type="bigint">
+            <column name="annotation_id" type="uuid">
                 <constraints nullable="true" />
             </column>
 

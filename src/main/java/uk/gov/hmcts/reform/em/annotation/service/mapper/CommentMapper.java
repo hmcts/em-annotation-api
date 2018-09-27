@@ -5,6 +5,8 @@ import org.mapstruct.Mapping;
 import uk.gov.hmcts.reform.em.annotation.domain.Comment;
 import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
 
+import java.util.UUID;
+
 /**
  * Mapper for the entity Comment and its DTO CommentDTO.
  */
@@ -17,7 +19,7 @@ public interface CommentMapper extends EntityMapper<CommentDTO, Comment> {
     @Mapping(source = "annotationId", target = "annotation")
     Comment toEntity(CommentDTO commentDTO);
 
-    default Comment fromId(Long id) {
+    default Comment fromId(UUID id) {
         if (id == null) {
             return null;
         }
