@@ -37,7 +37,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="annotation_id" type="bigint">
+            <column name="annotation_id" type="uuid">
                 <constraints nullable="true" />
             </column>
 

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Service Interface for managing Annotation.
@@ -34,12 +35,12 @@ public interface AnnotationService {
      * @param id the id of the entity
      * @return the entity
      */
-    Optional<AnnotationDTO> findOne(Long id);
+    Optional<AnnotationDTO> findOne(UUID id);
 
     /**
      * Delete the "id" annotation.
      *
      * @param id the id of the entity
      */
-    void delete(Long id);
+    void delete(UUID id);
 }

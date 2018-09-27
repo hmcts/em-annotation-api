@@ -41,6 +41,7 @@ liquibase {
             username liquibaseProps.getProperty('username')
             password liquibaseProps.getProperty('password')
             changeLogFile liquibaseProps.getProperty('changeLogFile')
+            referenceUrl liquibaseProps.getProperty('referenceUrl')
             defaultSchemaName ''
             logLevel 'debug'
             classpath 'src/main/resources/'
