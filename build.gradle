@@ -37,20 +37,20 @@ liquibase {
     activities {
         main {
             driver liquibaseProps.getProperty('driver')
-            url liquibaseProps.getProperty('url')
-            username liquibaseProps.getProperty('username')
-            password liquibaseProps.getProperty('password')
+            url project.hasProperty("dburl") ? "jdbc:postgresql://$dburl" : liquibaseProps.getProperty('url')
+            username project.hasProperty("flyway.user") ? "${rootProject.properties['flyway.user']}" : liquibaseProps.getProperty('username')
+            password project.hasProperty("flyway.password") ? "${rootProject.properties['flyway.password']}" : liquibaseProps.getProperty('password')
             changeLogFile liquibaseProps.getProperty('changeLogFile')
+            referenceUrl liquibaseProps.getProperty('referenceUrl')
             defaultSchemaName ''
             logLevel 'debug'
             classpath 'src/main/resources/'
         }
         diffLog {
             driver liquibaseProps.getProperty('driver')
-            url liquibaseProps.getProperty('url')
-            username liquibaseProps.getProperty('username')
-            password liquibaseProps.getProperty('password')
-            changeLogFile liquibaseProps.getProperty('changeLogFile')
+            url project.hasProperty("dburl") ? "jdbc:postgresql://$dburl" : liquibaseProps.getProperty('url')
+            username project.hasProperty("flyway.user") ? "${rootProject.properties['flyway.user']}" : liquibaseProps.getProperty('username')
+            password project.hasProperty("flyway.password") ? "${rootProject.properties['flyway.password']}" : liquibaseProps.getProperty('password')
             referenceUrl liquibaseProps.getProperty('referenceUrl')
             defaultSchemaName ''
             logLevel 'debug'
@@ -240,3 +240,5 @@ dependencyCheck {
 }
 
 compileJava.dependsOn processResources
+
+task migratePostgresDatabase(dependsOn: 'liquibaseUpdate')
