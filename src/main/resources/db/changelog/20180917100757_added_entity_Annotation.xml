@@ -33,22 +33,6 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="x" type="decimal(10,6)">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="y" type="decimal(10,6)">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="width" type="decimal(10,6)">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="height" type="decimal(10,6)">
-                <constraints nullable="true" />
-            </column>
-
             <column name="annotation_set_id" type="bigint">
                 <constraints nullable="true" />
             </column>
