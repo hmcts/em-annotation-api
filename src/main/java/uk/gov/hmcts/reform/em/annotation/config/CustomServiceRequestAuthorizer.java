@@ -43,7 +43,7 @@ public class CustomServiceRequestAuthorizer extends ServiceRequestAuthorizer {
             throw new BearerTokenMissingException();
         }
 
-        Service service = getTokenDetails(bearerToken);
+        Service service = getTokenDetails2(bearerToken);
         if (!authorizedServices.contains(service.getPrincipal().toLowerCase())) {
             throw new UnauthorisedServiceException();
         }
@@ -51,7 +51,7 @@ public class CustomServiceRequestAuthorizer extends ServiceRequestAuthorizer {
         return service;
     }
 
-    private Service getTokenDetails(String bearerToken) {
+    private Service getTokenDetails2(String bearerToken) {
         try {
             return serviceResolver.getTokenDetails(bearerToken);
         } catch (ServiceTokenInvalidException e) {
