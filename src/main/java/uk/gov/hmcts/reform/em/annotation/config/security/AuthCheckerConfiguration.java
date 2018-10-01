@@ -1,8 +1,13 @@
 package uk.gov.hmcts.reform.em.annotation.config.security;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import uk.gov.hmcts.reform.auth.checker.core.SubjectResolver;
+import uk.gov.hmcts.reform.auth.checker.core.service.Service;
+import uk.gov.hmcts.reform.auth.checker.core.service.ServiceRequestAuthorizer;
+import uk.gov.hmcts.reform.em.annotation.config.CustomServiceRequestAuthorizer;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
@@ -30,5 +35,10 @@ public class AuthCheckerConfiguration {
     @Bean
     public Function<HttpServletRequest, Collection<String>> authorizedRolesExtractor() {
         return request -> Collections.EMPTY_LIST;
+    }
+
+    @Bean
+    public ServiceRequestAuthorizer serviceRequestAuthorizer(SubjectResolver<Service> serviceResolver, Function<HttpServletRequest, Collection<String>> authorizedServicesExtractor) {
+        return new CustomServiceRequestAuthorizer(serviceResolver, authorizedServicesExtractor);
     }
 }
