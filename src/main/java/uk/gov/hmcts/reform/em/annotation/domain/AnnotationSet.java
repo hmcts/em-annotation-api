@@ -1,10 +1,13 @@
 package uk.gov.hmcts.reform.em.annotation.domain;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * A AnnotationSet.
@@ -18,9 +21,7 @@ public class AnnotationSet extends AbstractAuditingEntity implements Serializabl
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
+    private UUID id;
 
     @Column(name = "document_id")
     private String documentId;
@@ -29,11 +30,11 @@ public class AnnotationSet extends AbstractAuditingEntity implements Serializabl
     private Set<Annotation> annotations = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

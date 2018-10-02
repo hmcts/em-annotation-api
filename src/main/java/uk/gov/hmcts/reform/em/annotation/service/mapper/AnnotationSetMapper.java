@@ -5,6 +5,8 @@ import org.mapstruct.Mapping;
 import uk.gov.hmcts.reform.em.annotation.domain.AnnotationSet;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationSetDTO;
 
+import java.util.UUID;
+
 /**
  * Mapper for the entity AnnotationSet and its DTO AnnotationSetDTO.
  */
@@ -15,7 +17,7 @@ public interface AnnotationSetMapper extends EntityMapper<AnnotationSetDTO, Anno
     @Mapping(target = "annotations", ignore = true)
     AnnotationSet toEntity(AnnotationSetDTO annotationSetDTO);
 
-    default AnnotationSet fromId(Long id) {
+    default AnnotationSet fromId(UUID id) {
         if (id == null) {
             return null;
         }

@@ -18,7 +18,7 @@
     -->
     <changeSet id="20180917100758-1" author="pawel">
         <createTable tableName="comment">
-            <column name="id" type="uuid" autoIncrement="${autoIncrement}">
+            <column name="id" type="uuid">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="content" type="varchar(5000)">

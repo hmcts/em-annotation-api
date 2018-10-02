@@ -18,6 +18,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * REST controller for managing Rectangle.
@@ -47,8 +48,8 @@ public class RectangleResource {
     //@Timed
     public ResponseEntity<RectangleDTO> createRectangle(@RequestBody RectangleDTO rectangleDTO) throws URISyntaxException {
         log.debug("REST request to save Rectangle : {}", rectangleDTO);
-        if (rectangleDTO.getId() != null) {
-            throw new BadRequestAlertException("A new rectangle cannot already have an ID", ENTITY_NAME, "idexists");
+        if (rectangleDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         RectangleDTO result = rectangleService.save(rectangleDTO);
         return ResponseEntity.created(new URI("/api/rectangles/" + result.getId()))
@@ -101,7 +102,7 @@ public class RectangleResource {
      */
     @GetMapping("/rectangles/{id}")
     //@Timed
-    public ResponseEntity<RectangleDTO> getRectangle(@PathVariable Long id) {
+    public ResponseEntity<RectangleDTO> getRectangle(@PathVariable UUID id) {
         log.debug("REST request to get Rectangle : {}", id);
         Optional<RectangleDTO> rectangleDTO = rectangleService.findOne(id);
         return ResponseUtil.wrapOrNotFound(rectangleDTO);
@@ -115,7 +116,7 @@ public class RectangleResource {
      */
     @DeleteMapping("/rectangles/{id}")
     //@Timed
-    public ResponseEntity<Void> deleteRectangle(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRectangle(@PathVariable UUID id) {
         log.debug("REST request to delete Rectangle : {}", id);
         rectangleService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();

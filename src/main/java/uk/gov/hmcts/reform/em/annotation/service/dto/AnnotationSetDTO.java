@@ -3,13 +3,14 @@ package uk.gov.hmcts.reform.em.annotation.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * A DTO for the AnnotationSet entity.
  */
 public class AnnotationSetDTO extends AbstractAuditingDTO implements Serializable {
 
-    private Long id;
+    private UUID id;
 
     private String documentId;
 
@@ -23,11 +24,11 @@ public class AnnotationSetDTO extends AbstractAuditingDTO implements Serializabl
         this.annotations = annotations;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

@@ -48,9 +48,9 @@ public class AnnotationResource {
     //@Timed
     public ResponseEntity<AnnotationDTO> createAnnotation(@RequestBody AnnotationDTO annotationDTO) throws URISyntaxException {
         log.debug("REST request to save Annotation : {}", annotationDTO);
-//        if (annotationDTO.getId() != null) {
-//            throw new BadRequestAlertException("A new annotation cannot already have an ID", ENTITY_NAME, "idexists");
-//        }
+        if (annotationDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
         AnnotationDTO result = annotationService.save(annotationDTO);
         return ResponseEntity.created(new URI("/api/annotations/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))

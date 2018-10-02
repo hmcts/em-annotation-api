@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import uk.gov.hmcts.reform.em.annotation.domain.enumeration.AnnotationType;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -23,9 +22,8 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
     @Id
     private UUID id;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "annotation_type")
-    private AnnotationType annotationType;
+    private String annotationType;
 
     @Column(name = "page")
     private Integer page;
@@ -60,16 +58,16 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
         this.id = id;
     }
 
-    public AnnotationType getAnnotationType() {
+    public String getAnnotationType() {
         return annotationType;
     }
 
-    public Annotation annotationType(AnnotationType annotationType) {
+    public Annotation annotationType(String annotationType) {
         this.annotationType = annotationType;
         return this;
     }
 
-    public void setAnnotationType(AnnotationType annotationType) {
+    public void setAnnotationType(String annotationType) {
         this.annotationType = annotationType;
     }
 
