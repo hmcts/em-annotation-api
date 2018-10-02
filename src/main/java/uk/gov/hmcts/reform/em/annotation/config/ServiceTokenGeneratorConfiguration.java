@@ -30,13 +30,13 @@ public class ServiceTokenGeneratorConfiguration {
         return AuthTokenGeneratorFactory.createDefaultGenerator(secret, microService, serviceAuthorisationApi);
     }
 
-    @Bean
-    public SubjectResolver<Service> serviceResolver(final ServiceTokenParser serviceTokenParser, final ServiceAuthorisationApi serviceAuthorisationApi, AuthCheckerProperties properties) {
-        return new CachingSubjectResolver<>(new CustomServiceResolver(serviceTokenParser, serviceAuthorisationApi), properties.getService().getTtlInSeconds(), properties.getService().getMaximumSize());
-    }
-
-    @Bean
-    public SubjectResolver<User> userResolver(final UserTokenParser userTokenParser, final UserAuthorisationApi userAuthorisationApi, AuthCheckerProperties properties) {
-        return new CachingSubjectResolver<>(new CustomUserResolver(userTokenParser, userAuthorisationApi), properties.getService().getTtlInSeconds(), properties.getService().getMaximumSize());
-    }
+//    @Bean
+//    public SubjectResolver<Service> serviceResolver(final ServiceTokenParser serviceTokenParser, final ServiceAuthorisationApi serviceAuthorisationApi, AuthCheckerProperties properties) {
+//        return new CachingSubjectResolver<>(new CustomServiceResolver(serviceTokenParser, serviceAuthorisationApi), properties.getService().getTtlInSeconds(), properties.getService().getMaximumSize());
+//    }
+//
+//    @Bean
+//    public SubjectResolver<User> userResolver(final UserTokenParser userTokenParser, final UserAuthorisationApi userAuthorisationApi, AuthCheckerProperties properties) {
+//        return new CachingSubjectResolver<>(new CustomUserResolver(userTokenParser, userAuthorisationApi), properties.getService().getTtlInSeconds(), properties.getService().getMaximumSize());
+//    }
 }
