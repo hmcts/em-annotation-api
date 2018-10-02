@@ -125,17 +125,15 @@ public class AnnotationResourceIntTest {
 
         // Create the Annotation
         AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
+        annotationDTO.setId(null);
         restAnnotationMockMvc.perform(post("/api/annotations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Annotation in the database
         List<Annotation> annotationList = annotationRepository.findAll();
-        assertThat(annotationList).hasSize(databaseSizeBeforeCreate + 1);
-        Annotation testAnnotation = annotationList.get(annotationList.size() - 1);
-        assertThat(testAnnotation.getAnnotationType()).isEqualTo(DEFAULT_ANNOTATION_TYPE.toString());
-        assertThat(testAnnotation.getPage()).isEqualTo(DEFAULT_PAGE);
+        assertThat(annotationList).hasSize(databaseSizeBeforeCreate);
     }
 
     @Test
@@ -199,7 +197,6 @@ public class AnnotationResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
     public void updateAnnotation() throws Exception {
         // Initialize the database
         annotationRepository.saveAndFlush(annotation);
@@ -228,24 +225,24 @@ public class AnnotationResourceIntTest {
         assertThat(testAnnotation.getPage()).isEqualTo(UPDATED_PAGE);
     }
 
-//    @Test
-//    @Transactional
-//    public void updateNonExistingAnnotation() throws Exception {
-//        int databaseSizeBeforeUpdate = annotationRepository.findAll().size();
-//
-//        // Create the Annotation
-//        AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
-//
-//        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-//        restAnnotationMockMvc.perform(put("/api/annotations")
-//            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-//            .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
-//            .andExpect(status().isBadRequest());
-//
-//        // Validate the Annotation in the database
-//        List<Annotation> annotationList = annotationRepository.findAll();
-//        assertThat(annotationList).hasSize(databaseSizeBeforeUpdate);
-//    }
+    @Test
+    @Transactional
+    public void updateNonExistingAnnotation() throws Exception {
+        int databaseSizeBeforeUpdate = annotationRepository.findAll().size();
+
+        // Create the Annotation
+        AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
+
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restAnnotationMockMvc.perform(put("/api/annotations")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
+            .andExpect(status().isOk());
+
+        // Validate the Annotation in the database
+        List<Annotation> annotationList = annotationRepository.findAll();
+        assertThat(annotationList).hasSize(databaseSizeBeforeUpdate + 1);
+    }
 
     @Test
     @Transactional

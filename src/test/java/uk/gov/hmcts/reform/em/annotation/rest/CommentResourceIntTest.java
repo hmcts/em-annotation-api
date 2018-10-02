@@ -99,11 +99,32 @@ public class CommentResourceIntTest {
 
     @Test
     @Transactional
-    public void createComment() throws Exception {
+    public void createCommentUUIDNull() throws Exception {
         int databaseSizeBeforeCreate = commentRepository.findAll().size();
 
         // Create the Comment
         CommentDTO commentDTO = commentMapper.toDto(comment);
+        commentDTO.setId(null);
+        restCommentMockMvc.perform(post("/api/comments")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(commentDTO)))
+            .andExpect(status().isBadRequest());
+
+        // Validate the Comment in the database
+        List<Comment> commentList = commentRepository.findAll();
+        assertThat(commentList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
+    public void createCommentWithExistingId() throws Exception {
+        int databaseSizeBeforeCreate = commentRepository.findAll().size();
+
+        // Create the Comment with an existing ID
+        comment.setId(UUID.randomUUID());
+        CommentDTO commentDTO = commentMapper.toDto(comment);
+
+        // An entity with an existing ID cannot be created, so this API call must fail
         restCommentMockMvc.perform(post("/api/comments")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(commentDTO)))
@@ -112,29 +133,7 @@ public class CommentResourceIntTest {
         // Validate the Comment in the database
         List<Comment> commentList = commentRepository.findAll();
         assertThat(commentList).hasSize(databaseSizeBeforeCreate + 1);
-        Comment testComment = commentList.get(commentList.size() - 1);
-        assertThat(testComment.getContent()).isEqualTo(DEFAULT_CONTENT);
     }
-
-//    @Test
-//    @Transactional
-//    public void createCommentWithExistingId() throws Exception {
-//        int databaseSizeBeforeCreate = commentRepository.findAll().size();
-//
-//        // Create the Comment with an existing ID
-//        comment.setId(UUID.randomUUID());
-//        CommentDTO commentDTO = commentMapper.toDto(comment);
-//
-//        // An entity with an existing ID cannot be created, so this API call must fail
-//        restCommentMockMvc.perform(post("/api/comments")
-//            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-//            .content(TestUtil.convertObjectToJsonBytes(commentDTO)))
-//            .andExpect(status().isBadRequest());
-//
-//        // Validate the Comment in the database
-//        List<Comment> commentList = commentRepository.findAll();
-//        assertThat(commentList).hasSize(databaseSizeBeforeCreate);
-//    }
 
     @Test
     @Transactional
@@ -200,24 +199,24 @@ public class CommentResourceIntTest {
         assertThat(testComment.getContent()).isEqualTo(UPDATED_CONTENT);
     }
 
-//    @Test
-//    @Transactional
-//    public void updateNonExistingComment() throws Exception {
-//        int databaseSizeBeforeUpdate = commentRepository.findAll().size();
-//
-//        // Create the Comment
-//        CommentDTO commentDTO = commentMapper.toDto(comment);
-//
-//        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-//        restCommentMockMvc.perform(put("/api/comments")
-//            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-//            .content(TestUtil.convertObjectToJsonBytes(commentDTO)))
-//            .andExpect(status().isBadRequest());
-//
-//        // Validate the Comment in the database
-//        List<Comment> commentList = commentRepository.findAll();
-//        assertThat(commentList).hasSize(databaseSizeBeforeUpdate);
-//    }
+    @Test
+    @Transactional
+    public void updateNonExistingComment() throws Exception {
+        int databaseSizeBeforeUpdate = commentRepository.findAll().size();
+
+        // Create the Comment
+        CommentDTO commentDTO = commentMapper.toDto(comment);
+
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restCommentMockMvc.perform(put("/api/comments")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(commentDTO)))
+            .andExpect(status().isOk());
+
+        // Validate the Comment in the database
+        List<Comment> commentList = commentRepository.findAll();
+        assertThat(commentList).hasSize(databaseSizeBeforeUpdate + 1);
+    }
 
     @Test
     @Transactional

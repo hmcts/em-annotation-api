@@ -99,21 +99,20 @@ public class AnnotationSetResourceIntTest {
 
     @Test
     @Transactional
-    public void createAnnotationSet() throws Exception {
+    public void createAnnotationSetEmptyUUID() throws Exception {
         int databaseSizeBeforeCreate = annotationSetRepository.findAll().size();
 
         // Create the AnnotationSet
         AnnotationSetDTO annotationSetDTO = annotationSetMapper.toDto(annotationSet);
+        annotationSetDTO.setId(null);
         restAnnotationSetMockMvc.perform(post("/api/annotation-sets")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(annotationSetDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the AnnotationSet in the database
         List<AnnotationSet> annotationSetList = annotationSetRepository.findAll();
-        assertThat(annotationSetList).hasSize(databaseSizeBeforeCreate + 1);
-        AnnotationSet testAnnotationSet = annotationSetList.get(annotationSetList.size() - 1);
-        assertThat(testAnnotationSet.getDocumentId()).isEqualTo(DEFAULT_DOCUMENT_ID);
+        assertThat(annotationSetList).hasSize(databaseSizeBeforeCreate);
     }
 
     @Test
@@ -199,25 +198,25 @@ public class AnnotationSetResourceIntTest {
         AnnotationSet testAnnotationSet = annotationSetList.get(annotationSetList.size() - 1);
         assertThat(testAnnotationSet.getDocumentId()).isEqualTo(UPDATED_DOCUMENT_ID);
     }
-//
-//    @Test
-//    @Transactional
-//    public void updateNonExistingAnnotationSet() throws Exception {
-//        int databaseSizeBeforeUpdate = annotationSetRepository.findAll().size();
-//
-//        // Create the AnnotationSet
-//        AnnotationSetDTO annotationSetDTO = annotationSetMapper.toDto(annotationSet);
-//
-//        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-//        restAnnotationSetMockMvc.perform(put("/api/annotation-sets")
-//            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-//            .content(TestUtil.convertObjectToJsonBytes(annotationSetDTO)))
-//            .andExpect(status().isBadRequest());
-//
-//        // Validate the AnnotationSet in the database
-//        List<AnnotationSet> annotationSetList = annotationSetRepository.findAll();
-//        assertThat(annotationSetList).hasSize(databaseSizeBeforeUpdate);
-//    }
+
+    @Test
+    @Transactional
+    public void updateNonExistingAnnotationSet() throws Exception {
+        int databaseSizeBeforeUpdate = annotationSetRepository.findAll().size();
+
+        // Create the AnnotationSet
+        AnnotationSetDTO annotationSetDTO = annotationSetMapper.toDto(annotationSet);
+
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restAnnotationSetMockMvc.perform(put("/api/annotation-sets")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(annotationSetDTO)))
+            .andExpect(status().isOk());
+
+        // Validate the AnnotationSet in the database
+        List<AnnotationSet> annotationSetList = annotationSetRepository.findAll();
+        assertThat(annotationSetList).hasSize(databaseSizeBeforeUpdate + 1);
+    }
 
     @Test
     @Transactional
