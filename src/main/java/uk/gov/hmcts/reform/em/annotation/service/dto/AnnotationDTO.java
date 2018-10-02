@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import uk.gov.hmcts.reform.em.annotation.domain.enumeration.AnnotationType;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -24,9 +25,9 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
 
     private UUID annotationSetId;
 
-    private Set<CommentDTO> comments;
+    private Set<CommentDTO> comments = new HashSet<>();
 
-    private Set<RectangleDTO> rectangles;
+    private Set<RectangleDTO> rectangles = new HashSet<>();
 
     public UUID getId() {
         return id;

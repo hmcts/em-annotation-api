@@ -111,24 +111,20 @@ public class RectangleResourceIntTest {
 
     @Test
     @Transactional
-    public void createRectangle() throws Exception {
+    public void createRectangleUUIDNull() throws Exception {
         int databaseSizeBeforeCreate = rectangleRepository.findAll().size();
 
         // Create the Rectangle
         RectangleDTO rectangleDTO = rectangleMapper.toDto(rectangle);
+        rectangleDTO.setId(null);
         restRectangleMockMvc.perform(post("/api/rectangles")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(rectangleDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Rectangle in the database
         List<Rectangle> rectangleList = rectangleRepository.findAll();
-        assertThat(rectangleList).hasSize(databaseSizeBeforeCreate + 1);
-        Rectangle testRectangle = rectangleList.get(rectangleList.size() - 1);
-        assertThat(testRectangle.getX()).isEqualTo(DEFAULT_X);
-        assertThat(testRectangle.getY()).isEqualTo(DEFAULT_Y);
-        assertThat(testRectangle.getWidth()).isEqualTo(DEFAULT_WIDTH);
-        assertThat(testRectangle.getHeight()).isEqualTo(DEFAULT_HEIGHT);
+        assertThat(rectangleList).hasSize(databaseSizeBeforeCreate );
     }
 
     @Test
@@ -227,24 +223,24 @@ public class RectangleResourceIntTest {
         assertThat(testRectangle.getHeight()).isEqualTo(UPDATED_HEIGHT);
     }
 
-//    @Test
-//    @Transactional
-//    public void updateNonExistingRectangle() throws Exception {
-//        int databaseSizeBeforeUpdate = rectangleRepository.findAll().size();
-//
-//        // Create the Rectangle
-//        RectangleDTO rectangleDTO = rectangleMapper.toDto(rectangle);
-//
-//        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-//        restRectangleMockMvc.perform(put("/api/rectangles")
-//            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-//            .content(TestUtil.convertObjectToJsonBytes(rectangleDTO)))
-//            .andExpect(status().isBadRequest());
-//
-//        // Validate the Rectangle in the database
-//        List<Rectangle> rectangleList = rectangleRepository.findAll();
-//        assertThat(rectangleList).hasSize(databaseSizeBeforeUpdate);
-//    }
+    @Test
+    @Transactional
+    public void updateNonExistingRectangle() throws Exception {
+        int databaseSizeBeforeUpdate = rectangleRepository.findAll().size();
+
+        // Create the Rectangle
+        RectangleDTO rectangleDTO = rectangleMapper.toDto(rectangle);
+
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restRectangleMockMvc.perform(put("/api/rectangles")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(rectangleDTO)))
+            .andExpect(status().isOk());
+
+        // Validate the Rectangle in the database
+        List<Rectangle> rectangleList = rectangleRepository.findAll();
+        assertThat(rectangleList).hasSize(databaseSizeBeforeUpdate + 1);
+    }
 
     @Test
     @Transactional
