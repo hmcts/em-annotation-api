@@ -155,7 +155,9 @@ dependencies {
     annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor") {
         exclude group: 'com.vaadin.external.google', module: 'android-json'
     }
-    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: 'com.vaadin.external.google', module: 'android-json'
+    }
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'info.cukes', name: 'cucumber-junit', version: '1.2.5'
     testCompile group: 'info.cukes', name: 'cucumber-core', version: '1.2.5'
@@ -244,10 +246,10 @@ task smoke(type: Test) {
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
 
+task migratePostgresDatabase(dependsOn: 'liquibaseUpdate')
+
 dependencyCheck {
     suppressionFile = 'dependency-check-suppressions.xml'
 }
 
 compileJava.dependsOn processResources
-
-task migratePostgresDatabase(dependsOn: 'liquibaseUpdate')

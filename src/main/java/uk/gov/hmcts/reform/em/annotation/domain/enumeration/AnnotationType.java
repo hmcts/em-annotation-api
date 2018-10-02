@@ -4,5 +4,5 @@ package uk.gov.hmcts.reform.em.annotation.domain.enumeration;
  * The AnnotationType enumeration.
  */
 public enum AnnotationType {
-    AREA, highlight, POINT, TEXTBOX
+    AREA, HIGHLIGHT, POINT, TEXTBOX
 }

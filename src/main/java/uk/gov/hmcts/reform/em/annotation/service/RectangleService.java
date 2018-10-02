@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import uk.gov.hmcts.reform.em.annotation.service.dto.RectangleDTO;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Service Interface for managing Rectangle.
@@ -34,12 +35,12 @@ public interface RectangleService {
      * @param id the id of the entity
      * @return the entity
      */
-    Optional<RectangleDTO> findOne(Long id);
+    Optional<RectangleDTO> findOne(UUID id);
 
     /**
      * Delete the "id" rectangle.
      *
      * @param id the id of the entity
      */
-    void delete(Long id);
+    void delete(UUID id);
 }

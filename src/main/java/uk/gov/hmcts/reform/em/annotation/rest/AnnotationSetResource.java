@@ -19,6 +19,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * REST controller for managing AnnotationSet.
@@ -48,8 +49,8 @@ public class AnnotationSetResource {
     //@Timed
     public ResponseEntity<AnnotationSetDTO> createAnnotationSet(@RequestBody AnnotationSetDTO annotationSetDTO) throws URISyntaxException {
         log.debug("REST request to save AnnotationSet : {}", annotationSetDTO);
-        if (annotationSetDTO.getId() != null) {
-            throw new BadRequestAlertException("A new annotationSet cannot already have an ID", ENTITY_NAME, "idexists");
+        if (annotationSetDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         AnnotationSetDTO result = annotationSetService.save(annotationSetDTO);
         return ResponseEntity.created(new URI("/api/annotation-sets/" + result.getId()))
@@ -102,7 +103,7 @@ public class AnnotationSetResource {
      */
     @GetMapping("/annotation-sets/{id}")
     //@Timed
-    public ResponseEntity<AnnotationSetDTO> getAnnotationSet(@PathVariable Long id) {
+    public ResponseEntity<AnnotationSetDTO> getAnnotationSet(@PathVariable UUID id) {
         log.debug("REST request to get AnnotationSet : {}", id);
         Optional<AnnotationSetDTO> annotationSetDTO = annotationSetService.findOne(id);
         return ResponseUtil.wrapOrNotFound(annotationSetDTO);
@@ -116,7 +117,7 @@ public class AnnotationSetResource {
      */
     @DeleteMapping("/annotation-sets/{id}")
     //@Timed
-    public ResponseEntity<Void> deleteAnnotationSet(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAnnotationSet(@PathVariable UUID id) {
         log.debug("REST request to delete AnnotationSet : {}", id);
         annotationSetService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();

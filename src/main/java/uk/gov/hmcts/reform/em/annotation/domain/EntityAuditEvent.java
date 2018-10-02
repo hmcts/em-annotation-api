@@ -1,12 +1,15 @@
 package uk.gov.hmcts.reform.em.annotation.domain;
 
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "jhi_entity_audit_event")
@@ -16,13 +19,13 @@ public class EntityAuditEvent implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    private UUID id;
 
     @NotNull
     @Column(name = "entity_id", nullable = false)
-    private Long entityId;
+    private UUID entityId;
 
     @NotNull
     @Size(max = 255)
@@ -50,19 +53,19 @@ public class EntityAuditEvent implements Serializable{
     private Instant modifiedDate;
 
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public Long getEntityId() {
+    public UUID getEntityId() {
         return entityId;
     }
 
-    public void setEntityId(Long entityId) {
+    public void setEntityId(UUID entityId) {
         this.entityId = entityId;
     }
 

@@ -13,6 +13,7 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.RectangleDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.RectangleMapper;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Service Implementation for managing Rectangle.
@@ -69,7 +70,7 @@ public class RectangleServiceImpl implements RectangleService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<RectangleDTO> findOne(Long id) {
+    public Optional<RectangleDTO> findOne(UUID id) {
         log.debug("Request to get Rectangle : {}", id);
         return rectangleRepository.findById(id)
             .map(rectangleMapper::toDto);
@@ -81,7 +82,7 @@ public class RectangleServiceImpl implements RectangleService {
      * @param id the id of the entity
      */
     @Override
-    public void delete(Long id) {
+    public void delete(UUID id) {
         log.debug("Request to delete Rectangle : {}", id);
         rectangleRepository.deleteById(id);
     }

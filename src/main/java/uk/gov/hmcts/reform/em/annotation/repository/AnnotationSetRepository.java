@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.reform.em.annotation.domain.AnnotationSet;
 
 import java.util.Optional;
+import java.util.UUID;
 
 
 /**
@@ -12,7 +13,7 @@ import java.util.Optional;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface AnnotationSetRepository extends JpaRepository<AnnotationSet, Long> {
+public interface AnnotationSetRepository extends JpaRepository<AnnotationSet, UUID> {
 
     Optional<AnnotationSet> findByDocumentIdAndCreatedBy(String documentId, String createdBy);
 

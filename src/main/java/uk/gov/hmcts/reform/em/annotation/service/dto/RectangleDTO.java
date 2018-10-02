@@ -9,7 +9,7 @@ import java.util.UUID;
  */
 public class RectangleDTO extends AbstractAuditingDTO implements Serializable {
 
-    private Long id;
+    private UUID id;
 
     private Double x;
 
@@ -21,11 +21,11 @@ public class RectangleDTO extends AbstractAuditingDTO implements Serializable {
 
     private UUID annotationId;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

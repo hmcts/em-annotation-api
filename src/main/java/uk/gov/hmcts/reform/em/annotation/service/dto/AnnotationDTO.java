@@ -16,13 +16,13 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
     private UUID id;
 
     @JsonProperty("type")
-    private AnnotationType annotationType;
+    private String annotationType;
 
     private Integer page;
 
     private String color;
 
-    private Long annotationSetId;
+    private UUID annotationSetId;
 
     private Set<CommentDTO> comments;
 
@@ -36,11 +36,11 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
         this.id = id;
     }
 
-    public AnnotationType getAnnotationType() {
+    public String getAnnotationType() {
         return annotationType;
     }
 
-    public void setAnnotationType(AnnotationType annotationType) {
+    public void setAnnotationType(String annotationType) {
         this.annotationType = annotationType;
     }
 
@@ -52,11 +52,11 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
         this.page = page;
     }
 
-    public Long getAnnotationSetId() {
+    public UUID getAnnotationSetId() {
         return annotationSetId;
     }
 
-    public void setAnnotationSetId(Long annotationSetId) {
+    public void setAnnotationSetId(UUID annotationSetId) {
         this.annotationSetId = annotationSetId;
     }
 
