@@ -113,6 +113,8 @@ app-insights:
 #  includes2shealth: ${ENABLE_S2S_HEALTH_CHECK:false}
 
 idam:
+  user-auth:
+    url: ${IDAM_USER_BASE_URI:http://localhost:4501}
   s2s-auth:
     url: ${S2S_BASE_URI:http://localhost:4502}
     totp_secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
