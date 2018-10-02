@@ -18,6 +18,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * REST controller for managing Annotation.
@@ -47,9 +48,9 @@ public class AnnotationResource {
     //@Timed
     public ResponseEntity<AnnotationDTO> createAnnotation(@RequestBody AnnotationDTO annotationDTO) throws URISyntaxException {
         log.debug("REST request to save Annotation : {}", annotationDTO);
-        if (annotationDTO.getId() != null) {
-            throw new BadRequestAlertException("A new annotation cannot already have an ID", ENTITY_NAME, "idexists");
-        }
+//        if (annotationDTO.getId() != null) {
+//            throw new BadRequestAlertException("A new annotation cannot already have an ID", ENTITY_NAME, "idexists");
+//        }
         AnnotationDTO result = annotationService.save(annotationDTO);
         return ResponseEntity.created(new URI("/api/annotations/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -101,7 +102,7 @@ public class AnnotationResource {
      */
     @GetMapping("/annotations/{id}")
     //@Timed
-    public ResponseEntity<AnnotationDTO> getAnnotation(@PathVariable Long id) {
+    public ResponseEntity<AnnotationDTO> getAnnotation(@PathVariable UUID id) {
         log.debug("REST request to get Annotation : {}", id);
         Optional<AnnotationDTO> annotationDTO = annotationService.findOne(id);
         return ResponseUtil.wrapOrNotFound(annotationDTO);
@@ -115,7 +116,7 @@ public class AnnotationResource {
      */
     @DeleteMapping("/annotations/{id}")
     //@Timed
-    public ResponseEntity<Void> deleteAnnotation(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAnnotation(@PathVariable UUID id) {
         log.debug("REST request to delete Annotation : {}", id);
         annotationService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();

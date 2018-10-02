@@ -19,6 +19,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * REST controller for managing Comment.
@@ -102,7 +103,7 @@ public class CommentResource {
      */
     @GetMapping("/comments/{id}")
     //@Timed
-    public ResponseEntity<CommentDTO> getComment(@PathVariable Long id) {
+    public ResponseEntity<CommentDTO> getComment(@PathVariable UUID id) {
         log.debug("REST request to get Comment : {}", id);
         Optional<CommentDTO> commentDTO = commentService.findOne(id);
         return ResponseUtil.wrapOrNotFound(commentDTO);
@@ -116,7 +117,7 @@ public class CommentResource {
      */
     @DeleteMapping("/comments/{id}")
     //@Timed
-    public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteComment(@PathVariable UUID id) {
         log.debug("REST request to delete Comment : {}", id);
         commentService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();

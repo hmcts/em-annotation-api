@@ -13,6 +13,7 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.CommentMapper;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Service Implementation for managing Comment.
@@ -69,7 +70,7 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<CommentDTO> findOne(Long id) {
+    public Optional<CommentDTO> findOne(UUID id) {
         log.debug("Request to get Comment : {}", id);
         return commentRepository.findById(id)
             .map(commentMapper::toDto);
@@ -81,7 +82,7 @@ public class CommentServiceImpl implements CommentService {
      * @param id the id of the entity
      */
     @Override
-    public void delete(Long id) {
+    public void delete(UUID id) {
         log.debug("Request to delete Comment : {}", id);
         commentRepository.deleteById(id);
     }

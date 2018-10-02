@@ -18,7 +18,7 @@
     -->
     <changeSet id="20180917100757-1" author="pawel">
         <createTable tableName="annotation">
-            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+            <column name="id" type="uuid" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="annotation_type" type="varchar(255)">
@@ -30,22 +30,6 @@
             </column>
 
             <column name="color" type="varchar(10)">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="x" type="decimal(10,6)">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="y" type="decimal(10,6)">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="width" type="decimal(10,6)">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="height" type="decimal(10,6)">
                 <constraints nullable="true" />
             </column>
 

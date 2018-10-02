@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Service Implementation for managing Annotation.
@@ -93,7 +94,7 @@ public class AnnotationServiceImpl implements AnnotationService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<AnnotationDTO> findOne(Long id) {
+    public Optional<AnnotationDTO> findOne(UUID id) {
         log.debug("Request to get Annotation : {}", id);
         return annotationRepository.findById(id)
             .map(annotationMapper::toDto);
@@ -105,7 +106,7 @@ public class AnnotationServiceImpl implements AnnotationService {
      * @param id the id of the entity
      */
     @Override
-    public void delete(Long id) {
+    public void delete(UUID id) {
         log.debug("Request to delete Annotation : {}", id);
         annotationRepository.deleteById(id);
     }

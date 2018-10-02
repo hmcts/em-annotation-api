@@ -26,6 +26,7 @@ import uk.gov.hmcts.reform.em.annotation.rest.errors.ExceptionTranslator;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -84,6 +85,8 @@ public class AnnotationResourceIntTest {
     private MockMvc restAnnotationMockMvc;
 
     private Annotation annotation;
+
+    private UUID uuid;
 
     @Before
     public void setup() {
@@ -148,7 +151,8 @@ public class AnnotationResourceIntTest {
         int databaseSizeBeforeCreate = annotationRepository.findAll().size();
 
         // Create the Annotation with an existing ID
-        annotation.setId(1L);
+        uuid = UUID.randomUUID();
+        annotation.setId(uuid);
         AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
 
         // An entity with an existing ID cannot be created, so this API call must fail
@@ -172,7 +176,7 @@ public class AnnotationResourceIntTest {
         restAnnotationMockMvc.perform(get("/api/annotations?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(annotation.getId().intValue())))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(annotation.getId())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_ANNOTATION_TYPE.toString())))
             .andExpect(jsonPath("$.[*].page").value(hasItem(DEFAULT_PAGE)))
             .andExpect(jsonPath("$.[*].x").value(hasItem(Matchers.is(DEFAULT_X))))
@@ -191,7 +195,7 @@ public class AnnotationResourceIntTest {
         restAnnotationMockMvc.perform(get("/api/annotations/{id}", annotation.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(annotation.getId().intValue()))
+            .andExpect(jsonPath("$.id").value(annotation.getId()))
             .andExpect(jsonPath("$.type").value(DEFAULT_ANNOTATION_TYPE.toString()))
             .andExpect(jsonPath("$.page").value(DEFAULT_PAGE))
             .andExpect(jsonPath("$.x").value(DEFAULT_X))
@@ -289,11 +293,11 @@ public class AnnotationResourceIntTest {
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Annotation.class);
         Annotation annotation1 = new Annotation();
-        annotation1.setId(1L);
+        annotation1.setId(UUID.randomUUID());
         Annotation annotation2 = new Annotation();
         annotation2.setId(annotation1.getId());
         assertThat(annotation1).isEqualTo(annotation2);
-        annotation2.setId(2L);
+        annotation2.setId(uuid);
         assertThat(annotation1).isNotEqualTo(annotation2);
         annotation1.setId(null);
         assertThat(annotation1).isNotEqualTo(annotation2);
@@ -304,12 +308,12 @@ public class AnnotationResourceIntTest {
     public void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(AnnotationDTO.class);
         AnnotationDTO annotationDTO1 = new AnnotationDTO();
-        annotationDTO1.setId(1L);
+        annotationDTO1.setId(UUID.randomUUID());
         AnnotationDTO annotationDTO2 = new AnnotationDTO();
         assertThat(annotationDTO1).isNotEqualTo(annotationDTO2);
         annotationDTO2.setId(annotationDTO1.getId());
         assertThat(annotationDTO1).isEqualTo(annotationDTO2);
-        annotationDTO2.setId(2L);
+        annotationDTO2.setId(uuid);
         assertThat(annotationDTO1).isNotEqualTo(annotationDTO2);
         annotationDTO1.setId(null);
         assertThat(annotationDTO1).isNotEqualTo(annotationDTO2);
@@ -318,7 +322,7 @@ public class AnnotationResourceIntTest {
     @Test
     @Transactional
     public void testEntityFromId() {
-        assertThat(annotationMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(annotationMapper.fromId(uuid).getId()).isEqualTo(uuid);
         assertThat(annotationMapper.fromId(null)).isNull();
     }
 }
