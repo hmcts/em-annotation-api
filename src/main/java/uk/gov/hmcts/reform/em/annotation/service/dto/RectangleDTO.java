@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.em.annotation.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A DTO for the Rectangle entity.
@@ -18,7 +19,7 @@ public class RectangleDTO extends AbstractAuditingDTO implements Serializable {
 
     private Double height;
 
-    private Long annotationId;
+    private UUID annotationId;
 
     public Long getId() {
         return id;
@@ -60,11 +61,11 @@ public class RectangleDTO extends AbstractAuditingDTO implements Serializable {
         this.height = height;
     }
 
-    public Long getAnnotationId() {
+    public UUID getAnnotationId() {
         return annotationId;
     }
 
-    public void setAnnotationId(Long annotationId) {
+    public void setAnnotationId(UUID annotationId) {
         this.annotationId = annotationId;
     }
 

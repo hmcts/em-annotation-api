@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * A Annotation.
@@ -20,9 +21,7 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
+    private UUID id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "annotation_type")
@@ -34,18 +33,6 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
     @Column(name = "color")
     private String color;
 
-    @Column(name = "x", precision=10, scale=3)
-    private Double x;
-
-    @Column(name = "y", precision=10, scale=3)
-    private Double y;
-
-    @Column(name = "width", precision=10, scale=3)
-    private Double width;
-
-    @Column(name = "height", precision=10, scale=3)
-    private Double height;
-
     @OneToMany(mappedBy = "annotation", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
 
@@ -56,12 +43,20 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
     @JsonIgnoreProperties("annotations")
     private AnnotationSet annotationSet;
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -89,58 +84,6 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
 
     public void setPage(Integer page) {
         this.page = page;
-    }
-
-    public Double getX() {
-        return x;
-    }
-
-    public Annotation x(Double x) {
-        this.x = x;
-        return this;
-    }
-
-    public void setX(Double x) {
-        this.x = x;
-    }
-
-    public Double getY() {
-        return y;
-    }
-
-    public Annotation y(Double y) {
-        this.y = y;
-        return this;
-    }
-
-    public void setY(Double y) {
-        this.y = y;
-    }
-
-    public Double getWidth() {
-        return width;
-    }
-
-    public Annotation width(Double width) {
-        this.width = width;
-        return this;
-    }
-
-    public void setWidth(Double width) {
-        this.width = width;
-    }
-
-    public Double getHeight() {
-        return height;
-    }
-
-    public Annotation height(Double height) {
-        this.height = height;
-        return this;
-    }
-
-    public void setHeight(Double height) {
-        this.height = height;
     }
 
     public Set<Comment> getComments() {
@@ -230,13 +173,13 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
     @Override
     public String toString() {
         return "Annotation{" +
-            "id=" + getId() +
-            ", annotationType='" + getAnnotationType() + "'" +
-            ", page=" + getPage() +
-            ", x=" + getX() +
-            ", y=" + getY() +
-            ", width=" + getWidth() +
-            ", height=" + getHeight() +
-            "}";
+            "id=" + id +
+            ", annotationType=" + annotationType +
+            ", page=" + page +
+            ", color='" + color + '\'' +
+            ", comments=" + comments +
+            ", rectangles=" + rectangles +
+            ", annotationSet=" + annotationSet +
+            '}';
     }
 }
