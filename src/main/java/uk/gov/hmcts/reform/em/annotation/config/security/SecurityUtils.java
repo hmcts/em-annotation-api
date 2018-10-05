@@ -33,6 +33,18 @@ public final class SecurityUtils {
             });
     }
 
+    public static Optional<EmServiceAndUserDetails> getCurrentUserDetails() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        return Optional.ofNullable(securityContext.getAuthentication())
+                .map(authentication -> {
+                    if (authentication.getPrincipal() instanceof UserDetails) {
+                        EmServiceAndUserDetails springSecurityUser = (EmServiceAndUserDetails) authentication.getPrincipal();
+                        return springSecurityUser;
+                    }
+                    return null;
+                });
+    }
+
     /**
      * Get the JWT of the current user.
      *
