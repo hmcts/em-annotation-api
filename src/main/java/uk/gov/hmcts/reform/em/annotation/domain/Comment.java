@@ -15,7 +15,6 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "comment")
-
 public class Comment extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

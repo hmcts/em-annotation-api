@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
+import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 import uk.gov.hmcts.reform.em.annotation.domain.Rectangle;
 import uk.gov.hmcts.reform.em.annotation.repository.RectangleRepository;
 import uk.gov.hmcts.reform.em.annotation.service.RectangleService;
@@ -86,6 +87,8 @@ public class RectangleResourceIntTest {
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter).build();
+        em.persist(new IdamDetails("system"));
+        em.persist(new IdamDetails("anonymous"));
     }
 
     /**

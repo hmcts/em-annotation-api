@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.domain.Comment;
+import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 import uk.gov.hmcts.reform.em.annotation.repository.CommentRepository;
 import uk.gov.hmcts.reform.em.annotation.service.CommentService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
@@ -77,6 +78,8 @@ public class CommentResourceIntTest {
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter).build();
+        em.persist(new IdamDetails("system"));
+        em.persist(new IdamDetails("anonymous"));
     }
 
     /**
@@ -95,6 +98,7 @@ public class CommentResourceIntTest {
     @Before
     public void initTest() {
         comment = createEntity(em);
+
     }
 
     @Test

@@ -1,17 +1,21 @@
-package uk.gov.hmcts.reform.em.annotation.config.security;
+package uk.gov.hmcts.reform.em.annotation.authchecker;
 
-import uk.gov.hmcts.reform.auth.checker.core.user.User;
+import uk.gov.hmcts.reform.auth.checker.spring.useronly.UserDetails;
 
-import java.util.Set;
+import java.util.Collection;
 
-public class EmUser extends User {
+public class EmUserDetails extends UserDetails {
 
     private String forename;
     private String surname;
     private String email;
 
-    public EmUser(String principleId, Set<String> roles, String forename, String surname, String email) {
-        super(principleId, roles);
+    public EmUserDetails(String username, String token, Collection<String> authorities) {
+        super(username, token, authorities);
+    }
+
+    public EmUserDetails(String username, String token, Collection<String> authorities, String forename, String surname, String email) {
+        super(username, token, authorities);
         this.forename = forename;
         this.surname = surname;
         this.email = email;
@@ -40,4 +44,6 @@ public class EmUser extends User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+
 }

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.config.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -12,6 +13,9 @@ import uk.gov.hmcts.reform.auth.checker.core.RequestAuthorizer;
 import uk.gov.hmcts.reform.auth.checker.core.service.Service;
 import uk.gov.hmcts.reform.auth.checker.core.user.User;
 import uk.gov.hmcts.reform.auth.checker.spring.serviceanduser.AuthCheckerServiceAndUserFilter;
+import uk.gov.hmcts.reform.em.annotation.filter.IdamDetailsFilter;
+import uk.gov.hmcts.reform.em.annotation.repository.AnnotationSetRepository;
+import uk.gov.hmcts.reform.em.annotation.service.IdamDetailsFilterService;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -28,6 +32,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.authCheckerFilter = new AuthCheckerServiceAndUserFilter(serviceRequestAuthorizer, userRequestAuthorizer);
         this.authCheckerFilter.setAuthenticationManager(authenticationManager);
     }
+
+    @Autowired
+    IdamDetailsFilterService idamDetailsFilterService;
 
     @Override
     public void configure(WebSecurity web) {
@@ -50,6 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.antMatcher("/api/**")
             .addFilter(authCheckerFilter)
+            .addFilterAfter(new IdamDetailsFilter(idamDetailsFilterService), AuthCheckerServiceAndUserFilter.class)
             .sessionManagement().sessionCreationPolicy(STATELESS).and()
             .csrf().disable()
             .formLogin().disable()

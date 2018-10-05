@@ -10,10 +10,13 @@
     <include file="./changelog/20180917100758_added_entity_Comment.xml" relativeToChangelogFile="true"/>
     <include file="./changelog/20180917101255_added_entity_Rectangle.xml" relativeToChangelogFile="true"/>
     <include file="./changelog/20180917112342_added_entity_EntityAuditEvent.xml" relativeToChangelogFile="true"/>
-    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+
     <include file="./changelog/20180917100757_added_entity_constraints_AnnotationSet.xml" relativeToChangelogFile="true"/>
     <include file="./changelog/20180917100757_added_entity_constraints_Annotation.xml" relativeToChangelogFile="true"/>
     <include file="./changelog/20180917100758_added_entity_constraints_Comment.xml" relativeToChangelogFile="true"/>
     <include file="./changelog/20180917101255_added_entity_constraints_Rectangle.xml" relativeToChangelogFile="true"/>
-    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+
+    <include file="./changelog/20181005171348_changelog.xml" relativeToChangelogFile="true"/>
+
+
 </databaseChangeLog>
