@@ -8,9 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uk.gov.hmcts.reform.em.annotation.config.audit.EntityAuditEventListener;
 
-import javax.persistence.Column;
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
 
@@ -29,6 +27,10 @@ public abstract class AbstractAuditingEntity implements Serializable {
     @Column(name = "created_by", nullable = false, length = 50, updatable = false)
     private String createdBy;
 
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="created_by",insertable = false, updatable = false)
+    private IdamDetails createdByDetails;
+
     @CreatedDate
     @Column(name = "created_date", nullable = false, updatable = false)
     private Instant createdDate = Instant.now();
@@ -36,6 +38,10 @@ public abstract class AbstractAuditingEntity implements Serializable {
     @LastModifiedBy
     @Column(name = "last_modified_by", length = 50)
     private String lastModifiedBy;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="last_modified_by",insertable = false, updatable = false)
+    private IdamDetails lastModifiedByDetails;
 
     @LastModifiedDate
     @Column(name = "last_modified_date")
@@ -72,5 +78,21 @@ public abstract class AbstractAuditingEntity implements Serializable {
 
     public void setLastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public IdamDetails getCreatedByDetails() {
+        return createdByDetails;
+    }
+
+    public void setCreatedByDetails(IdamDetails createdByDetails) {
+        this.createdByDetails = createdByDetails;
+    }
+
+    public IdamDetails getLastModifiedByDetails() {
+        return lastModifiedByDetails;
+    }
+
+    public void setLastModifiedByDetails(IdamDetails lastModifiedByDetails) {
+        this.lastModifiedByDetails = lastModifiedByDetails;
     }
 }

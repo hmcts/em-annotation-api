@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.em.annotation.config.security;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import uk.gov.hmcts.reform.em.annotation.authchecker.EmServiceAndUserDetails;
 
 import java.util.Optional;
 
@@ -37,7 +38,7 @@ public final class SecurityUtils {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
                 .map(authentication -> {
-                    if (authentication.getPrincipal() instanceof UserDetails) {
+                    if (authentication.getPrincipal() instanceof EmServiceAndUserDetails) {
                         EmServiceAndUserDetails springSecurityUser = (EmServiceAndUserDetails) authentication.getPrincipal();
                         return springSecurityUser;
                     }

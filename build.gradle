@@ -15,7 +15,7 @@ plugins {
     id "net.ltgt.apt-idea" version "0.18"
     id "net.ltgt.apt" version "0.18"
     id 'jacoco'
-    id 'org.liquibase.gradle' version '2.0.1'
+//    id 'org.liquibase.gradle' version '2.0.1'
 //    id "com.github.spacialcircumstances.gradle-cucumber-reporting" version "0.0.11"
 }
 
@@ -27,6 +27,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'org.owasp.dependencycheck'
 apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'idea'
+apply from: 'gradle/liquibase.gradle'
 
 dependencyManagement {
     imports {
@@ -38,39 +39,6 @@ if (!project.hasProperty('runList')) {
     project.ext.runList = 'main'
 }
 
-//loading properties file.
-Properties liquibaseProps = new Properties()
-liquibaseProps.load(new FileInputStream("$projectDir/src/main/resources/liquibase.properties"))
-
-project.ext.diffChangelogFile = 'src/main/resources/db/changelog/' + new Date().format('yyyyMMddHHmmss') + '_changelog.xml'
-
-liquibase {
-    activities {
-        main {
-            driver liquibaseProps.getProperty('driver')
-            url project.hasProperty("dburl") ? "jdbc:postgresql://$dburl" : liquibaseProps.getProperty('url')
-            username project.hasProperty("flyway.user") ? "${rootProject.properties['flyway.user']}" : liquibaseProps.getProperty('username')
-            password project.hasProperty("flyway.password") ? "${rootProject.properties['flyway.password']}" : liquibaseProps.getProperty('password')
-            changeLogFile liquibaseProps.getProperty('changeLogFile')
-            referenceUrl liquibaseProps.getProperty('referenceUrl')
-            defaultSchemaName ''
-            logLevel 'debug'
-            classpath 'src/main/resources/'
-        }
-        diffLog {
-            driver liquibaseProps.getProperty('driver')
-            url project.hasProperty("dburl") ? "jdbc:postgresql://$dburl" : liquibaseProps.getProperty('url')
-            username project.hasProperty("flyway.user") ? "${rootProject.properties['flyway.user']}" : liquibaseProps.getProperty('username')
-            password project.hasProperty("flyway.password") ? "${rootProject.properties['flyway.password']}" : liquibaseProps.getProperty('password')
-            referenceUrl liquibaseProps.getProperty('referenceUrl')
-            defaultSchemaName ''
-            logLevel 'debug'
-            classpath 'src/main/resources/'
-        }
-    }
-
-    runList = project.ext.runList
-}
 
 group 'uk.gov.hmcts.reform.em.annotation'
 version '0.0.1'
@@ -128,10 +96,8 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile( 'org.apache.httpcomponents:httpclient:4.5.5')
     compile "org.liquibase:liquibase-core"
-    liquibaseRuntime "org.liquibase:liquibase-core"
-    liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibase_hibernate5_version}"
-    liquibaseRuntime sourceSets.main.compileClasspath
-    liquibaseRuntime "org.postgresql:postgresql"
+    compile "org.liquibase:liquibase-core"
+//    compile "com.mattbertolini:liquibase-slf4j"
     compile("org.postgresql:postgresql:${versions.postgresql}")
     compile group: 'info.cukes', name: 'cucumber-java', version: '1.2.5'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
@@ -163,7 +129,7 @@ dependencies {
     testCompile group: 'info.cukes', name: 'cucumber-core', version: '1.2.5'
     testCompile group: 'info.cukes', name: 'cucumber-spring', version: '1.2.5'
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.197'
-    liquibaseRuntime "com.h2database:h2"
+//    testCompile "com.mattbertolini:liquibase-slf4j"
     compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: '3.0.1'
     compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '3.0.1'
 }
@@ -246,10 +212,9 @@ task smoke(type: Test) {
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
 
-task migratePostgresDatabase(dependsOn: 'liquibaseUpdate')
-
 dependencyCheck {
     suppressionFile = 'dependency-check-suppressions.xml'
 }
 
 compileJava.dependsOn processResources
+

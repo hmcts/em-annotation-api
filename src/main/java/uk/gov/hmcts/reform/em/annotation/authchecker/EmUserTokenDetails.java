@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.em.annotation.config.security;
+package uk.gov.hmcts.reform.em.annotation.authchecker;
 
 import uk.gov.hmcts.reform.auth.parser.idam.core.user.token.UserTokenDetails;
 

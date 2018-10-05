@@ -1,20 +1,17 @@
 package uk.gov.hmcts.reform.em.annotation.config.security;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
 import uk.gov.hmcts.reform.auth.checker.core.CachingSubjectResolver;
 import uk.gov.hmcts.reform.auth.checker.core.SubjectResolver;
 import uk.gov.hmcts.reform.auth.checker.core.user.User;
-import uk.gov.hmcts.reform.auth.checker.core.user.UserResolver;
 import uk.gov.hmcts.reform.auth.checker.spring.AuthCheckerProperties;
-import uk.gov.hmcts.reform.auth.parser.idam.core.user.token.HttpComponentsBasedUserTokenParser;
-import uk.gov.hmcts.reform.auth.parser.idam.core.user.token.UserTokenDetails;
 import uk.gov.hmcts.reform.auth.parser.idam.core.user.token.UserTokenParser;
+import uk.gov.hmcts.reform.em.annotation.authchecker.EmAuthCheckerUserDetailsService;
+import uk.gov.hmcts.reform.em.annotation.authchecker.EmUserResolver;
+import uk.gov.hmcts.reform.em.annotation.authchecker.EmUserTokenDetails;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
@@ -45,7 +42,7 @@ public class AuthCheckerConfiguration {
     }
 
     @Bean
-    public SubjectResolver<User> userResolver( UserTokenParser<EmUserTokenDetails> emUserTokenParser, AuthCheckerProperties properties) {
+    public SubjectResolver<User> userResolver(UserTokenParser<EmUserTokenDetails> emUserTokenParser, AuthCheckerProperties properties) {
         return new CachingSubjectResolver<>(new EmUserResolver(emUserTokenParser), properties.getUser().getTtlInSeconds(), properties.getUser().getMaximumSize());
     }
 

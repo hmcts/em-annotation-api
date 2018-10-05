@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.em.annotation.config.security;
+package uk.gov.hmcts.reform.em.annotation.authchecker;
 
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -6,7 +6,6 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 import uk.gov.hmcts.reform.auth.checker.core.service.Service;
 import uk.gov.hmcts.reform.auth.checker.spring.serviceanduser.ServiceAndUserPair;
 import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.ServiceDetails;
-import uk.gov.hmcts.reform.em.annotation.config.EmUserDetails;
 
 public class EmAuthCheckerUserDetailsService implements AuthenticationUserDetailsService<PreAuthenticatedAuthenticationToken> {
 

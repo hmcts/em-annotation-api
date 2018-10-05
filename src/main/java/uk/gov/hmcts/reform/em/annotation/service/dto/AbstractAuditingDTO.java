@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.em.annotation.service.dto;
 
 import org.springframework.data.annotation.ReadOnlyProperty;
+import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -15,6 +16,11 @@ public abstract class AbstractAuditingDTO implements Serializable {
 
     @ReadOnlyProperty
     private String createdBy;
+
+    @ReadOnlyProperty
+    private IdamDetails createdByDetails;
+    @ReadOnlyProperty
+    private IdamDetails lastModifiedByDetails;
 
     @ReadOnlyProperty
     private Instant createdDate = Instant.now();
@@ -53,5 +59,21 @@ public abstract class AbstractAuditingDTO implements Serializable {
 
     public void setLastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public IdamDetails getCreatedByDetails() {
+        return createdByDetails;
+    }
+
+    public void setCreatedByDetails(IdamDetails createdByDetails) {
+        this.createdByDetails = createdByDetails;
+    }
+
+    public IdamDetails getLastModifiedByDetails() {
+        return lastModifiedByDetails;
+    }
+
+    public void setLastModifiedByDetails(IdamDetails lastModifiedByDetails) {
+        this.lastModifiedByDetails = lastModifiedByDetails;
     }
 }
