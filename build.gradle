@@ -147,6 +147,7 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/reform/em/annotation/Application*',
     '**uk/gov/hmcts/reform/em/annotation/appinsights/*',
     '**uk/gov/hmcts/reform/em/annotation/domain/*',
+    '**uk/gov/hmcts/reform/em/annotation/authchecker/*',
     '**uk/gov/hmcts/reform/em/annotation/config/*',
 ]
 
