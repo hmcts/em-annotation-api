@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
+import uk.gov.hmcts.reform.em.annotation.domain.AbstractAuditingEntity;
 
 import javax.persistence.PostPersist;
 import javax.persistence.PostRemove;
