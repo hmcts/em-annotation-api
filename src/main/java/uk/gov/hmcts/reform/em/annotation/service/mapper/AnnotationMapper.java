@@ -22,6 +22,8 @@ public interface AnnotationMapper extends EntityMapper<AnnotationDTO, Annotation
     @Mapping(target = "comments")
     @Mapping(target = "rectangles")
     @Mapping(source = "annotationSetId", target = "annotationSet")
+    @Mapping(target = "createdByDetails", ignore = true)
+    @Mapping(target = "lastModifiedByDetails", ignore = true)
     Annotation toEntity(AnnotationDTO annotationDTO);
 
     default Annotation fromId(UUID id) {
