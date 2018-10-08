@@ -17,6 +17,8 @@ public interface CommentMapper extends EntityMapper<CommentDTO, Comment> {
     CommentDTO toDto(Comment comment);
 
     @Mapping(source = "annotationId", target = "annotation")
+    @Mapping(target = "createdByDetails", ignore = true)
+    @Mapping(target = "lastModifiedByDetails", ignore = true)
     Comment toEntity(CommentDTO commentDTO);
 
     default Comment fromId(UUID id) {

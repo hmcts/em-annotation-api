@@ -15,6 +15,8 @@ public interface AnnotationSetMapper extends EntityMapper<AnnotationSetDTO, Anno
 
 
     @Mapping(target = "annotations", ignore = true)
+    @Mapping(target = "createdByDetails", ignore = true)
+    @Mapping(target = "lastModifiedByDetails", ignore = true)
     AnnotationSet toEntity(AnnotationSetDTO annotationSetDTO);
 
     default AnnotationSet fromId(UUID id) {

@@ -17,6 +17,8 @@ public interface RectangleMapper extends EntityMapper<RectangleDTO, Rectangle> {
     RectangleDTO toDto(Rectangle rectangle);
 
     @Mapping(source = "annotationId", target = "annotation")
+    @Mapping(target = "createdByDetails", ignore = true)
+    @Mapping(target = "lastModifiedByDetails", ignore = true)
     Rectangle toEntity(RectangleDTO rectangleDTO);
 
     default Rectangle fromId(UUID id) {
