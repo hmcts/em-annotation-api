@@ -42,7 +42,7 @@ def liquibaseCommand(command, changeLogFile = "--changeLogFile=src/main/resource
         }
         main = "liquibase.integration.commandline.Main"
 
-        def urlString = project.hasProperty("dburl") ? "jdbc:postgresql://$dburl" : "jdbc:postgresql://localhost:5432/emannotationapp"
+        def urlString = project.hasProperty("dburl") ? "jdbc:postgresql://$dburl" : "jdbc:postgresql://localhost:5444/emannotationapp"
         def user = project.hasProperty("flyway.user") ? "${rootProject.properties['flyway.user']}" : 'emannotationapp'
         def password = project.hasProperty("flyway.password") ? "${rootProject.properties['flyway.password']}" : 'emannotationapp'
 
