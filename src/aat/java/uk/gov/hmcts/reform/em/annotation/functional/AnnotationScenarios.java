@@ -38,7 +38,9 @@ public class AnnotationScenarios {
             .body(jsonObject.toString())
             .request("POST", Env.getTestUrl() + "/api/annotation-sets")
             .then()
-            .statusCode(201);
+            .statusCode(201)
+            .body("createdBy", is(testUtil.getUserId().toString()));
+
 
         UUID annotationId = UUID.randomUUID();
         JSONObject createAnnotations = new JSONObject();
@@ -74,12 +76,15 @@ public class AnnotationScenarios {
                 .then()
                 .statusCode(201)
                 .body("id", equalTo(annotationId.toString()))
+                .body("createdBy", is(testUtil.getUserId().toString()))
                 .body("rectangles", Matchers.hasSize(1))
+                .body("rectangles[0].createdBy", is(testUtil.getUserId().toString()))
                 .body("rectangles[0].x", is(0f))
                 .body("rectangles[0].y", is(0f))
                 .body("rectangles[0].width", is(10f))
                 .body("rectangles[0].height", is(11f))
                 .body("comments[0].content", is("text"))
+                .body("comments[0].createdBy", is(testUtil.getUserId().toString()))
                 .body("comments", Matchers.hasSize(1));
 
         comment.put("content", "text2");

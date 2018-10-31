@@ -14,7 +14,6 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "annotation")
-
 public class Annotation extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
