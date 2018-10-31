@@ -52,10 +52,11 @@ public class AnnotationSetResource {
         if (annotationSetDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AnnotationSetDTO result = annotationSetService.save(annotationSetDTO);
-        return ResponseEntity.created(new URI("/api/annotation-sets/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        annotationSetService.save(annotationSetDTO);
+        Optional<AnnotationSetDTO> createdAnnotationSetDto = annotationSetService.findOne(annotationSetDTO.getId());
+        return ResponseEntity.created(new URI("/api/annotation-sets/" + annotationSetDTO.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, annotationSetDTO.getId().toString()))
+            .body(createdAnnotationSetDto.get());
     }
 
     /**

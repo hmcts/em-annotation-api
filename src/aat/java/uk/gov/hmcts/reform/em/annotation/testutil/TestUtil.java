@@ -11,10 +11,11 @@ public class TestUtil {
 
     private String s2sToken;
     private String idamToken;
+    private Integer userId;
 
     public RequestSpecification authRequest() throws Exception {
         return s2sAuthRequest()
-            .header("Authorization", "Bearer " + getIdamToken("test@test.com"));
+            .header("Authorization", "Bearer " + generateIdamToken("test@test.com"));
     }
 
     public RequestSpecification s2sAuthRequest() throws Exception {
@@ -24,7 +25,7 @@ public class TestUtil {
                 .header("ServiceAuthorization", "Bearer " + getS2sToken());
     }
 
-    public String getIdamToken(String username) {
+    public String generateIdamToken(String username) {
         if (idamToken == null) {
             createUser(username, "password");
             String userId = findUserIdByUserEmail(username).toString();
@@ -46,11 +47,12 @@ public class TestUtil {
     }
 
     private Integer findUserIdByUserEmail(String email) {
-        return RestAssured
+        userId = RestAssured
                 .get(Env.getIdamURL() + "/users?email=" + email)
                 .getBody()
                 .jsonPath()
                 .get("id");
+        return userId;
     }
 
     public void createUser(String email, String password) {
@@ -91,4 +93,23 @@ public class TestUtil {
 
     }
 
+    public void setS2sToken(String s2sToken) {
+        this.s2sToken = s2sToken;
+    }
+
+    public String generateIdamToken() {
+        return idamToken;
+    }
+
+    public void setIdamToken(String idamToken) {
+        this.idamToken = idamToken;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 }
