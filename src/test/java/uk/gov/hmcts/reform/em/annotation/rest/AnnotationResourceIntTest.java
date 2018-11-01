@@ -139,6 +139,27 @@ public class AnnotationResourceIntTest {
 
     @Test
     @Transactional
+    public void createAnnotationWithExistingId() throws Exception {
+        int databaseSizeBeforeCreate = annotationRepository.findAll().size();
+
+        // Create the Annotation with an existing ID
+        uuid = UUID.randomUUID();
+        annotation.setId(uuid);
+        AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
+
+        // An entity with an existing ID cannot be created, so this API call must fail
+        restAnnotationMockMvc.perform(post("/api/annotations")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
+            .andExpect(status().isCreated());
+
+        // Validate the Annotation in the database
+        List<Annotation> annotationList = annotationRepository.findAll();
+        assertThat(annotationList).hasSize(databaseSizeBeforeCreate + 1);
+    }
+
+    @Test
+    @Transactional
     public void getAllAnnotations() throws Exception {
         // Initialize the database
         annotationRepository.saveAndFlush(annotation);

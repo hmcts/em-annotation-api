@@ -13,6 +13,7 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import java.util.Optional;
 import java.util.UUID;
@@ -99,7 +100,13 @@ public class AnnotationServiceImpl implements AnnotationService {
     public Optional<AnnotationDTO> findOne(UUID id, boolean refresh) {
         Optional<Annotation> annotation = annotationRepository.findById(id);
         if (refresh) {
-            annotation.ifPresent( a -> entityManager.refresh(a) );
+            annotation.ifPresent( a -> {
+                try {
+                    entityManager.refresh(a);
+                } catch (EntityNotFoundException e) {
+                    log.debug("entity not found", e);
+                }
+            });
         }
         return annotation.map(annotationMapper::toDto);
     }
