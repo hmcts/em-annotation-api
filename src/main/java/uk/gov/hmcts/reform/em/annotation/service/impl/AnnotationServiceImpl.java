@@ -8,13 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.domain.Annotation;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationRepository;
-import uk.gov.hmcts.reform.em.annotation.repository.AnnotationSetRepository;
-import uk.gov.hmcts.reform.em.annotation.repository.CommentRepository;
-import uk.gov.hmcts.reform.em.annotation.repository.RectangleRepository;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,19 +29,15 @@ public class AnnotationServiceImpl implements AnnotationService {
     private final AnnotationRepository annotationRepository;
 
     private final AnnotationMapper annotationMapper;
-    private final RectangleRepository rectangleRepository;
-    private final CommentRepository commentRepository;
-    private final AnnotationSetRepository annotationSetRepository;
 
-    public AnnotationServiceImpl(AnnotationRepository annotationRepository, AnnotationMapper annotationMapper, RectangleRepository rectangleRepository, CommentRepository commentRepository, AnnotationSetRepository annotationSetRepository) {
+    @PersistenceContext
+    private final EntityManager entityManager;
+
+    public AnnotationServiceImpl(AnnotationRepository annotationRepository, AnnotationMapper annotationMapper, EntityManager entityManager) {
         this.annotationRepository = annotationRepository;
         this.annotationMapper = annotationMapper;
-        this.rectangleRepository = rectangleRepository;
-        this.commentRepository = commentRepository;
-        this.annotationSetRepository = annotationSetRepository;
+        this.entityManager = entityManager;
     }
-
-
 
     /**
      * Save a annotation.
@@ -96,8 +91,17 @@ public class AnnotationServiceImpl implements AnnotationService {
     @Transactional(readOnly = true)
     public Optional<AnnotationDTO> findOne(UUID id) {
         log.debug("Request to get Annotation : {}", id);
-        return annotationRepository.findById(id)
-            .map(annotationMapper::toDto);
+        return findOne(id, false);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<AnnotationDTO> findOne(UUID id, boolean refresh) {
+        Optional<Annotation> annotation = annotationRepository.findById(id);
+        if (refresh) {
+            annotation.ifPresent( a -> entityManager.refresh(a) );
+        }
+        return annotation.map(annotationMapper::toDto);
     }
 
     /**
