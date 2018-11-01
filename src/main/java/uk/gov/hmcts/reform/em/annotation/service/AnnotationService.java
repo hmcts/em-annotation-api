@@ -37,10 +37,14 @@ public interface AnnotationService {
      */
     Optional<AnnotationDTO> findOne(UUID id);
 
+    Optional<AnnotationDTO> findOne(UUID id, boolean refresh);
+
     /**
      * Delete the "id" annotation.
      *
      * @param id the id of the entity
      */
     void delete(UUID id);
+
+
 }

@@ -43,6 +43,7 @@ public class TestUtil {
 
             idamToken = response.getBody().print();
         }
+        System.out.println("Authorization: "+idamToken);
         return idamToken;
     }
 
@@ -87,8 +88,10 @@ public class TestUtil {
                     .body(jsonObject.toString())
                     .post(Env.getS2SURL() + "/lease");
             s2sToken = response.getBody().asString();
-        }
 
+
+        }
+        System.out.println("ServiceAuthorization: "+s2sToken);
         return s2sToken;
 
     }
