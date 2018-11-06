@@ -91,10 +91,6 @@ module "db" {
   common_tags  = "${var.common_tags}"
 }
 
-provider "vault" {
-  address = "https://vault.reform.hmcts.net:6200"
-}
-
 data "azurerm_key_vault_secret" "s2s_key" {
   name      = "microservicekey-em-annotation-app"
   vault_uri = "https://s2s-${local.local_env}.vault.azure.net/"
