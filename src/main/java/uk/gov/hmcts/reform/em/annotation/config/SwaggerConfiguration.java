@@ -26,14 +26,13 @@ public class SwaggerConfiguration {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.regex("/em-annotation-app(.*)"))
+                .paths(PathSelectors.regex("/api(.*)"))
                 .build()
                 .apiInfo(apiInfo());
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("EM Annotation App")
                 .description("API to store and retrieve annotations for DM Store")
                 .version(apiVersion)
                 .build();

@@ -1,5 +1,9 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -26,6 +30,7 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping("/api")
+@Api(value="annotationsets", description = "Operations pertaining to annotation sets")
 public class AnnotationSetResource {
 
     private final Logger log = LoggerFactory.getLogger(AnnotationSetResource.class);
@@ -45,6 +50,13 @@ public class AnnotationSetResource {
      * @return the ResponseEntity with status 201 (Created) and with body the new annotationSetDTO, or with status 400 (Bad Request) if the annotationSet has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
+    @ApiOperation(value = "Create an annotationSetDTO", notes = "A POST request to create an annotationSetDTO")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successfully created", response = AnnotationSetDTO.class),
+            @ApiResponse(code = 400, message = "annotationSetDTO not valid, invalid id"),
+            @ApiResponse(code = 401, message = "Unauthorised"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+    })
     @PostMapping("/annotation-sets")
     //@Timed
     public ResponseEntity<AnnotationSetDTO> createAnnotationSet(@RequestBody AnnotationSetDTO annotationSetDTO) throws URISyntaxException {
@@ -71,6 +83,15 @@ public class AnnotationSetResource {
      * or with status 500 (Internal Server Error) if the annotationSetDTO couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
+    @ApiOperation(value = "Update an existing annotationSetDTO", notes = "A PUT request to update an annotationSetDTO")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = AnnotationSetDTO.class),
+            @ApiResponse(code = 400, message = "annotationSetDTO not valid, invalid id"),
+            @ApiResponse(code = 500, message = "annotationSetDTO couldn't be updated"),
+            @ApiResponse(code = 401, message = "Unauthorised"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found"),
+    })
     @PutMapping("/annotation-sets")
     //@Timed
     public ResponseEntity<AnnotationSetDTO> updateAnnotationSet(@RequestBody AnnotationSetDTO annotationSetDTO) throws URISyntaxException {
@@ -90,6 +111,13 @@ public class AnnotationSetResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of annotationSets in body
      */
+    @ApiOperation(value = "Get all annotationSets", notes = "A GET request without a body is used to retrieve all annotationSets")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = AnnotationSetDTO.class, responseContainer = "List"),
+            @ApiResponse(code = 401, message = "Unauthorised"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found"),
+    })
     @GetMapping("/annotation-sets")
     //@Timed
     public ResponseEntity<List<AnnotationSetDTO>> getAllAnnotationSets(Pageable pageable) {
@@ -105,6 +133,13 @@ public class AnnotationSetResource {
      * @param id the id of the annotationSetDTO to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the annotationSetDTO, or with status 404 (Not Found)
      */
+    @ApiOperation(value = "Get an existing annotationSetDTO", notes = "A GET request to retrieve an annotationSetDTO")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = AnnotationSetDTO.class),
+            @ApiResponse(code = 401, message = "Unauthorised"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found"),
+    })
     @GetMapping("/annotation-sets/{id}")
     //@Timed
     public ResponseEntity<AnnotationSetDTO> getAnnotationSet(@PathVariable UUID id) {
@@ -119,6 +154,13 @@ public class AnnotationSetResource {
      * @param id the id of the annotationSetDTO to delete
      * @return the ResponseEntity with status 200 (OK)
      */
+    @ApiOperation(value = "Delete an annotationSetDTO", notes = "A DELETE request to delete an annotationSetDTO")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 401, message = "Unauthorised"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found"),
+    })
     @DeleteMapping("/annotation-sets/{id}")
     //@Timed
     public ResponseEntity<Void> deleteAnnotationSet(@PathVariable UUID id) {
