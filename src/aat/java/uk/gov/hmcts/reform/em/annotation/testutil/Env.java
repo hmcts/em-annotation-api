@@ -9,6 +9,7 @@ public class Env {
     static Properties defaults = new Properties();
 
     static {
+        defaults.setProperty("PROXY", "false");
         defaults.setProperty("TEST_URL", "http://localhost:8080");
         defaults.setProperty("S2S_TOKEN", "AAAAAAAAAAAAAAAA");
         defaults.setProperty("S2S_SERVICE_NAME", "em_gw");
@@ -17,6 +18,8 @@ public class Env {
         defaults.setProperty("IDAM_API_USER", "test@test.com");
         defaults.setProperty("IDAM_API_URL", "http://localhost:4501");
     }
+
+    public static String getUseProxy() { return require("PROXY"); }
 
     public static String getTestUrl() {
         return require("TEST_URL");
