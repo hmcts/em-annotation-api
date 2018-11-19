@@ -74,8 +74,8 @@ class AnnoLoad extends Simulation with HttpConfiguration {
 //  val scn = scenario("Anno load test").exec(CreateAnnotationSet.createTask)
   val scn = scenario("Anno creation test")
     .exec(CreateAnnotationSet.createTask)
-    .repeat(2) {
-      feed(csv("/home/velican/feeder.csv"))
+    .repeat(10) {
+      feed(csv("/home/velican/feeder.csv")).feed(Iterator.continually(Map("annotationSetId" -> CreateAnnotationSet.newAnnotationSetId.toString)))
         .exec(CreateAnnotations.createAnnotation)
     }
 
