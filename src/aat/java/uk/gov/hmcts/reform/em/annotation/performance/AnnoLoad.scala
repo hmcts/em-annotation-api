@@ -65,7 +65,7 @@ class AnnoLoad extends Simulation with HttpConfiguration {
       .header("Authorization", CreateAnnotationSet.authorization)
       .header("ServiceAuthorization", CreateAnnotationSet.serviceAuthorization)
       .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-      .body(StringBody(annotationJsonObject.toString))
+      .body(ElFileBody("/home/velican/annotation.json"))
       .check(
         status.find.in(201)
       ))
@@ -73,8 +73,11 @@ class AnnoLoad extends Simulation with HttpConfiguration {
 
 //  val scn = scenario("Anno load test").exec(CreateAnnotationSet.createTask)
   val scn = scenario("Anno creation test")
-                .exec(CreateAnnotationSet.createTask)
-                .exec(CreateAnnotations.createAnnotation)
+    .exec(CreateAnnotationSet.createTask)
+    .repeat(2) {
+      feed(csv("/home/velican/feeder.csv"))
+        .exec(CreateAnnotations.createAnnotation)
+    }
 
   setUp(scn.inject(atOnceUsers(1)).protocols(httpProtocol))
     .assertions(details("createTask").failedRequests.percent.is(0))
