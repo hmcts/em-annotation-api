@@ -61,7 +61,7 @@ class AnnoLoad extends Simulation with HttpConfiguration {
     annotationJsonObject.put("rectangles", rectangles)
 
     val createAnnotation = exec(http("createAnnotation")
-      .post(Env.getTestUrl + "/api/em-anno/annotations")
+      .post(Env.getTestUrl + "/api/annotations")
       .header("Authorization", CreateAnnotationSet.authorization)
       .header("ServiceAuthorization", CreateAnnotationSet.serviceAuthorization)
       .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
