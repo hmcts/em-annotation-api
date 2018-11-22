@@ -33,6 +33,7 @@ public class SwaggerConfiguration {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
+                .title("EM Annotation API")
                 .description("API to store and retrieve annotations for DM Store")
                 .version(apiVersion)
                 .build();
