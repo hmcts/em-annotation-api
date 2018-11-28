@@ -18,6 +18,7 @@ def product = "em"
 def component = "anno"
 def vault = "rpa"
 def channel = '#rpa-pipeline'
+// TODO Alec had no 'app' defined, example has def app = "recipe-backend". Do I need to define the app variable?
 
 List<LinkedHashMap<String, Object>> secrets = [
     secret('em-s2s-token', 'S2S_TOKEN')

@@ -4,5 +4,10 @@ metadata:
   name: ${SERVICE_NAME}-config
   namespace: ${NAMESPACE}
 data:
-  IDAM_API_BASE_URI: "https://preprod-idamapi.reform.hmcts.net:3511"
+  IDAM_API_BASE_URI: "https://preprod-idamapi.reform.hmcts.net:3511" #TODO Are these correct? Written by Alec
   S2S_BASE_URI: "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+# TODO This data is NOT referenced in any sections within deployment.template.yaml. Can be added by the following lines, should it be?
+#within spec: -> containers: ->
+#      envFrom:
+#        - configMapRef:
+#            name: ${SERVICE_NAME}-config

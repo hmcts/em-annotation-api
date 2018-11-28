@@ -21,7 +21,7 @@ spec:
       containers:
         - image: ${IMAGE_NAME}
           name: ${SERVICE_NAME}
-          env:
+          env: #TODO Are these env variables correct? Where did he get these values from, application.yaml?
             - name: SPRING_DATASOURCE_URL
               value: 'jdbc:postgresql://shared-database:5432/emannotationapp?ssl=true'
             - name: SPRING_DATASOURCE_USERNAME
@@ -82,10 +82,13 @@ spec:
               memory: '2048Mi'
               cpu: '2500m'
           ports:
-            - containerPort: 4400
+            - containerPort: 4550
               name: http
           imagePullPolicy: Always
 ---
+#
+# Service
+#
 apiVersion: v1
 kind: Service
 metadata:
@@ -98,10 +101,13 @@ spec:
     - name: http
       protocol: TCP
       port: 80
-      targetPort: 4400
+      targetPort: 4550
   selector:
     app: ${SERVICE_NAME}
 ---
+#
+# INGRESS
+#
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -119,11 +125,9 @@ spec:
               serviceName: ${SERVICE_NAME}
               servicePort: 80
 ---
----
 #
 # DATABASE
 #
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -133,6 +137,11 @@ data:
   initdb.sql: |
     CREATE USER emannotationapp WITH PASSWORD 'emannotationapp';
     CREATE DATABASE emannotationapp WITH OWNER = emannotationapp ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${NAMESPACE}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -172,6 +181,7 @@ spec:
           configMap:
             name: shared-database-initdb
 ---
+# TODO Which shared database is this? Alec added it
 apiVersion: v1
 kind: Service
 metadata:
