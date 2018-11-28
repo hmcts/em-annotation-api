@@ -21,7 +21,10 @@ spec:
       containers:
         - image: ${IMAGE_NAME}
           name: ${SERVICE_NAME}
-          env: #TODO Are these env variables correct? Where did he get these values from, application.yaml?
+          envFrom:
+            - configMapRef:
+                name: ${SERVICE_NAME}-config
+          env:
             - name: SPRING_DATASOURCE_URL
               value: 'jdbc:postgresql://shared-database:5432/emannotationapp?ssl=true'
             - name: SPRING_DATASOURCE_USERNAME
@@ -181,7 +184,6 @@ spec:
           configMap:
             name: shared-database-initdb
 ---
-# TODO Which shared database is this? Alec added it
 apiVersion: v1
 kind: Service
 metadata:
