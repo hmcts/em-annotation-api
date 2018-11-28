@@ -1,5 +1,9 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +22,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
+@Api(value="AnnotationSet filter", description = "Operations pertaining to filtering AnnotationSets")
 public class FilterAnnotationSet {
 
     private final Logger log = LoggerFactory.getLogger(FilterAnnotationSet.class);
@@ -28,6 +33,13 @@ public class FilterAnnotationSet {
         this.annotationSetService = annotationSetService;
     }
 
+    @ApiOperation(value = "Filter an annotationSet", notes = "A GET request to filter an annotationSetDTO")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = AnnotationSetDTO.class, responseContainer = "List"),
+            @ApiResponse(code = 401, message = "Unauthorised"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found"),
+    })
     @GetMapping("/annotation-sets/filter")
     //@Timed
     public ResponseEntity<AnnotationSetDTO> getAllAnnotationSets(@RequestParam("documentId") String documentId) {
