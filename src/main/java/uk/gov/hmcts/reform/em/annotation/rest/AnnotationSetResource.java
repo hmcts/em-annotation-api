@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -30,7 +29,6 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping("/api")
-@Api(value="annotationsets", description = "Operations pertaining to annotation sets")
 public class AnnotationSetResource {
 
     private final Logger log = LoggerFactory.getLogger(AnnotationSetResource.class);
