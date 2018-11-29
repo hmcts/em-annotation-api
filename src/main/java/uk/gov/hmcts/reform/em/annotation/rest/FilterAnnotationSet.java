@@ -22,7 +22,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Api(value="AnnotationSet filter", description = "Operations pertaining to filtering AnnotationSets")
 public class FilterAnnotationSet {
 
     private final Logger log = LoggerFactory.getLogger(FilterAnnotationSet.class);

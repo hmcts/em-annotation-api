@@ -29,7 +29,6 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping("/api")
-@Api(value="annotations", description = "Operations pertaining to annotations")
 public class AnnotationResource {
 
     private final Logger log = LoggerFactory.getLogger(AnnotationResource.class);
