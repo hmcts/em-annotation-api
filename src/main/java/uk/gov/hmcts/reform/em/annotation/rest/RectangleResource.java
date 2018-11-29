@@ -29,7 +29,6 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping("/api")
-@Api(value="rectangles", description = "Operations pertaining to rectangles")
 public class RectangleResource {
 
     private final Logger log = LoggerFactory.getLogger(RectangleResource.class);

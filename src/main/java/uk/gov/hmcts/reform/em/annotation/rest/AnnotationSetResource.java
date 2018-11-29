@@ -30,7 +30,6 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping("/api")
-@Api(value="annotationsets", description = "Operations pertaining to annotation sets")
 public class AnnotationSetResource {
 
     private final Logger log = LoggerFactory.getLogger(AnnotationSetResource.class);

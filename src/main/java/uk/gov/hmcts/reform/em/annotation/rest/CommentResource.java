@@ -30,7 +30,6 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping("/api")
-@Api(value="comments", description = "Operations pertaining to comments")
 public class CommentResource {
 
     private final Logger log = LoggerFactory.getLogger(CommentResource.class);
