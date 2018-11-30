@@ -40,7 +40,6 @@ spec:
               value: "${POSTGRES_PASSWORD}"
 
 #            db
-#TODO these 4 values come from module.db. I don't have access to them, how can I confirm the values?
             - name: SPRING_DATASOURCE_URL
               value: 'jdbc:postgresql://shared-database:5432/emannotationapp?ssl=true'
             - name: SPRING_DATASOURCE_USERNAME
@@ -51,6 +50,8 @@ spec:
               value: 'true' #TODO: Alec set it as true, but main.tf has value = false. What should I set it to?
 
 #            TODO: IDAM_API_BASE_URI and S2S_BASE_URI not included, should they be? why/why not?
+#            in application.yaml, theyre http://localhost:4501 and 4502
+#            but in variables.tf they're http://betaDevBccidamAppLB.reform.hmcts.net:80 and http://rpe-service-auth-provider-preview.service.core-compute-preview.internal
             - name: REFORM_SERVICE_NAME
               value: 'em-anno' # See em_anno_app_url in variables.tf
             - name: REFORM_TEAM
@@ -58,7 +59,7 @@ spec:
             - name: REFORM_SERVICE_TYPE
               value: 'em-anno' #TODO: Alec set it to 'em-anno', but main.tf has 'java'. What should I set it to?
             - name: REFORM_ENVIRONMENT
-              value: 'preview' #TODO: main.tf has value 'preview', but why? we're replacing it with AKS?
+              value: 'preview' # TODO Why is preview being used if we're replacing it with AKS?
             - name: PACKAGES_NAME
               value: 'em-anno'
             - name: PACKAGES_PROJECT
