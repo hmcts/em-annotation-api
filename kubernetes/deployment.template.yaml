@@ -47,19 +47,15 @@ spec:
             - name: SPRING_DATASOURCE_PASSWORD
               value: 'emannotationapp'
             - name: ENABLE_DB_MIGRATE
-              value: 'true' #TODO: Alec set it as true, but main.tf has value = false. What should I set it to?
-
-#            TODO: IDAM_API_BASE_URI and S2S_BASE_URI not included, should they be? why/why not?
-#            in application.yaml, theyre http://localhost:4501 and 4502
-#            but in variables.tf they're http://betaDevBccidamAppLB.reform.hmcts.net:80 and http://rpe-service-auth-provider-preview.service.core-compute-preview.internal
+              value: 'true'
             - name: REFORM_SERVICE_NAME
               value: 'em-anno' # See em_anno_app_url in variables.tf
             - name: REFORM_TEAM
               value: 'evidence'
             - name: REFORM_SERVICE_TYPE
-              value: 'em-anno' #TODO: Alec set it to 'em-anno', but main.tf has 'java'. What should I set it to?
+              value: 'java'
             - name: REFORM_ENVIRONMENT
-              value: 'preview' # TODO Why is preview being used if we're replacing it with AKS?
+              value: 'preview'
             - name: PACKAGES_NAME
               value: 'em-anno'
             - name: PACKAGES_PROJECT
@@ -81,9 +77,9 @@ spec:
             - name: SHOW_SQL
               value: 'true'
             - name: ENDPOINTS_HEALTH_SENSITIVE
-              value: 'false' #TODO Alec set it as false, but main.tf has 'true'. What should I set it to?
+              value: 'false'
             - name: ENDPOINTS_INFO_SENSITIVE
-              value: 'false' #TODO Same as above - Alec set false, main.tf has true.
+              value: 'false'
             - name: S2S_NAMES_WHITELIST
               value: 'em_api,em_gw,ccd_gw,ccd_data,sscs,divorce_document_upload,divorce_document_generator,probate_backend,jui_webapp,pui_webapp,em_npa_app'
             - name: CASE_WORKER_ROLES
