@@ -29,7 +29,29 @@ spec:
             - name: S2S_KEY
               value: '${S2S_TOKEN}'
 #            Import from main.tf
-#            This is to use the AAT database
+##            This is to use a postgreSQL container (for PRs). TODO Set this and required associated resources up.
+#            - name: POSTGRES_HOST
+#              valueFrom:
+#                secretKeyRef:
+#                  name: ${SERVICE_NAME}-postgres-secret
+#                  key: host
+#            - name: POSTGRES_DATABASE
+#              valueFrom:
+#                secretKeyRef:
+#                  name: ${SERVICE_NAME}-postgres-secret
+#                  key: database
+#            - name: POSTGRES_USER
+#              valueFrom:
+#                secretKeyRef:
+#                  name: ${SERVICE_NAME}-postgres-secret
+#                  key: username
+#            - name: POSTGRES_PASSWORD
+#              valueFrom:
+#                secretKeyRef:
+#                  name: ${SERVICE_NAME}-postgres-secret
+#                  key: password
+
+##            This is to use the AAT database.
             - name: POSTGRES_HOST
               value: "${POSTGRES_HOST}"
             - name: POSTGRES_DATABASE
@@ -88,8 +110,9 @@ spec:
               value: 'false'
             - name: ENABLE_S2S_HEALTH_CHECK
               value: 'false'
-            - name: APPINSIGHTS_INSTRUMENTATIONKEY
-              value: '${APPINSIGHTS_INSTRUMENTATIONKEY}'
+#           TODO Fix appinsights and uncomment
+#            - name: APPINSIGHTS_INSTRUMENTATIONKEY
+#              value: '${APPINSIGHTS_INSTRUMENTATIONKEY}'
           resources:
             requests:
               memory: '1024Mi'
