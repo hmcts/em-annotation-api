@@ -25,6 +25,22 @@ spec:
             - configMapRef:
                 name: ${SERVICE_NAME}-config
           env:
+#            Import variables from vault
+            - name: S2S_KEY
+              value: '${S2S_TOKEN}'
+#            Import from main.tf
+#            This is to use the AAT database
+            - name: POSTGRES_HOST
+              value: "${POSTGRES_HOST}"
+            - name: POSTGRES_DATABASE
+              value: "${POSTGRES_DATABASE}"
+            - name: POSTGRES_USER
+              value: "${POSTGRES_USER}"
+            - name: POSTGRES_PASSWORD
+              value: "${POSTGRES_PASSWORD}"
+
+#            db
+#TODO these 4 values come from module.db. I don't have access to them, how can I confirm the values?
             - name: SPRING_DATASOURCE_URL
               value: 'jdbc:postgresql://shared-database:5432/emannotationapp?ssl=true'
             - name: SPRING_DATASOURCE_USERNAME
@@ -32,17 +48,17 @@ spec:
             - name: SPRING_DATASOURCE_PASSWORD
               value: 'emannotationapp'
             - name: ENABLE_DB_MIGRATE
-              value: 'true'
-            - name: S2S_KEY
-              value: '${S2S_TOKEN}'
+              value: 'true' #TODO: Alec set it as true, but main.tf has value = false. What should I set it to?
+
+#            TODO: IDAM_API_BASE_URI and S2S_BASE_URI not included, should they be? why/why not?
             - name: REFORM_SERVICE_NAME
-              value: 'em-anno'
+              value: 'em-anno' # See em_anno_app_url in variables.tf
             - name: REFORM_TEAM
               value: 'evidence'
             - name: REFORM_SERVICE_TYPE
-              value: 'em-anno'
+              value: 'em-anno' #TODO: Alec set it to 'em-anno', but main.tf has 'java'. What should I set it to?
             - name: REFORM_ENVIRONMENT
-              value: 'preview'
+              value: 'preview' #TODO: main.tf has value 'preview', but why? we're replacing it with AKS?
             - name: PACKAGES_NAME
               value: 'em-anno'
             - name: PACKAGES_PROJECT
@@ -64,9 +80,9 @@ spec:
             - name: SHOW_SQL
               value: 'true'
             - name: ENDPOINTS_HEALTH_SENSITIVE
-              value: 'false'
+              value: 'false' #TODO Alec set it as false, but main.tf has 'true'. What should I set it to?
             - name: ENDPOINTS_INFO_SENSITIVE
-              value: 'false'
+              value: 'false' #TODO Same as above - Alec set false, main.tf has true.
             - name: S2S_NAMES_WHITELIST
               value: 'em_api,em_gw,ccd_gw,ccd_data,sscs,divorce_document_upload,divorce_document_generator,probate_backend,jui_webapp,pui_webapp,em_npa_app'
             - name: CASE_WORKER_ROLES
