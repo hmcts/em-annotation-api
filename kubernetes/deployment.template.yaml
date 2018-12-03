@@ -27,40 +27,22 @@ spec:
           env:
 #            Import variables from vault
             - name: S2S_KEY
-              value: '${S2S_TOKEN}'
+              value: "${S2S_TOKEN}"
 #            Import from main.tf
-##            This is to use a postgreSQL container (for PRs). TODO Set this and required associated resources up.
-#            - name: POSTGRES_HOST
-#              valueFrom:
-#                secretKeyRef:
-#                  name: ${SERVICE_NAME}-postgres-secret
-#                  key: host
-#            - name: POSTGRES_DATABASE
-#              valueFrom:
-#                secretKeyRef:
-#                  name: ${SERVICE_NAME}-postgres-secret
-#                  key: database
-#            - name: POSTGRES_USER
-#              valueFrom:
-#                secretKeyRef:
-#                  name: ${SERVICE_NAME}-postgres-secret
-#                  key: username
-#            - name: POSTGRES_PASSWORD
-#              valueFrom:
-#                secretKeyRef:
-#                  name: ${SERVICE_NAME}-postgres-secret
-#                  key: password
 
-##            This is to use the AAT database.
+#            This is to use the AAT database.
             - name: POSTGRES_HOST
-              value: "${POSTGRES_HOST}"
+              value: "${POSTGRES_HOST}" # TODO I'm not getting these from the vault. Where am I getting them from?
             - name: POSTGRES_DATABASE
               value: "${POSTGRES_DATABASE}"
             - name: POSTGRES_USER
               value: "${POSTGRES_USER}"
             - name: POSTGRES_PASSWORD
               value: "${POSTGRES_PASSWORD}"
-
+#           App insights
+#           Note: value found in vault
+            - name: APPINSIGHTS_INSTRUMENTATIONKEY
+              value: "${APPINSIGHTS_INSTRUMENTATIONKEY}"
 #            db
             - name: SPRING_DATASOURCE_URL
               value: 'jdbc:postgresql://shared-database:5432/emannotationapp?ssl=true'
@@ -110,9 +92,27 @@ spec:
               value: 'false'
             - name: ENABLE_S2S_HEALTH_CHECK
               value: 'false'
-#           TODO Fix appinsights and uncomment
-#            - name: APPINSIGHTS_INSTRUMENTATIONKEY
-#              value: '${APPINSIGHTS_INSTRUMENTATIONKEY}'
+##            This is to use a postgreSQL container (for PRs). TODO Set this and required associated resources up. What is secretKeyRef?!
+#            - name: POSTGRES_HOST
+#              valueFrom:
+#                secretKeyRef:
+#                  name: ${SERVICE_NAME}-postgres-secret
+#                  key: host
+#            - name: POSTGRES_DATABASE
+#              valueFrom:
+#                secretKeyRef:
+#                  name: ${SERVICE_NAME}-postgres-secret
+#                  key: database
+#            - name: POSTGRES_USER
+#              valueFrom:
+#                secretKeyRef:
+#                  name: ${SERVICE_NAME}-postgres-secret
+#                  key: username
+#            - name: POSTGRES_PASSWORD
+#              valueFrom:
+#                secretKeyRef:
+#                  name: ${SERVICE_NAME}-postgres-secret
+#                  key: password
           resources:
             requests:
               memory: '1024Mi'
@@ -124,6 +124,51 @@ spec:
             - containerPort: 4400
               name: http
           imagePullPolicy: Always
+
+#---
+## TODO find out how much of this is needed for a postgres container.
+##
+## Service Catalog Database Instance
+##
+#apiVersion: servicecatalog.k8s.io/v1beta1
+#kind: ServiceInstance
+#metadata:
+#  name: ${SERVICE_NAME}-postgres-instance
+#  namespace: ${NAMESPACE}
+#spec:
+#  #
+#  # Get the value of this from 'svcat get classes'
+#  #
+#  clusterServiceClassExternalName: azure-postgresql-9-6-database
+#
+#  #
+#  # The 'SKU'. Get the value of this from 'svc describe class <class name>'
+#  #
+#  clusterServicePlanExternalName: database
+#
+#  #
+#  # Parameters.  Get these from here: https://github.com/Azure/open-service-broker-azure/blob/master/docs/modules/postgresql.md
+#  # or 'svcat describe <class>/<plan>'
+#  # e.g. 'svcat describe plan azure-postgresql-9-6-database/database'
+#  #
+#  parameters:
+#    parentAlias: cnp-osba-postgres-server
+#---
+##
+## The binding.  This will return the secret with connection details, etc.
+##
+#apiVersion: servicecatalog.k8s.io/v1beta1
+#kind: ServiceBinding
+#metadata:
+#  name: ${SERVICE_NAME}-postgres-binding
+#  namespace: ${NAMESPACE}
+#spec:
+#  instanceRef:
+#    name: ${SERVICE_NAME}-postgres-instance
+#  #
+#  # This is the secret used above in your pod environment config
+#  #
+#  secretName: ${SERVICE_NAME}-postgres-secret
 ---
 #
 # Service
@@ -176,6 +221,8 @@ data:
   initdb.sql: |
     CREATE USER emannotationapp WITH PASSWORD 'emannotationapp';
     CREATE DATABASE emannotationapp WITH OWNER = emannotationapp ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+#    APPINSIGHTS_INSTRUMENTATIONKEY: 'fake-key' #TODO: CMC-claim-store has this line, is it a placeholder that we actually need?
+
 ---
 apiVersion: v1
 kind: Namespace
