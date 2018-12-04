@@ -27,22 +27,22 @@ spec:
           env:
 #            Import variables from vault
             - name: S2S_KEY
-              value: "${S2S_TOKEN}"
+              value: '${S2S_TOKEN}'
 #            Import from main.tf
 
 #            This is to use the AAT database.
             - name: POSTGRES_HOST
-              value: "${POSTGRES_HOST}" # TODO I'm not getting these from the vault. Where am I getting them from?
+              value: '${POSTGRES_HOST}' # TODO I'm not getting these from the vault. Where am I getting them from?
             - name: POSTGRES_DATABASE
-              value: "${POSTGRES_DATABASE}"
+              value: '${POSTGRES_DATABASE}'
             - name: POSTGRES_USER
-              value: "${POSTGRES_USER}"
+              value: '${POSTGRES_USER}'
             - name: POSTGRES_PASSWORD
-              value: "${POSTGRES_PASSWORD}"
+              value: '${POSTGRES_PASSWORD}'
 #           App insights
 #           Note: value found in vault
             - name: APPINSIGHTS_INSTRUMENTATIONKEY
-              value: "${APPINSIGHTS_INSTRUMENTATIONKEY}"
+              value: '${APPINSIGHTS_INSTRUMENTATIONKEY}'
 #            db
             - name: SPRING_DATASOURCE_URL
               value: 'jdbc:postgresql://shared-database:5432/emannotationapp?ssl=true'
