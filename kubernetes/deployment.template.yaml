@@ -92,7 +92,9 @@ spec:
               value: 'false'
             - name: ENABLE_S2S_HEALTH_CHECK
               value: 'false'
+
 ##            This is to use a postgreSQL container (for PRs). TODO Set this and required associated resources up. What is secretKeyRef?!
+#             START OF POSTGRES DB STUFF
 #            - name: POSTGRES_HOST
 #              valueFrom:
 #                secretKeyRef:
@@ -113,6 +115,8 @@ spec:
 #                secretKeyRef:
 #                  name: ${SERVICE_NAME}-postgres-secret
 #                  key: password
+
+#          PAUSE POSTGRES DB STUFF
           resources:
             requests:
               memory: '1024Mi'
@@ -126,7 +130,8 @@ spec:
           imagePullPolicy: Always
 
 #---
-## TODO find out how much of this is needed for a postgres container.
+## TODO find out how much of this is needed for a postgres container, and how much I already have
+# MORE POSTGRES DB STUFF
 ##
 ## Service Catalog Database Instance
 ##
@@ -169,6 +174,8 @@ spec:
 #  # This is the secret used above in your pod environment config
 #  #
 #  secretName: ${SERVICE_NAME}-postgres-secret
+
+# END OF POSTGRES DB STUFF
 ---
 #
 # Service
