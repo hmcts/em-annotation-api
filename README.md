@@ -46,7 +46,8 @@ To view our REST API go to {HOST}:{PORT}/swagger-ui.html
 A list of our endpoints can be found here
 > https://hmcts.github.io/reform-api-docs/swagger.html?url=https://hmcts.github.io/reform-api-docs/specs/em-annotation-app.json
 
-
+### Does this use AKS when being merged?
+Creating a PR to find out. I will change "couldn't" to "could not" in src/.../rest/AnnotationResource.java
 
 
 

@@ -87,7 +87,7 @@ public class AnnotationResource {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = AnnotationDTO.class),
             @ApiResponse(code = 400, message = "annotationDTO not valid, invalid id"),
-            @ApiResponse(code = 500, message = "annotationDTO couldn't be updated"),
+            @ApiResponse(code = 500, message = "annotationDTO could not be updated"),
             @ApiResponse(code = 401, message = "Unauthorised"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "Not Found"),
