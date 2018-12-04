@@ -29,16 +29,15 @@ spec:
             - name: S2S_KEY
               value: '${S2S_TOKEN}'
 #            Import from main.tf
-
-#            This is to use the AAT database.
+#            This is to use the postgres database that we create further down.
             - name: POSTGRES_HOST
-              value: '${POSTGRES_HOST}' # TODO I'm not getting these from the vault. Where am I getting them from?
+              value: 'shared-database'
             - name: POSTGRES_DATABASE
-              value: '${POSTGRES_DATABASE}'
+              value: 'emannotationapp'
             - name: POSTGRES_USER
-              value: '${POSTGRES_USER}'
+              value: 'emannotationapp'
             - name: POSTGRES_PASSWORD
-              value: '${POSTGRES_PASSWORD}'
+              value: 'emannotationapp'
 #           App insights
 #           Note: value found in vault
             - name: APPINSIGHTS_INSTRUMENTATIONKEY
