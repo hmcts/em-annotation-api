@@ -44,7 +44,7 @@ spec:
               value: '${APPINSIGHTS_INSTRUMENTATIONKEY}'
 #            db
             - name: SPRING_DATASOURCE_URL
-              value: 'jdbc:postgresql://shared-database:5432/emannotationapp?ssl=true'
+              value: 'jdbc:postgresql://shared-database:5432/emannotationapp?ssl=disable'
             - name: SPRING_DATASOURCE_USERNAME
               value: 'emannotationapp'
             - name: SPRING_DATASOURCE_PASSWORD
@@ -127,54 +127,6 @@ spec:
             - containerPort: 8080
               name: http
           imagePullPolicy: Always
-
-#---
-## TODO find out how much of this is needed for a postgres container, and how much I already have
-# MORE POSTGRES DB STUFF
-##
-## Service Catalog Database Instance
-##
-#apiVersion: servicecatalog.k8s.io/v1beta1
-#kind: ServiceInstance
-#metadata:
-#  name: ${SERVICE_NAME}-postgres-instance
-#  namespace: ${NAMESPACE}
-#spec:
-#  #
-#  # Get the value of this from 'svcat get classes'
-#  #
-#  clusterServiceClassExternalName: azure-postgresql-9-6-database
-#
-#  #
-#  # The 'SKU'. Get the value of this from 'svc describe class <class name>'
-#  #
-#  clusterServicePlanExternalName: database
-#
-#  #
-#  # Parameters.  Get these from here: https://github.com/Azure/open-service-broker-azure/blob/master/docs/modules/postgresql.md
-#  # or 'svcat describe <class>/<plan>'
-#  # e.g. 'svcat describe plan azure-postgresql-9-6-database/database'
-#  #
-#  parameters:
-#    parentAlias: cnp-osba-postgres-server
-#---
-##
-## The binding.  This will return the secret with connection details, etc.
-##
-#apiVersion: servicecatalog.k8s.io/v1beta1
-#kind: ServiceBinding
-#metadata:
-#  name: ${SERVICE_NAME}-postgres-binding
-#  namespace: ${NAMESPACE}
-#spec:
-#  instanceRef:
-#    name: ${SERVICE_NAME}-postgres-instance
-#  #
-#  # This is the secret used above in your pod environment config
-#  #
-#  secretName: ${SERVICE_NAME}-postgres-secret
-
-# END OF POSTGRES DB STUFF
 ---
 #
 # Service
@@ -227,8 +179,6 @@ data:
   initdb.sql: |
     CREATE USER emannotationapp WITH PASSWORD 'emannotationapp';
     CREATE DATABASE emannotationapp WITH OWNER = emannotationapp ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-#    APPINSIGHTS_INSTRUMENTATIONKEY: 'fake-key' #TODO: CMC-claim-store has this line, is it a placeholder that we actually need?
-
 ---
 apiVersion: v1
 kind: Namespace
