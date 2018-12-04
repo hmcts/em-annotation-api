@@ -91,31 +91,21 @@ spec:
               value: 'false'
             - name: ENABLE_S2S_HEALTH_CHECK
               value: 'false'
-
-##            This is to use a postgreSQL container (for PRs). TODO Set this and required associated resources up. What is secretKeyRef?!
-#             START OF POSTGRES DB STUFF
-#            - name: POSTGRES_HOST
-#              valueFrom:
-#                secretKeyRef:
-#                  name: ${SERVICE_NAME}-postgres-secret
-#                  key: host
-#            - name: POSTGRES_DATABASE
-#              valueFrom:
-#                secretKeyRef:
-#                  name: ${SERVICE_NAME}-postgres-secret
-#                  key: database
-#            - name: POSTGRES_USER
-#              valueFrom:
-#                secretKeyRef:
-#                  name: ${SERVICE_NAME}-postgres-secret
-#                  key: username
-#            - name: POSTGRES_PASSWORD
-#              valueFrom:
-#                secretKeyRef:
-#                  name: ${SERVICE_NAME}-postgres-secret
-#                  key: password
-
-#          PAUSE POSTGRES DB STUFF
+#             AAT testutil variables
+            - name: TEST_URL
+              value: 'http://${SERVICE_NAME}:8080' #TODO How do I put a ${...} into a ' '. In .tf files, its like this
+            - name: S2S_TOKEN
+              value: '${S2S_TOKEN}'
+            - name: S2S_SERVICE_NAME
+              value: 'em_gw'
+            - name: S2S_URL
+              value: 'http://${SERVICE_NAME}:4502' #TODO What should this variable be?
+            - name: IDAM_API_USER_ROLE
+              value: 'caseworker'
+            - name: IDAM_API_USER
+              value: 'test@test.com'
+            - name: IDAM_API_URL
+              value: 'http://${SERVICE_NAME}:4501'
           resources:
             requests:
               memory: '1024Mi'
