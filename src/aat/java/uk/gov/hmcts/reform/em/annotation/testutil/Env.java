@@ -12,10 +12,10 @@ public class Env {
         defaults.setProperty("TEST_URL", "http://localhost:8080");
         defaults.setProperty("S2S_TOKEN", "AAAAAAAAAAAAAAAA");
         defaults.setProperty("S2S_SERVICE_NAME", "em_gw");
-        defaults.setProperty("S2S_URL", "http://localhost:4502");
+        defaults.setProperty("S2S_BASE_URI", "http://localhost:4502"); // Changed to match main.tf
         defaults.setProperty("IDAM_API_USER_ROLE", "caseworker");
         defaults.setProperty("IDAM_API_USER", "test@test.com");
-        defaults.setProperty("IDAM_API_URL", "http://localhost:4501");
+        defaults.setProperty("IDAM_API_BASE_URI", "http://localhost:4501");  // Changed to match main.tf
     }
 
     public static String getTestUrl() {
@@ -23,11 +23,11 @@ public class Env {
     }
 
     public static String getIdamURL() {
-        return require("IDAM_API_URL");
+        return require("IDAM_API_BASE_URI");
     }
 
     public static String getS2SURL() {
-        return require("S2S_URL");
+        return require("S2S_BASE_URI");
     }
 
     public static String getS2SToken() {
