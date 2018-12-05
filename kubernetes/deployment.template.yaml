@@ -1,4 +1,7 @@
 ---
+#
+# DEPLOYMENT - Defines the image to use, all env variables, exposed ports and resource limits
+#
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -91,21 +94,6 @@ spec:
               value: 'false'
             - name: ENABLE_S2S_HEALTH_CHECK
               value: 'false'
-#             AAT testutil variables
-            - name: TEST_URL
-              value: 'http://${SERVICE_NAME}:8080' #TODO How do I put a ${...} into a ' '. In .tf files, its like this
-            - name: S2S_TOKEN
-              value: '${S2S_TOKEN}'
-            - name: S2S_SERVICE_NAME
-              value: 'em_gw'
-            - name: S2S_URL
-              value: 'http://${SERVICE_NAME}:4502' #TODO What should this variable be?
-            - name: IDAM_API_USER_ROLE
-              value: 'caseworker'
-            - name: IDAM_API_USER
-              value: 'test@test.com'
-            - name: IDAM_API_URL
-              value: 'http://${SERVICE_NAME}:4501'
           resources:
             requests:
               memory: '1024Mi'
@@ -119,7 +107,7 @@ spec:
           imagePullPolicy: Always
 ---
 #
-# Service
+# SERVICE - exposes containers internally to the cluster - enables service discovery via internal DNS
 #
 apiVersion: v1
 kind: Service
@@ -138,7 +126,7 @@ spec:
     app: ${SERVICE_NAME}
 ---
 #
-# INGRESS
+# INGRESS - makes it accessible from outside the cluster
 #
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -158,7 +146,7 @@ spec:
               servicePort: 80
 ---
 #
-# DATABASE
+# DATABASE - Create a DB to run PRs on
 #
 apiVersion: v1
 kind: ConfigMap
@@ -170,11 +158,17 @@ data:
     CREATE USER emannotationapp WITH PASSWORD 'emannotationapp';
     CREATE DATABASE emannotationapp WITH OWNER = emannotationapp ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
 ---
+#
+# NAMESPACE - Defines a logical grouping of resources
+#
 apiVersion: v1
 kind: Namespace
 metadata:
   name: ${NAMESPACE}
 ---
+#
+# DEPLOYMENT - Defines the image & port for the postgres DB
+#
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -213,6 +207,9 @@ spec:
           configMap:
             name: shared-database-initdb
 ---
+#
+# SERVICE - Expose the postgres container internally to the cluster
+#
 apiVersion: v1
 kind: Service
 metadata:
