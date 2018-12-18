@@ -8,6 +8,7 @@ locals {
 # "${local.app_full_name}"
 # "${local.local_env}"
 
+
 module "app" {
   source = "git@github.com:hmcts/cnp-module-webapp?ref=master"
   product = "${local.app_full_name}"
@@ -22,6 +23,8 @@ module "app" {
   common_tags  = "${var.common_tags}"
   asp_rg = "${var.shared_product_name}-${var.env}"
   asp_name = "${var.shared_product_name}-${var.env}"
+  appinsights_instrumentation_key = "${var.appinsights_instrumentation_key}"
+
 
   app_settings = {
     POSTGRES_HOST = "${module.db.host_name}"
