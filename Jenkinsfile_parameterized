@@ -19,12 +19,12 @@ properties([
 def type = "java"
 def product = "em"
 def component = "anno"
-def vault = "rpa"
 def channel = '#rpa-pipeline'
 
-List<LinkedHashMap<String, Object>> secrets = [
-        secret('em-s2s-token', 'S2S_TOKEN'),
-        secret('AppInsightsInstrumentationKey', 'APPINSIGHTS_INSTRUMENTATIONKEY'),
+def secrets = [
+        's2s-${env}': [
+                secret('microservicekey-em-gw', 'FUNCTIONAL_TEST_CLIENT_S2S_TOKEN')
+        ]
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
@@ -35,6 +35,11 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
       envVariable: envVar
     ]
 }
+
+def vaultOverrides = [
+        'preview' : 'aat',
+        'spreview': 'saat'
+]
 
 // Vars needed for AKS testing - keep values in sync with: /src/kubernetes/deployment.template.yaml
 // THESE WILL BE OVERWRITTEN IN ASE DEPLOYMENTS WITH TERRAFORM OUTPUTS.TF
@@ -52,8 +57,8 @@ withParameterizedPipeline(type, product, component, params.ENVIRONMENT, 'sandbox
 //    enableCrossBrowserTest(120)
     enableDockerBuild()
     enableDeployToAKS()
+    overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
-    setVaultName(vault)
 
 
     after('checkout') {
