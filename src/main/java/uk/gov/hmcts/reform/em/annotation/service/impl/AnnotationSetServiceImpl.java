@@ -90,8 +90,12 @@ public class AnnotationSetServiceImpl implements AnnotationSetService {
 
     @Override
     public Optional<AnnotationSetDTO> findOneByDocumentId(String documentId) {
-        return annotationSetRepository
-            .findByDocumentIdAndCreatedBy(documentId, SecurityUtils.getCurrentUserLogin().get())
-            .map(annotationSetMapper::toDto);
+        if (SecurityUtils.getCurrentUserLogin().isPresent()) {
+            return annotationSetRepository
+                    .findByDocumentIdAndCreatedBy(documentId, SecurityUtils.getCurrentUserLogin().get())
+                    .map(annotationSetMapper::toDto);
+        } else {
+            return Optional.empty();
+        }
     }
 }
