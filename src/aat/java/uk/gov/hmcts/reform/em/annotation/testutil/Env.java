@@ -6,6 +6,8 @@ import java.util.Properties;
 
 public class Env {
 
+    private Env() {}
+
     static Properties defaults = new Properties();
 
     static {
@@ -15,7 +17,7 @@ public class Env {
         defaults.setProperty("S2S_URL", "http://localhost:4502");
         defaults.setProperty("IDAM_API_USER_ROLE", "caseworker");
         defaults.setProperty("IDAM_API_USER", "test@test.com");
-        defaults.setProperty("IDAM_API_URL", "http://localhost:4501");
+        defaults.setProperty("IDAM_API_URL", "http://betadevaccidamapplb.reform.hmcts.net");
     }
 
     public static String getTestUrl() {
