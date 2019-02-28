@@ -49,14 +49,8 @@ env.S2S_URL = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.int
 
 withParameterizedPipeline(type, product, component, params.ENVIRONMENT, 'sandbox') {
     enableSlackNotifications(channel)
-
-//    enablePerformanceTest(15)
-//    enableApiGatewayTest(15)
-//    enableFullFunctionalTest(30)
-//    enableMutationTest(120)
-//    enableCrossBrowserTest(120)
+    enableDbMigration()
     enableDockerBuild()
-    enableDeployToAKS()
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
 
