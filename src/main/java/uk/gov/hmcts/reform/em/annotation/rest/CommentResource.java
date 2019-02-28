@@ -1,5 +1,8 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -45,6 +48,13 @@ public class CommentResource {
      * @return the ResponseEntity with status 201 (Created) and with body the new commentDTO, or with status 400 (Bad Request) if the comment has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
+    @ApiOperation(value = "Create an commentDTO", notes = "A POST request to create a commentDTO")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successfully created", response = CommentDTO.class),
+            @ApiResponse(code = 400, message = "commentDTO not valid, invalid id"),
+            @ApiResponse(code = 401, message = "Unauthorised"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+    })
     @PostMapping("/comments")
     //@Timed
     public ResponseEntity<CommentDTO> createComment(@Valid @RequestBody CommentDTO commentDTO) throws URISyntaxException {
@@ -67,6 +77,15 @@ public class CommentResource {
      * or with status 500 (Internal Server Error) if the commentDTO couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
+    @ApiOperation(value = "Update an existing annotationDTO", notes = "A PUT request to update an annotationDTO")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = CommentDTO.class),
+            @ApiResponse(code = 400, message = "commentDTO not valid, invalid id"),
+            @ApiResponse(code = 500, message = "commentDTO couldn't be updated"),
+            @ApiResponse(code = 401, message = "Unauthorised"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found"),
+    })
     @PutMapping("/comments")
     //@Timed
     public ResponseEntity<CommentDTO> updateComment(@Valid @RequestBody CommentDTO commentDTO) throws URISyntaxException {
@@ -86,6 +105,13 @@ public class CommentResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of comments in body
      */
+    @ApiOperation(value = "Get all comments", notes = "A GET request without a body is used to retrieve all annotations")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = CommentDTO.class, responseContainer = "List"),
+            @ApiResponse(code = 401, message = "Unauthorised"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found"),
+    })
     @GetMapping("/comments")
     //@Timed
     public ResponseEntity<List<CommentDTO>> getAllComments(Pageable pageable) {
@@ -101,6 +127,13 @@ public class CommentResource {
      * @param id the id of the commentDTO to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the commentDTO, or with status 404 (Not Found)
      */
+    @ApiOperation(value = "Get an existing commentDTO", notes = "A GET request to retrieve an commentDTO")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = CommentDTO.class),
+            @ApiResponse(code = 401, message = "Unauthorised"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found"),
+    })
     @GetMapping("/comments/{id}")
     //@Timed
     public ResponseEntity<CommentDTO> getComment(@PathVariable UUID id) {
@@ -115,6 +148,13 @@ public class CommentResource {
      * @param id the id of the commentDTO to delete
      * @return the ResponseEntity with status 200 (OK)
      */
+    @ApiOperation(value = "Delete a commentDTO", notes = "A DELETE request to delete a commentDTO")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 401, message = "Unauthorised"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found"),
+    })
     @DeleteMapping("/comments/{id}")
     //@Timed
     public ResponseEntity<Void> deleteComment(@PathVariable UUID id) {

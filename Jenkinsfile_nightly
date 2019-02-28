@@ -1,14 +1,14 @@
 #!groovy
 
 properties([
-    [
-        $class: 'GithubProjectProperty',
-        displayName: 'Evidence Management Store App',
-        projectUrlStr: 'https://github.com/hmcts/em-annotation-app'
-    ],
-    pipelineTriggers([
-        cron('H 05 * * *')
-    ])
+        [
+                $class: 'GithubProjectProperty',
+                displayName: 'Evidence Management Store App',
+                projectUrlStr: 'https://github.com/hmcts/em-annotation-app'
+        ],
+        pipelineTriggers([
+                cron('H 05 * * *')
+        ])
 ])
 
 @Library("Infrastructure")
@@ -16,11 +16,13 @@ properties([
 def type = "java"
 def product = "em"
 def component = "anno"
-
+def vault = "rpa-aat"
 def channel = '#rpa-pipeline'
 
-List<LinkedHashMap<String, Object>> secrets = [
-    secret('em-s2s-token', 'S2S_TOKEN')
+def secrets = [
+        's2s-${env}': [
+                secret('microservicekey-em-gw', 'FUNCTIONAL_TEST_CLIENT_S2S_TOKEN')
+        ]
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
@@ -32,9 +34,16 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
-withNightlyPipeline(type, product, component) {
+def vaultOverrides = [
+        'preview' : 'aat',
+        'spreview': 'saat'
+]
+
+withPipeline(type , product, component) {
     enableSlackNotifications(channel)
     enableDbMigration()
+    enableDockerBuild()
+    overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
 
     after('checkout') {
