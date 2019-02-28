@@ -49,7 +49,7 @@ public class TestUtil {
 
     private Integer findUserIdByUserEmail(String email) {
         userId = RestAssured
-                .get(Env.getIdamURL() + "/users?email=" + email)
+                .get(Env.getIdamURL() + "/testing-support/accounts/" + email)
                 .getBody()
                 .jsonPath()
                 .get("id");
