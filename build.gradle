@@ -129,8 +129,7 @@ dependencies {
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.197'
     testCompile 'com.warrenstrange:googleauth:1.1.2'
 //    testCompile "com.mattbertolini:liquibase-slf4j"
-    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: '3.0.1'
-    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '3.0.1'
+    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: '5.0.1'
 }
 
 bootJar {
