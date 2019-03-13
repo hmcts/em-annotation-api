@@ -100,7 +100,7 @@ dependencies {
 //    compile "com.mattbertolini:liquibase-slf4j"
     compile("org.postgresql:postgresql:${versions.postgresql}")
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
-    compile group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '2.1.1'
+    compile group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '2.3.1'
     compile group: 'commons-validator', name: 'commons-validator', version: '1.6'
     compile "javax.transaction:javax.transaction-api"
     compile "org.ehcache:ehcache"

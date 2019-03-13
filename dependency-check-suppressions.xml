@@ -346,4 +346,14 @@
         <gav regex="true">.*</gav>
         <cve>CVE-2011-2732</cve>
     </suppress>
+    <suppress>
+        <notes>False positive: https://github.com/jeremylong/DependencyCheck/issues/1573</notes>
+        <gav regex="true">.*</gav>
+        <cve>CVE-2014-3488</cve>
+    </suppress>
+    <suppress>
+        <notes>False positive: https://github.com/jeremylong/DependencyCheck/issues/1573</notes>
+        <gav regex="true">.*</gav>
+        <cve>CVE-2015-2156</cve>
+    </suppress>
 </suppressions>
