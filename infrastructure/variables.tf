@@ -56,7 +56,7 @@ variable "java_opts" {
 ////////////////////////////////////////////////
 // Endpoints
 ////////////////////////////////////////////////
-variable "idam_api_url" {
+variable "idam_api_base_uri" {
   default = "http://betaDevBccidamAppLB.reform.hmcts.net:80"
 }
 
@@ -82,9 +82,6 @@ variable "database_name" {
 ////////////////////////////////////////////////
 // Logging
 ////////////////////////////////////////////////
-variable "root_appender" {
-  default = "JSON_CONSOLE"
-}
 
 variable "json_console_pretty_print" {
   default = "false"

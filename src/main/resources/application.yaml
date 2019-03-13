@@ -38,12 +38,6 @@ spring:
 #  enabled: ${ENABLE_DB_MIGRATE:true}
 #  change-log: classpath:/db/db.changelog-master.xml
 
-base-urls:
-  idam-user: ${IDAM_API_URL:http://betadevaccidamapplb.reform.hmcts.net}
-  idam-s2s: ${S2S_URL:http://localhost:4502}
-  s2s-token: ${S2S_TOKEN:AAAAAAAAAAAAAAAA}
-  test-url: ${TEST_URL:http://localhost:8080}
-
 management:
   endpoints:
     web:
@@ -82,20 +76,27 @@ info:
     name: ${PACKAGES_NAME:cor}
 #    version: ${PACKAGES_VERSION:unknown}
 
+# AuthCheckerConfiguration
 authorization:
   case-worker-roles: ${CASE_WORKER_ROLES:caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce}
   s2s-names-whitelist: ${S2S_NAMES_WHITELIST:sscs,divorce,ccd,em_gw,jui_webapp,pui_webapp,em_npa_app}
 
+# auth-checker-lib
 auth:
   idam:
     client:
-      baseUrl: ${IDAM_API_BASE_URI:http://betadevaccidamapplb.reform.hmcts.net}
+      baseUrl: ${IDAM_API_BASE_URI:http://localhost:4501}
   provider:
     service:
       client:
         baseUrl: ${S2S_BASE_URI:http://localhost:4502}
 
-
+# service-auth-provider-client lib
+idam:
+  s2s-auth:
+    url: ${S2S_BASE_URI:http://localhost:4502}
+    totp_secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
+    microservice: ${S2S_SERVICE_NAME:em_annotation_app}
 
 azure:
   app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:true}
@@ -111,9 +112,3 @@ app-insights:
 #toggle:
 #  includeidamhealth: ${ENABLE_IDAM_HEALTH_CHECK:false}
 #  includes2shealth: ${ENABLE_S2S_HEALTH_CHECK:false}
-
-idam:
-  s2s-auth:
-    url: ${S2S_BASE_URI:http://localhost:4502}
-    totp_secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
-    microservice: em_annotation_app
