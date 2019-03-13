@@ -9,7 +9,7 @@ output "vaultName" {
 }
 
 output "idam_api_base_uri" {
-  value = "${var.idam_api_url}"
+  value = "${var.idam_api_base_uri}"
 }
 
 output "s2s_base_uri" {
