@@ -31,7 +31,7 @@ apply from: 'gradle/liquibase.gradle'
 
 dependencyManagement {
     imports {
-        mavenBom 'org.springframework.cloud:spring-cloud-openfeign:2.0.2.BUILD-SNAPSHOT'
+        mavenBom 'org.springframework.cloud:spring-cloud-openfeign:2.1.1.RELEASE'
     }
 }
 
@@ -100,7 +100,7 @@ dependencies {
 //    compile "com.mattbertolini:liquibase-slf4j"
     compile("org.postgresql:postgresql:${versions.postgresql}")
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
-    compile group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '2.1.1'
+    compile group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '2.3.1'
     compile group: 'commons-validator', name: 'commons-validator', version: '1.6'
     compile "javax.transaction:javax.transaction-api"
     compile "org.ehcache:ehcache"
@@ -111,6 +111,8 @@ dependencies {
     compile "org.hibernate:hibernate-envers"
     compile "org.hibernate.validator:hibernate-validator"
     compile group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.3'
+    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: '5.0.1'
+    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '5.0.1'
     compile "org.hibernate.validator:hibernate-validator"
     compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"
     compile "org.springframework.boot:spring-boot-starter-security"
@@ -129,8 +131,6 @@ dependencies {
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.197'
     testCompile 'com.warrenstrange:googleauth:1.1.2'
 //    testCompile "com.mattbertolini:liquibase-slf4j"
-    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: '3.0.1'
-    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '3.0.1'
 }
 
 bootJar {
