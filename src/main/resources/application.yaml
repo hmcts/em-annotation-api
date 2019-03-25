@@ -39,6 +39,9 @@ spring:
 #  change-log: classpath:/db/db.changelog-master.xml
 
 management:
+  endpoint:
+    health:
+      show-details: "always"
   endpoints:
     web:
       base-path: '/'
