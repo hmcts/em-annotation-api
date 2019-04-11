@@ -1,9 +1,10 @@
-em-anno:
+anno:
   postgresql:
     postgresqlUsername: emannotationapp
     postgresqlPassword: emannotationapp
     postgresqlDatabase: emannotationapp
     nameOverride: em-anno-db
+    # TODO Delete service, port
     service:
       port: 5432
   image: 'https://hmcts.azurecr.io/hmcts/em-anno:latest'
