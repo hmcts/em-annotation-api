@@ -6,7 +6,7 @@ anno:
     # TODO Delete service, port
     service:
       port: 5432
-  image: 'hmcts.azurecr.io/hmcts/em-anno:latest'
+  image: 'hmctspublic.azurecr.io/em/anno:latest'
   applicationPort: 8080
   readinessDelay: 40
   readinessTimeout: 5
