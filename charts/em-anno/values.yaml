@@ -2,7 +2,6 @@ anno:
   postgresql:
     postgresqlUsername: emannotationapp
     postgresqlPassword: emannotationapp
-    postgresqlDatabase: emannotationapp
     nameOverride: em-anno-db
     # TODO Delete service, port
     service:
