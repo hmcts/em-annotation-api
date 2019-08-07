@@ -74,7 +74,7 @@ dependencyCheck {
 def versions = [
         postgresql         : '42.2.6',
         springBoot         : '2.0.5.RELEASE',
-        springfoxSwagger   : '2.7.0',
+        springfoxSwagger   : '2.9.2',
         h2                 : '1.4.197',
         liquibase          : '3.5.3',
         pact_version       : '3.5.24'
@@ -102,13 +102,13 @@ sourceSets {
 }
 
 dependencies {
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org:2.9.9"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc:2.9.9"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.9"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.9.9"
-    compile "com.fasterxml.jackson.core:jackson-annotations:2.9.9"
-    compile "com.fasterxml.jackson.core:jackson-databind:2.9.9"
-    compile "com.fasterxml.jackson.module:jackson-module-afterburner:2.9.9"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org:2.9.9.2"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc:2.9.9.2"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.9.2"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.9.9.2"
+    compile "com.fasterxml.jackson.core:jackson-annotations:2.9.9.2"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.9.9.2"
+    compile "com.fasterxml.jackson.module:jackson-module-afterburner:2.9.9.2"
     compile "org.zalando:problem-spring-web:0.24.0-RC.0"
     compile("io.springfox:springfox-swagger2:${versions.springfoxSwagger}")
     compile("io.springfox:springfox-swagger-ui:${versions.springfoxSwagger}")
@@ -264,7 +264,7 @@ task smoke(type: Test) {
 task contract(type: Test) {
     group = 'Delivery pipeline'
     description = 'Runs the consumer Pact tests'
-    
+
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
     include "uk/gov/hmcts/reform/em/annotation/**"
