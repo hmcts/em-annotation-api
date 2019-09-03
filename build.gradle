@@ -15,8 +15,7 @@ plugins {
     id "net.ltgt.apt-idea" version "0.18"
     id "net.ltgt.apt" version "0.18"
     id 'jacoco'
-//    id 'org.liquibase.gradle' version '2.0.1'
-//    id "com.github.spacialcircumstances.gradle-cucumber-reporting" version "0.0.11"
+    id 'au.com.dius.pact' version '3.5.24'
 }
 
 apply plugin: 'java'
@@ -75,10 +74,32 @@ dependencyCheck {
 def versions = [
         postgresql         : '42.2.6',
         springBoot         : '2.0.5.RELEASE',
-        springfoxSwagger   : '2.7.0',
+        springfoxSwagger   : '2.9.2',
         h2                 : '1.4.197',
         liquibase          : '3.5.3',
+        pact_version       : '3.5.24'
 ]
+
+sourceSets {
+    aat {
+        java {
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+            srcDir('src/aat/java')
+        }
+        resources {
+            srcDir('src/aat/resources')
+        }
+    }
+    contractTest {
+        java {
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+            srcDir file('src/contractTest/java')
+        }
+        resources.srcDir file('src/contactTest/resources')
+    }
+}
 
 dependencies {
     compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org:2.9.9"
@@ -86,7 +107,7 @@ dependencies {
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.9"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.9.9"
     compile "com.fasterxml.jackson.core:jackson-annotations:2.9.9"
-    compile "com.fasterxml.jackson.core:jackson-databind:2.9.9"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.9.9.2"
     compile "com.fasterxml.jackson.module:jackson-module-afterburner:2.9.9"
     compile "org.zalando:problem-spring-web:0.24.0-RC.0"
     compile("io.springfox:springfox-swagger2:${versions.springfoxSwagger}")
@@ -129,10 +150,28 @@ dependencies {
     }
     testCompile 'io.rest-assured:rest-assured:3.2.0'
     testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.197'
     testCompile 'com.warrenstrange:googleauth:1.1.2'
-//    testCompile "com.mattbertolini:liquibase-slf4j"
+
+    testCompileOnly 'junit:junit:4.12'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.3.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.2'
+
+    testCompile "org.junit.jupiter:junit-jupiter-api:5.3.2"
+    testRuntime "org.junit.jupiter:junit-jupiter-engine:5.3.2"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.3.2"
+
+    //pact contract testing
+    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit5_2.12', version: versions.pact_version
+    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-java8_2.12', version: versions.pact_version
+
+    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
+    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
+    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.3.2')
+
+    contractTestCompile sourceSets.main.runtimeClasspath
+    contractTestCompile sourceSets.test.runtimeClasspath
 }
 
 bootJar {
@@ -181,17 +220,25 @@ sonarqube {
     }
 }
 
-sourceSets {
-    aat {
-        java {
-            compileClasspath += main.output
-            runtimeClasspath += main.output
-            srcDir('src/aat/java')
-        }
-        resources {
-            srcDir('src/aat/resources')
-        }
+
+configurations {
+    contractTestCompile.extendsFrom testCompile
+    contractTestRuntime.extendsFrom testRuntime
+}
+
+
+idea {
+    module {
+        testSourceDirs += project.sourceSets.aat.java.srcDirs
+        testResourceDirs += project.sourceSets.aat.resources.srcDirs
+        testSourceDirs += project.sourceSets.contractTest.java.srcDirs
+        testResourceDirs += project.sourceSets.contractTest.resources.srcDirs
     }
+}
+
+test {
+    useJUnitPlatform()
+
 }
 
 task functional(type: Test) {
@@ -212,6 +259,34 @@ task smoke(type: Test) {
     include "uk/gov/hmcts/reform/em/annotation/smoke/**"
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
+}
+
+task contract(type: Test) {
+    group = 'Delivery pipeline'
+    description = 'Runs the consumer Pact tests'
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.contractTest.output.classesDirs
+    classpath = sourceSets.contractTest.runtimeClasspath
+    include "uk/gov/hmcts/reform/em/annotation/**"
+    systemProperty 'pact.rootDir', "${rootDir}/pacts"
+    environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
+}
+
+project.ext {
+    pactVersion = getCheckedOutGitCommitHash()
+}
+
+def getCheckedOutGitCommitHash() {
+    'git rev-parse --verify --short HEAD'.execute().text.trim()
+}
+
+pact {
+    publish {
+        pactDirectory = 'target/pacts'
+        pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
+        tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
+        version = project.pactVersion
+    }
 }
 
 dependencyCheck {
