@@ -24,7 +24,7 @@ module "app" {
   common_tags  = "${var.common_tags}"
   asp_rg = "${var.shared_product_name}-${var.env}"
   asp_name = "${var.shared_product_name}-anno-${var.env}"
-  appinsights_instrumentation_key = "${var.appinsights_instrumentation_key}"
+  appinsights_instrumentation_key = "${data.azurerm_key_vault_secret.app_insights_key.value}"
 
 
   app_settings = {
@@ -108,6 +108,12 @@ data "azurerm_key_vault" "shared_key_vault" {
   resource_group_name = "${local.shared_vault_name}"
 }
 
+data "azurerm_key_vault" "product" {
+  name = "${var.shared_product_name}-${var.env}"
+  resource_group_name = "${var.shared_product_name}-${var.env}"
+}
+
+# Copy s2s key from shared to local vault
 module "local_key_vault" {
   source = "git@github.com:hmcts/moj-module-key-vault?ref=master"
   product = "${local.app_full_name}"
@@ -117,6 +123,7 @@ module "local_key_vault" {
   resource_group_name = "${module.app.resource_group_name}"
   product_group_object_id = "5d9cd025-a293-4b97-a0e5-6f43efce02c0"
   common_tags = "${var.common_tags}"
+  managed_identity_object_id = "${var.managed_identity_object_id}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
