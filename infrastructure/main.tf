@@ -156,6 +156,18 @@ resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   key_vault_id = "${data.azurerm_key_vault.shared_key_vault.id}"
 }
 
+# Load AppInsights key from rpa vault
+data "azurerm_key_vault_secret" "app_insights_key" {
+  name      = "AppInsightsInstrumentationKey"
+  key_vault_id = "${data.azurerm_key_vault.product.id}"
+}
+
+resource "azurerm_key_vault_secret" "local_app_insights_key" {
+  name         = "AppInsightsInstrumentationKey"
+  value        = "${data.azurerm_key_vault_secret.app_insights_key.value}"
+  key_vault_id = "${data.azurerm_key_vault.local_key_vault.id}"
+}
+
 resource "azurerm_resource_group" "rg" {
   name     = "${var.product}-${var.env}"
   location = "${var.location}"

@@ -18,13 +18,11 @@ anno:
   livenessFailureThreshold: 10
   aadIdentityName: em
   keyVaults:
-    s2s:
-      resourceGroup: rpe-service-auth-provider
+    em-anno:
+      resourceGroup: em-anno
       secrets:
         - microservicekey-em-annotation-app
         - AppInsightsInstrumentationKey
-        - docmosis-templates-auth
-        - docmosis-access-key
   environment:
     SPRING_DATASOURCE_URL: jdbc:postgresql://{{ .Release.Name }}-{{ .Values.postgresql.nameOverride}}:5432/postgres?ssl=disable
     SPRING_DATASOURCE_USERNAME: "{{ .Values.postgresql.postgresqlUsername}}"
