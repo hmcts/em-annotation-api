@@ -384,4 +384,11 @@
         <cve>CVE-2018-14041</cve>
         <cve>CVE-2018-14040</cve>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jackson-databind-2.9.9.3.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson\.core/jackson-databind@.*$</packageUrl>
+        <cve>CVE-2019-16335</cve>
+    </suppress>
 </suppressions>
