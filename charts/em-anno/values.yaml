@@ -3,6 +3,9 @@ anno:
     postgresqlUsername: emannotationapp
     postgresqlPassword: emannotationapp
     nameOverride: em-anno-db
+    # TODO Delete service, port
+    service:
+      port: 5432
   image: 'hmctspublic.azurecr.io/em/anno:latest'
   applicationPort: 8080
   readinessDelay: 40
