@@ -105,8 +105,8 @@ data "azurerm_key_vault_secret" "s2s_key" {
 }
 
 data "azurerm_key_vault" "key_vault" {
-  name = "${local.vaultName}"
-  resource_group_name = "${local.vaultName}"
+  name = "${module.key_vault.name}"
+  resource_group_name = "${module.key_vault.name}"
 }
 
 resource "azurerm_key_vault_secret" "local_s2s_key" {
