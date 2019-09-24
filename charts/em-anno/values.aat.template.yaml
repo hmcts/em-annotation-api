@@ -2,3 +2,14 @@ anno:
   # Don't modify below here
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
+  environment:
+    SPRING_DATASOURCE_URL:
+    SPRING_DATASOURCE_USERNAME:
+    SPRING_DATASOURCE_PASSWORD:
+    DRAFT_STORE_DB_CONN_OPTIONS: ?sslmode=disable
+    DRAFT_STORE_DB_HOST: em-anno-postgres-db-aat.postgres.database.azure.com
+    DRAFT_STORE_DB_NAME: annotation
+    DRAFT_STORE_DB_USER_NAME: annotation@em-anno-postgres-db-aat
+    RUN_DB_MIGRATION_ON_STARTUP: 'false'
+    IDAM_URL: https://idam-api.aat.platform.hmcts.net
+    S2S_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
