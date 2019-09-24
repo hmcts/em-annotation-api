@@ -23,7 +23,11 @@ anno:
       secrets:
         - microservicekey-em-annotation-app
         - AppInsightsInstrumentationKey
-        - service-POSTGRES-PASS
+        - anno-POSTGRES-DATABASE
+        - anno-POSTGRES-HOST
+        - anno-POSTGRES-PASS
+        - anno-POSTGRES-PORT
+        - anno-POSTGRES-USER
   environment:
     SPRING_DATASOURCE_URL: jdbc:postgresql://{{ .Release.Name }}-{{ .Values.postgresql.nameOverride}}:5432/postgres?ssl=disable
     SPRING_DATASOURCE_USERNAME: "{{ .Values.postgresql.postgresqlUsername}}"
