@@ -7,3 +7,4 @@ spring:
       aliases:
         microservicekey-em-annotation-app: S2S_KEY
         AppInsightsInstrumentationKey: APPINSIGHTS_INSTRUMENTATIONKEY
+        service-POSTGRES-PASS: SPRING_DATASOURCE_PASSWORD
