@@ -59,6 +59,6 @@ anno:
     CASE_WORKER_ROLES: caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce
     ENABLE_IDAM_HEALTH_CHECK: false
     ENABLE_S2S_HEALTH_CHECK: false
-    ENABLE_LIQUIBASE: true
+    ENABLE_LIQUIBASE: false
     SERVER_PORT: 8080
 
