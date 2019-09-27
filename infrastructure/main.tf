@@ -4,11 +4,11 @@ locals {
   local_env = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "aat" : "saat" : var.env}"
   shared_vault_name = "${var.shared_product_name}-${local.local_env}"
   tags = "${merge(var.common_tags, map("Team Contact", "#rpe"))}"
-  vaultName = "${local.app_full_name}-${var.env}"
+
+  previewVaultName = "${local.app_full_name}-aat"
+  nonPreviewVaultName = "${local.app_full_name}-${var.env}"
+  vaultName = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
 }
-# "${local.ase_name}"
-# "${local.app_full_name}"
-# "${local.local_env}"
 
 
 module "app" {
@@ -104,17 +104,6 @@ data "azurerm_key_vault_secret" "s2s_key" {
   key_vault_id = "${data.azurerm_key_vault.s2s_vault.id}"
 }
 
-data "azurerm_key_vault" "key_vault" {
-  name = "${module.key_vault.key_vault_name}"
-  resource_group_name = "${module.key_vault.key_vault_name}"
-}
-
-resource "azurerm_key_vault_secret" "local_s2s_key" {
-  name         = "microservicekey-em-annotation-app"
-  value        = "${data.azurerm_key_vault_secret.s2s_key.value}"
-  key_vault_id = "${data.azurerm_key_vault.key_vault.id}"
-}
-
 data "azurerm_key_vault" "shared_key_vault" {
   name = "${local.shared_vault_name}"
   resource_group_name = "${local.shared_vault_name}"
@@ -136,6 +125,17 @@ module "key_vault" {
   product_group_object_id = "5d9cd025-a293-4b97-a0e5-6f43efce02c0"
   common_tags = "${var.common_tags}"
   managed_identity_object_id = "${var.managed_identity_object_id}"
+}
+
+data "azurerm_key_vault" "key_vault" {
+  name = "${local.vaultName}"
+  resource_group_name = "${local.vaultName}"
+}
+
+resource "azurerm_key_vault_secret" "local_s2s_key" {
+  name         = "microservicekey-em-annotation-app"
+  value        = "${data.azurerm_key_vault_secret.s2s_key.value}"
+  key_vault_id = "${data.azurerm_key_vault.key_vault.id}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
