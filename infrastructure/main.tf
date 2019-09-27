@@ -10,6 +10,11 @@ locals {
   vaultName = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
 }
 
+resource "azurerm_resource_group" "rg" {
+  name     = "${var.product}-${var.env}"
+  location = "${var.location}"
+  tags = "${local.tags}"
+}
 
 module "app" {
   source = "git@github.com:hmcts/cnp-module-webapp?ref=master"
@@ -178,10 +183,4 @@ resource "azurerm_key_vault_secret" "local_app_insights_key" {
   name         = "AppInsightsInstrumentationKey"
   value        = "${data.azurerm_key_vault_secret.app_insights_key.value}"
   key_vault_id = "${data.azurerm_key_vault.local_key_vault.id}"
-}
-
-resource "azurerm_resource_group" "rg" {
-  name     = "${var.product}-${var.env}"
-  location = "${var.location}"
-  tags = "${local.tags}"
 }
