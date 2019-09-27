@@ -160,7 +160,7 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
   name = "${var.component}-POSTGRES-PORT"
   value = "${module.db.postgresql_listen_port}"
   key_vault_id = "${data.azurerm_key_vault.local_key_vault.id}"
-}key_vault
+}
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name = "${var.component}-POSTGRES-DATABASE"
