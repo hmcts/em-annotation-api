@@ -5,9 +5,7 @@ locals {
   shared_vault_name = "${var.shared_product_name}-${local.local_env}"
   tags = "${merge(var.common_tags, map("Team Contact", "#rpe"))}"
 
-  previewVaultName = "${local.app_full_name}-aat"
-  nonPreviewVaultName = "${local.app_full_name}-${var.env}"
-  vaultName = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
+  vaultName = "${local.app_full_name}-${var.env}"
 }
 
 resource "azurerm_resource_group" "rg" {
