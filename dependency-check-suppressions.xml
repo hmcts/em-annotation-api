@@ -319,13 +319,6 @@
         <cve>CVE-2018-1000180</cve>
     </suppress>
     <suppress>
-        <notes><![CDATA[
-   file name: jackson-databind-2.9.9.2.jar
-   ]]></notes>
-        <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson\.core/jackson-databind@.*$</packageUrl>
-        <cve>CVE-2019-17267</cve>
-    </suppress>
-    <suppress>
         <notes>See https://github.com/FasterXML/jackson-modules-java8/issues/90#issuecomment-450544881</notes>
         <gav regex="true">.*</gav>
         <cve>CVE-2018-1000613</cve>
