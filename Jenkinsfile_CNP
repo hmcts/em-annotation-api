@@ -54,8 +54,4 @@ withPipeline(type , product, component) {
     disableLegacyDeploymentOnAAT()
     installCharts()
     enableAksStagingDeployment()
-
-    after('smoketest:aat') {
-        sh "rm -rf infrastructure/"
-    }
 }
