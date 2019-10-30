@@ -1,4 +1,4 @@
-anno:
+java:
   postgresql:
     postgresqlUsername: emannotationapp
     postgresqlPassword: emannotationapp
