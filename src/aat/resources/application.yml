@@ -4,7 +4,7 @@ spring:
     allow-bean-definition-overriding: true
 
 test:
-  url: ${TSET_URL:http://localhost:8080}
+  url: ${TEST_URL:http://localhost:8080}
 
 idam:
   api:
