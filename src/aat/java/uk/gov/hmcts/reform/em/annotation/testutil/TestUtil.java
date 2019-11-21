@@ -4,13 +4,11 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.em.test.idam.IdamHelper;
 import uk.gov.hmcts.reform.em.test.s2s.S2sHelper;
 
 import javax.annotation.PostConstruct;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
