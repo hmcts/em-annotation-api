@@ -30,7 +30,7 @@ apply from: 'gradle/liquibase.gradle'
 
 dependencyManagement {
     imports {
-        mavenBom 'org.springframework.cloud:spring-cloud-openfeign:2.1.4.RELEASE'
+        mavenBom 'org.springframework.cloud:spring-cloud-openfeign:2.2.1.RELEASE'
     }
 }
 
