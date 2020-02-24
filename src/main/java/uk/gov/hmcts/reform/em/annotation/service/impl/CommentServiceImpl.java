@@ -8,10 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.domain.Comment;
 import uk.gov.hmcts.reform.em.annotation.repository.CommentRepository;
+import uk.gov.hmcts.reform.em.annotation.rest.errors.ResourceNotFoundException;
 import uk.gov.hmcts.reform.em.annotation.service.CommentService;
+import uk.gov.hmcts.reform.em.annotation.service.CommentTagService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.CommentMapper;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,9 +31,14 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentMapper commentMapper;
 
-    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper) {
+    private final CommentTagService commentTagService;
+
+    public CommentServiceImpl(CommentRepository commentRepository,
+                              CommentMapper commentMapper,
+                              CommentTagService commentTagService) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
+        this.commentTagService = commentTagService;
     }
 
     /**
@@ -42,6 +50,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDTO save(CommentDTO commentDTO) {
         log.debug("Request to save Comment : {}", commentDTO);
+
         Comment comment = commentMapper.toEntity(commentDTO);
         comment = commentRepository.save(comment);
         return commentMapper.toDto(comment);
@@ -60,7 +69,6 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.findAll(pageable)
             .map(commentMapper::toDto);
     }
-
 
     /**
      * Get one comment by id.
