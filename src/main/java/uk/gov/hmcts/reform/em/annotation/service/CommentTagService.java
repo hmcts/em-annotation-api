@@ -12,27 +12,10 @@ import java.util.Optional;
 public interface CommentTagService {
 
     /**
-     * Save a comment tag.
-     *
-     * @param commentTagDTO the entity to save
-     * @return the persisted entity
-     */
-    CommentTagDTO save(CommentTagDTO commentTagDTO);
-
-    /**
      * Get all the comment tags.
      *
      * @param pageable the pagination information
      * @return the list of entities
      */
     Page<CommentTagDTO> findAll(Pageable pageable);
-
-
-    /**
-     * Get the "id" comment tag.
-     *
-     * @param name the id of the entity
-     * @return the entity
-     */
-    Optional<CommentTagDTO> findOne(String name);
 }

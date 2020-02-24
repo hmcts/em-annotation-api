@@ -30,31 +30,7 @@ public class CommentTagDTO {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        CommentTagDTO commentTagDTO = (CommentTagDTO) o;
-        if (commentTagDTO.getName() == null || getName() == null) {
-            return false;
-        }
-        return Objects.equals(getName(), commentTagDTO.getName());
-    }
-
-    @Override
     public int hashCode() {
         return Objects.hashCode(getName());
-    }
-
-    @Override
-    public String toString() {
-        return "CommentDTO{" +
-                "name=" + getName() + "'" +
-                ", label=" + getLabel() + "'" +
-                "}";
     }
 }
