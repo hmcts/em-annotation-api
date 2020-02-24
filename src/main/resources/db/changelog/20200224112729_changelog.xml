@@ -1,0 +1,38 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+<property name="now" value="now()" dbms="h2"/>
+
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
+
+    <changeSet author="tomelliott (generated)" id="1582543651845-5">
+        <createTable tableName="comment_tag">
+            <column name="name" type="VARCHAR(35)">
+                <constraints primaryKey="true" primaryKeyName="comment_tagPK"/>
+            </column>
+            <column name="label" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comment_id" type="uuid">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20180917100757-2" author="Tom Elliott">
+        <addForeignKeyConstraint baseColumnNames="comment_id"
+                                 baseTableName="comment_tag"
+                                 constraintName="fk_comment_tag_comment_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="comment"/>
+    </changeSet>
+</databaseChangeLog>
