@@ -33,20 +33,6 @@ public class CommentTagServiceImpl implements CommentTagService {
     }
 
     /**
-     * Save a comment tag.
-     *
-     * @param commentTagDTO the entity to save
-     * @return the persisted entity
-     */
-    @Override
-    public CommentTagDTO save(CommentTagDTO commentTagDTO) {
-        log.debug("Request to save Comment : {}", commentTagDTO);
-        CommentTag commentTag = commentTagMapper.toEntity(commentTagDTO);
-        commentTag = commentTagRepository.save(commentTag);
-        return commentTagMapper.toDto(commentTag);
-    }
-
-    /**
      * Get all the comment tags.
      *
      * @param pageable the pagination information
@@ -57,20 +43,6 @@ public class CommentTagServiceImpl implements CommentTagService {
     public Page<CommentTagDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Comment Tags");
         return commentTagRepository.findAll(pageable)
-                .map(commentTagMapper::toDto);
-    }
-
-    /**
-     * Get one comment tag by name.
-     *
-     * @param name the name of the entity
-     * @return the entity
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<CommentTagDTO> findOne(String name) {
-        log.debug("Request to get Comment Tag : {}", name);
-        return commentTagRepository.findByName(name)
                 .map(commentTagMapper::toDto);
     }
 }
