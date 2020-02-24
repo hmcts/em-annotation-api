@@ -28,9 +28,4 @@ public class CommentTagDTO {
     public void setLabel(String label) {
         this.label = label;
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getName());
-    }
 }
