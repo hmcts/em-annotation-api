@@ -1,5 +1,5 @@
 variable "product" {
-  type = "string"
+  default = "em"
 }
 
 variable "shared_product_name" {
@@ -7,7 +7,7 @@ variable "shared_product_name" {
 }
 
 variable "component" {
-  type = "string"
+  default = "anno"
 }
 
 variable "team_name" {
@@ -24,7 +24,7 @@ variable "location" {
 }
 
 variable "env" {
-  type = "string"
+  default = "demo"
 }
 
 variable "subscription" {
