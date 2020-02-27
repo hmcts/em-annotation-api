@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.domain.Annotation;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
+import uk.gov.hmcts.reform.em.annotation.domain.Tag;
 import uk.gov.hmcts.reform.em.annotation.domain.enumeration.AnnotationType;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationRepository;
 import uk.gov.hmcts.reform.em.annotation.rest.errors.ExceptionTranslator;
@@ -111,6 +112,12 @@ public class AnnotationResourceIntTest {
             .annotationType(DEFAULT_ANNOTATION_TYPE.toString())
             .page(DEFAULT_PAGE);
         annotation.setId(UUID.randomUUID());
+        annotation.setCreatedBy("system");
+        Tag tag = new Tag();
+        tag.setName("new_tag");
+        tag.setLabel("new tag");
+        tag.setCreatedBy("system");
+        annotation.addTag(tag);
         return annotation;
     }
 

@@ -11,12 +11,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.domain.Comment;
-import uk.gov.hmcts.reform.em.annotation.domain.CommentTag;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 import uk.gov.hmcts.reform.em.annotation.repository.CommentRepository;
 import uk.gov.hmcts.reform.em.annotation.service.CommentService;
@@ -94,10 +92,6 @@ public class CommentResourceIntTest {
         Comment comment = new Comment()
             .content(DEFAULT_CONTENT);
         comment.setId(UUID.randomUUID());
-        CommentTag tag = new CommentTag();
-        tag.setName("new_tag");
-        tag.setLabel("new tag");
-        comment.addCommentTag(tag);
         return comment;
     }
 

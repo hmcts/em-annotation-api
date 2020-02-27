@@ -19,8 +19,6 @@ public class CommentDTO extends AbstractAuditingDTO implements Serializable {
 
     private UUID annotationId;
 
-    private Set<CommentTagDTO> commentTags = new HashSet<>();
-
     public UUID getId() {
         return id;
     }
@@ -44,15 +42,6 @@ public class CommentDTO extends AbstractAuditingDTO implements Serializable {
     public void setAnnotationId(UUID annotationId) {
         this.annotationId = annotationId;
     }
-
-    public Set<CommentTagDTO> getCommentTags() {
-        return commentTags;
-    }
-
-    public void setCommentTags(Set<CommentTagDTO> commentTags) {
-        this.commentTags = commentTags;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {

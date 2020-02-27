@@ -33,6 +33,9 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
     @OneToMany(mappedBy = "annotation", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
 
+    @OneToMany(mappedBy = "annotation", cascade = CascadeType.ALL)
+    private Set<Tag> tags = new HashSet<>();
+
     @OneToMany(mappedBy = "annotation", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Rectangle> rectangles = new HashSet<>();
 
@@ -106,6 +109,25 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public Annotation tags(Set<Tag> tags) {
+        this.tags = tags;
+        return this;
+    }
+
+    public Annotation addTag(Tag tag) {
+        this.tags.add(tag);
+        return this;
+    }
+
+    public Annotation removeTag(Tag tag) {
+        this.tags.remove(tag);
+        return this;
     }
 
     public Set<Rectangle> getRectangles() {
