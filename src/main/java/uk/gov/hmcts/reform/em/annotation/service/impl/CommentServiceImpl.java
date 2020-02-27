@@ -8,13 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.domain.Comment;
 import uk.gov.hmcts.reform.em.annotation.repository.CommentRepository;
-import uk.gov.hmcts.reform.em.annotation.rest.errors.ResourceNotFoundException;
 import uk.gov.hmcts.reform.em.annotation.service.CommentService;
-import uk.gov.hmcts.reform.em.annotation.service.CommentTagService;
+import uk.gov.hmcts.reform.em.annotation.service.TagService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.CommentMapper;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,14 +29,14 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentMapper commentMapper;
 
-    private final CommentTagService commentTagService;
+    private final TagService tagService;
 
     public CommentServiceImpl(CommentRepository commentRepository,
                               CommentMapper commentMapper,
-                              CommentTagService commentTagService) {
+                              TagService tagService) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
-        this.commentTagService = commentTagService;
+        this.tagService = tagService;
     }
 
     /**

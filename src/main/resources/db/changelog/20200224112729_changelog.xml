@@ -15,24 +15,34 @@
     <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
 
     <changeSet author="tomelliott (generated)" id="1582543651845-5">
-        <createTable tableName="comment_tag">
-            <column name="name" type="VARCHAR(35)">
-                <constraints primaryKey="true" primaryKeyName="comment_tagPK"/>
+        <createTable tableName="tag">
+            <column name="name" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(150)">
+                <constraints nullable="false"/>
             </column>
             <column name="label" type="VARCHAR(20)">
                 <constraints nullable="false"/>
             </column>
-            <column name="comment_id" type="uuid">
+            <column name="color" type="VARCHAR(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="annotation_id" type="uuid">
                 <constraints nullable="true" />
             </column>
         </createTable>
     </changeSet>
 
     <changeSet id="20180917100757-2" author="Tom Elliott">
-        <addForeignKeyConstraint baseColumnNames="comment_id"
-                                 baseTableName="comment_tag"
-                                 constraintName="fk_comment_tag_comment_id"
+        <addForeignKeyConstraint baseColumnNames="annotation_id"
+                                 baseTableName="tag"
+                                 constraintName="fk_tag_annotation_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="comment"/>
+                                 referencedTableName="annotation"/>
+
+        <addUniqueConstraint columnNames="name, created_by"
+                             constraintName="composite_primary_key"
+                             tableName="tag"/>
     </changeSet>
 </databaseChangeLog>

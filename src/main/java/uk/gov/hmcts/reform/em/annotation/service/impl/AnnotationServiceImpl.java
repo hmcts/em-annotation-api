@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.domain.Annotation;
+import uk.gov.hmcts.reform.em.annotation.domain.Tag;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationRepository;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
@@ -50,6 +51,7 @@ public class AnnotationServiceImpl implements AnnotationService {
     public AnnotationDTO save(AnnotationDTO annotationDTO) {
         log.debug("Request to save Annotation : {}", annotationDTO);
         final Annotation annotation = annotationMapper.toEntity(annotationDTO);
+
         if (annotationDTO.getRectangles() != null) {
             annotation.getRectangles().forEach(r -> {
                 if (r.getAnnotation() == null ) {
@@ -64,6 +66,10 @@ public class AnnotationServiceImpl implements AnnotationService {
                 }
             });
         }
+        for (Tag tag : annotation.getTags()) {
+            tag.setCreatedBy(annotationDTO.getCreatedBy());
+        }
+
         return annotationMapper.toDto(annotationRepository.save(annotation));
     }
 

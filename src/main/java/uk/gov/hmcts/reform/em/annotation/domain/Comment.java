@@ -33,9 +33,6 @@ public class Comment extends AbstractAuditingEntity implements Serializable {
     @JsonIgnore
     private Annotation annotation;
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
-    private Set<CommentTag> commentTags = new HashSet<>();
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public UUID getId() {
         return id;
@@ -56,25 +53,6 @@ public class Comment extends AbstractAuditingEntity implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Set<CommentTag> getCommentTags() {
-        return commentTags;
-    }
-
-    public Comment commentTags(Set<CommentTag> commentTags) {
-        this.commentTags = commentTags;
-        return this;
-    }
-
-    public Comment addCommentTag(CommentTag commentTag) {
-        this.commentTags.add(commentTag);
-        return this;
-    }
-
-    public Comment removeCommentTag(CommentTag commentTag) {
-        this.commentTags.remove(commentTag);
-        return this;
     }
 
     public Annotation getAnnotation() {
