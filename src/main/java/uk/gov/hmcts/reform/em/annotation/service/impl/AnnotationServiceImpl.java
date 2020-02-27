@@ -11,6 +11,7 @@ import uk.gov.hmcts.reform.em.annotation.domain.Tag;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationRepository;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
+import uk.gov.hmcts.reform.em.annotation.service.dto.TagDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 
 import javax.persistence.EntityManager;
@@ -52,6 +53,10 @@ public class AnnotationServiceImpl implements AnnotationService {
         log.debug("Request to save Annotation : {}", annotationDTO);
         final Annotation annotation = annotationMapper.toEntity(annotationDTO);
 
+        for (TagDTO tag : annotationDTO.getTags()) {
+            tag.setCreatedBy(annotationDTO.getCreatedBy());
+        }
+
         if (annotationDTO.getRectangles() != null) {
             annotation.getRectangles().forEach(r -> {
                 if (r.getAnnotation() == null ) {
@@ -66,8 +71,13 @@ public class AnnotationServiceImpl implements AnnotationService {
                 }
             });
         }
-        for (Tag tag : annotation.getTags()) {
-            tag.setCreatedBy(annotationDTO.getCreatedBy());
+        if (annotationDTO.getTags() != null) {
+            annotation.getTags().forEach(t -> {
+                if (t.getAnnotation() == null) {
+                    t.setAnnotation(annotation);
+                }
+                t.setCreatedBy(annotationDTO.getCreatedBy());
+            });
         }
 
         return annotationMapper.toDto(annotationRepository.save(annotation));
