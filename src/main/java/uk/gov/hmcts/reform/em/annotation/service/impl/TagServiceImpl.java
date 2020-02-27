@@ -43,10 +43,4 @@ public class TagServiceImpl implements TagService {
                 .map(tagMapper::toDto)
                 .collect(Collectors.toList());
     }
-
-    @Override
-    public TagDTO save(TagDTO tagDTO) {
-        tagRepository.saveAndFlush(tagMapper.toEntity(tagDTO));
-        return tagDTO;
-    }
 }

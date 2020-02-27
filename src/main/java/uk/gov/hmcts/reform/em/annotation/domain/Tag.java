@@ -68,4 +68,18 @@ public class Tag implements Serializable {
     public void setColor(String color) {
         this.color = color;
     }
+
+    public Annotation getAnnotation() {
+        return annotation;
+    }
+
+    public Tag annotation(Annotation annotation) {
+        this.annotation = annotation;
+        return this;
+    }
+
+    public void setAnnotation(Annotation annotation) {
+        this.annotation = annotation;
+    }
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 }

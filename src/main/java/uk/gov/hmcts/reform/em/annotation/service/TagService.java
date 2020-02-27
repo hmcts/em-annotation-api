@@ -16,6 +16,4 @@ public interface TagService {
      * @return a list of tags belonging to the required user
      */
     List<TagDTO> findTagByCreatedBy(String createdBy);
-
-    TagDTO save(TagDTO tagDTO);
 }

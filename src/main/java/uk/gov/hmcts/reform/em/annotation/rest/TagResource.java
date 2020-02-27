@@ -5,18 +5,13 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uk.gov.hmcts.reform.em.annotation.rest.errors.BadRequestAlertException;
-import uk.gov.hmcts.reform.em.annotation.rest.util.HeaderUtil;
 import uk.gov.hmcts.reform.em.annotation.service.TagService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
-import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.TagDTO;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 /**
@@ -51,6 +46,6 @@ public class TagResource {
     public ResponseEntity<List<TagDTO>> getTagsCreatedBy(@PathVariable String createdBy) {
         log.debug("REST request to get Tags for : {}", createdBy);
         List<TagDTO> tags = tagService.findTagByCreatedBy(createdBy);
-        return ResponseEntity.ok().body(tags);
+        return new ResponseEntity<>(tags, HttpStatus.OK);
     }
 }
