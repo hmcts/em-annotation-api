@@ -7,9 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.domain.Annotation;
-import uk.gov.hmcts.reform.em.annotation.domain.Tag;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationRepository;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
+import uk.gov.hmcts.reform.em.annotation.service.TagService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.TagDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
@@ -33,12 +33,18 @@ public class AnnotationServiceImpl implements AnnotationService {
 
     private final AnnotationMapper annotationMapper;
 
+    private final TagService tagService;
+
     @PersistenceContext
     private final EntityManager entityManager;
 
-    public AnnotationServiceImpl(AnnotationRepository annotationRepository, AnnotationMapper annotationMapper, EntityManager entityManager) {
+    public AnnotationServiceImpl(AnnotationRepository annotationRepository,
+                                 AnnotationMapper annotationMapper,
+                                 TagService tagService,
+                                 EntityManager entityManager) {
         this.annotationRepository = annotationRepository;
         this.annotationMapper = annotationMapper;
+        this.tagService = tagService;
         this.entityManager = entityManager;
     }
 
@@ -51,11 +57,12 @@ public class AnnotationServiceImpl implements AnnotationService {
     @Override
     public AnnotationDTO save(AnnotationDTO annotationDTO) {
         log.debug("Request to save Annotation : {}", annotationDTO);
-        final Annotation annotation = annotationMapper.toEntity(annotationDTO);
 
         for (TagDTO tag : annotationDTO.getTags()) {
             tag.setCreatedBy(annotationDTO.getCreatedBy());
         }
+
+        final Annotation annotation = annotationMapper.toEntity(annotationDTO);
 
         if (annotationDTO.getRectangles() != null) {
             annotation.getRectangles().forEach(r -> {
@@ -73,6 +80,11 @@ public class AnnotationServiceImpl implements AnnotationService {
         }
         if (annotationDTO.getTags() != null) {
             annotation.getTags().forEach(t -> {
+                if (t.getId() == null) {
+                    tagService.persistTag(t);
+                    t.setId(UUID.randomUUID());
+                }
+
                 if (t.getAnnotation() == null) {
                     t.setAnnotation(annotation);
                 }

@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * A Annotation.
@@ -33,8 +30,8 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
     @OneToMany(mappedBy = "annotation", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
 
-    @OneToMany(mappedBy = "annotation", cascade = CascadeType.ALL)
-    private Set<Tag> tags = new HashSet<>();
+    @OneToMany(mappedBy = "annotation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Tag> tags = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "annotation", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Rectangle> rectangles = new HashSet<>();

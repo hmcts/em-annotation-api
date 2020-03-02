@@ -8,6 +8,8 @@ import java.util.UUID;
  */
 public class TagDTO {
 
+    private UUID id;
+
     @Size(max = 35)
     private String name;
 
@@ -19,6 +21,14 @@ public class TagDTO {
     private String color;
 
     private UUID annotationId;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

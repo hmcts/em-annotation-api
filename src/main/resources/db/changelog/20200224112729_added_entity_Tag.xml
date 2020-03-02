@@ -16,6 +16,9 @@
 
     <changeSet author="tomelliott (generated)" id="1582543651845-5">
         <createTable tableName="tag">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
             <column name="name" type="VARCHAR(20)">
                 <constraints nullable="false"/>
             </column>
@@ -40,9 +43,5 @@
                                  constraintName="fk_tag_annotation_id"
                                  referencedColumnNames="id"
                                  referencedTableName="annotation"/>
-
-        <addUniqueConstraint columnNames="name, created_by"
-                             constraintName="composite_primary_key"
-                             tableName="tag"/>
     </changeSet>
 </databaseChangeLog>

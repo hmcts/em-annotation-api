@@ -2,9 +2,7 @@ package uk.gov.hmcts.reform.em.annotation.service.dto;
 
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 /**

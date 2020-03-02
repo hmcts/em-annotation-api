@@ -13,5 +13,5 @@ import java.util.UUID;
 @Repository
 public interface TagRepository extends JpaRepository<Tag, UUID> {
 
-    List<Tag> findTagByCreatedBy(String createdBy);
+    List<Tag> findTagsByCreatedBy(String createdBy);
 }

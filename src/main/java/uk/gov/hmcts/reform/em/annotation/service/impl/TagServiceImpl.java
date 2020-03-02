@@ -4,12 +4,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.hmcts.reform.em.annotation.domain.Tag;
 import uk.gov.hmcts.reform.em.annotation.repository.TagRepository;
 import uk.gov.hmcts.reform.em.annotation.service.TagService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.TagDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.TagMapper;
 
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -38,9 +42,31 @@ public class TagServiceImpl implements TagService {
      */
     @Override
     public List<TagDTO> findTagByCreatedBy(String createdBy) {
-        return tagRepository.findTagByCreatedBy(createdBy)
+        return tagRepository.findTagsByCreatedBy(createdBy)
                 .stream()
+                .filter(t -> t.getAnnotation() == null)
+                .filter(distinctByKey(Tag::getName))
                 .map(tagMapper::toDto)
+                .map(tag -> {
+                    tag.setId(null);
+                    return tag;
+                })
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Method used to store tags that are to be kept separate from a particular annotation
+     *
+     * @param tag the new tag to be persisted
+     */
+    @Override
+    public void persistTag(Tag tag) {
+        tag.setId(UUID.randomUUID());
+        tagRepository.saveAndFlush(tag);
+    }
+
+    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
     }
 }

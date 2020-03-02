@@ -15,8 +15,7 @@
     <include file="./changelog/20180917100757_added_entity_constraints_Annotation.xml" relativeToChangelogFile="true"/>
     <include file="./changelog/20180917100758_added_entity_constraints_Comment.xml" relativeToChangelogFile="true"/>
     <include file="./changelog/20180917101255_added_entity_constraints_Rectangle.xml" relativeToChangelogFile="true"/>
+    <include file="./changelog/20200224112729_added_entity_Tag.xml" relativeToChangelogFile="true"/>
 
     <include file="./changelog/20181005171348_changelog.xml" relativeToChangelogFile="true"/>
-    <include file="./changelog/20200224112729_changelog.xml" relativeToChangelogFile="true"/>
-
 </databaseChangeLog>

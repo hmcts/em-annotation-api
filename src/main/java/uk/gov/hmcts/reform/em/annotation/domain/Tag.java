@@ -6,20 +6,21 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * A Comment Tag.
  */
 @Entity
 @Table(name = "tag")
-@IdClass(TagId.class)
 public class Tag implements Serializable {
 
     @Id
+    private UUID id;
+
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
-    @Id
     @Column(name = "created_by", nullable = false)
     private String createdBy;
 
@@ -36,6 +37,15 @@ public class Tag implements Serializable {
     private Annotation annotation;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.service;
 
+import uk.gov.hmcts.reform.em.annotation.domain.Tag;
 import uk.gov.hmcts.reform.em.annotation.service.dto.TagDTO;
 
 import java.util.List;
@@ -16,4 +17,11 @@ public interface TagService {
      * @return a list of tags belonging to the required user
      */
     List<TagDTO> findTagByCreatedBy(String createdBy);
+
+    /**
+     * Method used to store tags that are to be kept separate from a particular annotation
+     *
+     * @param tag the new tag to be persisted
+     */
+    void persistTag(Tag tag);
 }

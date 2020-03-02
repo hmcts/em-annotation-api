@@ -114,6 +114,7 @@ public class AnnotationResourceIntTest {
         annotation.setId(UUID.randomUUID());
         annotation.setCreatedBy("system");
         Tag tag = new Tag();
+        tag.setId(UUID.randomUUID());
         tag.setName("new_tag");
         tag.setLabel("new tag");
         tag.setCreatedBy("system");

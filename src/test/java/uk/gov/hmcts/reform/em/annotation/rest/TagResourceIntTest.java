@@ -23,6 +23,8 @@ import uk.gov.hmcts.reform.em.annotation.service.mapper.TagMapper;
 
 import javax.persistence.EntityManager;
 
+import java.util.UUID;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -80,6 +82,7 @@ public class TagResourceIntTest {
 
     public static Tag createEntity(EntityManager em) {
         Tag tag = new Tag();
+        tag.setId(UUID.randomUUID());
         tag.setName("new_tag");
         tag.setLabel("new tag");
         tag.setCreatedBy("system");
