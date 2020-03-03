@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.service.dto;
 
 import javax.validation.constraints.Size;
-import java.util.UUID;
 
 /**
  * A DTO for the Tag entity.
@@ -17,8 +16,6 @@ public class TagDTO {
     private String label;
 
     private String color;
-
-    private UUID annotationId;
 
     public String getName() {
         return name;
@@ -50,14 +47,5 @@ public class TagDTO {
 
     public void setColor(String color) {
         this.color = color;
-    }
-
-
-    public UUID getAnnotationId() {
-        return annotationId;
-    }
-
-    public void setAnnotationId(UUID annotationId) {
-        this.annotationId = annotationId;
     }
 }

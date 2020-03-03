@@ -7,9 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.domain.Annotation;
-import uk.gov.hmcts.reform.em.annotation.domain.Tag;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationRepository;
+import uk.gov.hmcts.reform.em.annotation.repository.TagRepository;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
+import uk.gov.hmcts.reform.em.annotation.service.TagService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.TagDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
@@ -31,14 +32,20 @@ public class AnnotationServiceImpl implements AnnotationService {
 
     private final AnnotationRepository annotationRepository;
 
+    private final TagService tagService;
+
     private final AnnotationMapper annotationMapper;
 
     @PersistenceContext
     private final EntityManager entityManager;
 
-    public AnnotationServiceImpl(AnnotationRepository annotationRepository, AnnotationMapper annotationMapper, EntityManager entityManager) {
+    public AnnotationServiceImpl(AnnotationRepository annotationRepository,
+                                 AnnotationMapper annotationMapper,
+                                 TagService tagService,
+                                 EntityManager entityManager) {
         this.annotationRepository = annotationRepository;
         this.annotationMapper = annotationMapper;
+        this.tagService = tagService;
         this.entityManager = entityManager;
     }
 
@@ -73,10 +80,8 @@ public class AnnotationServiceImpl implements AnnotationService {
         }
         if (annotationDTO.getTags() != null) {
             annotation.getTags().forEach(t -> {
-                if (t.getAnnotation() == null) {
-                    t.setAnnotation(annotation);
-                }
                 t.setCreatedBy(annotationDTO.getCreatedBy());
+                tagService.persistTag(t);
             });
         }
 
@@ -96,7 +101,6 @@ public class AnnotationServiceImpl implements AnnotationService {
         return annotationRepository.findAll(pageable)
             .map(annotationMapper::toDto);
     }
-
 
     /**
      * Get one annotation by id.
