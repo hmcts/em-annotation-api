@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.hmcts.reform.em.annotation.domain.Tag;
 import uk.gov.hmcts.reform.em.annotation.repository.TagRepository;
 import uk.gov.hmcts.reform.em.annotation.service.TagService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.TagDTO;
@@ -42,5 +43,10 @@ public class TagServiceImpl implements TagService {
                 .stream()
                 .map(tagMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void persistTag(Tag tag) {
+        tagRepository.saveAndFlush(tag);
     }
 }

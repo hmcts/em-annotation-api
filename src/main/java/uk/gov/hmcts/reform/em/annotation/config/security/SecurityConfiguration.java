@@ -56,7 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         authenticationManager.setEraseCredentialsAfterAuthentication(false);
         authCheckerFilter.setAuthenticationManager(authenticationManager());
 
-        http.antMatcher("/api/**")
+        http.antMatcher("/apig/**")
             .addFilter(authCheckerFilter)
             .addFilterAfter(new IdamDetailsFilter(idamDetailsFilterService), AuthCheckerServiceAndUserFilter.class)
             .sessionManagement().sessionCreationPolicy(STATELESS).and()
