@@ -45,6 +45,11 @@ public class TagServiceImpl implements TagService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Persist tag entity in the database
+     *
+     * @param tag the tag to be persisted to the database
+     */
     @Override
     public void persistTag(Tag tag) {
         tagRepository.saveAndFlush(tag);

@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.domain.Comment;
 import uk.gov.hmcts.reform.em.annotation.repository.CommentRepository;
 import uk.gov.hmcts.reform.em.annotation.service.CommentService;
-import uk.gov.hmcts.reform.em.annotation.service.TagService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.CommentMapper;
 
@@ -29,14 +28,9 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentMapper commentMapper;
 
-    private final TagService tagService;
-
-    public CommentServiceImpl(CommentRepository commentRepository,
-                              CommentMapper commentMapper,
-                              TagService tagService) {
+    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
-        this.tagService = tagService;
     }
 
     /**

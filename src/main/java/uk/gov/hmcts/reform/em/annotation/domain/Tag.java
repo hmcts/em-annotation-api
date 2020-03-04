@@ -1,11 +1,10 @@
 package uk.gov.hmcts.reform.em.annotation.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
- * A Comment Tag.
+ * An Annotation Tag.
  */
 @Entity
 @Table(name = "tag")
@@ -20,7 +19,6 @@ public class Tag implements Serializable {
     @Column(name = "created_by", nullable = false)
     private String createdBy;
 
-    @Size(max = 20)
     @Column(name = "label", length = 20, nullable = false)
     private String label;
 
