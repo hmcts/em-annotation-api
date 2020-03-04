@@ -9,5 +9,4 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.TagDTO;
  */
 @Mapper(componentModel = "spring")
 public interface TagMapper extends EntityMapper<TagDTO, Tag> {
-
 }
