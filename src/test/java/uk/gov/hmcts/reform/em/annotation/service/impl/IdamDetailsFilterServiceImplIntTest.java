@@ -11,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.em.annotation.Application;
+import uk.gov.hmcts.reform.em.annotation.BaseTest;
+import uk.gov.hmcts.reform.em.annotation.TestSecurityConfiguration;
 import uk.gov.hmcts.reform.em.annotation.authchecker.EmServiceAndUserDetails;
 import uk.gov.hmcts.reform.em.annotation.repository.IdamDetailsRepository;
 import uk.gov.hmcts.reform.em.annotation.service.IdamDetailsFilterService;
@@ -18,8 +20,8 @@ import uk.gov.hmcts.reform.em.annotation.service.IdamDetailsFilterService;
 import java.util.Arrays;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
-public class IdamDetailsFilterServiceImplIntTest {
+@SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
+public class IdamDetailsFilterServiceImplIntTest extends BaseTest {
 
     @Autowired
     IdamDetailsFilterService idamDetailsFilterService;

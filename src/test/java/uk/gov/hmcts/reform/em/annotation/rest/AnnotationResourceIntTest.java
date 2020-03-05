@@ -10,10 +10,10 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
+import uk.gov.hmcts.reform.em.annotation.BaseTest;
+import uk.gov.hmcts.reform.em.annotation.TestSecurityConfiguration;
 import uk.gov.hmcts.reform.em.annotation.domain.Annotation;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 import uk.gov.hmcts.reform.em.annotation.domain.enumeration.AnnotationType;
@@ -31,7 +31,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static uk.gov.hmcts.reform.em.annotation.rest.TestUtil.createFormattingConversionService;
 
 /**
  * Test class for the AnnotationResource REST controller.
@@ -39,8 +38,8 @@ import static uk.gov.hmcts.reform.em.annotation.rest.TestUtil.createFormattingCo
  * @see AnnotationResource
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
-public class AnnotationResourceIntTest {
+@SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
+public class AnnotationResourceIntTest extends BaseTest {
 
     private static final AnnotationType DEFAULT_ANNOTATION_TYPE = AnnotationType.AREA;
     private static final AnnotationType UPDATED_ANNOTATION_TYPE = AnnotationType.HIGHLIGHT;
@@ -81,8 +80,6 @@ public class AnnotationResourceIntTest {
     @Autowired
     private EntityManager em;
 
-    private MockMvc restAnnotationMockMvc;
-
     private Annotation annotation;
 
     private UUID uuid;
@@ -91,11 +88,6 @@ public class AnnotationResourceIntTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         final AnnotationResource annotationResource = new AnnotationResource(annotationService);
-        this.restAnnotationMockMvc = MockMvcBuilders.standaloneSetup(annotationResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
         em.persist(new IdamDetails("system"));
         em.persist(new IdamDetails("anonymous"));
     }
@@ -127,7 +119,7 @@ public class AnnotationResourceIntTest {
         // Create the Annotation
         AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
         annotationDTO.setId(null);
-        restAnnotationMockMvc.perform(post("/api/annotations")
+        restLogoutMockMvc.perform(post("/api/annotations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
             .andExpect(status().isBadRequest());
@@ -148,7 +140,7 @@ public class AnnotationResourceIntTest {
         AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restAnnotationMockMvc.perform(post("/api/annotations")
+        restLogoutMockMvc.perform(post("/api/annotations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
             .andExpect(status().isCreated());
@@ -165,7 +157,7 @@ public class AnnotationResourceIntTest {
         annotationRepository.saveAndFlush(annotation);
 
         // Get all the annotationList
-        restAnnotationMockMvc.perform(get("/api/annotations?sort=id,desc"))
+        restLogoutMockMvc.perform(get("/api/annotations?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(annotation.getId().toString())))
@@ -180,7 +172,7 @@ public class AnnotationResourceIntTest {
         annotationRepository.saveAndFlush(annotation);
 
         // Get the annotation
-        restAnnotationMockMvc.perform(get("/api/annotations/{id}", annotation.getId()))
+        restLogoutMockMvc.perform(get("/api/annotations/{id}", annotation.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(annotation.getId().toString()))
@@ -192,7 +184,7 @@ public class AnnotationResourceIntTest {
     @Transactional
     public void getNonExistingAnnotation() throws Exception {
         // Get the annotation
-        restAnnotationMockMvc.perform(get("/api/annotations/{id}", UUID.randomUUID()))
+        restLogoutMockMvc.perform(get("/api/annotations/{id}", UUID.randomUUID()))
             .andExpect(status().isNotFound());
     }
 
@@ -213,7 +205,7 @@ public class AnnotationResourceIntTest {
             .page(UPDATED_PAGE);
         AnnotationDTO annotationDTO = annotationMapper.toDto(updatedAnnotation);
 
-        restAnnotationMockMvc.perform(put("/api/annotations")
+        restLogoutMockMvc.perform(put("/api/annotations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
             .andExpect(status().isOk());
@@ -235,7 +227,7 @@ public class AnnotationResourceIntTest {
         AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restAnnotationMockMvc.perform(put("/api/annotations")
+        restLogoutMockMvc.perform(put("/api/annotations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
             .andExpect(status().isOk());
@@ -254,7 +246,7 @@ public class AnnotationResourceIntTest {
         int databaseSizeBeforeDelete = annotationRepository.findAll().size();
 
         // Get the annotation
-        restAnnotationMockMvc.perform(delete("/api/annotations/{id}", annotation.getId())
+        restLogoutMockMvc.perform(delete("/api/annotations/{id}", annotation.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
