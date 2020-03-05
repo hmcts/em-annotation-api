@@ -15,8 +15,8 @@ import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.config.Constants;
 import uk.gov.hmcts.reform.em.annotation.config.audit.AuditEventConverter;
 import uk.gov.hmcts.reform.em.annotation.domain.PersistentAuditEvent;
-import uk.gov.hmcts.reform.em.annotation.repository.CustomAuditEventRepository;
-import uk.gov.hmcts.reform.em.annotation.repository.PersistenceAuditEventRepository;
+import uk.gov.hmcts.reform.em.annotation.BaseTest;
+import uk.gov.hmcts.reform.em.annotation.TestSecurityConfiguration;
 
 import javax.servlet.http.HttpSession;
 import java.time.Instant;
@@ -33,9 +33,9 @@ import static uk.gov.hmcts.reform.em.annotation.repository.CustomAuditEventRepos
  * @see CustomAuditEventRepository
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
 @Transactional
-public class CustomAuditEventRepositoryIntTest {
+public class CustomAuditEventRepositoryIntTest extends BaseTest {
 
     @Autowired
     private PersistenceAuditEventRepository persistenceAuditEventRepository;
