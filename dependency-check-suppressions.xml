@@ -400,5 +400,6 @@
         <cve>CVE-2019-20444</cve>
         <cve>CVE-2020-1938</cve>
         <cve>CVE-2019-10797</cve>
+        <cve>CVE-2020-1935</cve>
     </suppress>
 </suppressions>
