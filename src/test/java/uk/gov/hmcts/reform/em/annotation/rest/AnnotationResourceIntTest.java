@@ -16,8 +16,10 @@ import uk.gov.hmcts.reform.em.annotation.BaseTest;
 import uk.gov.hmcts.reform.em.annotation.TestSecurityConfiguration;
 import uk.gov.hmcts.reform.em.annotation.domain.Annotation;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
+import uk.gov.hmcts.reform.em.annotation.domain.Tag;
 import uk.gov.hmcts.reform.em.annotation.domain.enumeration.AnnotationType;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationRepository;
+import uk.gov.hmcts.reform.em.annotation.repository.TagRepository;
 import uk.gov.hmcts.reform.em.annotation.rest.errors.ExceptionTranslator;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
@@ -63,6 +65,9 @@ public class AnnotationResourceIntTest extends BaseTest {
     private AnnotationRepository annotationRepository;
 
     @Autowired
+    private TagRepository tagRepository;
+
+    @Autowired
     private AnnotationMapper annotationMapper;
     
     @Autowired
@@ -103,6 +108,12 @@ public class AnnotationResourceIntTest extends BaseTest {
             .annotationType(DEFAULT_ANNOTATION_TYPE.toString())
             .page(DEFAULT_PAGE);
         annotation.setId(UUID.randomUUID());
+        annotation.setCreatedBy("system");
+        Tag tag = new Tag();
+        tag.setName("new_tag");
+        tag.setLabel("new tag");
+        tag.setCreatedBy("system");
+        annotation.addTag(tag);
         return annotation;
     }
 
@@ -154,6 +165,11 @@ public class AnnotationResourceIntTest extends BaseTest {
     @Transactional
     public void getAllAnnotations() throws Exception {
         // Initialize the database
+        Tag tag = new Tag();
+        tag.setName("new_tag");
+        tag.setLabel("new tag");
+        tag.setCreatedBy("system");
+        tagRepository.saveAndFlush(tag);
         annotationRepository.saveAndFlush(annotation);
 
         // Get all the annotationList
@@ -169,6 +185,11 @@ public class AnnotationResourceIntTest extends BaseTest {
     @Transactional
     public void getAnnotation() throws Exception {
         // Initialize the database
+        Tag tag = new Tag();
+        tag.setName("new_tag");
+        tag.setLabel("new tag");
+        tag.setCreatedBy("system");
+        tagRepository.saveAndFlush(tag);
         annotationRepository.saveAndFlush(annotation);
 
         // Get the annotation
@@ -192,6 +213,11 @@ public class AnnotationResourceIntTest extends BaseTest {
     @Transactional
     public void updateAnnotation() throws Exception {
         // Initialize the database
+        Tag tag = new Tag();
+        tag.setName("new_tag");
+        tag.setLabel("new tag");
+        tag.setCreatedBy("system");
+        tagRepository.saveAndFlush(tag);
         annotationRepository.saveAndFlush(annotation);
 
         int databaseSizeBeforeUpdate = annotationRepository.findAll().size();
@@ -241,6 +267,11 @@ public class AnnotationResourceIntTest extends BaseTest {
     @Transactional
     public void deleteAnnotation() throws Exception {
         // Initialize the database
+        Tag tag = new Tag();
+        tag.setName("new_tag");
+        tag.setLabel("new tag");
+        tag.setCreatedBy("system");
+        tagRepository.saveAndFlush(tag);
         annotationRepository.saveAndFlush(annotation);
 
         int databaseSizeBeforeDelete = annotationRepository.findAll().size();
