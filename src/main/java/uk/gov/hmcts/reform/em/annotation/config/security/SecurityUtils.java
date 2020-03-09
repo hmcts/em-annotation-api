@@ -76,16 +76,6 @@ public final class SecurityUtils {
     }
 
     /**
-     * Check if a user is authenticated and has any roles (authorities).
-     * Change this if you care about specific roles
-     * @return true if the user is authenticated, false otherwise.
-     */
-    public static boolean isAuthenticated() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null && getAuthorities(authentication).findAny().isPresent();
-    }
-
-    /**
      * If the current user has a specific authority (security role).
      * The name of this method comes from the {@code isUserInRole()} method in the Servlet API.
      * @param authority the authority to check.
