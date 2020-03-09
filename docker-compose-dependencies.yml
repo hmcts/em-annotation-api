@@ -53,19 +53,28 @@ services:
       - IDAM_SPI_FORGEROCK_IDM_USERNAME=openidm-admin
       - IDAM_SPI_FORGEROCK_IDM_PASSWORD=openidm-admin
       - IDAM_SPI_FORGEROCK_IDM_PIN_DEFAULTPASSWORD=BlaBlaBlackSh33p
+      - IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_WEBSHOW=AAAAAAAAAAAAAAAA
+      - IDAM_WEBSHOW_WHITELIST=http://localhost:8080/oauth2redirect
+      - REFORM_SERVICE_NAME=idam-api
+      - REFORM_TEAM=idam
+      - REFORM_ENVIRONMENT=local
     ports:
       - 5000:5000
-    links:
-      - smtp-server
-      - idam-database
+
+  idam-web-public:
+    image: hmctspublic.azurecr.io/idam/web-public:stable
+    environment:
+      - JAVA_OPTS=-Xms128m -Xms512m
+      - STRATEGIC_SERVICE_URL=http://idam-api:5000
+    ports:
+      - 9002:8080
     depends_on:
-      - idam-database
-      - smtp-server
+      - idam-api
 
   idam-web-admin:
     image: hmctspublic.azurecr.io/idam/web-admin:stable
     environment:
-      - JAVA_TOOL_OPTIONS=-Xms128m -Xmx512m -XX:MaxPermSize=512m
+      - JAVA_OPTS=-Xms128m -Xms512m
       - STRATEGIC_SERVICE_URL=http://idam-api:5000
       - STRATEGIC_PUBLIC_URL=http://idam-web-public:9002
     ports:
@@ -79,15 +88,6 @@ services:
       - 1025:1025
       - 8025:8025
 
-  idam-database:
-    image: postgres
-    environment:
-      - POSTGRES_USER=idam-username
-      - POSTGRES_PASSWORD=idam-password
-      - POSTGRES_DB=idam
-    ports:
-      - 5434:5432
-
   annotation-api-db:
     image: postgres
     restart: always
@@ -97,3 +97,31 @@ services:
     - POSTGRES_PASSWORD=emannotationapp
     ports:
     - 5444:5432
+
+  fr-am:
+    image: hmctsprivate.azurecr.io/idam/idam-fr-am:latest
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xms128m -Xmx512m -XX:MaxPermSize=512m
+    hostname: localam
+    ports:
+      - 9080:8080
+      - 1389:1389
+    depends_on:
+      - shared-db
+
+  fr-idm:
+    image: hmctsprivate.azurecr.io/idam/idam-fr-idm:latest
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xms128m -Xmx512m -XX:MaxPermSize=512m
+    hostname: localidm
+    ports:
+      - 18080:18080
+      - 9010:9010
+    depends_on:
+      - fr-am
+      - shared-db
+
+  shared-db:
+    image: hmctsprivate.azurecr.io/idam/shared-db:latest
+    ports:
+      - 5430:5432
