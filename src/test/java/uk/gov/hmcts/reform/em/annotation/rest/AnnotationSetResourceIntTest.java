@@ -171,7 +171,7 @@ public class AnnotationSetResourceIntTest {
     public void getNonExistingAnnotationSet() throws Exception {
         // Get the annotationSet
         restAnnotationSetMockMvc.perform(get("/api/annotation-sets/{id}", UUID.randomUUID()))
-            .andExpect(status().isNotFound());
+            .andExpect(status().isNoContent());
     }
 
     @Test
