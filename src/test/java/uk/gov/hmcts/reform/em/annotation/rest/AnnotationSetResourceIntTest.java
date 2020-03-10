@@ -162,8 +162,8 @@ public class AnnotationSetResourceIntTest extends BaseTest {
     @Transactional
     public void getNonExistingAnnotationSet() throws Exception {
         // Get the annotationSet
-        restLogoutMockMvc.perform(get("/api/annotation-sets/{id}", UUID.randomUUID()))
-            .andExpect(status().isNotFound());
+        restAnnotationSetMockMvc.perform(get("/api/annotation-sets/{id}", UUID.randomUUID()))
+            .andExpect(status().isNoContent());
     }
 
     @Test
