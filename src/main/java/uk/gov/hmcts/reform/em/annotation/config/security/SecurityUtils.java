@@ -75,31 +75,4 @@ public final class SecurityUtils {
                 .map(authentication -> (String) authentication.getCredentials());
     }
 
-    /**
-     * If the current user has a specific authority (security role).
-     * The name of this method comes from the {@code isUserInRole()} method in the Servlet API.
-     * @param authority the authority to check.
-     * @return true if the current user has the authority, false otherwise.
-     */
-    public static boolean isCurrentUserInRole(String authority) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null
-                && getAuthorities(authentication)
-                .anyMatch(authority::equals);
-    }
-
-    private static Stream<String> getAuthorities(Authentication authentication) {
-        Collection<? extends GrantedAuthority> authorities = authentication instanceof JwtAuthenticationToken
-                ? extractAuthorityFromClaims(((JwtAuthenticationToken) authentication).getToken().getClaims())
-                : authentication.getAuthorities();
-        return authorities.stream()
-                .map(GrantedAuthority::getAuthority);
-    }
-
-    public static List<GrantedAuthority> extractAuthorityFromClaims(Map<String, Object> claims) {
-        return ((List<String>) claims.get("roles"))
-                .stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-    }
 }
