@@ -15,6 +15,11 @@ import org.springframework.security.web.servletapi.SecurityContextHolderAwareReq
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
+import uk.gov.hmcts.reform.em.annotation.config.security.JwtGrantedAuthoritiesConverter;
+import uk.gov.hmcts.reform.em.annotation.repository.IdamRepository;
+import uk.gov.hmcts.reform.idam.client.IdamApi;
+import uk.gov.hmcts.reform.idam.client.IdamClient;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -25,10 +30,25 @@ import java.util.Map;
 public class BaseTest {
 
     @MockBean
+    private ServiceAuthFilter serviceAuthFilter;
+
+    @MockBean
     private JwtDecoder jwtDecoder;
 
     @Autowired
     private WebApplicationContext context;
+
+    @MockBean
+    private JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
+
+    @MockBean
+    private IdamApi idamApi;
+
+    @MockBean
+    private IdamClient idamClient;
+
+    @MockBean
+    private IdamRepository idamRepository;
 
     private static final String ID_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9"
             + ".eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsIm"

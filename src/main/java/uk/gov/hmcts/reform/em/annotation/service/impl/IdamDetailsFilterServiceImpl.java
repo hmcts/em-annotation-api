@@ -2,10 +2,10 @@ package uk.gov.hmcts.reform.em.annotation.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 import uk.gov.hmcts.reform.em.annotation.repository.IdamDetailsRepository;
 import uk.gov.hmcts.reform.em.annotation.service.IdamDetailsFilterService;
+import uk.gov.hmcts.reform.idam.client.models.UserDetails;
 
 @Service
 @Transactional
@@ -18,17 +18,16 @@ public class IdamDetailsFilterServiceImpl implements IdamDetailsFilterService {
     }
 
     @Override
-    public void saveIdamDetails() {
-        SecurityUtils.getCurrentUserDetails().ifPresent( emServiceAndUserDetails -> {
-            if (!idamDetailsRepository.existsById(emServiceAndUserDetails.getUsername())) {
-                IdamDetails idamDetails = new IdamDetails();
-                idamDetails.setId(emServiceAndUserDetails.getUsername());
-                idamDetails.setForename(emServiceAndUserDetails.getForename());
-                idamDetails.setSurname(emServiceAndUserDetails.getSurname());
-                idamDetails.setEmail(emServiceAndUserDetails.getEmail());
-                idamDetailsRepository.save(idamDetails);
-            }
-        });
+    public void saveIdamDetails(UserDetails userDetails) {
+
+        if (!idamDetailsRepository.existsById(userDetails.getId())) {
+            IdamDetails idamDetails = new IdamDetails();
+            idamDetails.setId(userDetails.getId());
+            idamDetails.setForename(userDetails.getForename());
+            userDetails.getSurname().ifPresent(surname -> idamDetails.setSurname(surname));
+            idamDetails.setEmail(userDetails.getEmail());
+            idamDetailsRepository.save(idamDetails);
+        }
     }
 
 }
