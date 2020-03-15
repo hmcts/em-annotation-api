@@ -3,21 +3,15 @@ package uk.gov.hmcts.reform.em.annotation.service.impl;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.BDDMockito;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.BaseTest;
 import uk.gov.hmcts.reform.em.annotation.TestSecurityConfiguration;
-import uk.gov.hmcts.reform.em.annotation.authchecker.EmServiceAndUserDetails;
 import uk.gov.hmcts.reform.em.annotation.repository.IdamDetailsRepository;
 import uk.gov.hmcts.reform.em.annotation.service.IdamDetailsFilterService;
-
-import java.util.Arrays;
+import uk.gov.hmcts.reform.idam.client.models.UserDetails;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
@@ -34,17 +28,12 @@ public class IdamDetailsFilterServiceImplIntTest extends BaseTest {
 
         Assert.assertFalse(idamDetailsRepository.existsById("1"));
 
-        Authentication authentication = Mockito.mock(Authentication.class);
-
-
-        BDDMockito.given(authentication.getPrincipal()).willReturn(
-                new EmServiceAndUserDetails("1", "token",
-                        Arrays.asList("role_x"),
-                        "f_name", "s_name", "a@b.com", "1"));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        idamDetailsFilterService.saveIdamDetails();
+        UserDetails userDetails = UserDetails.builder()
+                .id("1")
+                .forename("FN")
+                .email("user@idam.com")
+                .build();
+        idamDetailsFilterService.saveIdamDetails(userDetails);
 
         Assert.assertTrue(idamDetailsRepository.existsById("1"));
 

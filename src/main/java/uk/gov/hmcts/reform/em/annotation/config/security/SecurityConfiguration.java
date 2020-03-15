@@ -11,12 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtDecoders;
-import org.springframework.security.oauth2.jwt.JwtIssuerValidator;
-import org.springframework.security.oauth2.jwt.JwtTimestampValidator;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
 import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 
@@ -31,23 +27,29 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${oidc.issuer}")
     private String issuerOverride;
 
-    private final ServiceAuthFilter serviceAuthFilter;
+    private ServiceAuthFilter serviceAuthFilter;
 
-    public SecurityConfiguration(final ServiceAuthFilter serviceAuthFilter) {
+    private JwtAuthenticationConverter jwtAuthenticationConverter;
+
+
+    public SecurityConfiguration(final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter,
+                                 final ServiceAuthFilter serviceAuthFilter) {
         this.serviceAuthFilter = serviceAuthFilter;
+        this.jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
     }
 
     @Override
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/swagger-ui.html",
-            "/webjars/springfox-swagger-ui/**",
-            "/swagger-resources/**",
-            "/v2/**",
-            "/health",
-            "/health/liveness",
-            "/status/health",
-            "/loggers/**",
-            "/");
+                "/webjars/springfox-swagger-ui/**",
+                "/swagger-resources/**",
+                "/v2/**",
+                "/health",
+                "/health/liveness",
+                "/status/health",
+                "/loggers/**",
+                "/");
     }
 
     @Override
@@ -65,6 +67,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2ResourceServer()
                 .jwt()
+                .jwtAuthenticationConverter(jwtAuthenticationConverter)
                 .and()
                 .and()
                 .oauth2Client();
