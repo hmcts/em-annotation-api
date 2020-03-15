@@ -8,6 +8,8 @@ import uk.gov.hmcts.reform.em.annotation.repository.IdamDetailsRepository;
 import uk.gov.hmcts.reform.em.annotation.service.IdamDetailsFilterService;
 import uk.gov.hmcts.reform.idam.client.models.UserDetails;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 public class IdamDetailsFilterServiceImpl implements IdamDetailsFilterService {
@@ -26,7 +28,10 @@ public class IdamDetailsFilterServiceImpl implements IdamDetailsFilterService {
             IdamDetails idamDetails = new IdamDetails();
             idamDetails.setId(userDetails.getId());
             idamDetails.setForename(userDetails.getForename());
-            userDetails.getSurname().ifPresent(surname -> idamDetails.setSurname(surname));
+            Optional<String> optSurname = userDetails.getSurname();
+            if(optSurname.isPresent()) {
+                idamDetails.setSurname(optSurname.get());
+            }
             idamDetails.setEmail(userDetails.getEmail());
             idamDetailsRepository.save(idamDetails);
         }
