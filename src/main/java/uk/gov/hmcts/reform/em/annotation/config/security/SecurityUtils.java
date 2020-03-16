@@ -1,28 +1,33 @@
 package uk.gov.hmcts.reform.em.annotation.config.security;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import uk.gov.hmcts.reform.em.annotation.authchecker.EmServiceAndUserDetails;
+import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.em.annotation.repository.IdamRepository;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.ACCESS_TOKEN;
 
 /**
  * Utility class for Spring Security.
  */
-public final class SecurityUtils {
+@Service
+public class SecurityUtils {
 
-    private SecurityUtils() {
+    public static final String TOKEN_NAME = "tokenName";
+
+    private final IdamRepository idamRepository;
+
+    @Autowired
+    public SecurityUtils(final IdamRepository idamRepository){
+        this.idamRepository = idamRepository;
     }
 
     /**
@@ -30,7 +35,7 @@ public final class SecurityUtils {
      *
      * @return the login of the current user
      */
-    public static Optional<String> getCurrentUserLogin() {
+    public Optional<String> getCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
                 .map(authentication -> {
@@ -40,7 +45,11 @@ public final class SecurityUtils {
                     } else if (authentication.getPrincipal() instanceof String) {
                         return (String) authentication.getPrincipal();
                     } else if (authentication instanceof JwtAuthenticationToken) {
-                        return (String) ((JwtAuthenticationToken) authentication).getToken().getClaims().get("preferred_username");
+                        Jwt jwt = ((JwtAuthenticationToken) authentication).getToken();
+                        if (jwt.containsClaim(TOKEN_NAME) && jwt.getClaim(TOKEN_NAME).equals(ACCESS_TOKEN)) {
+                            uk.gov.hmcts.reform.idam.client.models.UserDetails userDetails = idamRepository.getUserDetails(jwt.getTokenValue());
+                            return userDetails.getId();
+                        }
                     } else if (authentication.getPrincipal() instanceof DefaultOidcUser) {
                         Map<String, Object> attributes = ((DefaultOidcUser) authentication.getPrincipal()).getAttributes();
                         if (attributes.containsKey("preferred_username")) {
@@ -49,30 +58,6 @@ public final class SecurityUtils {
                     }
                     return null;
                 });
-    }
-
-    public static Optional<EmServiceAndUserDetails> getCurrentUserDetails() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.ofNullable(securityContext.getAuthentication())
-                .map(authentication -> {
-                    if (authentication.getPrincipal() instanceof EmServiceAndUserDetails) {
-                        EmServiceAndUserDetails springSecurityUser = (EmServiceAndUserDetails) authentication.getPrincipal();
-                        return springSecurityUser;
-                    }
-                    return null;
-                });
-    }
-
-    /**
-     * Get the JWT of the current user.
-     *
-     * @return the JWT of the current user
-     */
-    public static Optional<String> getCurrentUserJWT() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.ofNullable(securityContext.getAuthentication())
-                .filter(authentication -> authentication.getCredentials() instanceof String)
-                .map(authentication -> (String) authentication.getCredentials());
     }
 
 }
