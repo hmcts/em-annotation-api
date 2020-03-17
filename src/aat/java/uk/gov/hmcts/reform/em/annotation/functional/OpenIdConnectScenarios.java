@@ -1,10 +1,5 @@
 package uk.gov.hmcts.reform.em.annotation.functional;
 
-import uk.gov.hmcts.reform.em.EmTestConfig;
-import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
-
-import java.io.IOException;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -15,6 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import uk.gov.hmcts.reform.em.EmTestConfig;
+import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
+
+import java.io.IOException;
 
 @SpringBootTest(classes = {TestUtil.class, EmTestConfig.class})
 @PropertySource(value = "classpath:application.yml")
@@ -29,19 +28,6 @@ public class OpenIdConnectScenarios {
 
     @Value("${test.url}")
     String testUrl;
-
-    @Test
-    // Invalid S2SAuth
-    public void testInvalidS2SAuth() throws IOException, InterruptedException {
-
-        testUtil
-                .invalidS2SAuth()
-                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-                .request("GET", testUrl + "/api/annotation-sets")
-                .then()
-                .statusCode(401);
-
-    }
 
     @Test
     // Invalid IdamAuth
