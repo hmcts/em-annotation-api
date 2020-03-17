@@ -110,8 +110,8 @@ idam:
   api:
     url: ${IDAM_API_BASE_URI:http://localhost:5000}
     client:
-      id: ${OAUTH_CLIENT:microservicekey-em-annotation-app}
-      secret: ${FUNCTIONAL_TEST_CLIENT_OAUTH_SECRET:AAAAAAAAAAAAAAAA}
+      id: microservicekey-em-annotation-app
+      secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
       redirect_uri: ${IDAM_WEBSHOW_WHITELIST:http://localhost:8080/oauth2redirect}
       grant_type: 'password'
       scope: 'openid roles profile'
