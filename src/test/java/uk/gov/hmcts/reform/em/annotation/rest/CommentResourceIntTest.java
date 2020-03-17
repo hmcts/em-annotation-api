@@ -13,14 +13,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.BaseTest;
-import uk.gov.hmcts.reform.em.annotation.TestSecurityConfiguration;
 import uk.gov.hmcts.reform.em.annotation.domain.Comment;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 import uk.gov.hmcts.reform.em.annotation.repository.CommentRepository;
+import uk.gov.hmcts.reform.em.annotation.rest.errors.ExceptionTranslator;
 import uk.gov.hmcts.reform.em.annotation.service.CommentService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.CommentMapper;
-import uk.gov.hmcts.reform.em.annotation.rest.errors.ExceptionTranslator;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -37,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see CommentResource
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
+@SpringBootTest(classes = {Application.class})
 public class CommentResourceIntTest extends BaseTest {
 
     private static final String DEFAULT_CONTENT = "AAAAAAAAAA";
