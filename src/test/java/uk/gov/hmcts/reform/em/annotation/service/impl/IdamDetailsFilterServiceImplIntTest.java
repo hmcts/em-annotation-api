@@ -1,22 +1,5 @@
 package uk.gov.hmcts.reform.em.annotation.service.impl;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.apache.commons.lang3.RandomStringUtils.random;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
-
-import uk.gov.hmcts.reform.em.annotation.Application;
-import uk.gov.hmcts.reform.em.annotation.BaseTest;
-import uk.gov.hmcts.reform.em.annotation.TestSecurityConfiguration;
-import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
-import uk.gov.hmcts.reform.em.annotation.repository.IdamDetailsRepository;
-import uk.gov.hmcts.reform.em.annotation.service.IdamDetailsFilterService;
-import uk.gov.hmcts.reform.idam.client.models.UserDetails;
-
-import java.util.Optional;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -24,9 +7,24 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import uk.gov.hmcts.reform.em.annotation.Application;
+import uk.gov.hmcts.reform.em.annotation.BaseTest;
+import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
+import uk.gov.hmcts.reform.em.annotation.repository.IdamDetailsRepository;
+import uk.gov.hmcts.reform.em.annotation.service.IdamDetailsFilterService;
+import uk.gov.hmcts.reform.idam.client.models.UserDetails;
+
+import java.util.Optional;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.apache.commons.lang3.RandomStringUtils.random;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
+@SpringBootTest(classes = {Application.class})
 public class IdamDetailsFilterServiceImplIntTest extends BaseTest {
 
     @Autowired
