@@ -10,10 +10,9 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
+import uk.gov.hmcts.reform.em.annotation.BaseTest;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 import uk.gov.hmcts.reform.em.annotation.domain.Tag;
 import uk.gov.hmcts.reform.em.annotation.repository.TagRepository;
@@ -25,8 +24,6 @@ import javax.persistence.EntityManager;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static uk.gov.hmcts.reform.em.annotation.rest.TestUtil.createFormattingConversionService;
 
 /**
  * Test class for the CommentResource REST controller.
@@ -34,8 +31,8 @@ import static uk.gov.hmcts.reform.em.annotation.rest.TestUtil.createFormattingCo
  * @see TagResource
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
-public class TagResourceIntTest {
+@SpringBootTest(classes = {Application.class})
+public class TagResourceIntTest extends BaseTest {
 
     private static final String INVALID_USER = "invalid_user";
 
@@ -61,19 +58,12 @@ public class TagResourceIntTest {
     @Autowired
     private EntityManager em;
 
-    private MockMvc restTagMockMvc;
-
     private Tag tag;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         final TagResource tagResource = new TagResource(tagService);
-        this.restTagMockMvc = MockMvcBuilders.standaloneSetup(tagResource)
-                .setCustomArgumentResolvers(pageableArgumentResolver)
-                .setControllerAdvice(exceptionTranslator)
-                .setConversionService(createFormattingConversionService())
-                .setMessageConverters(jacksonMessageConverter).build();
         em.persist(new IdamDetails("system"));
         em.persist(new IdamDetails("anonymous"));
     }
@@ -96,7 +86,7 @@ public class TagResourceIntTest {
     public void getAllTagsByUser() throws Exception {
         tagRepository.saveAndFlush(tag);
 
-        restTagMockMvc.perform(get("/api/tags/{createdBy}", tag.getCreatedBy()))
+        restLogoutMockMvc.perform(get("/api/tags/{createdBy}", tag.getCreatedBy()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("$.[*].name").value(tag.getName()))
@@ -107,7 +97,7 @@ public class TagResourceIntTest {
     @Test
     @Transactional
     public void getTagsNonExistentUser() throws Exception {
-        restTagMockMvc.perform(get("/api/comments/{createdBy}", INVALID_USER))
-                .andExpect(status().isNotFound());
+        restLogoutMockMvc.perform(get("/api/comments/{createdBy}", INVALID_USER))
+                .andExpect(status().isBadRequest());
     }
 }
