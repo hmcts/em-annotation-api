@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import uk.gov.hmcts.reform.em.annotation.domain.enumeration.AnnotationType;
 
 import java.io.Serializable;
 import java.util.HashSet;
