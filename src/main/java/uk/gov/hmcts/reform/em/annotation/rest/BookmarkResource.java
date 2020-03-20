@@ -15,10 +15,9 @@ import uk.gov.hmcts.reform.em.annotation.rest.errors.BadRequestAlertException;
 import uk.gov.hmcts.reform.em.annotation.rest.util.HeaderUtil;
 import uk.gov.hmcts.reform.em.annotation.rest.util.PaginationUtil;
 import uk.gov.hmcts.reform.em.annotation.service.BookmarkService;
-import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.BookmarkDTO;
 
-import java.net.URI;
+import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.UUID;
@@ -41,35 +40,60 @@ public class BookmarkResource {
     }
 
     /**
-     * POST  /annotations : Create a new bookmark.
+     * POST  /bookmarks : Create a new bookmark.
      *
      * @param bookmarkDTO the bookmarkDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new annotationDTO, or with status 400 (Bad Request) if the annotation has already an ID
+     * @return the ResponseEntity with status 201 (Created) and with body the new bookmarkDTO, or with status 400 (Bad Request) if the bookmark has an invalid ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @ApiOperation(value = "Create an bookmarkDTO", notes = "A POST request to create an bookmarkDTO")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successfully created", response = BookmarkDTO.class),
-            @ApiResponse(code = 400, message = "annotationDTO not valid, invalid id"),
+            @ApiResponse(code = 400, message = "bookmarkDTO not valid, invalid id"),
             @ApiResponse(code = 401, message = "Unauthorised"),
             @ApiResponse(code = 403, message = "Forbidden"),
     })
     @PostMapping("/bookmarks")
     //@Timed
-    public ResponseEntity<AnnotationDTO> createBookmark(@RequestBody BookmarkDTO bookmarkDTO) throws URISyntaxException {
+    public ResponseEntity<BookmarkDTO> createBookmark(@RequestBody BookmarkDTO bookmarkDTO) throws URISyntaxException {
         log.debug("REST request to save Bookmark : {}", bookmarkDTO);
         if (bookmarkDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        bookmarkService.save(bookmarkDTO);
+        BookmarkDTO result = bookmarkService.save(bookmarkDTO);
+        return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
+    }
 
-        final URI uri = new URI("/api/bookmarks/" + bookmarkDTO.getId());
-        return bookmarkService.findOne(bookmarkDTO.getId(), true).map( renderedAnnotation ->
-                ResponseEntity.created(uri)
-                        .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, bookmarkDTO.getId().toString()))
-                        .body(renderedAnnotation)
-        )
-                .orElse(ResponseEntity.badRequest().build());
+    /**
+     * PUT  /bookmarks : Updates an existing bookmark.
+     *
+     * @param bookmarkDTO the bookmarkDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated bookmarkDTO,
+     * or with status 400 (Bad Request) if the bookmarkDTO is not valid,
+     * or with status 500 (Internal Server Error) if the bookmarkDTO couldn't be updated
+     */
+    @ApiOperation(value = "Update an existing bookmarkDTO", notes = "A PUT request to update an bookmarkDTO")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = BookmarkDTO.class),
+            @ApiResponse(code = 400, message = "bookmarkDTO not valid, invalid id"),
+            @ApiResponse(code = 500, message = "bookmarkDTO couldn't be updated"),
+            @ApiResponse(code = 401, message = "Unauthorised"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found"),
+    })
+    @PutMapping("/bookmarks")
+    //@Timed
+    public ResponseEntity<BookmarkDTO> updateBookmark(@Valid @RequestBody BookmarkDTO bookmarkDTO) {
+        log.debug("REST request to update Bookmark : {}", bookmarkDTO);
+        if (bookmarkDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        BookmarkDTO result = bookmarkService.save(bookmarkDTO);
+        return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, bookmarkDTO.getId().toString()))
+                .body(result);
     }
 
     /**
@@ -85,14 +109,12 @@ public class BookmarkResource {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "Not Found"),
     })
-    @GetMapping("/bookmarks/{documentId}")
+    @GetMapping("/{documentId}/bookmarks")
     //@Timed
-    public ResponseEntity<List<BookmarkDTO>> getAllDocumentBookmarks(@PathVariable UUID documentId, Pageable pageable) {
-        // need to receive the user Id in the requestbody or somewhere similar.
-
+    public ResponseEntity<List<BookmarkDTO>> getAllDocumentBookmarks(@PathVariable String documentId, Pageable pageable) {
         log.debug("REST request to get a page of Bookmarks");
-        Page<BookmarkDTO> page = bookmarkService.findAllDocumentBookmarks(documentId, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/annotations");
+        Page<BookmarkDTO> page = bookmarkService.findAllByDocumentId(documentId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/bookmarks");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 

@@ -15,11 +15,14 @@ public class BookmarkDTO {
 
     private UUID documentId;
 
+    @Size(max = 50)
+    private String createdBy;
+
     private int num;
 
-    private int xCoordinate;
+    private double xCoordinate;
 
-    private int yCoordinate;
+    private double yCoordinate;
 
     public UUID getId() {
         return id;
@@ -45,6 +48,14 @@ public class BookmarkDTO {
         this.documentId = documentId;
     }
 
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
     public int getNum() {
         return num;
     }
@@ -53,19 +64,19 @@ public class BookmarkDTO {
         this.num = num;
     }
 
-    public int getxCoordinate() {
+    public double getxCoordinate() {
         return xCoordinate;
     }
 
-    public void setxCoordinate(int xCoordinate) {
+    public void setxCoordinate(double xCoordinate) {
         this.xCoordinate = xCoordinate;
     }
 
-    public int getyCoordinate() {
+    public double getyCoordinate() {
         return yCoordinate;
     }
 
-    public void setyCoordinate(int yCoordinate) {
+    public void setyCoordinate(double yCoordinate) {
         this.yCoordinate = yCoordinate;
     }
 }
