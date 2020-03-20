@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.em.annotation.service.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import uk.gov.hmcts.reform.em.annotation.domain.Bookmark;
 import uk.gov.hmcts.reform.em.annotation.service.dto.BookmarkDTO;
 

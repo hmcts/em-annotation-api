@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.em.annotation.domain;
 
+import org.springframework.data.annotation.CreatedBy;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,7 +15,7 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "bookmark")
-public class Bookmark extends AbstractAuditingEntity implements Serializable {
+public class Bookmark implements Serializable {
 
     @Id
     private UUID id;
@@ -25,15 +27,19 @@ public class Bookmark extends AbstractAuditingEntity implements Serializable {
     @Column(name = "document_id", nullable = false)
     private UUID documentId;
 
+    @CreatedBy
+    @Column(name = "created_by", nullable = false, length = 50, updatable = false)
+    private String createdBy;
+
     @Column(name = "num", nullable = false)
     // pdfjs specific location information
     private int num;
 
     @Column(name = "x_coordinate", nullable = false)
-    private float xCoordinate;
+    private double xCoordinate;
 
     @Column(name = "y_coordinate", nullable = false)
-    private float yCoordinate;
+    private double yCoordinate;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 
@@ -61,6 +67,14 @@ public class Bookmark extends AbstractAuditingEntity implements Serializable {
         this.documentId = documentId;
     }
 
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
     public int getNum() {
         return num;
     }
@@ -69,19 +83,19 @@ public class Bookmark extends AbstractAuditingEntity implements Serializable {
         this.num = num;
     }
 
-    public float getxCoordinate() {
+    public double getxCoordinate() {
         return xCoordinate;
     }
 
-    public void setxCoordinate(float xCoordinate) {
+    public void setxCoordinate(double xCoordinate) {
         this.xCoordinate = xCoordinate;
     }
 
-    public float getyCoordinate() {
+    public double getyCoordinate() {
         return yCoordinate;
     }
 
-    public void setyCoordinate(float yCoordinate) {
+    public void setyCoordinate(double yCoordinate) {
         this.yCoordinate = yCoordinate;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
