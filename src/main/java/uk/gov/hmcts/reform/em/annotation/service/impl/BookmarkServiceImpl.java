@@ -49,11 +49,11 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Override
     public BookmarkDTO save(BookmarkDTO bookmarkDTO) {
         log.debug("Request to save Bookmark : {}", bookmarkDTO);
-        Optional<String> user = securityUtils.getCurrentUserLogin();
-        if (user.isPresent()) {
-            bookmarkDTO.setCreatedBy(user.get());
-        } else {
-            throw new UsernameNotFoundException("User not found");
+        if (bookmarkDTO.getCreatedBy() == null) {
+            bookmarkDTO.setCreatedBy(
+                    securityUtils.getCurrentUserLogin()
+                            .orElseThrow(() -> new UsernameNotFoundException("User not found."))
+            );
         }
 
         Bookmark bookmark = bookmarkMapper.toEntity(bookmarkDTO);

@@ -18,6 +18,7 @@ import uk.gov.hmcts.reform.em.annotation.service.BookmarkService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.BookmarkDTO;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.UUID;
@@ -61,7 +62,7 @@ public class BookmarkResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         BookmarkDTO result = bookmarkService.save(bookmarkDTO);
-        return ResponseEntity.ok()
+        return ResponseEntity.created(new URI("/api/bookmarks/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
                 .body(result);
     }
