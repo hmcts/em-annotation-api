@@ -25,10 +25,4 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="tomelliott (generated)" id="1584707813647-2">
-        <dropDefaultValue columnDataType="FLOAT8" columnName="x_coordinate" tableName="bookmark"/>
-    </changeSet>
-    <changeSet author="tomelliott (generated)" id="1584707813647-3">
-        <dropDefaultValue columnDataType="FLOAT8" columnName="y_coordinate" tableName="bookmark"/>
-    </changeSet>
 </databaseChangeLog>
