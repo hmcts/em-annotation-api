@@ -20,9 +20,9 @@ public class BookmarkDTO {
 
     private int num;
 
-    private double xCoordinate;
+    private Double xCoordinate;
 
-    private double yCoordinate;
+    private Double yCoordinate;
 
     public UUID getId() {
         return id;
@@ -64,19 +64,19 @@ public class BookmarkDTO {
         this.num = num;
     }
 
-    public double getxCoordinate() {
+    public Double getxCoordinate() {
         return xCoordinate;
     }
 
-    public void setxCoordinate(double xCoordinate) {
+    public void setxCoordinate(Double xCoordinate) {
         this.xCoordinate = xCoordinate;
     }
 
-    public double getyCoordinate() {
+    public Double getyCoordinate() {
         return yCoordinate;
     }
 
-    public void setyCoordinate(double yCoordinate) {
+    public void setyCoordinate(Double yCoordinate) {
         this.yCoordinate = yCoordinate;
     }
 }

@@ -35,11 +35,11 @@ public class Bookmark implements Serializable {
     // pdfjs specific location information
     private int num;
 
-    @Column(name = "x_coordinate", nullable = false)
-    private double xCoordinate;
+    @Column(name = "x_coordinate")
+    private Double xCoordinate;
 
-    @Column(name = "y_coordinate", nullable = false)
-    private double yCoordinate;
+    @Column(name = "y_coordinate")
+    private Double yCoordinate;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 
@@ -83,19 +83,19 @@ public class Bookmark implements Serializable {
         this.num = num;
     }
 
-    public double getxCoordinate() {
+    public Double getxCoordinate() {
         return xCoordinate;
     }
 
-    public void setxCoordinate(double xCoordinate) {
+    public void setxCoordinate(Double xCoordinate) {
         this.xCoordinate = xCoordinate;
     }
 
-    public double getyCoordinate() {
+    public Double getyCoordinate() {
         return yCoordinate;
     }
 
-    public void setyCoordinate(double yCoordinate) {
+    public void setyCoordinate(Double yCoordinate) {
         this.yCoordinate = yCoordinate;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
