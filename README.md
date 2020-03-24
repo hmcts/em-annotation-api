@@ -9,21 +9,25 @@
 Annotation API is a backend service to store and retrieve annotations.
 
 ## Quickstart
+To pull all dependencies and set up IDAM data run:
 ```bash
 #Cloning repo and running though docker
 git clone https://github.com/hmcts/em-annotation-app.git
 cd em-annotation-app/
-az acr login --name hmcts --subscription 1c4f0704-a29e-403d-b719-b90c34ef14c9
-docker-compose -f docker-compose-dependencies.yml up
+az acr login --name hmctspublic && az acr login --name hmctsprivate
+docker-compose -f docker-compose-dependencies.yml pull
+./bin/start-local-environment.sh <DOCMOSIS_ACCESS_KEY_VALUE>
 ```
 
 Run below command to setup the db:
+```
 ./gradlew migratePostgresDatabase
+```
 
-To set up IDAM data run: `./idam-client-setup.sh`. 
-To check the data you can log into IDAM-web-admin `http://localhost:8082` with:
-Username `idamOwner@hmcts.net`
-Password `Ref0rmIsFun`
+Run the below to start the application:
+```
+./gradlew bootRun
+```
 
 ### Swagger UI
 To view our REST API go to {HOST}:{PORT}/swagger-ui.html
