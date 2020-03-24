@@ -45,7 +45,6 @@ echo "Starting dependencies..."
 docker-compose ${COMPOSE_FILE} build
 docker-compose ${COMPOSE_FILE} up -d service-auth-provider-app \
                                      smtp-server \
-                                     annotation-api-db \
-                                     shared-db
+                                     annotation-api-db
 
 echo "LOCAL ENVIRONMENT SUCCESSFULLY STARTED"
