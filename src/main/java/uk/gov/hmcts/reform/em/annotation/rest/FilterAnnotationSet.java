@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.reform.em.annotation.rest.errors.ResourceNotFoundException;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationSetService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationSetDTO;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * REST controller for managing AnnotationSet.
@@ -31,7 +32,8 @@ public class FilterAnnotationSet {
         this.annotationSetService = annotationSetService;
     }
 
-    @ApiOperation(value = "Filter an annotationSet", notes = "A GET request to filter an annotationSetDTO")
+    @ApiOperation(value = "Filter an annotationSet",
+            notes = "A GET request to filter an annotationSetDTO or create one if none exist for documentId")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = AnnotationSetDTO.class, responseContainer = "List"),
             @ApiResponse(code = 401, message = "Unauthorised"),
@@ -44,8 +46,16 @@ public class FilterAnnotationSet {
         log.debug("REST request to get a page of AnnotationSets");
         Optional<AnnotationSetDTO> optionalAnnotationSetDTO = annotationSetService.findOneByDocumentId(documentId);
         return optionalAnnotationSetDTO
-            .map( annotationSetDTO -> ResponseEntity.ok(annotationSetDTO))
-            .orElseThrow( () -> new ResourceNotFoundException("Could not find annotation set for this document id#" + documentId) );
-    }
+            .map(annotationSetDTO -> ResponseEntity.ok(annotationSetDTO))
+            .orElseGet(() -> {
+                log.debug("No AnnotationSets exist for documentId {}. Creating a new AnnotationSet", documentId);
 
+                AnnotationSetDTO annotationSetDTO = new AnnotationSetDTO();
+                annotationSetDTO.setId(UUID.randomUUID());
+                annotationSetDTO.setDocumentId(documentId);
+                annotationSetDTO.setAnnotations(new HashSet<>());
+
+                return ResponseEntity.ok(annotationSetService.save(annotationSetDTO));
+            });
+    }
 }
