@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.em.annotation.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import uk.gov.hmcts.reform.em.annotation.domain.enumeration.AnnotationType;
 
@@ -24,6 +26,9 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
     private String color;
 
     private UUID annotationSetId;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String documentId;
 
     private Set<CommentDTO> comments = new HashSet<>();
 
@@ -93,6 +98,14 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
     }
 
     @Override
