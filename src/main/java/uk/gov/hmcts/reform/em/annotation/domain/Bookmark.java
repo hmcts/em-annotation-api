@@ -31,7 +31,7 @@ public class Bookmark implements Serializable {
     @Column(name = "created_by", nullable = false, length = 50, updatable = false)
     private String createdBy;
 
-    @Column(name = "numgit c", nullable = false)
+    @Column(name = "num", nullable = false)
     private Integer pageNumber;
 
     @Column(name = "x_coordinate")

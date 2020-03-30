@@ -55,7 +55,6 @@ public class BookmarkResource {
             @ApiResponse(code = 403, message = "Forbidden"),
     })
     @PostMapping("/bookmarks")
-    //@Timed
     public ResponseEntity<BookmarkDTO> createBookmark(@RequestBody BookmarkDTO bookmarkDTO) throws URISyntaxException {
         log.debug("REST request to save Bookmark : {}", bookmarkDTO);
         if (bookmarkDTO.getId() == null) {
@@ -85,7 +84,6 @@ public class BookmarkResource {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @PutMapping("/bookmarks")
-    //@Timed
     public ResponseEntity<BookmarkDTO> updateBookmark(@Valid @RequestBody BookmarkDTO bookmarkDTO) {
         log.debug("REST request to update Bookmark : {}", bookmarkDTO);
         if (bookmarkDTO.getId() == null) {
@@ -111,7 +109,6 @@ public class BookmarkResource {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @GetMapping("/{documentId}/bookmarks")
-    //@Timed
     public ResponseEntity<List<BookmarkDTO>> getAllDocumentBookmarks(@PathVariable String documentId, Pageable pageable) {
         log.debug("REST request to get a page of Bookmarks");
         Page<BookmarkDTO> page = bookmarkService.findAllByDocumentId(documentId, pageable);
@@ -136,7 +133,6 @@ public class BookmarkResource {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @DeleteMapping("/bookmarks/{id}")
-    //@Timed
     public ResponseEntity<Void> deleteBookmark(@PathVariable UUID id) {
         log.debug("REST request to delete Bookmark : {}", id);
         bookmarkService.delete(id);
