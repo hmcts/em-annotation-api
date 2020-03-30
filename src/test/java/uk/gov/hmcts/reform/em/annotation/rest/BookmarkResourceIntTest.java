@@ -74,7 +74,7 @@ public class BookmarkResourceIntTest extends BaseTest {
         bookmark.setDocumentId(UUID.randomUUID());
         bookmark.setCreatedBy("bob");
         bookmark.setName("My Bookmark");
-        bookmark.setNum(426);
+        bookmark.setPageNumber(426);
         bookmark.setxCoordinate(32.7);
         bookmark.setyCoordinate(100.9);
         return bookmark;
