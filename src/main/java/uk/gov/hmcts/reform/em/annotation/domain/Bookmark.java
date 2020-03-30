@@ -31,9 +31,8 @@ public class Bookmark implements Serializable {
     @Column(name = "created_by", nullable = false, length = 50, updatable = false)
     private String createdBy;
 
-    @Column(name = "num", nullable = false)
-    // pdfjs specific location information
-    private int num;
+    @Column(name = "numgit c", nullable = false)
+    private Integer pageNumber;
 
     @Column(name = "x_coordinate")
     private Double xCoordinate;
@@ -75,12 +74,12 @@ public class Bookmark implements Serializable {
         this.createdBy = createdBy;
     }
 
-    public int getNum() {
-        return num;
+    public Integer getPageNumber() {
+        return pageNumber;
     }
 
-    public void setNum(int num) {
-        this.num = num;
+    public void setPageNumber(Integer pageNumber) {
+        this.pageNumber = pageNumber;
     }
 
     public Double getxCoordinate() {

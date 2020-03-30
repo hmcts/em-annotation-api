@@ -18,7 +18,7 @@ public class BookmarkDTO {
     @Size(max = 50)
     private String createdBy;
 
-    private int num;
+    private Integer pageNumber;
 
     private Double xCoordinate;
 
@@ -56,12 +56,12 @@ public class BookmarkDTO {
         this.createdBy = createdBy;
     }
 
-    public int getNum() {
-        return num;
+    public Integer getPageNumber() {
+        return pageNumber;
     }
 
-    public void setNum(int num) {
-        this.num = num;
+    public void setPageNumber(Integer pageNumber) {
+        this.pageNumber = pageNumber;
     }
 
     public Double getxCoordinate() {
