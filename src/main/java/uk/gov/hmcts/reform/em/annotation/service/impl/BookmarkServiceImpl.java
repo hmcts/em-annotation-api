@@ -69,7 +69,7 @@ public class BookmarkServiceImpl implements BookmarkService {
      * @return
      */
     @Override
-    public Page<BookmarkDTO> findAllByDocumentId(String documentId, Pageable pageable) {
+    public Page<BookmarkDTO> findAllByDocumentId(UUID documentId, Pageable pageable) {
         Optional<String> user = securityUtils.getCurrentUserLogin();
         if (user.isPresent()) {
             return bookmarkRepository.findByDocumentIdAndCreatedBy(documentId, user.get(), pageable).map(bookmarkMapper::toDto);
