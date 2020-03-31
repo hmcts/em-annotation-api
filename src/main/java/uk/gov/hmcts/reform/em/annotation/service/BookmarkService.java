@@ -23,7 +23,7 @@ public interface BookmarkService {
      * @param documentId
      * @return
      */
-    Page<BookmarkDTO> findAllByDocumentId(String documentId, Pageable pageable);
+    Page<BookmarkDTO> findAllByDocumentId(UUID documentId, Pageable pageable);
 
     /**
      * Delete the "id" bookmark.
