@@ -14,5 +14,5 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 @Repository
 public interface BookmarkRepository extends JpaRepository<Bookmark, UUID> {
-    Page<Bookmark> findByDocumentIdAndCreatedBy(String documentId, String createdBy, Pageable pageable);
+    Page<Bookmark> findByDocumentIdAndCreatedBy(UUID documentId, String createdBy, Pageable pageable);
 }

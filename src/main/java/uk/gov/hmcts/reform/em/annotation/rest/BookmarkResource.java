@@ -109,15 +109,12 @@ public class BookmarkResource {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @GetMapping("/{documentId}/bookmarks")
-    public ResponseEntity<List<BookmarkDTO>> getAllDocumentBookmarks(@PathVariable String documentId, Pageable pageable) {
+    public ResponseEntity<List<BookmarkDTO>> getAllDocumentBookmarks(@PathVariable UUID documentId, Pageable pageable) {
         log.debug("REST request to get a page of Bookmarks");
         Page<BookmarkDTO> page = bookmarkService.findAllByDocumentId(documentId, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/bookmarks");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
-
-    // update bookmark (need bookmarkId)
-    // need to verify the update is being made by user that created the bookmark
 
     /**
      * DELETE  /bookmarks/:id : delete the "id" bookmark.
