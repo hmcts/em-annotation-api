@@ -114,7 +114,7 @@ public class BookmarkResource {
         log.debug("REST request to get a page of Bookmarks");
         Page<BookmarkDTO> page = bookmarkService.findAllByDocumentId(documentId, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/bookmarks");
-        if (!page.hasContent()) {
+        if (page.hasContent()) {
             return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         } else {
             throw new ResourceNotFoundException("Could not find bookmarks for this document id#" + documentId);
