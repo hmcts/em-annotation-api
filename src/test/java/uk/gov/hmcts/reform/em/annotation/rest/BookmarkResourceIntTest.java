@@ -6,12 +6,16 @@ import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.BaseTest;
+import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
 import uk.gov.hmcts.reform.em.annotation.domain.Bookmark;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 import uk.gov.hmcts.reform.em.annotation.repository.BookmarkRepository;
@@ -22,9 +26,12 @@ import uk.gov.hmcts.reform.em.annotation.service.mapper.BookmarkMapper;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -57,6 +64,9 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Autowired
     private EntityManager em;
+
+    @MockBean
+    private SecurityUtils securityUtils;
 
     private Bookmark bookmark;
 
@@ -101,6 +111,26 @@ public class BookmarkResourceIntTest extends BaseTest {
         // Validate the Comment in the database
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
+    public void createBookmarkCreatedByNull() throws Exception {
+        int databaseSizeBeforeCreate = bookmarkRepository.findAll().size();
+        bookmark.setCreatedBy(null);
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("fabio"));
+
+        // Create the Comment
+        bookmark.setId(UUID.randomUUID());
+        BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
+        restLogoutMockMvc.perform(post("/api/bookmarks")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(bookmarkDTO)))
+                .andExpect(status().isCreated());
+
+        // Validate the Comment in the database
+        List<Bookmark> bookmarkList = bookmarkRepository.findAll();
+        assertThat(bookmarkList).hasSize(databaseSizeBeforeCreate + 1);
     }
 
     @Test
@@ -161,6 +191,29 @@ public class BookmarkResourceIntTest extends BaseTest {
 
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    public void getBookmarksByDocumentId() throws Exception {
+        bookmark = bookmarkRepository.saveAndFlush(bookmark);
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("bob"));
+
+        restLogoutMockMvc.perform(get("/api/" + bookmark.getDocumentId() + "/bookmarks"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$.[*].id").value(hasItem(bookmark.getId().toString())))
+                .andExpect(jsonPath("$.[*].name").value(hasItem(bookmark.getName())));
+    }
+
+    @Test
+    @Transactional
+    public void getBookmarksByDocumentIdNoContent() throws Exception {
+        bookmark = bookmarkRepository.saveAndFlush(bookmark);
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("fabio"));
+
+        restLogoutMockMvc.perform(get("/api/" + bookmark.getDocumentId() + "/bookmarks"))
+                .andExpect(status().isNoContent());
     }
 
     @Test
