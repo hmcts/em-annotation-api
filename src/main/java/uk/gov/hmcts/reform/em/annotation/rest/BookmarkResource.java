@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uk.gov.hmcts.reform.em.annotation.rest.errors.BadRequestAlertException;
-import uk.gov.hmcts.reform.em.annotation.rest.errors.ResourceNotFoundException;
+import uk.gov.hmcts.reform.em.annotation.rest.errors.EmptyResponseException;
 import uk.gov.hmcts.reform.em.annotation.rest.util.HeaderUtil;
 import uk.gov.hmcts.reform.em.annotation.rest.util.PaginationUtil;
 import uk.gov.hmcts.reform.em.annotation.service.BookmarkService;
@@ -117,7 +117,7 @@ public class BookmarkResource {
         if (page.hasContent()) {
             return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         } else {
-            throw new ResourceNotFoundException("Could not find bookmarks for this document id#" + documentId);
+            throw new EmptyResponseException("Could not find bookmarks for this document id#" + documentId);
         }
     }
 
