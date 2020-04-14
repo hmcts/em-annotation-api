@@ -72,7 +72,7 @@ dependencyCheck {
 }
 
 def versions = [
-        postgresql         : '42.2.8',
+        postgresql         : '42.2.12',
         springfoxSwagger   : '2.9.2',
         h2                 : '1.4.197',
         liquibase          : '3.5.3',
