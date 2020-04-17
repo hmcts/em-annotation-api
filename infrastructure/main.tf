@@ -38,20 +38,20 @@ module "key_vault" {
   managed_identity_object_id = "${var.managed_identity_object_id}"
 }
 
-data "azurerm_key_vault" "s2s_vault" {
-  name = "s2s-${local.local_env}"
-  resource_group_name = "rpe-service-auth-provider-${local.local_env}"
-}
+#data "azurerm_key_vault" "s2s_vault" {
+#  name = "s2s-${local.local_env}"
+#  resource_group_name = "rpe-service-auth-provider-${local.local_env}"
+#}
 
-data "azurerm_key_vault_secret" "s2s_key" {
-  name      = "microservicekey-em-annotation-app"
-  key_vault_id = "${data.azurerm_key_vault.s2s_vault.id}"
-}
+#data "azurerm_key_vault_secret" "s2s_key" {
+#  name      = "microservicekey-em-annotation-app"
+#  key_vault_id = "${data.azurerm_key_vault.s2s_vault.id}"
+#}
 
-data "azurerm_key_vault" "key_vault" {
-  name = "${module.key_vault.key_vault_name}"
-  resource_group_name = "${module.key_vault.key_vault_name}"
-}
+#data "azurerm_key_vault" "key_vault" {
+#  name = "${module.key_vault.key_vault_name}"
+#  resource_group_name = "${module.key_vault.key_vault_name}"
+#}
 
 #resource "azurerm_key_vault_secret" "local_s2s_key" {
 #  name         = "microservicekey-em-annotation-app"
