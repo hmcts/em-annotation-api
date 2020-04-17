@@ -29,6 +29,26 @@ Run the below to start the application:
 ./gradlew bootRun
 ```
 
+### Running contract or pact tests:
+
+You can run contract or pact tests as follows:
+
+```
+docker-compose -f docker-pactbroker-compose.yml up
+```
+
+```
+./gradlew contract
+```
+
+and then using it to publish your tests:
+
+```
+./gradlew pactPublish
+```
+
+
+
 ### Swagger UI
 To view our REST API go to {HOST}:{PORT}/swagger-ui.html
 > http://localhost:8080/swagger-ui.html
