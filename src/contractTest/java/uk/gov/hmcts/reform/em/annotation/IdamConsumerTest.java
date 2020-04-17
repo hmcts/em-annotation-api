@@ -50,7 +50,7 @@ public class IdamConsumerTest {
 
     }
 
-    @Pact(provider = "idam_api", consumer = "em_annotation_app")
+    @Pact(provider = "idam_api", consumer = "em_annotation_api")
     public RequestResponsePact executeGetIdamAuthCodeAndGet200Response(PactDslWithProvider builder) {
         Map<String, String> headers = Maps.newHashMap();
         headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
@@ -69,7 +69,7 @@ public class IdamConsumerTest {
                 .toPact();
     }
 
-    @Pact(provider = "idam_api", consumer = "em_annotation_app")
+    @Pact(provider = "idam_api", consumer = "em_annotation_api")
     public RequestResponsePact executeGetIdamAuthTokenAndGet200(PactDslWithProvider builder) {
 
         Map<String, String> headers = Maps.newHashMap();
@@ -88,7 +88,7 @@ public class IdamConsumerTest {
                 .toPact();
     }
 
-    @Pact(provider = "idam_api", consumer = "em_annotation_app")
+    @Pact(provider = "idam_api", consumer = "em_annotation_api")
     public RequestResponsePact executeGetUserDetailsAndGet200(PactDslWithProvider builder) {
 
         Map<String, String> headers = Maps.newHashMap();
