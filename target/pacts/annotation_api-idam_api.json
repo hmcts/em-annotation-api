@@ -7,13 +7,12 @@
     },
     "interactions": [
         {
-            "description": "Provider receives a POST request from an Annotation API",
+            "description": "Provider receives a GET /details request from an Annotation API",
             "request": {
-                "method": "POST",
-                "path": "/oauth2/authorize",
+                "method": "GET",
+                "path": "/details",
                 "headers": {
-                    "Authorization": "111",
-                    "Content-Type": "application/x-www-form-urlencoded"
+                    "Authorization": "111"
                 }
             },
             "response": {
@@ -22,19 +21,13 @@
                     "Content-Type": "application/json; charset=UTF-8"
                 },
                 "body": {
-                    "code": "12345"
+                    "forename": "Case",
+                    "surname": "Officer",
+                    "roles": "[\"caseofficer-ia\"]",
+                    "id": "123",
+                    "email": "ia-caseofficer@fake.hmcts.net"
                 },
                 "matchingRules": {
-                    "body": {
-                        "$.code": {
-                            "matchers": [
-                                {
-                                    "match": "type"
-                                }
-                            ],
-                            "combine": "AND"
-                        }
-                    },
                     "header": {
                         "Content-Type": {
                             "matchers": [
@@ -50,18 +43,26 @@
             },
             "providerStates": [
                 {
-                    "name": "Idam returns the auth code "
+                    "name": "Idam successfully returns user details"
                 }
             ]
         },
         {
-            "description": "Provider receives a GET /code request from an Annotation API",
+            "description": "Provider receives a POST /o/token request from Annotation API",
             "request": {
                 "method": "POST",
-                "path": "/oauth2/token",
+                "path": "/o/token",
                 "headers": {
-                    "Authorization": "111",
                     "Content-Type": "application/x-www-form-urlencoded"
+                },
+                "body": {
+                    "grant_type": "password",
+                    "client_id": "stitching-api",
+                    "client_secret": "some-secret",
+                    "redirect_uri": "/oauth2redirect",
+                    "scope": "openid roles profile",
+                    "username": "stitchingusername",
+                    "password": "stitchingpwd"
                 }
             },
             "response": {
@@ -70,13 +71,40 @@
                     "Content-Type": "application/json; charset=UTF-8"
                 },
                 "body": {
-                    "access_token": "some-long-access-token",
+                    "access_token": "some-long-value",
+                    "refresh_token": "another-long-value",
+                    "scope": "openid roles profile",
+                    "id_token": "saome-value",
                     "token_type": "Bearer",
-                    "expires_in": "28800"
+                    "expires_in": "12345"
                 },
                 "matchingRules": {
                     "body": {
                         "$.access_token": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.refresh_token": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.scope": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.id_token": {
                             "matchers": [
                                 {
                                     "match": "type"
@@ -116,48 +144,7 @@
             },
             "providerStates": [
                 {
-                    "name": "Idam successfully returns user details"
-                }
-            ]
-        },
-        {
-            "description": "Provider receives a GET /details request from an Annotation API",
-            "request": {
-                "method": "GET",
-                "path": "/details",
-                "headers": {
-                    "Authorization": "111"
-                }
-            },
-            "response": {
-                "status": 200,
-                "headers": {
-                    "Content-Type": "application/json; charset=UTF-8"
-                },
-                "body": {
-                    "forename": "Case",
-                    "surname": "Officer",
-                    "roles": "[\"caseofficer-ia\"]",
-                    "id": "123",
-                    "email": "ia-caseofficer@fake.hmcts.net"
-                },
-                "matchingRules": {
-                    "header": {
-                        "Content-Type": {
-                            "matchers": [
-                                {
-                                    "match": "regex",
-                                    "regex": "application/json;\\s?charset=(utf|UTF)-8"
-                                }
-                            ],
-                            "combine": "AND"
-                        }
-                    }
-                }
-            },
-            "providerStates": [
-                {
-                    "name": "Idam successfully returns user details"
+                    "name": "Idam successfully returns access token"
                 }
             ]
         }
