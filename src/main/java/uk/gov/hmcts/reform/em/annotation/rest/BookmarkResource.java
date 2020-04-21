@@ -23,6 +23,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing Bookmarks.
@@ -93,6 +94,44 @@ public class BookmarkResource {
         BookmarkDTO result = bookmarkService.save(bookmarkDTO);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, bookmarkDTO.getId().toString()))
+                .body(result);
+    }
+
+    /**
+     * PUT  /bookmarks : Updates multiple existing bookmarks.
+     *
+     * @param bookmarkDTOList the list of bookmarkDTO objects to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated bookmarkDTO objects,
+     * or with status 400 (Bad Request) if the bookmarkDTO objects are not valid,
+     * or with status 500 (Internal Server Error) if the bookmarkDTO objects couldn't be updated
+     */
+    @ApiOperation(value = "Update an multiple existing bookmarkDTO objects", notes = "A PUT request to update multiple bookmarkDTO objects")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = BookmarkDTO.class),
+            @ApiResponse(code = 400, message = "bookmarkDTO objects not valid, invalid id"),
+            @ApiResponse(code = 500, message = "bookmarkDTO objects couldn't be updated"),
+            @ApiResponse(code = 401, message = "Unauthorised"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found"),
+    })
+    @PutMapping("/bookmarks_multiple")
+    public ResponseEntity<List<BookmarkDTO>> updateMultipleBookmarks(@Valid @RequestBody List<BookmarkDTO> bookmarkDTOList) {
+        log.debug("REST request to update list of Bookmark objects : {}", bookmarkDTOList);
+
+        if (bookmarkDTOList.stream().anyMatch(bookmark -> bookmark.getId() == null)) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+
+        List<BookmarkDTO> result = bookmarkDTOList.stream()
+                .map(bookmarkService::save)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME,
+                        bookmarkDTOList.stream()
+                                .map(BookmarkDTO::getId)
+                                .collect(Collectors.toList())
+                                .toString()))
                 .body(result);
     }
 

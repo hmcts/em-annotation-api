@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.em.annotation.service.dto;
 
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -23,6 +25,10 @@ public class BookmarkDTO {
     private Double xCoordinate;
 
     private Double yCoordinate;
+
+    private Integer index;
+
+    private List<UUID> children = new ArrayList<>();
 
     public UUID getId() {
         return id;
@@ -78,5 +84,21 @@ public class BookmarkDTO {
 
     public void setyCoordinate(Double yCoordinate) {
         this.yCoordinate = yCoordinate;
+    }
+
+    public Integer getIndex() {
+        return index;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
+    }
+
+    public List<UUID> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<UUID> children) {
+        this.children = children;
     }
 }
