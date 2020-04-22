@@ -87,7 +87,6 @@ public class BookmarkResourceIntTest extends BaseTest {
         bookmark.setPageNumber(426);
         bookmark.setxCoordinate(32.7);
         bookmark.setyCoordinate(100.9);
-        bookmark.setIndex(8);
         return bookmark;
     }
 
@@ -194,9 +193,6 @@ public class BookmarkResourceIntTest extends BaseTest {
         assertThat(bookmarkList).hasSize(databaseSizeBeforeUpdate);
     }
 
-
-
-
     @Test
     @Transactional
     public void updateMultipleBookmark() throws Exception {
@@ -247,11 +243,6 @@ public class BookmarkResourceIntTest extends BaseTest {
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeUpdate);
     }
-
-
-
-
-
 
     @Test
     @Transactional
