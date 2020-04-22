@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.em.annotation;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.Pact;
 import au.com.dius.pact.consumer.dsl.PactDslJsonArray;
@@ -13,11 +11,9 @@ import au.com.dius.pact.model.RequestResponsePact;
 import com.google.common.collect.Maps;
 import io.restassured.RestAssured;
 import io.restassured.config.EncoderConfig;
-import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
-import java.util.Map;
-
 import lombok.extern.slf4j.Slf4j;
+import net.serenitybdd.rest.SerenityRest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,60 +28,27 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @Slf4j
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
 public class IdamConsumerTest {
 
     private static final String IDAM_DETAILS_URL = "/details";
-    private static final String IDAM_OPENID_AUTHORIZE_URL = "/o/authorize";
-    private static final String IDAM_OPENID_TOKEN = "/o/token";
-    private static final String REDIRECT_URI = "/oauth2redirect";
     private static final String ACCESS_TOKEN = "111";
+
+    private static final String IDAM_OPENID_TOKEN_URL = "/o/token";
+    private static final String CLIENT_REDIRECT_URI = "/oauth2redirect";
 
     @BeforeEach
     public void setUp() {
         RestAssured.defaultParser = Parser.JSON;
         RestAssured.config().encoderConfig(new EncoderConfig("UTF-8", "UTF-8"));
 
-    }
-
-    @Pact(provider = "idam_api", consumer = "em_annotation_api")
-    public RequestResponsePact executeGetIdamAuthCodeAndGet200Response(PactDslWithProvider builder) {
-        Map<String, String> headers = Maps.newHashMap();
-        headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
-        headers.put(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
-
-        return builder
-                .given("Idam successfully returns user details")
-                .uponReceiving("Provider receives a GET /details request from an Stitching API")
-                .path(IDAM_OPENID_AUTHORIZE_URL)
-                .method(HttpMethod.POST.toString())
-                .headers(headers)
-                .willRespondWith()
-                .status(HttpStatus.OK.value())
-                .body(new PactDslJsonBody()
-                        .stringType("code", "12345"))
-                .toPact();
-    }
-
-    @Pact(provider = "idam_api", consumer = "em_annotation_api")
-    public RequestResponsePact executeGetIdamAuthTokenAndGet200(PactDslWithProvider builder) {
-
-        Map<String, String> headers = Maps.newHashMap();
-        headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
-        headers.put(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
-
-        return builder
-                .given("Idam successfully returns user details")
-                .uponReceiving("Provider receives a GET /details request from an Stitching API")
-                .path(IDAM_OPENID_TOKEN)
-                .method(HttpMethod.POST.toString())
-                .headers(headers)
-                .willRespondWith()
-                .status(HttpStatus.OK.value())
-                .body(createUserDetailsResponseForPost())
-                .toPact();
     }
 
     @Pact(provider = "idam_api", consumer = "em_annotation_api")
@@ -114,7 +77,7 @@ public class IdamConsumerTest {
         headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
 
         String actualResponseBody =
-                RestAssured
+            SerenityRest
                         .given()
                         .headers(headers)
                         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -143,79 +106,6 @@ public class IdamConsumerTest {
 
     }
 
-    @Test
-    @PactTestFor(pactMethod = "executeGetIdamAuthCodeAndGet200Response")
-    public void should_post_to_oauth2_authorize_and_receive_code_with_200_response(MockServer mockServer) {
-
-        Map<String, String> headers = Maps.newHashMap();
-        headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
-
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-
-        body.add("response_type", "");
-        body.add("client_id", "abc");
-        body.add("redirect_uri", REDIRECT_URI);
-
-        String actualResponseBody =
-                RestAssured
-                        .given()
-                        .headers(headers)
-                        .contentType(ContentType.URLENC)
-                        .formParams(body)
-                        .when()
-                        .post(mockServer.getUrl() + IDAM_OPENID_AUTHORIZE_URL)
-                        .then()
-                        .statusCode(200)
-                        .and()
-                        .extract()
-                        .asString();
-
-        assertThat(actualResponseBody).isNotNull();
-
-        JSONObject response = new JSONObject(actualResponseBody);
-        assertThat(response.get("code").toString()).isNotBlank();
-
-    }
-
-    @Test
-    @PactTestFor(pactMethod = "executeGetIdamAuthTokenAndGet200")
-    public void should_post_to_oauth2_token_and_receive_code_with_200_response(MockServer mockServer) {
-
-        Map<String, String> headers = Maps.newHashMap();
-
-        headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
-
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("code", "random-code");
-        body.add("grant_type", "authorization_code");
-        body.add("redirect_uri", REDIRECT_URI);
-        body.add("client_id", "ia");
-        body.add("client_secret", "some_client_secret");
-
-        String actualResponseBody =
-                RestAssured
-                        .given()
-                        .headers(headers)
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                        .formParams(body)
-                        .log().all(true)
-                        .when()
-                        .post(mockServer.getUrl() + IDAM_OPENID_TOKEN)
-                        .then()
-                        .statusCode(200)
-                        .and()
-                        .extract().response().body()
-                        .asString();
-
-        JSONObject response = new JSONObject(actualResponseBody);
-
-        assertThat(response).isNotNull();
-        assertThat(response.getString("access_token")).isNotBlank();
-        assertThat(response.getString("token_type")).isEqualTo("Bearer");
-        assertThat(response.getString("expires_in")).isNotBlank();
-
-    }
-
     private PactDslJsonBody createUserDetailsResponse() {
         PactDslJsonArray array = new PactDslJsonArray().stringValue("caseofficer-ia");
 
@@ -228,13 +118,76 @@ public class IdamConsumerTest {
 
     }
 
-    private PactDslJsonBody createUserDetailsResponseForPost() {
-        PactDslJsonArray array = new PactDslJsonArray().stringValue("caseofficer-ia");
+    @Pact(provider = "idam_api", consumer = "em_annotation_api")
+    public RequestResponsePact executeGetIdamAccessTokenAndGet200(PactDslWithProvider builder) throws JSONException {
+
+        Map<String, String> headers = Maps.newHashMap();
+        headers.put(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON_VALUE);
+
+        return builder
+            .given("Idam successfully returns access token")
+            .uponReceiving("Provider receives a POST /o/token request from an Stitching API")
+            .path(IDAM_OPENID_TOKEN_URL)
+            .method(HttpMethod.POST.toString())
+            .headers(headers)
+            .willRespondWith()
+            .status(HttpStatus.OK.value())
+            .body(createAuthResponse())
+            .toPact();
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "executeGetIdamAccessTokenAndGet200")
+    public void should_post_to_token_endpoint_and_receive_access_token_with_200_response(MockServer mockServer)
+        throws JSONException {
+
+
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("grant_type", "password");
+        body.add("client_id", "ia");
+        body.add("client_secret", "some_client_secret");
+        body.add("redirect_uri", CLIENT_REDIRECT_URI);
+        body.add("scope","openid roles profile");
+        body.add("username","stitchingusername");
+        body.add("password","stitchingpwd");
+
+
+        String actualResponseBody =
+
+            SerenityRest
+                .given()
+                .contentType(APPLICATION_JSON_VALUE)
+                .formParams(body)
+                .log().all(true)
+                .when()
+                .post(mockServer.getUrl() + IDAM_OPENID_TOKEN_URL)
+                .then()
+                .statusCode(200)
+                .and()
+                .extract()
+                .asString();
+
+        JSONObject response = new JSONObject(actualResponseBody);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getString("access_token")).isNotBlank();
+        assertThat(response.getString("refresh_token")).isNotBlank();
+        assertThat(response.getString("id_token")).isNotBlank();
+        assertThat(response.getString("scope")).isNotBlank();
+        assertThat(response.getString("token_type")).isEqualTo("Bearer");
+        assertThat(response.getString("expires_in")).isNotBlank();
+
+    }
+
+    private PactDslJsonBody createAuthResponse() {
 
         return new PactDslJsonBody()
-                .stringType("access_token","some-access-token")
-                .stringType("token_type", "Bearer")
-                .stringType("expires_in", "26800");
+            .stringType("access_token", "some-long-value")
+            .stringType("refresh_token", "another-long-value")
+            .stringType("scope", "openid roles profile")
+            .stringType("id_token", "saome-value")
+            .stringType("token_type", "Bearer")
+            .stringType("expires_in","12345");
 
     }
 
