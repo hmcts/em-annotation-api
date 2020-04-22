@@ -59,7 +59,7 @@ public class IdamConsumerTest {
 
         return builder
                 .given("Idam successfully returns user details")
-                .uponReceiving("Provider receives a GET /details request from an Stitching API")
+                .uponReceiving("Provider receives a GET /details request from an Annotation API")
                 .path(IDAM_DETAILS_URL)
                 .method(HttpMethod.GET.toString())
                 .headers(headers)
@@ -126,7 +126,7 @@ public class IdamConsumerTest {
 
         return builder
             .given("Idam successfully returns access token")
-            .uponReceiving("Provider receives a POST /o/token request from an Stitching API")
+            .uponReceiving("Provider receives a POST /o/token request from an Annotation API")
             .path(IDAM_OPENID_TOKEN_URL)
             .method(HttpMethod.POST.toString())
             .headers(headers)
@@ -148,8 +148,8 @@ public class IdamConsumerTest {
         body.add("client_secret", "some_client_secret");
         body.add("redirect_uri", CLIENT_REDIRECT_URI);
         body.add("scope","openid roles profile");
-        body.add("username","stitchingusername");
-        body.add("password","stitchingpwd");
+        body.add("username","annotationusername");
+        body.add("password","annotationpwd");
 
 
         String actualResponseBody =
@@ -185,7 +185,7 @@ public class IdamConsumerTest {
             .stringType("access_token", "some-long-value")
             .stringType("refresh_token", "another-long-value")
             .stringType("scope", "openid roles profile")
-            .stringType("id_token", "saome-value")
+            .stringType("id_token", "some-value")
             .stringType("token_type", "Bearer")
             .stringType("expires_in","12345");
 

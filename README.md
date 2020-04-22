@@ -29,26 +29,6 @@ Run the below to start the application:
 ./gradlew bootRun
 ```
 
-### Running contract or pact tests:
-
-You can run contract or pact tests as follows:
-
-```
-docker-compose -f docker-pactbroker-compose.yml up
-```
-
-```
-./gradlew contract
-```
-
-and then using it to publish your tests:
-
-```
-./gradlew pactPublish
-```
-
-
-
 ### Swagger UI
 To view our REST API go to {HOST}:{PORT}/swagger-ui.html
 > http://localhost:8080/swagger-ui.html
@@ -69,6 +49,29 @@ It uses:
 
 ### Plugins
 * [lombok plugin](https://plugins.jetbrains.com/idea/plugin/6317-lombok-plugin) - Lombok IDEA plugin
+
+### Running contract or pact tests:
+
+You can run contract or pact tests as follows:
+
+```
+./gradlew clean
+
+```
+./gradlew contract
+```
+
+You can then publish your pact tests locally by first running the pact docker-compose:
+
+```
+docker-compose -f docker-pactbroker-compose.yml up
+```
+
+and then using it to publish your tests:
+
+```
+./gradlew pactPublish
+```
 
 ## License
 
