@@ -28,7 +28,7 @@ public class BookmarkDTO {
 
     private Integer index;
 
-    private List<UUID> children = new ArrayList<>();
+    private UUID parent;
 
     public UUID getId() {
         return id;
@@ -94,11 +94,11 @@ public class BookmarkDTO {
         this.index = index;
     }
 
-    public List<UUID> getChildren() {
-        return children;
+    public UUID getParent() {
+        return parent;
     }
 
-    public void setChildren(List<UUID> children) {
-        this.children = children;
+    public void setParent(UUID parent) {
+        this.parent = parent;
     }
 }

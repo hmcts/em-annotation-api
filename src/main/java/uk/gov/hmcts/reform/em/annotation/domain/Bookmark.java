@@ -42,9 +42,8 @@ public class Bookmark implements Serializable {
     @Column(name = "index")
     private Integer index;
 
-    @ElementCollection
-    @Column(name="children")
-    private List<UUID> children = new ArrayList<>();
+    @Column(name = "parent")
+    private UUID parent;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 
@@ -112,12 +111,12 @@ public class Bookmark implements Serializable {
         this.index = index;
     }
 
-    public List<UUID> getChildren() {
-        return children;
+    public UUID getParent() {
+        return parent;
     }
 
-    public void setChildren(List<UUID> children) {
-        this.children = children;
+    public void setParent(UUID parent) {
+        this.parent = parent;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 }
