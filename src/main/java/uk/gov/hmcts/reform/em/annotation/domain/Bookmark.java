@@ -5,8 +5,6 @@ import org.springframework.data.annotation.CreatedBy;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 /**
