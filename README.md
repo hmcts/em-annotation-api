@@ -37,6 +37,29 @@ To view our REST API go to {HOST}:{PORT}/swagger-ui.html
 A list of our endpoints can be found here
 > https://hmcts.github.io/reform-api-docs/specs/rpa-em-annotation-app.json
 
+### Running contract or pact tests:
+
+You can run contract or pact tests as follows:
+```
+./gradlew clean
+```
+
+```
+./gradlew contract
+```
+
+You can then publish your pact tests locally by first running the pact docker-compose:
+
+```
+docker-compose -f docker-pactbroker-compose.yml up
+```
+
+and then using it to publish your tests:
+
+```
+./gradlew pactPublish
+```
+
 ### Tech
 
 It uses:
@@ -53,3 +76,5 @@ It uses:
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+
