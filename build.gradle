@@ -76,6 +76,7 @@ def versions = [
         springfoxSwagger   : '2.9.2',
         h2                 : '1.4.197',
         liquibase          : '3.5.3',
+        serenity           : '2.0.23',
         pact_version       : '3.5.24'
 ]
 
@@ -157,10 +158,6 @@ dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test") {
         exclude group: 'com.vaadin.external.google', module: 'android-json'
     }
-    testCompile group: 'io.rest-assured', name: 'rest-assured', version: '4.0.0'
-    testCompile group: 'io.rest-assured', name: 'rest-assured-common', version: '4.0.0'
-    testCompile group: 'io.rest-assured', name: 'json-path', version: '4.0.0'
-    testCompile group: 'io.rest-assured', name: 'xml-path', version: '4.0.0'
     testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
     testCompile 'com.warrenstrange:googleauth:1.4.0'
@@ -175,6 +172,7 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.3.2"
 
     //pact contract testing
+    testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
     contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit5_2.12', version: versions.pact_version
     contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-java8_2.12', version: versions.pact_version
 
@@ -274,7 +272,7 @@ task contract(type: Test) {
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
     include "uk/gov/hmcts/reform/em/annotation/**"
-    systemProperty 'pact.rootDir', "${rootDir}/pacts"
+    systemProperty 'pact.rootDir', "pacts"
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
 
@@ -288,7 +286,7 @@ def getCheckedOutGitCommitHash() {
 
 pact {
     publish {
-        pactDirectory = 'target/pacts'
+        pactDirectory = 'pacts'
         pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
         tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
         version = project.pactVersion
