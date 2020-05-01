@@ -43,9 +43,6 @@ public class Bookmark implements Serializable {
     @Column(name = "previous")
     private UUID previous;
 
-    @Column(name = "next")
-    private UUID next;
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 
     public UUID getId() {
@@ -118,14 +115,6 @@ public class Bookmark implements Serializable {
 
     public void setPrevious(UUID previous) {
         this.previous = previous;
-    }
-
-    public UUID getNext() {
-        return next;
-    }
-
-    public void setNext(UUID next) {
-        this.next = next;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove

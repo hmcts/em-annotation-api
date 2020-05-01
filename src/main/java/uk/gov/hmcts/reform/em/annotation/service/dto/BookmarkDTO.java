@@ -28,8 +28,6 @@ public class BookmarkDTO {
 
     private UUID previous;
 
-    private UUID next;
-
     public UUID getId() {
         return id;
     }
@@ -100,13 +98,5 @@ public class BookmarkDTO {
 
     public void setPrevious(UUID previous) {
         this.previous = previous;
-    }
-
-    public UUID getNext() {
-        return next;
-    }
-
-    public void setNext(UUID next) {
-        this.next = next;
     }
 }

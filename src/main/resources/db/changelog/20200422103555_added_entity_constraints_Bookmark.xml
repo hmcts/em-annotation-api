@@ -8,9 +8,6 @@
             <column name="previous" type="UUID">
                 <constraints nullable="true"/>
             </column>
-            <column name="next" type="UUID">
-                <constraints nullable="true"/>
-            </column>
         </addColumn>
     </changeSet>
 </databaseChangeLog>
