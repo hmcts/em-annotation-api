@@ -1,6 +1,7 @@
 buildscript {
     dependencies {
-        classpath "io.spring.gradle:dependency-management-plugin:1.0.9.RELEASE"
+        classpath("io.spring.gradle:dependency-management-plugin:1.0.9.RELEASE")
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.0.83")
     }
 }
 
@@ -27,6 +28,8 @@ apply plugin: 'org.owasp.dependencycheck'
 apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'idea'
 apply from: 'gradle/liquibase.gradle'
+apply plugin: 'net.serenity-bdd.aggregator'
+
 
 dependencyManagement {
     imports {
@@ -173,6 +176,12 @@ dependencies {
 
     //pact contract testing
     testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
+    testCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
+    testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
+    testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
+
+
+
     contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit5_2.12', version: versions.pact_version
     contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-java8_2.12', version: versions.pact_version
 
@@ -275,6 +284,9 @@ task contract(type: Test) {
     systemProperty 'pact.rootDir', "pacts"
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
+
+
+
 
 project.ext {
     pactVersion = getCheckedOutGitCommitHash()
