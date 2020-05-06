@@ -183,9 +183,6 @@ dependencies {
     testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
 
-
-
-
     contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit5_2.12', version: versions.pact_version
     contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-java8_2.12', version: versions.pact_version
 
@@ -289,9 +286,12 @@ task contract(type: Test) {
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
 
+task runAndPublishConsumerPactTests(type: Test){
+    logger.lifecycle("Runs pact Tests")
+    testClassesDirs = sourceSets.contractTest.output.classesDirs
+    classpath = sourceSets.contractTest.runtimeClasspath
 
-
-
+}
 
 project.ext {
     pactVersion = getCheckedOutGitCommitHash()
