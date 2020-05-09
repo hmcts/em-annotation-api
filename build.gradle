@@ -31,8 +31,6 @@ apply plugin: 'idea'
 apply from: 'gradle/liquibase.gradle'
 apply plugin: 'net.serenity-bdd.aggregator'
 
-// only way to get Serenity to publish a single page html report of all the Func.Tests : https://github.com/serenity-bdd/serenity-core/issues/244 - 
-test.finalizedBy(aggregate)
 
 dependencyManagement {
     imports {
@@ -194,8 +192,6 @@ dependencies {
 
     aatCompile "uk.gov.hmcts.reform:em-test-helper:1.17.4"
 
-
-
     contractTestCompile sourceSets.main.runtimeClasspath
     contractTestCompile sourceSets.test.runtimeClasspath
 }
@@ -269,6 +265,9 @@ task functional(type: Test) {
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
 
+// Serenity Reporting : https://stackoverflow.com/questions/36472191/gradle-run-testreport-task-after-test-phase-of-all-submodules
+functional.finalizedBy(aggregate)
+
 task smoke(type: Test) {
     group = 'Delivery pipeline'
     description = 'Executes non-destructive smoke tests'
@@ -278,6 +277,8 @@ task smoke(type: Test) {
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
+
+
 
 task contract(type: Test) {
     group = 'Delivery pipeline'
@@ -315,7 +316,6 @@ pact {
 }
 
 serenity {
-    test.finalizedBy(aggregate)
     reports = ["single-page-html"]
 }
 
