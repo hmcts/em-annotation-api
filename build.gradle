@@ -315,6 +315,7 @@ pact {
 }
 
 serenity {
+    test.finalizedBy(aggregate)
     reports = ["single-page-html"]
 }
 
