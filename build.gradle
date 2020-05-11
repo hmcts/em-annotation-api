@@ -265,6 +265,9 @@ task functional(type: Test) {
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
 
+// Serenity Reporting : https://stackoverflow.com/questions/36472191/gradle-run-testreport-task-after-test-phase-of-all-submodules
+functional.finalizedBy(aggregate)
+
 task smoke(type: Test) {
     group = 'Delivery pipeline'
     description = 'Executes non-destructive smoke tests'
@@ -274,6 +277,8 @@ task smoke(type: Test) {
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
+
+
 
 task contract(type: Test) {
     group = 'Delivery pipeline'
