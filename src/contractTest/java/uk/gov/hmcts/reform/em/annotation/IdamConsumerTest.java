@@ -108,7 +108,7 @@ public class IdamConsumerTest {
         headers.put(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
         Map<String, Object> params = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        params.put("username", "emCaseOfficer");
+        params.put("username", "emCaseOfficer@email.net");
         params.put("password", "Password123");
 
         return builder
