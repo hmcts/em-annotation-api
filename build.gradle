@@ -298,6 +298,8 @@ task runAndPublishConsumerPactTests(type: Test){
 
 }
 
+runAndPublishConsumerPactTests.finalizedBy pactPublish
+
 project.ext {
     pactVersion = getCheckedOutGitCommitHash()
 }
