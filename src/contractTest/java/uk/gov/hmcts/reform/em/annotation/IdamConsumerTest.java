@@ -112,7 +112,7 @@ public class IdamConsumerTest {
         params.put("password", "Password123");
 
         return builder
-            .given("I have obtained authorization_code as a user and a client", params)
+            .given("I have an obtained authorization_code as a user and a client", params)
             .uponReceiving("Provider takes user/pwd and returns Auth code to Annotation API")
             .path(IDAM_OPENID_TOKEN_URL)
             .method(HttpMethod.POST.toString())
@@ -158,7 +158,7 @@ public class IdamConsumerTest {
 
         Map<String, Object> params = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-        params.put("username", "emCaseOfficer");
+        params.put("username", "emCaseOfficer@email.net");
         params.put("password", "Password123");
 
         return builder
