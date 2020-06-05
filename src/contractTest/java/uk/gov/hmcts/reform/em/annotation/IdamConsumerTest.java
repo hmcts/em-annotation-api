@@ -224,7 +224,7 @@ public class IdamConsumerTest {
         params.put("client_id", client_id);
         params.put("client_secret", client_secret);
         params.put("scope", "openid roles profile");
-        params.put("username", "emCaseOfficer@fake.hmcts.net");
+        params.put("username", "emCaseOfficer@email.net");
         params.put("password", "Password123");
 
         return builder
