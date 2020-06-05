@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,15 @@ public class IdamConsumerTest {
     private static final String IDAM_DETAILS_URL = "/details";
     private static final String IDAM_OPENID_TOKEN_URL = "/o/token";
     private static String ACCESS_TOKEN = "111";
+
+    @Value("${idam.client.id}")
+    String client_id;
+
+    @Value("${idam.client.secret}")
+    String client_secret;
+
+    @Value("${idam.client.redirect_uri}")
+    String redirect_uri;
 
     @Pact(provider = "Idam_api", consumer = "Annotation_api")
     public RequestResponsePact executeGetUserDetailsAndGet200(PactDslWithProvider builder) {
@@ -207,9 +217,9 @@ public class IdamConsumerTest {
 
         Map<String, Object> params = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-        params.put("redirect_uri", "http://www.service.com/callback");
-        params.put("client_id", "service");
-        params.put("client_secret", "secret");
+        params.put("redirect_uri", redirect_uri);
+        params.put("client_id", client_id);
+        params.put("client_secret", client_secret);
         params.put("scope", "openid roles profile");
         params.put("username", "emCaseOfficer@fake.hmcts.net");
         params.put("password", "Password123");
