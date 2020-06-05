@@ -120,6 +120,9 @@ public class IdamConsumerTest {
         Map<String, Object> params = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         params.put("username", "emCaseOfficer@email.net");
         params.put("password", "Password123");
+        params.put("client_id", client_id);
+        params.put("redirect_uri", redirect_uri);
+        params.put("scope", "openid roles profile");
 
         return builder
             .given("I have an obtained authorization_code as a user and a client", params)
