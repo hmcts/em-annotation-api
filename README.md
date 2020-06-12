@@ -8,7 +8,7 @@
 
 Annotation API is a backend service to store and retrieve annotations.
 
-## Quickstart.
+## Quickstart..
 To pull all dependencies and set up IDAM data run:
 ```bash
 #Cloning repo and running though docker
