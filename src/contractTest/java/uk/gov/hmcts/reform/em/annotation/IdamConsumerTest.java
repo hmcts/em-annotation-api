@@ -1,20 +1,17 @@
 package uk.gov.hmcts.reform.em.annotation;
 
 import au.com.dius.pact.consumer.MockServer;
-import au.com.dius.pact.consumer.Pact;
 import au.com.dius.pact.consumer.dsl.PactDslJsonArray;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
-import au.com.dius.pact.model.RequestResponsePact;
+import au.com.dius.pact.core.model.RequestResponsePact;
+import au.com.dius.pact.core.model.annotations.Pact;
 import com.google.common.collect.Maps;
+import io.restassured.http.ContentType;
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.rest.SerenityRest;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,8 +23,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
 import java.util.Map;
 import java.util.TreeMap;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
@@ -49,62 +48,64 @@ public class IdamConsumerTest {
     String redirect_uri;
 
 
-    @Pact(provider = "Idam_api", consumer = "Annotation_api")
-    public RequestResponsePact executeGetIdamAccessTokenAndGet200(PactDslWithProvider builder) throws JSONException {
-        String[] rolesArray = new String[1];
-        rolesArray[0] = "citizen";
-        Map<String, String> requestheaders = Maps.newHashMap();
-        requestheaders.put("Content-Type", "application/x-www-form-urlencoded");
+//    @Pact(provider = "Idam_api", consumer = "Annotation_api")
+//    public RequestResponsePact executeGetIdamAccessTokenAndGet200(PactDslWithProvider builder) throws JSONException {
+//        String[] rolesArray = new String[1];
+//        rolesArray[0] = "citizen";
+//        Map<String, String> requestheaders = Maps.newHashMap();
+//        requestheaders.put("Content-Type", "application/x-www-form-urlencoded");
+//
+//        Map<String, String> responseheaders = Maps.newHashMap();
+//        responseheaders.put("Content-Type", "application/json");
+//
+//        Map<String, Object> params = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+//        params.put("email", "emCaseOfficer@email.net");
+//        params.put("password", "Password123");
+//        params.put("forename","emCaseOfficer");
+//        params.put("surname", "jar123");
+//        params.put("roles", rolesArray);
+//
+//        return builder
+//            .given("a user exists", params)
+//            .uponReceiving("Provider takes user/pwd and returns Access Token to Annotation API")
+//            .path(IDAM_OPENID_TOKEN_URL)
+//            .method(HttpMethod.POST.toString())
+//            .body("redirect_uri=http%3A%2F%2Fwww.dummy-pact-service.com%2Fcallback&client_id=pact&grant_type=password&username=emCaseOfficer%40email.net&password=Password123&client_secret=pactsecret&scope=openid profile roles","application/x-www-form-urlencoded")
+//            .willRespondWith()
+//            .status(HttpStatus.OK.value())
+//            .headers(responseheaders)
+//            .body(createAuthResponse())
+//            .toPact();
+//    }
+//
+//    @Test
+//    @PactTestFor(pactMethod = "executeGetIdamAccessTokenAndGet200")
+//    public void should_post_to_token_endpoint_and_receive_access_token_with_200_response(MockServer mockServer)
+//        throws JSONException {
+//        String actualResponseBody =
+//        SerenityRest
+//            .given()
+//            .contentType(ContentType.URLENC)
+//            .formParam("redirect_uri", "http://www.dummy-pact-service.com/callback")
+//            .formParam("client_id", "pact")
+//            .formParam("grant_type", "password")
+//            .formParam("username", "emCaseOfficer@email.net")
+//            .formParam("password", "Password123")
+//            .formParam("client_secret", "pactsecret")
+//            .formParam("scope", "openid profile roles")
+//            .post(mockServer.getUrl() + IDAM_OPENID_TOKEN_URL)
+//            .then()
+//            .log().all().extract().asString();
+//        System.out.println("responseasstring......"+actualResponseBody);
+//        JSONObject response = new JSONObject(actualResponseBody);
+//
+//        ACCESS_TOKEN = response.getString("access_token");
+//        assertThat(response).isNotNull();
+//        assertThat(response.getString("access_token")).isNotBlank();
+//
+//    }
 
-        Map<String, String> responseheaders = Maps.newHashMap();
-        responseheaders.put("Content-Type", "application/json");
-
-        Map<String, Object> params = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        params.put("email", "emCaseOfficer@email.net");
-        params.put("password", "Password123");
-        params.put("forename","emCaseOfficer");
-        params.put("surname", "jar123");
-        params.put("roles", rolesArray);
-
-        return builder
-            .given("a user exists", params)
-            .uponReceiving("Provider takes user/pwd and returns Access Token to Annotation API")
-            .path(IDAM_OPENID_TOKEN_URL)
-            .method(HttpMethod.POST.toString())
-            .body("redirect_uri=http%3A%2F%2Fwww.dummy-pact-service.com%2Fcallback&client_id=pact&grant_type=password&username=emCaseOfficer%40email.net&password=Password123&client_secret=pactsecret&scope=openid profile roles","application/x-www-form-urlencoded")
-            .willRespondWith()
-            .status(HttpStatus.OK.value())
-            .headers(responseheaders)
-            .body(createAuthResponse())
-            .toPact();
-    }
-
-    @Test
-    @PactTestFor(pactMethod = "executeGetIdamAccessTokenAndGet200")
-    public void should_post_to_token_endpoint_and_receive_access_token_with_200_response(MockServer mockServer)
-        throws JSONException {
-        String actualResponseBody =
-        SerenityRest
-            .given()
-            .contentType(ContentType.URLENC)
-            .formParam("redirect_uri", "http://www.dummy-pact-service.com/callback")
-            .formParam("client_id", "pact")
-            .formParam("grant_type", "password")
-            .formParam("username", "emCaseOfficer@email.net")
-            .formParam("password", "Password123")
-            .formParam("client_secret", "pactsecret")
-            .formParam("scope", "openid profile roles")
-            .post(mockServer.getUrl() + IDAM_OPENID_TOKEN_URL)
-            .then()
-            .log().all().extract().asString();            
-        System.out.println("responseasstring......"+actualResponseBody);
-        JSONObject response = new JSONObject(actualResponseBody);
-
-        ACCESS_TOKEN = response.getString("access_token");
-        assertThat(response).isNotNull();
-        assertThat(response.getString("access_token")).isNotBlank();
-
-    }
+    ////////////////////////////////////////////////////////////////////////////
 
     @Pact(provider = "Idam_api", consumer = "Annotation_api")
     public RequestResponsePact executeGetUserDetailsAndGet200(PactDslWithProvider builder) {
@@ -122,14 +123,31 @@ public class IdamConsumerTest {
         params.put("username", "emCaseOfficer@email.net");
         params.put("password", "Password123");
 
+        Map<String, String> responseheaders = Maps.newHashMap();
+        responseheaders.put("Content-Type", "application/json");
+
+        String[] rolesArray = new String[1];
+        rolesArray[0] = "citizen";
+
+        Map<String, Object> tokenParams = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        params.put("email", "emCaseOfficer@email.net");
+        params.put("password", "Password123");
+        params.put("forename","emCaseOfficer");
+        params.put("surname", "jar123");
+        params.put("roles", rolesArray);
+
         return builder
-            .given("I have obtained an access_token as a user", params)
+            .given("a user exists", tokenParams)
+            .uponReceiving("Provider takes user/pwd and returns Access Token to Annotation API")
+            .path(IDAM_OPENID_TOKEN_URL)
+            .method(HttpMethod.POST.toString())
+            .body("redirect_uri=http%3A%2F%2Fwww.dummy-pact-service.com%2Fcallback&client_id=pact&grant_type=password&username=emCaseOfficer%40email.net&password=Password123&client_secret=pactsecret&scope=openid profile roles","application/x-www-form-urlencoded")
+            .willRespondWith()
+            .body(new PactDslJsonBody().valueFromProviderState("access_token", "access_token", "afkgrkfglfhafjhaerfjwojjf"))
             .uponReceiving("Provider returns user info to Annotation API")
             .path(IDAM_DETAILS_URL)
-
-
+            .headers("AUTHORIZATION","Bearer " +"${access_token}")
             .method(HttpMethod.GET.toString())
-            .headers(requestHeaders)
             .willRespondWith()
             .status(HttpStatus.OK.value())
             .body(createUserInfoResponse())
