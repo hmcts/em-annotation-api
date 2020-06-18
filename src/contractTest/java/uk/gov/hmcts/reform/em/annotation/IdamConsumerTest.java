@@ -113,7 +113,6 @@ public class IdamConsumerTest {
         Map<String, String> requestHeaders = Maps.newHashMap();
 //        requestHeaders.put(HttpHeaders.AUTHORIZATION, new PactDslJsonBody().  valueFromProviderState("accountId", "${accountId}", 123));
         requestHeaders.put(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-
         Map<String, Object> params = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
         params.put("redirect_uri", "http://www.dummy-pact-service.com/callback");
@@ -143,13 +142,15 @@ public class IdamConsumerTest {
             .method(HttpMethod.POST.toString())
             .body("redirect_uri=http%3A%2F%2Fwww.dummy-pact-service.com%2Fcallback&client_id=pact&grant_type=password&username=emCaseOfficer%40email.net&password=Password123&client_secret=pactsecret&scope=openid profile roles","application/x-www-form-urlencoded")
             .willRespondWith()
-                .body(new PactDslJsonBody().valueFromProviderState("access_token", "access_token", "afkgrkfglfhafjhaerfjwojjf"))
+                .body(new PactDslJsonBody().valueFromProviderState("access_token","\\${access_token}", "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FI"))
             .uponReceiving("Provider returns user info to Annotation API")
             .path(IDAM_DETAILS_URL)
-            .headers("AUTHORIZATION","Bearer " +"${access_token}")
+            //.matchHeader("AUTHORIZATION","Bearer " +"${access_token}")
+            .headers("AUTHORIZATION","Bearer ${access_token}")
             .method(HttpMethod.GET.toString())
             .willRespondWith()
             .status(HttpStatus.OK.value())
+            .headers(responseheaders)
             .body(createUserInfoResponse())
             .toPact();
     }
@@ -159,14 +160,28 @@ public class IdamConsumerTest {
     public void should_get_user_details_with_access_token(MockServer mockServer) throws JSONException {
 
         Map<String, String> headers = Maps.newHashMap();
-        headers.put(HttpHeaders.AUTHORIZATION, "Bearer afkgrkfglfhafjhaerfjwojjf");
+        headers.put(HttpHeaders.AUTHORIZATION, "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FI");
         headers.put(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
-        String actualResponseBody =
+        String tokenResponseBody =
                 SerenityRest
                 .given()
-                .headers(headers)
+                .contentType(ContentType.URLENC)
+                .formParam("redirect_uri", "http://www.dummy-pact-service.com/callback")
+                .formParam("client_id", "pact")
+                .formParam("grant_type", "password")
+                .formParam("username", "emCaseOfficer@email.net")
+                .formParam("password", "Password123")
+                .formParam("client_secret", "pactsecret")
+                .formParam("scope", "openid profile roles")
+                .post(mockServer.getUrl() + IDAM_OPENID_TOKEN_URL)
+                .then()
+                .log().all().extract().asString();
+        String detailsResponseBody =
+                SerenityRest
+                .given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .headers(headers)
                 .when()
                 .get(mockServer.getUrl() + IDAM_DETAILS_URL)
                 .then()
@@ -176,9 +191,9 @@ public class IdamConsumerTest {
                 .body()
                 .asString();
 
-        JSONObject response = new JSONObject(actualResponseBody);
+        JSONObject response = new JSONObject(detailsResponseBody);
 
-        assertThat(actualResponseBody).isNotNull();
+        assertThat(detailsResponseBody).isNotNull();
         assertThat(response).hasNoNullFieldsOrProperties();
         assertThat(response.getString("uid")).isNotBlank();
         assertThat(response.getString("given_name")).isNotBlank();
