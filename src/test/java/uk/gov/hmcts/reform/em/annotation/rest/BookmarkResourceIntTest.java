@@ -21,6 +21,7 @@ import uk.gov.hmcts.reform.em.annotation.repository.BookmarkRepository;
 import uk.gov.hmcts.reform.em.annotation.rest.errors.ExceptionTranslator;
 import uk.gov.hmcts.reform.em.annotation.service.BookmarkService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.BookmarkDTO;
+import uk.gov.hmcts.reform.em.annotation.service.dto.DeleteBookmarkDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.BookmarkMapper;
 
 import javax.persistence.EntityManager;
@@ -299,11 +300,20 @@ public class BookmarkResourceIntTest extends BaseTest {
         bookmarkDTO2.setName("Another new Bookmark");
         bookmarkRepository.saveAndFlush(bookmarkMapper.toEntity(bookmarkDTO2));
 
+        BookmarkDTO bookmarkDTO3 = bookmarkMapper.toDto(updatedBookmark);
+        bookmarkDTO3.setId(UUID.randomUUID());
+        bookmarkDTO3.setName("A Bookmark");
+        bookmarkRepository.saveAndFlush(bookmarkMapper.toEntity(bookmarkDTO3));
+
         int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
+
+        DeleteBookmarkDTO deleteBookmarkDTO = new DeleteBookmarkDTO();
+        deleteBookmarkDTO.setUpdated(bookmarkDTO3);
+        deleteBookmarkDTO.setDeleted(Arrays.asList(bookmarkDTO.getId(), bookmarkDTO1.getId(), bookmarkDTO2.getId()));
 
         restLogoutMockMvc.perform(delete("/api/bookmarks_multiple")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(Arrays.asList(bookmarkDTO.getId(), bookmarkDTO1.getId(), bookmarkDTO2.getId()))))
+                .content(TestUtil.convertObjectToJsonBytes(deleteBookmarkDTO)))
                 .andExpect(status().isOk());
 
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
