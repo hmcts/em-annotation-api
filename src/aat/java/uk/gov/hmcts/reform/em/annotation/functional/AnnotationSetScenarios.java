@@ -28,8 +28,142 @@ public class AnnotationSetScenarios {
     private String documentId = UUID.randomUUID().toString();
 
     @Test
-    public void testFilterAnnotationSetSuccess() {
+    public void testCreateAnnotationSetSuccess() {
+        JSONObject jsonObject = new JSONObject();
 
+        jsonObject.put("documentId", UUID.randomUUID().toString());
+        jsonObject.put("id", UUID.randomUUID().toString());
+
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(jsonObject.toString())
+                .request("POST", testUrl + "/api/annotation-sets")
+                .then()
+                .statusCode(201);
+    }
+
+    @Test
+    public void testGetAnnotationSetsSuccess() {
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("documentId", UUID.randomUUID().toString());
+        jsonObject.put("id", UUID.randomUUID().toString());
+
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(jsonObject.toString())
+                .request("POST", testUrl + "/api/annotation-sets")
+                .then()
+                .statusCode(201);
+
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .request("GET", testUrl + "/api/annotation-sets")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    public void testGetAnnotationSetByIdSuccess() {
+        JSONObject jsonObject = new JSONObject();
+        String annotationSetId = UUID.randomUUID().toString();
+
+        jsonObject.put("documentId", UUID.randomUUID().toString());
+        jsonObject.put("id", annotationSetId);
+
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(jsonObject.toString())
+                .request("POST", testUrl + "/api/annotation-sets")
+                .then()
+                .statusCode(201);
+
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .request("GET", testUrl + "/api/annotation-sets/" + annotationSetId)
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    public void testGetAnnotationSetByIdNoContent() {
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .request("GET", testUrl + "/api/annotation-sets/1234")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void testUpdateAnnotationSetSuccess() {
+        JSONObject jsonObject = new JSONObject();
+        String annotationSetId = UUID.randomUUID().toString();
+
+        jsonObject.put("documentId", UUID.randomUUID().toString());
+        jsonObject.put("id", annotationSetId);
+
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(jsonObject.toString())
+                .request("POST", testUrl + "/api/annotation-sets")
+                .then()
+                .statusCode(201);
+
+        jsonObject.remove("documentId");
+        jsonObject.put("documentId", UUID.randomUUID().toString());
+
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(jsonObject.toString())
+                .request("PUT", testUrl + "/api/annotation-sets/" + annotationSetId)
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    public void testDeleteAnnotationSetSuccess() {
+        JSONObject jsonObject = new JSONObject();
+        String annotationSetId = UUID.randomUUID().toString();
+
+        jsonObject.put("documentId", UUID.randomUUID().toString());
+        jsonObject.put("id", annotationSetId);
+
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(jsonObject.toString())
+                .request("POST", testUrl + "/api/annotation-sets")
+                .then()
+                .statusCode(201);
+
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .request("DELETE", testUrl + "/api/annotation-sets/" + annotationSetId)
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    public void testFilterAnnotationSetSuccess() {
         JSONObject jsonObject = new JSONObject();
 
         jsonObject.put("documentId", documentId);
