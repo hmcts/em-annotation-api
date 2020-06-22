@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.em.annotation.functional;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
