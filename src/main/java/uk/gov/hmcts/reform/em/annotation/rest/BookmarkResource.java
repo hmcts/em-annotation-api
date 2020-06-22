@@ -17,6 +17,7 @@ import uk.gov.hmcts.reform.em.annotation.rest.util.HeaderUtil;
 import uk.gov.hmcts.reform.em.annotation.rest.util.PaginationUtil;
 import uk.gov.hmcts.reform.em.annotation.service.BookmarkService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.BookmarkDTO;
+import uk.gov.hmcts.reform.em.annotation.service.dto.DeleteBookmarkDTO;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -185,7 +186,7 @@ public class BookmarkResource {
     /**
      * DELETE  /bookmarks : delete multiple bookmarks.
      *
-     * @param bookmarkDTOList the list of bookmarkDTO objects to delete
+     * @param deleteBookmarkDTO object containing the list of bookmarkDTO objects to delete and parent to update
      * @return the ResponseEntity with status 200 (OK),
      * or with status 400 (Bad Request) if the bookmarkDTO objects are not valid,
      * or with status 500 (Internal Server Error) if the bookmarkDTO objects couldn't be deleted
@@ -198,19 +199,20 @@ public class BookmarkResource {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @DeleteMapping("/bookmarks_multiple")
-    public ResponseEntity<Void> deleteMultipleBookmarks(@Valid @RequestBody List<UUID> bookmarkDTOList) {
-        log.debug("REST request to delete list of Bookmark objects : {}", bookmarkDTOList);
+    public ResponseEntity<Void> deleteMultipleBookmarks(@Valid @RequestBody DeleteBookmarkDTO deleteBookmarkDTO) {
+        log.debug("REST request to delete list of Bookmark objects : {}", deleteBookmarkDTO.getDeleted());
 
-        if (bookmarkDTOList.stream().anyMatch(Objects::isNull)) {
+        if (Objects.isNull(deleteBookmarkDTO.getUpdated().getId()) || deleteBookmarkDTO.getDeleted().stream().anyMatch(Objects::isNull)) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        bookmarkDTOList.forEach(bookmarkService::delete);
+        deleteBookmarkDTO.getDeleted().forEach(bookmarkService::delete);
+        bookmarkService.save(deleteBookmarkDTO.getUpdated());
 
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityDeletionAlert(
                         ENTITY_NAME,
-                        new ArrayList<>(bookmarkDTOList)
+                        new ArrayList<>(deleteBookmarkDTO.getDeleted())
                                 .toString()))
                 .build();
     }
