@@ -101,7 +101,7 @@ public class AnnotationSetScenarios {
                 .authRequest()
                 .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .request("GET", testUrl + "/api/annotation-sets/1234")
+                .request("GET", testUrl + "/api/annotation-sets/" + UUID.randomUUID().toString())
                 .then()
                 .statusCode(404);
     }
@@ -131,7 +131,7 @@ public class AnnotationSetScenarios {
                 .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(jsonObject.toString())
-                .request("PUT", testUrl + "/api/annotation-sets/" + annotationSetId)
+                .request("PUT", testUrl + "/api/annotation-sets")
                 .then()
                 .statusCode(200);
     }
