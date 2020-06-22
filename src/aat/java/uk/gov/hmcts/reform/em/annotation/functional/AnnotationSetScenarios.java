@@ -103,7 +103,7 @@ public class AnnotationSetScenarios {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .request("GET", testUrl + "/api/annotation-sets/" + UUID.randomUUID().toString())
                 .then()
-                .statusCode(404);
+                .statusCode(204);
     }
 
     @Test
