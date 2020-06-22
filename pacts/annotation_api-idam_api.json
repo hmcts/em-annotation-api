@@ -3,25 +3,64 @@
         "name": "Idam_api"
     },
     "consumer": {
-        "name": "annotation_api"
+        "name": "Annotation_api"
     },
     "interactions": [
         {
-            "description": "Provider receives a POST /o/token request from Annotation API",
+            "description": "Provider receives request to establish a session for user and returns a cookie",
+            "request": {
+                "method": "POST",
+                "path": "/o/token"
+            },
+            "response": {
+                "status": 200,
+                "headers": {
+                    "Content-Type": "application/json; charset=UTF-8"
+                },
+                "body": {
+                    "cookie": "Idam.Session=4mTQBb9rwVUUfW3quFPLICL9BQA.*AAJTSQACMDIAAlNLABw4bmdTUnV2RHJBMUJzNDZRZGxLTFNqQWk1MkE9AAR0eXBlAANDVFMAAlMxAAIwMQ"
+                },
+                "matchingRules": {
+                    "body": {
+                        "$.cookie": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    },
+                    "header": {
+                        "Content-Type": {
+                            "matchers": [
+                                {
+                                    "match": "regex",
+                                    "regex": "application/json;\\s?charset=(utf|UTF)-8"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    }
+                }
+            },
+            "providerStates": [
+                {
+                    "name": "I establish a session as a user",
+                    "params": {
+                        "password": "Password123",
+                        "username": "emCaseOfficer"
+                    }
+                }
+            ]
+        },
+        {
+            "description": "Provider responds back with time bound token to Annotation API",
             "request": {
                 "method": "POST",
                 "path": "/o/token",
                 "headers": {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                "body": {
-                    "grant_type": "password",
-                    "client_id": "ia",
-                    "client_secret": "some_client_secret",
-                    "redirect_uri": "/oauth2redirect",
-                    "scope": "openid roles profile",
-                    "username": "annotationusername",
-                    "password": "annotationpwd"
+                    "Content-Type": "application/json"
                 }
             },
             "response": {
@@ -30,12 +69,12 @@
                     "Content-Type": "application/json; charset=UTF-8"
                 },
                 "body": {
-                    "access_token": "some-long-value",
-                    "refresh_token": "another-long-value",
+                    "access_token": "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FI",
+                    "refresh_token": "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoiYi9PNk92V",
                     "scope": "openid roles profile",
-                    "id_token": "some-value",
+                    "id_token": "eyJ0eXAiOiJKV1QiLCJraWQiOiJiL082T3ZWdjEre",
                     "token_type": "Bearer",
-                    "expires_in": "12345"
+                    "expires_in": "28798"
                 },
                 "matchingRules": {
                     "body": {
@@ -103,17 +142,25 @@
             },
             "providerStates": [
                 {
-                    "name": "Idam successfully returns access token"
+                    "name": "I have obtained an access_token as a user",
+                    "params": {
+                        "client_id": "service",
+                        "client_secret": "secret",
+                        "password": "Password123",
+                        "redirect_uri": "http://www.service.com/callback",
+                        "scope": "openid roles profile",
+                        "username": "emCaseOfficer@fake.hmcts.net"
+                    }
                 }
             ]
         },
         {
-            "description": "Provider receives a GET /details request from an Annotation API",
+            "description": "Provider takes user/pwd and returns Auth code to Annotation API",
             "request": {
-                "method": "GET",
-                "path": "/details",
+                "method": "POST",
+                "path": "/o/token",
                 "headers": {
-                    "Authorization": "111"
+                    "Content-Type": "application/json"
                 }
             },
             "response": {
@@ -122,15 +169,68 @@
                     "Content-Type": "application/json; charset=UTF-8"
                 },
                 "body": {
-                    "forename": "Case",
-                    "surname": "Officer",
-                    "roles": "[\"caseofficer-ia\"]",
-                    "id": "123",
-                    "email": "ia-caseofficer@fake.hmcts.net"
+                    "code": "4mTQBb9rwVUUfW3quFPLICL9BQA"
                 },
                 "matchingRules": {
                     "body": {
-                        "$.id": {
+                        "$.code": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    },
+                    "header": {
+                        "Content-Type": {
+                            "matchers": [
+                                {
+                                    "match": "regex",
+                                    "regex": "application/json;\\s?charset=(utf|UTF)-8"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    }
+                }
+            },
+            "providerStates": [
+                {
+                    "name": "I have obtained authorization_code as a user and a client",
+                    "params": {
+                        "password": "Password123",
+                        "username": "emCaseOfficer"
+                    }
+                }
+            ]
+        },
+        {
+            "description": "Provider returns user details to Annotation API",
+            "request": {
+                "method": "POST",
+                "path": "/details",
+                "headers": {
+                    "Authorization": "4mTQBb9rwVUUfW3quFPLICL9BQA"
+                }
+            },
+            "response": {
+                "status": 200,
+                "headers": {
+                    "Content-Type": "application/json; charset=UTF-8"
+                },
+                "body": {
+                    "accountStatus": "active",
+                    "mail": "emCaseOfficer@email.net",
+                    "givenName": "emCaseOfficer",
+                    "roles": "[\"citizen\"]",
+                    "_id": "1234-2345-3456-4567",
+                    "sn": "Jar",
+                    "userName": "emCaseOfficer@email.net"
+                },
+                "matchingRules": {
+                    "body": {
+                        "$._id": {
                             "matchers": [
                                 {
                                     "match": "type"
@@ -138,7 +238,7 @@
                             ],
                             "combine": "AND"
                         },
-                        "$.email": {
+                        "$.accountStatus": {
                             "matchers": [
                                 {
                                     "match": "type"
@@ -146,7 +246,7 @@
                             ],
                             "combine": "AND"
                         },
-                        "$.forename": {
+                        "$.givenName": {
                             "matchers": [
                                 {
                                     "match": "type"
@@ -154,7 +254,23 @@
                             ],
                             "combine": "AND"
                         },
-                        "$.surname": {
+                        "$.sn": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.userName": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.mail": {
                             "matchers": [
                                 {
                                     "match": "type"
@@ -186,7 +302,16 @@
             },
             "providerStates": [
                 {
-                    "name": "Idam successfully returns user details"
+                    "name": "a user exists",
+                    "params": {
+                        "email": "emCaseOfficer@email.net",
+                        "forename": "emCaseOfficer",
+                        "password": "Password123",
+                        "roles": [
+                            "citizen"
+                        ],
+                        "surname": "Jar"
+                    }
                 }
             ]
         }
