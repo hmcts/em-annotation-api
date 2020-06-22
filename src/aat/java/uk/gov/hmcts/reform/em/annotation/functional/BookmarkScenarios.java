@@ -195,7 +195,6 @@ public class BookmarkScenarios {
     @Test
     public void testDeleteMultipleBookmarks() {
         JSONObject jsonObject = createBookmarkRequest();
-        JSONArray jsonArray = new JSONArray();
 
         testUtil
                 .authRequest()
@@ -206,13 +205,19 @@ public class BookmarkScenarios {
                 .then()
                 .statusCode(201);
 
+        JSONObject deleteBookmarkRequest = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+
         Object bookmarkId = jsonObject.get("id");
         jsonArray.put(bookmarkId);
+
+        deleteBookmarkRequest.put("updated", createBookmarkRequest());
+        deleteBookmarkRequest.put("deleted", jsonArray);
 
         testUtil
                 .authRequest()
                 .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-                .body(jsonArray.toString())
+                .body(deleteBookmarkRequest.toString())
                 .request("DELETE", testUrl + "/api/bookmarks_multiple")
                 .then()
                 .statusCode(200);
