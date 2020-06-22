@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
     <suppress>
-    <cve>CVE-2020-5398</cve>
-    <cve>CVE-2019-20444</cve>
-    <cve>CVE-2019-20445</cve>
-    <cve>CVE-2020-1745</cve>
+        <cve>CVE-2020-5407</cve>
+        <cve>CVE-2020-5408</cve>
+        <cve>CVE-2020-5398</cve>
+        <cve>CVE-2019-20444</cve>
+        <cve>CVE-2019-20445</cve>
+        <cve>CVE-2020-1745</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
@@ -405,5 +407,6 @@
         <cve>CVE-2020-11612</cve>
         <cve>CVE-2020-9488</cve>
         <cve>CVE-2020-10683</cve>
+        <cve>CVE-2020-9484</cve>
     </suppress>
 </suppressions>
