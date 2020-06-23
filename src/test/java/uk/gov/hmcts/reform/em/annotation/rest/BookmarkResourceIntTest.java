@@ -319,4 +319,37 @@ public class BookmarkResourceIntTest extends BaseTest {
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeDelete - 3);
     }
+
+    @Test
+    @Transactional
+    public void deleteMultipleBookmarksUpdatedIsNull() throws Exception {
+        bookmarkRepository.saveAndFlush(bookmark);
+        Bookmark updatedBookmark = bookmarkRepository.findById(bookmark.getId()).get();
+
+        em.detach(updatedBookmark);
+        BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(updatedBookmark);
+        BookmarkDTO bookmarkDTO1 = bookmarkMapper.toDto(updatedBookmark);
+        bookmarkDTO1.setId(UUID.randomUUID());
+        bookmarkDTO1.setName("New Bookmark");
+        bookmarkRepository.saveAndFlush(bookmarkMapper.toEntity(bookmarkDTO1));
+
+        BookmarkDTO bookmarkDTO2 = bookmarkMapper.toDto(updatedBookmark);
+        bookmarkDTO2.setId(UUID.randomUUID());
+        bookmarkDTO2.setName("Another new Bookmark");
+        bookmarkRepository.saveAndFlush(bookmarkMapper.toEntity(bookmarkDTO2));
+
+        int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
+
+        DeleteBookmarkDTO deleteBookmarkDTO = new DeleteBookmarkDTO();
+        deleteBookmarkDTO.setUpdated(null);
+        deleteBookmarkDTO.setDeleted(Arrays.asList(bookmarkDTO.getId(), bookmarkDTO1.getId(), bookmarkDTO2.getId()));
+
+        restLogoutMockMvc.perform(delete("/api/bookmarks_multiple")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(deleteBookmarkDTO)))
+                .andExpect(status().isOk());
+
+        List<Bookmark> bookmarkList = bookmarkRepository.findAll();
+        assertThat(bookmarkList).hasSize(databaseSizeBeforeDelete - 3);
+    }
 }
