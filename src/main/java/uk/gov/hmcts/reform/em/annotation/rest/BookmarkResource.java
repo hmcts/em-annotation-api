@@ -202,12 +202,15 @@ public class BookmarkResource {
     public ResponseEntity<Void> deleteMultipleBookmarks(@Valid @RequestBody DeleteBookmarkDTO deleteBookmarkDTO) {
         log.debug("REST request to delete list of Bookmark objects : {}", deleteBookmarkDTO.getDeleted());
 
-        if (Objects.isNull(deleteBookmarkDTO.getUpdated().getId()) || deleteBookmarkDTO.getDeleted().stream().anyMatch(Objects::isNull)) {
+        if (deleteBookmarkDTO.getDeleted().stream().anyMatch(Objects::isNull)) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
         deleteBookmarkDTO.getDeleted().forEach(bookmarkService::delete);
-        bookmarkService.save(deleteBookmarkDTO.getUpdated());
+
+        if (!Objects.isNull(deleteBookmarkDTO.getUpdated())) {
+            bookmarkService.save(deleteBookmarkDTO.getUpdated());
+        }
 
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityDeletionAlert(

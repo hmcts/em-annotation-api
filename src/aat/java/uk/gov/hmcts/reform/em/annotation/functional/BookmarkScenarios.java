@@ -222,4 +222,33 @@ public class BookmarkScenarios {
                 .then()
                 .statusCode(200);
     }
+
+    @Test
+    public void testDeleteMultipleBookmarksUpdatedIsNull() {
+        JSONObject jsonObject = createBookmarkRequest();
+
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(jsonObject.toString())
+                .request("POST", testUrl + "/api/bookmarks")
+                .then()
+                .statusCode(201);
+
+        JSONObject deleteBookmarkRequest = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+
+        Object bookmarkId = jsonObject.get("id");
+        jsonArray.put(bookmarkId);
+        deleteBookmarkRequest.put("deleted", jsonArray);
+
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .body(deleteBookmarkRequest.toString())
+                .request("DELETE", testUrl + "/api/bookmarks_multiple")
+                .then()
+                .statusCode(200);
+    }
 }
