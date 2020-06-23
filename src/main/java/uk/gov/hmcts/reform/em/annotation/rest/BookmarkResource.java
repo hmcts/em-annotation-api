@@ -199,7 +199,7 @@ public class BookmarkResource {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @DeleteMapping("/bookmarks_multiple")
-    public ResponseEntity<BookmarkDTO> deleteMultipleBookmarks(@Valid @RequestBody DeleteBookmarkDTO deleteBookmarkDTO) {
+    public ResponseEntity<Void> deleteMultipleBookmarks(@Valid @RequestBody DeleteBookmarkDTO deleteBookmarkDTO) {
         log.debug("REST request to delete list of Bookmark objects : {}", deleteBookmarkDTO.getDeleted());
 
         if (deleteBookmarkDTO.getDeleted().stream().anyMatch(Objects::isNull)) {
@@ -209,20 +209,14 @@ public class BookmarkResource {
         deleteBookmarkDTO.getDeleted().forEach(bookmarkService::delete);
 
         if (!Objects.isNull(deleteBookmarkDTO.getUpdated())) {
-            BookmarkDTO result = bookmarkService.save(deleteBookmarkDTO.getUpdated());
-            return ResponseEntity.ok()
-                    .headers(HeaderUtil.createEntityDeletionAlert(
-                            ENTITY_NAME,
-                            new ArrayList<>(deleteBookmarkDTO.getDeleted())
-                                    .toString()))
-                    .body(result);
-        } else {
-            return ResponseEntity.ok()
-                    .headers(HeaderUtil.createEntityDeletionAlert(
-                            ENTITY_NAME,
-                            new ArrayList<>(deleteBookmarkDTO.getDeleted())
-                                    .toString()))
-                    .body(null);
+            bookmarkService.save(deleteBookmarkDTO.getUpdated());
         }
+
+        return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityDeletionAlert(
+                        ENTITY_NAME,
+                        new ArrayList<>(deleteBookmarkDTO.getDeleted())
+                                .toString()))
+                .build();
     }
 }
