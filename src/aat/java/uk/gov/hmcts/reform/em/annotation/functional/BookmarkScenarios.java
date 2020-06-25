@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.functional;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -143,6 +144,33 @@ public class BookmarkScenarios {
     }
 
     @Test
+    public void testUpdateMultipleBookmarks() {
+        JSONObject jsonObject = createBookmarkRequest();
+        JSONArray jsonArray = new JSONArray();
+
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(jsonObject.toString())
+                .request("POST", testUrl + "/api/bookmarks")
+                .then()
+                .statusCode(201);
+
+        jsonObject.remove("name");
+        jsonObject.put("name", "new name");
+        jsonArray.put(jsonObject);
+
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .body(jsonArray.toString())
+                .request("PUT", testUrl + "/api/bookmarks_multiple")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
     public void testDeleteBookmark() {
         JSONObject jsonObject = createBookmarkRequest();
         Object docId = jsonObject.get("id");
@@ -160,6 +188,66 @@ public class BookmarkScenarios {
                 .authRequest()
                 .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .request("DELETE", testUrl + String.format("/api/bookmarks/%s", docId))
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    public void testDeleteMultipleBookmarks() {
+        JSONObject jsonObject = createBookmarkRequest();
+
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(jsonObject.toString())
+                .request("POST", testUrl + "/api/bookmarks")
+                .then()
+                .statusCode(201);
+
+        JSONObject deleteBookmarkRequest = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+
+        Object bookmarkId = jsonObject.get("id");
+        jsonArray.put(bookmarkId);
+
+        deleteBookmarkRequest.put("updated", createBookmarkRequest());
+        deleteBookmarkRequest.put("deleted", jsonArray);
+
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .body(deleteBookmarkRequest.toString())
+                .request("DELETE", testUrl + "/api/bookmarks_multiple")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    public void testDeleteMultipleBookmarksUpdatedIsNull() {
+        JSONObject jsonObject = createBookmarkRequest();
+
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(jsonObject.toString())
+                .request("POST", testUrl + "/api/bookmarks")
+                .then()
+                .statusCode(201);
+
+        JSONObject deleteBookmarkRequest = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+
+        Object bookmarkId = jsonObject.get("id");
+        jsonArray.put(bookmarkId);
+        deleteBookmarkRequest.put("deleted", jsonArray);
+
+        testUtil
+                .authRequest()
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .body(deleteBookmarkRequest.toString())
+                .request("DELETE", testUrl + "/api/bookmarks_multiple")
                 .then()
                 .statusCode(200);
     }
