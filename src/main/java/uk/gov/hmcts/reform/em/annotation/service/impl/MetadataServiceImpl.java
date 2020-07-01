@@ -32,7 +32,7 @@ public class MetadataServiceImpl implements MetadataService {
 
         Metadata metadata = metadataRepository.findByDocumentId(metadataDto.getDocumentId());
 
-        if(Objects.nonNull(metadataRepository.findByDocumentId(metadataDto.getDocumentId()))) {
+        if(Objects.nonNull(metadata)) {
             metadata.setRotationAngle(metadataDto.getRotationAngle());
         } else {
             metadata = metadataMapper.toEntity(metadataDto);
