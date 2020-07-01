@@ -11,9 +11,9 @@ import java.util.UUID;
 @Data
 public class MetadataDto {
 
-    @NotNull
+    @NotNull(message = "Rotation Angle can not null")
     private Integer rotationAngle;
 
-    @NotNull
+    @NotNull(message = "DocumentId can not null")
     private UUID documentId;
 }
