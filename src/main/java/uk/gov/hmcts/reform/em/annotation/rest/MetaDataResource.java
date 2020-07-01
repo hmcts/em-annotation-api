@@ -50,10 +50,9 @@ public class MetaDataResource {
 
         log.debug("REST request to save Metadata : {}", metadataDto);
 
-        metadataService.save(metadataDto);
+        MetadataDto createdMetadataDto = metadataService.save(metadataDto);
 
-        final URI uri = new URI("/api/metadata/" + metadataDto.getDocumentId());
-        MetadataDto createdMetadataDto = metadataService.findByDocumentId(metadataDto.getDocumentId());
+        final URI uri = new URI("/api/metadata/" + createdMetadataDto.getDocumentId());
 
         return ResponseEntity.created(uri)
                 .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, createdMetadataDto.getDocumentId().toString()))
