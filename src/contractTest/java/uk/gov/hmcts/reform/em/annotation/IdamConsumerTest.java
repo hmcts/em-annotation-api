@@ -1,16 +1,13 @@
 package uk.gov.hmcts.reform.em.annotation;
 
 import au.com.dius.pact.consumer.MockServer;
-import au.com.dius.pact.consumer.dsl.PactDslJsonArray;
+import au.com.dius.pact.consumer.dsl.DslPart;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
-import au.com.dius.pact.consumer.dsl.DslPart;
-import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
-import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import com.google.common.collect.Maps;
 import io.restassured.http.ContentType;
 import lombok.extern.slf4j.Slf4j;
@@ -99,7 +96,7 @@ public class IdamConsumerTest {
             .post(mockServer.getUrl() + IDAM_OPENID_TOKEN_URL)
             .then()
             .log().all().extract().asString();
-        System.out.println("responseasstring......"+actualResponseBody);
+
         JSONObject response = new JSONObject(actualResponseBody);
 
         ACCESS_TOKEN = response.getString("access_token");
@@ -173,7 +170,6 @@ public class IdamConsumerTest {
     }
 
     private DslPart createUserInfoResponse() {
-//        PactDslJsonArray array = new PactDslJsonArray().string("citizen");
 
         return new PactDslJsonBody()
             .stringType("uid", "1234-2345-3456-4567")
