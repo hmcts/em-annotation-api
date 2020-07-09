@@ -106,6 +106,16 @@ sourceSets {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group in ['org.apache.tomcat.embed']) {
+                details.useVersion '9.0.36'
+            }
+        }
+    }
+}
+
 dependencies {
     compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org:2.10.3"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc:2.10.1"
