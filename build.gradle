@@ -45,7 +45,7 @@ if (!project.hasProperty('runList')) {
 
 group 'uk.gov.hmcts.reform.em.annotation'
 version '0.0.1'
-sourceCompatibility = 1.8
+sourceCompatibility = 11
 mainClassName = 'uk.gov.hmcts.reform.em.annotation.Application'
 
 configurations {
