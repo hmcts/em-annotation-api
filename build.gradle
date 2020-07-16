@@ -45,7 +45,7 @@ if (!project.hasProperty('runList')) {
 
 group 'uk.gov.hmcts.reform.em.annotation'
 version '0.0.1'
-sourceCompatibility = 1.8
+sourceCompatibility = 11
 mainClassName = 'uk.gov.hmcts.reform.em.annotation.Application'
 
 configurations {
@@ -82,7 +82,8 @@ def versions = [
         liquibase          : '3.5.3',
         serenity           : '2.0.23',
         serenityreporter   : '2.1.4',
-        pact_version       : '3.5.24'
+        pact_version       : '3.5.24',
+        logging            : '5.1.5'
 ]
 
 sourceSets {
@@ -103,6 +104,16 @@ sourceSets {
             srcDir file('src/contractTest/java')
         }
         resources.srcDir file('src/contactTest/resources')
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group in ['org.apache.tomcat.embed']) {
+                details.useVersion '9.0.36'
+            }
+        }
     }
 }
 
@@ -128,7 +139,6 @@ dependencies {
     compile("org.postgresql:postgresql:${versions.postgresql}")
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
     compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
-    compile group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '2.3.1'
     compile group: 'commons-validator', name: 'commons-validator', version: '1.6'
     compile "javax.transaction:javax.transaction-api"
     compile group: 'org.ehcache', name: 'ehcache', version: '3.7.1'
@@ -139,8 +149,9 @@ dependencies {
     compile "org.hibernate:hibernate-envers"
     compile "org.hibernate.validator:hibernate-validator"
     compile group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.3'
-    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: '5.0.1'
-    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '5.0.1'
+    compile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.logging
+    compile group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.logging
+    compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.logging
     compile group: 'uk.gov.hmcts.reform', name: 'health-spring-boot-starter', version: '0.0.5'
     compile group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version:'0.0.4'
     compile "org.hibernate.validator:hibernate-validator"
@@ -191,7 +202,9 @@ dependencies {
     contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
     contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.3.2')
 
-    aatCompile "uk.gov.hmcts.reform:em-test-helper:1.17.5"
+    aatCompile ("uk.gov.hmcts.reform:em-test-helper:1.17.5") {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-test'
+    }
 
     contractTestCompile sourceSets.main.runtimeClasspath
     contractTestCompile sourceSets.test.runtimeClasspath
