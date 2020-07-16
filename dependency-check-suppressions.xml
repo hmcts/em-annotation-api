@@ -42,5 +42,9 @@
         <cve>CVE-2020-10683</cve>
         <cve>CVE-2020-9484</cve>
         <cve>CVE-2019-14900</cve>
+        <cve>CVE-2007-5615</cve>
+        <cve>CVE-2019-20445</cve>
+        <cve>CVE-2019-20444</cve>
+        <cve>CVE-2020-7238</cve>
     </suppress>
 </suppressions>
