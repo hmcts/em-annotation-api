@@ -15,6 +15,7 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.MetadataDto;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -77,6 +78,10 @@ public class MetaDataResource {
         log.debug("REST request to get the metadata for the Document");
         MetadataDto metadataDto = metadataService.findByDocumentId(documentId);
 
+        if (Objects.isNull(metadataDto)
+                || Objects.isNull(metadataDto.getRotationAngle())) {
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok().body(metadataDto);
     }
 
