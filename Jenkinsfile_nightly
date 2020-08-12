@@ -53,4 +53,5 @@ withNightlyPipeline(type, product, component) {
     loadVaultSecrets(secrets)
 
     enableFullFunctionalTest()
+    enableSlackNotifications('#em-dev-chat')
 }
