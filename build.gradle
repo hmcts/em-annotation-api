@@ -46,7 +46,7 @@ pitest {
 
     targetClasses = ['uk.gov.hmcts.reform.em.annotation.service.impl.*']
 
-    targetTests = ['uk.gov.hmcts.reform.em.annotation.service.impl.MetadataServiceImplTest'//,
+    targetTests = ['uk.gov.hmcts.reform.em.annotation.service.impl.*'//,
 //                   'uk.gov.hmcts.ccd.domain.model.*',
 //                   'uk.gov.hmcts.ccd.domain.service.*'
     ]
@@ -285,6 +285,8 @@ jacocoTestReport {
 }
 
 project.tasks['sonarqube'].dependsOn jacocoTestReport
+project.tasks['sonarqube'].group = "Verification"
+
 
 sonarqube {
     properties {
