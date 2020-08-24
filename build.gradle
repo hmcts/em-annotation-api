@@ -18,6 +18,8 @@ plugins {
     id "net.ltgt.apt" version "0.21"
     id 'jacoco'
     id 'au.com.dius.pact' version '4.1.2'
+    id "info.solidsoft.pitest" version '1.4.0'
+
 }
 
 apply plugin: 'java'
@@ -38,6 +40,37 @@ dependencyManagement {
     }
 }
 
+pitest {
+
+    logger.lifecycle("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ KASI Runs pact Tests")
+
+    targetClasses = ['uk.gov.hmcts.reform.em.annotation.*']
+
+    targetTests = ['uk.gov.hmcts.reform.em.annotation.rest.MetaDataResourceTest'//,
+//                   'uk.gov.hmcts.ccd.domain.model.*',
+//                   'uk.gov.hmcts.ccd.domain.service.*'
+    ]
+
+//    excludedClasses = ['uk.gov.hmcts.ccd.UserProfileApplication']
+
+    enableDefaultIncrementalAnalysis = true
+    historyInputLocation = ['build/reports/pitest/fastermutationtesting']
+    historyOutputLocation = ['build/reports/pitest/fastermutationtestingoutput']
+    threads = 15
+    testSourceSets = [sourceSets.test]
+    mainSourceSets = [sourceSets.main]
+    fileExtensionsToFilter.addAll('xml','json')
+    outputFormats = ['XML', 'HTML','CSV']
+    mutationThreshold = 9
+    coverageThreshold = 0
+    maxMutationsPerClass = 15
+    jvmArgs = ['-Xms1G','-Xmx3G']
+    timestampedReports = false
+    failWhenNoMutations = false
+    detectInlinedCode = true
+
+}
+
 if (!project.hasProperty('runList')) {
     project.ext.runList = 'main'
 }
@@ -46,6 +79,8 @@ if (!project.hasProperty('runList')) {
 group 'uk.gov.hmcts.reform.em.annotation'
 version '0.0.1'
 sourceCompatibility = 11
+targetCompatibility = 11
+
 mainClassName = 'uk.gov.hmcts.reform.em.annotation.Application'
 
 configurations {
