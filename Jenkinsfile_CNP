@@ -52,7 +52,6 @@ def vaultOverrides = [
 ]
 
 withPipeline(type , product, component) {
-    enableMutationTest()
     enableDbMigration('em-anno')
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
@@ -66,6 +65,8 @@ withPipeline(type , product, component) {
     }
 
     after('functionalTest:preview') {
+        // DO Not check in this command.
+        sh ' ./gradlew pitest'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }
 
