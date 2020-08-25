@@ -84,6 +84,7 @@ dependencyCheck {
 def versions = [
         postgresql         : '42.2.13',
         springfoxSwagger   : '2.9.2',
+        pitest             : '1.5.1',
         gradlePitest       : '1.3.0',
         sonarPitest        : '0.5',
         h2                 : '1.4.197',
@@ -259,15 +260,12 @@ jacocoTestReport {
 
 pitest {
 
-    logger.lifecycle("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ KASI Runs PIT  Tests")
-//    targetClasses = ['uk.gov.hmcts.reform.em.annotation.*']
-//    targetTests = ['uk.gov.hmcts.reform.em.annotation.service.impl.*'//,
-//                   'uk.gov.hmcts.ccd.domain.model.*',
-//                   'uk.gov.hmcts.ccd.domain.service.*'
-//    ]
-
+    // junit5PluginVersion = '0.12'
+    logger.lifecycle("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ RUNNING THE  PIT  Tests  ~~~~~~~")
+    targetClasses = ['uk.gov.hmcts.reform.em.annotation.*']
     excludedClasses = [
-            'uk.gov.hmcts.reform.em.annotation.appinsights.*' ,
+                    'uk.gov.hmcts.reform.em.annotation.appinsights.*' ,
+                    'uk.gov.hmcts.reform.em.annotation.authchecker.*' ,
                     'uk.gov.hmcts.reform.em.annotation.config.*',
                     'uk.gov.hmcts.reform.em.annotation.info.*',
                     'uk.gov.hmcts.reform.em.annotation.Application.java',
@@ -293,6 +291,7 @@ pitest {
 }
 
 project.tasks['sonarqube'].group = "Verification"
+//project.tasks['pitest'].group = "pitest"
 
 
 sonarqube {
@@ -305,7 +304,9 @@ sonarqube {
     }
 }
 
-project.tasks['sonarqube'].dependsOn test, integration, jacocoTestReport,pitest
+project.tasks['sonarqube'].dependsOn  jacocoTestReport
+// project.tasks['sonarqube'].dependsOn  pitest
+
 
 
 configurations {
