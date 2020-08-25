@@ -40,36 +40,6 @@ dependencyManagement {
     }
 }
 
-pitest {
-
-    logger.lifecycle("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ KASI Runs PIT  Tests")
-    targetClasses = ['uk.gov.hmcts.reform.em.annotation.service.impl.*']
-    targetTests = ['uk.gov.hmcts.reform.em.annotation.service.impl.*'//,
-//                   'uk.gov.hmcts.ccd.domain.model.*',
-//                   'uk.gov.hmcts.ccd.domain.service.*'
-    ]
-
-    excludedClasses = ['uk.gov.hmcts.reform.em.annotation.service.impl.IdamDetailsFilterServiceImplIntTest']
-
-    enableDefaultIncrementalAnalysis = true
-    historyInputLocation = 'build/reports/pitest/fastermutationtesting'
-    historyOutputLocation ='build/reports/pitest/fastermutationtestingoutput'
-    threads = 15
-    testSourceSets = [sourceSets.test]
-    mainSourceSets = [sourceSets.main]
-    fileExtensionsToFilter.addAll('xml','json')
-    outputFormats = ['XML', 'HTML','CSV']
-    mutationThreshold = 5
-    coverageThreshold = 0
-    maxMutationsPerClass = 15
-    jvmArgs = ['-Xms1G','-Xmx3G']
-    timestampedReports = false
-    failWhenNoMutations = false
-    detectInlinedCode = true
-
-}
-
-project.tasks['pitest'].group = "Verification"
 
 
 if (!project.hasProperty('runList')) {
@@ -228,6 +198,11 @@ dependencies {
     testRuntime "org.junit.jupiter:junit-jupiter-engine:5.3.2"
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.3.2"
 
+    //pitest
+    testCompile group: 'org.pitest', name: 'pitest', version: versions.pitest
+    testCompile 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.4.0'
+    testCompile 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
+
     //pact contract testing
     testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
@@ -282,7 +257,41 @@ jacocoTestReport {
 
 }
 
-project.tasks['sonarqube'].dependsOn jacocoTestReport
+pitest {
+
+    logger.lifecycle("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ KASI Runs PIT  Tests")
+//    targetClasses = ['uk.gov.hmcts.reform.em.annotation.*']
+//    targetTests = ['uk.gov.hmcts.reform.em.annotation.service.impl.*'//,
+//                   'uk.gov.hmcts.ccd.domain.model.*',
+//                   'uk.gov.hmcts.ccd.domain.service.*'
+//    ]
+
+    excludedClasses = [
+            'uk.gov.hmcts.reform.em.annotation.appinsights.*' ,
+                    'uk.gov.hmcts.reform.em.annotation.config.*',
+                    'uk.gov.hmcts.reform.em.annotation.info.*',
+                    'uk.gov.hmcts.reform.em.annotation.Application.java',
+
+    ]
+
+    enableDefaultIncrementalAnalysis = true
+    historyInputLocation = 'build/reports/pitest/fastermutationtesting'
+    historyOutputLocation ='build/reports/pitest/fastermutationtestingoutput'
+    threads = 15
+    testSourceSets = [sourceSets.test]
+    mainSourceSets = [sourceSets.main]
+    fileExtensionsToFilter.addAll('xml','json')
+    outputFormats = ['XML', 'HTML','CSV']
+    mutationThreshold = 5
+    coverageThreshold = 0
+    maxMutationsPerClass = 15
+    jvmArgs = ['-Xms1G','-Xmx3G']
+    timestampedReports = false
+    failWhenNoMutations = false
+    detectInlinedCode = true
+
+}
+
 project.tasks['sonarqube'].group = "Verification"
 
 
@@ -295,6 +304,8 @@ sonarqube {
         property "sonar.pitest.reportsDirectory", "build/reports/pitest"
     }
 }
+
+project.tasks['sonarqube'].dependsOn test, integration, jacocoTestReport,pitest
 
 
 configurations {
