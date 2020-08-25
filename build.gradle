@@ -40,8 +40,6 @@ dependencyManagement {
     }
 }
 
-
-
 if (!project.hasProperty('runList')) {
     project.ext.runList = 'main'
 }
@@ -50,8 +48,6 @@ if (!project.hasProperty('runList')) {
 group 'uk.gov.hmcts.reform.em.annotation'
 version '0.0.1'
 sourceCompatibility = 11
-targetCompatibility = 11
-
 mainClassName = 'uk.gov.hmcts.reform.em.annotation.Application'
 
 configurations {
@@ -199,7 +195,7 @@ dependencies {
     testRuntime "org.junit.jupiter:junit-jupiter-engine:5.3.2"
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.3.2"
 
-    //pitest
+    //Pitest
     testCompile group: 'org.pitest', name: 'pitest', version: versions.pitest
     testCompile 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.4.0'
     testCompile 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
@@ -259,9 +255,6 @@ jacocoTestReport {
 }
 
 pitest {
-
-    // junit5PluginVersion = '0.12'
-    logger.lifecycle("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ RUNNING THE  PIT  Tests  ~~~~~~~")
     targetClasses = ['uk.gov.hmcts.reform.em.annotation.*']
     excludedClasses = [
                     'uk.gov.hmcts.reform.em.annotation.appinsights.*' ,
@@ -269,7 +262,7 @@ pitest {
                     'uk.gov.hmcts.reform.em.annotation.config.*',
                     'uk.gov.hmcts.reform.em.annotation.info.*',
                     'uk.gov.hmcts.reform.em.annotation.Application.java',
-
+                    'uk.gov.hmcts.reform.em.annotation.service.util.*'
     ]
 
     enableDefaultIncrementalAnalysis = true
@@ -291,7 +284,6 @@ pitest {
 }
 
 project.tasks['sonarqube'].group = "Verification"
-//project.tasks['pitest'].group = "pitest"
 
 
 sonarqube {
@@ -305,9 +297,6 @@ sonarqube {
 }
 
 project.tasks['sonarqube'].dependsOn  jacocoTestReport
-// project.tasks['sonarqube'].dependsOn  pitest
-
-
 
 configurations {
     contractTestCompile.extendsFrom testCompile

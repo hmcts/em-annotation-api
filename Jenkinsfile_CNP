@@ -65,8 +65,6 @@ withPipeline(type , product, component) {
     }
 
     after('functionalTest:preview') {
-        // DO Not check in this command.
-        sh ' ./gradlew pitest'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }
 
