@@ -89,5 +89,6 @@
   "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/api/comments?offset=10\u0026pageNumber=10\u0026pageSize=10\u0026paged=true\u0026sort.sorted=true\u0026sort.unsorted=true\u0026unpaged=true_GET": "ignore",
   "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/api/bookmarks/id_DELETE":"ignore",
   "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/api/annotation-sets_POST":"ignore",
-  "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/api/bookmarks_multiple_DELETE": "ignore"
+  "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/api/bookmarks_multiple_DELETE": "ignore",
+  "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/api/rectangles_PUT": "ignore"
 }
