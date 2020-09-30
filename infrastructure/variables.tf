@@ -132,7 +132,7 @@ variable "appinsights_location" {
 }
 
 variable "application_type" {
-  default     = "Web"
+  default     = "web"
   description = "Type of Application Insights (Web/Other)"
 }
 ////////////////////////////////////////////////
