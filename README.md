@@ -57,6 +57,7 @@ You can then publish your pact tests locally by first running the pact docker-co
 docker-compose -f docker-pactbroker-compose.yml up
 ```
 
+
 and then using it to publish your tests:
 
 ```
@@ -67,7 +68,7 @@ and then using it to publish your tests:
 
 It uses:
 
-* Java8
+* Java11
 * Spring boot
 * Junit, Mockito and SpringBootTest and Powermockito
 * Gradle
