@@ -41,6 +41,8 @@ public class IdamConsumerTest {
     @Value("pact")
     String client_id;
 
+
+
     @Value("pactsecret")
     String client_secret;
 
