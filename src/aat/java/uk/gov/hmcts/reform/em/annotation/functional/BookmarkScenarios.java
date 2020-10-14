@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.functional;
 
+import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -18,7 +19,7 @@ import java.util.UUID;
 
 @SpringBootTest(classes = {TestUtil.class, EmTestConfig.class})
 @PropertySource(value = "classpath:application.yml")
-@RunWith(SpringRunner.class)
+@RunWith(SpringIntegrationSerenityRunner.class)
 public class BookmarkScenarios {
 
     @Autowired
