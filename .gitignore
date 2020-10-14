@@ -104,3 +104,4 @@ application/src/main/resources/META-INF/build-info.properties
 .settings/
 bin/main/
 bin/test/
+src/main/generated
