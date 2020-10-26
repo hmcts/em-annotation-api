@@ -120,6 +120,9 @@ configurations.all {
             if (details.requested.group in ['org.apache.tomcat.embed']) {
                 details.useVersion '9.0.37'
             }
+            if (details.requested.name in ['spring-boot-starter-actuator']) {
+                details.useVersion '2.3.0.RELEASE'
+            }
         }
     }
 }
@@ -127,6 +130,13 @@ configurations.all {
 ext['kotlin.version'] = '1.3.50'
 
 dependencies {
+
+    compile(
+            "org.springframework.boot:spring-boot-starter-web",
+            "org.springframework.boot:spring-boot-starter-actuator:2.3.0.RELEASE",
+            "org.springframework.boot:spring-boot-starter-data-jpa"
+    )
+    
     compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org:2.10.3"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc:2.10.1"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.2"
@@ -138,9 +148,7 @@ dependencies {
     compile "org.zalando:problem-spring-web:0.25.2"
     compile("io.springfox:springfox-swagger2:${versions.springfoxSwagger}")
     compile("io.springfox:springfox-swagger-ui:${versions.springfoxSwagger}")
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    
     compile( 'org.apache.httpcomponents:httpclient:4.5.10')
     compile "org.liquibase:liquibase-core"
     compile "org.liquibase:liquibase-core"
@@ -161,7 +169,6 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.logging
     compile group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.logging
     compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.logging
-    compile group: 'uk.gov.hmcts.reform', name: 'health-spring-boot-starter', version: '0.0.5'
     compile group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version:'0.0.4'
     compile "org.hibernate.validator:hibernate-validator"
     compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"
