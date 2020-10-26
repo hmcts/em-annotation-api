@@ -55,17 +55,6 @@ repositories {
     }
 }
 
-dependencyCheck {
-    // Specifies if the build should be failed if a CVSS score above a specified level is identified.
-    // range of 0-10 fails the build, anything greater and it doesn't fail the build
-    failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'false' ? 11 : 0
-    suppressionFile = 'dependency-check-suppressions.xml'
-    analyzers {
-        // Disable scanning of .NET related binaries
-        assemblyEnabled = false
-    }
-}
-
 def versions = [
         postgresql         : '42.2.13',
         springfoxSwagger   : '3.0.0',
@@ -106,9 +95,6 @@ sourceSets {
 configurations.all {
     resolutionStrategy {
         eachDependency { DependencyResolveDetails details ->
-            if (details.requested.group in ['org.apache.tomcat.embed']) {
-                details.useVersion '9.0.37'
-            }
             if (details.requested.name in ['spring-boot-actuator, spring-boot-actuator-autoconfigure, spring-boot-autoconfigure']) {
                 details.useVersion '2.3.4.RELEASE'
             }
@@ -157,7 +143,7 @@ dependencies {
     compile "org.zalando:problem-spring-web:0.25.2"
     compile("io.springfox:springfox-swagger2:${versions.springfoxSwagger}")
     compile("io.springfox:springfox-swagger-ui:${versions.springfoxSwagger}")
-
+    compile group: 'com.google.guava', name: 'guava', version: '30.0-jre'
     compile( 'org.apache.httpcomponents:httpclient:4.5.10')
     compile "org.liquibase:liquibase-core"
     compile "org.liquibase:liquibase-core"
