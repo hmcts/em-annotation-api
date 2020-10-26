@@ -230,13 +230,13 @@ bootJar {
 }
 
 def coverageExclusionList = [
-        '**uk/gov/hmcts/reform/em/annotation/Application*',
-        '**uk/gov/hmcts/reform/em/annotation/appinsights/*',
-        '**uk/gov/hmcts/reform/em/annotation/domain/*',
-        '**uk/gov/hmcts/reform/em/annotation/authchecker/*',
-        '**uk/gov/hmcts/reform/em/annotation/config/*',
-        '**uk/gov/hmcts/reform/em/annotation/service/mapper/*',
-        '**uk/gov/hmcts/reform/em/annotation/service/dto/*'
+    '**uk/gov/hmcts/reform/em/annotation/Application*',
+    '**uk/gov/hmcts/reform/em/annotation/appinsights/*',
+    '**uk/gov/hmcts/reform/em/annotation/domain/*',
+    '**uk/gov/hmcts/reform/em/annotation/authchecker/*',
+    '**uk/gov/hmcts/reform/em/annotation/config/*',
+    '**uk/gov/hmcts/reform/em/annotation/service/mapper/*',
+    '**uk/gov/hmcts/reform/em/annotation/service/dto/*'
 
 ]
 
@@ -253,12 +253,12 @@ jacocoTestReport {
 pitest {
     targetClasses = ['uk.gov.hmcts.reform.em.annotation.*']
     excludedClasses = [
-            'uk.gov.hmcts.reform.em.annotation.appinsights.*' ,
-            'uk.gov.hmcts.reform.em.annotation.authchecker.*' ,
-            'uk.gov.hmcts.reform.em.annotation.config.*',
-            'uk.gov.hmcts.reform.em.annotation.info.*',
-            'uk.gov.hmcts.reform.em.annotation.Application.java',
-            'uk.gov.hmcts.reform.em.annotation.service.util.*'
+                    'uk.gov.hmcts.reform.em.annotation.appinsights.*' ,
+                    'uk.gov.hmcts.reform.em.annotation.authchecker.*' ,
+                    'uk.gov.hmcts.reform.em.annotation.config.*',
+                    'uk.gov.hmcts.reform.em.annotation.info.*',
+                    'uk.gov.hmcts.reform.em.annotation.Application.java',
+                    'uk.gov.hmcts.reform.em.annotation.service.util.*'
     ]
 
     enableDefaultIncrementalAnalysis = true
