@@ -122,7 +122,7 @@ dependencies {
             "org.springframework.boot:spring-boot-starter-jdbc:2.3.4.RELEASE",
             "org.springframework.boot:spring-boot-starter-validation:2.3.4.RELEASE",
             "org.springframework.boot:spring-boot-autoconfigure:2.3.4.RELEASE",
-            "org.springframework.boot:spring-boot-starter-data-jpa:2.3.4.RELEASE"
+            "org.springframework.boot:spring-boot-starter-data-jpa:2.3.5.RELEASE"
     )
 
     compile ('org.springframework.cloud:spring-cloud-openfeign:2.2.2.RELEASE') {
