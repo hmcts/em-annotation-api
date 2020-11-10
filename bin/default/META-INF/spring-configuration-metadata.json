@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "toggle",
+      "type": "uk.gov.hmcts.reform.em.annotation.testutil.ToggleProperties",
+      "sourceType": "uk.gov.hmcts.reform.em.annotation.testutil.ToggleProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "toggle.enable-metadata-endpoint",
+      "type": "java.lang.Boolean",
+      "sourceType": "uk.gov.hmcts.reform.em.annotation.testutil.ToggleProperties"
+    }
+  ],
+  "hints": []
+}
