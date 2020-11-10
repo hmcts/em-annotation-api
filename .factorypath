@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<factorypath>
+	<factorypathentry kind="EXTJAR" id="/Users/rajashekarkatla/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.12/48e4e5d60309ebd833bc528dcf77668eab3cd72c/lombok-1.18.12.jar" enabled="true" runInBatchMode="false"/>
+	<factorypathentry kind="EXTJAR" id="/Users/rajashekarkatla/.gradle/caches/modules-2/files-2.1/org.mapstruct/mapstruct-processor/1.2.0.Final/c51aac238f3904b14daac804f105639ac47ebb2a/mapstruct-processor-1.2.0.Final.jar" enabled="true" runInBatchMode="false"/>
+	<factorypathentry kind="EXTJAR" id="/Users/rajashekarkatla/.gradle/caches/modules-2/files-2.1/org.hibernate/hibernate-jpamodelgen/5.3.13.Final/8bba3e7fa5bd92717d0449c725962589cbebb5e5/hibernate-jpamodelgen-5.3.13.Final.jar" enabled="true" runInBatchMode="false"/>
+	<factorypathentry kind="EXTJAR" id="/Users/rajashekarkatla/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-configuration-processor/2.1.10.RELEASE/74a0cc1cb7e2fe77d46f038c8d309f2592c9c8e/spring-boot-configuration-processor-2.1.10.RELEASE.jar" enabled="true" runInBatchMode="false"/>
+	<factorypathentry kind="EXTJAR" id="/Users/rajashekarkatla/.gradle/caches/modules-2/files-2.1/org.jboss.logging/jboss-logging/3.3.3.Final/d3cfa8d3075fd52884fc82ded5c52b1407f18e6e/jboss-logging-3.3.3.Final.jar" enabled="true" runInBatchMode="false"/>
+	<factorypathentry kind="EXTJAR" id="/Users/rajashekarkatla/.gradle/caches/modules-2/files-2.1/org.glassfish.jaxb/jaxb-runtime/2.3.1/dd6dda9da676a54c5b36ca2806ff95ee017d8738/jaxb-runtime-2.3.1.jar" enabled="true" runInBatchMode="false"/>
+	<factorypathentry kind="EXTJAR" id="/Users/rajashekarkatla/.gradle/caches/modules-2/files-2.1/javax.xml.bind/jaxb-api/2.3.1/8531ad5ac454cc2deb9d4d32c40c4d7451939b5d/jaxb-api-2.3.1.jar" enabled="true" runInBatchMode="false"/>
+	<factorypathentry kind="EXTJAR" id="/Users/rajashekarkatla/.gradle/caches/modules-2/files-2.1/javax.activation/javax.activation-api/1.2.0/85262acf3ca9816f9537ca47d5adeabaead7cb16/javax.activation-api-1.2.0.jar" enabled="true" runInBatchMode="false"/>
+	<factorypathentry kind="EXTJAR" id="/Users/rajashekarkatla/.gradle/caches/modules-2/files-2.1/org.glassfish.jaxb/txw2/2.3.1/a09d2c48d3285f206fafbffe0e50619284e92126/txw2-2.3.1.jar" enabled="true" runInBatchMode="false"/>
+	<factorypathentry kind="EXTJAR" id="/Users/rajashekarkatla/.gradle/caches/modules-2/files-2.1/com.sun.istack/istack-commons-runtime/3.0.7/c197c86ceec7318b1284bffb49b54226ca774003/istack-commons-runtime-3.0.7.jar" enabled="true" runInBatchMode="false"/>
+	<factorypathentry kind="EXTJAR" id="/Users/rajashekarkatla/.gradle/caches/modules-2/files-2.1/org.jvnet.staxex/stax-ex/1.8/8cc35f73da321c29973191f2cf143d29d26a1df7/stax-ex-1.8.jar" enabled="true" runInBatchMode="false"/>
+	<factorypathentry kind="EXTJAR" id="/Users/rajashekarkatla/.gradle/caches/modules-2/files-2.1/com.sun.xml.fastinfoset/FastInfoset/1.2.15/bb7b7ec0379982b97c62cd17465cb6d9155f68e8/FastInfoset-1.2.15.jar" enabled="true" runInBatchMode="false"/>
+</factorypath>
