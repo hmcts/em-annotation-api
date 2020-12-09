@@ -69,6 +69,7 @@ def versions = [
         serenityreporter   : '2.3.5',
         serenityRestAssured: '2.3.4',
         pact_version       : '4.0.11',
+        hibernate          : '5.4.25.Final',
         logging            : '5.1.7'
 ]
 
@@ -154,18 +155,21 @@ dependencies {
     compile group: 'commons-validator', name: 'commons-validator', version: '1.7'
     compile "javax.transaction:javax.transaction-api"
     compile group: 'org.ehcache', name: 'ehcache', version: '3.7.1'
-    compile "org.hibernate:hibernate-core"
+
     compile "com.zaxxer:HikariCP"
-    compile "org.hibernate:hibernate-jcache"
-    compile "org.hibernate:hibernate-entitymanager"
-    compile "org.hibernate:hibernate-envers"
-    compile "org.hibernate.validator:hibernate-validator"
+    
+    compile group:'org.hibernate', name: 'hibernate-core', version: versions.hibernate
+    compile group:'org.hibernate', name: 'hibernate-jcache', version: versions.hibernate
+    compile group:'org.hibernate', name: 'hibernate-entitymanager', version: versions.hibernate
+    compile group:'org.hibernate', name: 'hibernate-envers', version: versions.hibernate
+    compile "org.hibernate.validator:hibernate-validator:6.1.6.Final"
+
     compile group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.4'
     compile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.logging
     compile group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.logging
     compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.logging
     compile group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version:'0.1.0'
-    compile "org.hibernate.validator:hibernate-validator"
+    
     compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"
 
     compile group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
@@ -184,7 +188,7 @@ dependencies {
 
     annotationProcessor "org.projectlombok:lombok:1.18.16"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
-    annotationProcessor "org.hibernate:hibernate-jpamodelgen"
+    annotationProcessor group:'org.hibernate', name: 'hibernate-jpamodelgen', version: versions.hibernate
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor", withoutStuff
     testCompile "org.springframework.boot:spring-boot-starter-test", withoutStuff
     testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
