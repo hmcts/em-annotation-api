@@ -132,7 +132,7 @@ dependencies {
 
     compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.40'
     
-    compile ('org.springframework.cloud:spring-cloud-openfeign:2.2.2.RELEASE') {
+    compile ('org.springframework.cloud:spring-cloud-openfeign:3.0.0') {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-actuator'
     }
 
