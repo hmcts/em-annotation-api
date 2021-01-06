@@ -131,5 +131,6 @@
   "10054_Cookie Without SameSite Attribute_http://em-anno-aat.service.core-compute-aat.internal/api/annotation-sets?offset=10\u0026pageNumber=10\u0026pageSize=10\u0026paged=true\u0026sort.sorted=true\u0026sort.unsorted=true\u0026unpaged=true_GET":"ignore",
   "10054_Cookie Without SameSite Attribute_http://em-anno-aat.service.core-compute-aat.internal/api/comments?offset=10\u0026pageNumber=10\u0026pageSize=10\u0026paged=true\u0026sort.sorted=true\u0026sort.unsorted=true\u0026unpaged=true_GET":"ignore",
   "100000_A Client Error response code was returned by the server_http://em-anno-aat.service.core-compute-aat.internal/api/annotation-sets?offset=10\u0026pageNumber=10\u0026pageSize=10\u0026paged=true\u0026sort.sorted=true\u0026sort.unsorted=true\u0026unpaged=true_GET":"ignore",
-  "10010_Cookie No HttpOnly Flag_http://em-anno-aat.service.core-compute-aat.internal/api/annotation-sets_POST": "ignore"
+  "10010_Cookie No HttpOnly Flag_http://em-anno-aat.service.core-compute-aat.internal/api/annotation-sets_POST": "ignore",
+  "10010_Cookie No HttpOnly Flag_http://em-anno-aat.service.core-compute-aat.internal/api/annotation-sets_PUT": "ignore"
 }
