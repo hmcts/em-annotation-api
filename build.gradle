@@ -191,6 +191,13 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.1.2'
     compile group: 'uk.gov.hmcts.reform', name: 'idam-client', version: '1.5.5'
 
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+    compile group: 'org.apache.httpcomponents.client5', name: 'httpclient5', version: '5.0.3'
+    compile group: 'org.apache.httpcomponents.core5', name: 'httpcore5', version: '5.0.3'
+    compile group: 'org.apache.httpcomponents.core5', name: 'httpcore5-h2', version: '5.0.3'
+    compile group: 'org.apache.httpcomponents', name: 'fluent-hc', version: '4.5.13'
+    compile group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.13'
+
     annotationProcessor "org.projectlombok:lombok:1.18.16"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     annotationProcessor group:'org.hibernate', name: 'hibernate-jpamodelgen', version: versions.hibernate
