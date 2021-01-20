@@ -7,11 +7,11 @@ buildscript {
 
 plugins {
     id 'application'
-    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.springframework.boot' version '2.3.4.RELEASE'
-    id 'uk.gov.hmcts.java' version '0.12.1'
+    id 'uk.gov.hmcts.java' version '0.12.3'
     id 'com.github.ben-manes.versions' version '0.36.0'
-    id 'org.sonarqube' version '3.0'
+    id 'org.sonarqube' version '3.1'
     id 'jacoco'
     id 'au.com.dius.pact' version '4.1.7'
     id "info.solidsoft.pitest" version '1.5.2'
@@ -118,6 +118,9 @@ dependencies {
         exclude group: 'uk.gov.hmcts.reform', module: 'java-logging-spring'
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-test'
+    }
+
+    def withoutAlpnApi = {
         exclude group: 'org.eclipse.jetty.alpn', module: 'alpn-api'
     }
 
@@ -151,7 +154,7 @@ dependencies {
     compile "org.zalando:problem-spring-web:0.26.2"
     compile("io.springfox:springfox-swagger2:${versions.springfoxSwagger}")
     compile("io.springfox:springfox-swagger-ui:${versions.springfoxSwagger}")
-    compile group: 'com.google.guava', name: 'guava', version: '30.0-jre'
+    compile group: 'com.google.guava', name: 'guava', version: '30.1-jre'
     compile( 'org.apache.httpcomponents:httpclient:4.5.10')
     compile "org.liquibase:liquibase-core"
     compile "org.liquibase:liquibase-core"
@@ -224,10 +227,10 @@ dependencies {
     testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
 
-    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit', version: "4.0.10"
-    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit5', version: "4.0.10"
-    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-java8', version: "4.0.10"
-    compile group: 'au.com.dius', name: 'pact-jvm-consumer', version: "4.0.10", withoutStuff
+    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit', version: "4.0.10", withoutAlpnApi
+    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit5', version: "4.0.10", withoutAlpnApi
+    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-java8', version: "4.0.10", withoutAlpnApi
+    compile group: 'au.com.dius', name: 'pact-jvm-consumer', version: "4.0.10", withoutAlpnApi
 
     contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
     contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
