@@ -118,6 +118,7 @@ dependencies {
         exclude group: 'uk.gov.hmcts.reform', module: 'java-logging-spring'
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-test'
+        exclude group: 'org.eclipse.jetty.alpn', module: 'alpn-api'
     }
 
     compile(
@@ -226,7 +227,7 @@ dependencies {
     contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit', version: "4.0.10"
     contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit5', version: "4.0.10"
     contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-java8', version: "4.0.10"
-    compile group: 'au.com.dius', name: 'pact-jvm-consumer', version: "4.0.10"
+    compile group: 'au.com.dius', name: 'pact-jvm-consumer', version: "4.0.10", withoutStuff
 
     contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
     contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
