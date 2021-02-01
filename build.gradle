@@ -202,7 +202,7 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'fluent-hc', version: '4.5.13'
     compile group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.13'
 
-    annotationProcessor "org.projectlombok:lombok:1.18.16"
+    annotationProcessor "org.projectlombok:lombok:1.18.18"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     annotationProcessor group:'org.hibernate', name: 'hibernate-jpamodelgen', version: versions.hibernate
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor", withoutStuff
