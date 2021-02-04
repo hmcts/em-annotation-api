@@ -15,6 +15,8 @@ import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.BaseTest;
 import uk.gov.hmcts.reform.em.annotation.domain.Annotation;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
+import uk.gov.hmcts.reform.em.annotation.domain.Rectangle;
+import uk.gov.hmcts.reform.em.annotation.domain.Comment;
 import uk.gov.hmcts.reform.em.annotation.domain.Tag;
 import uk.gov.hmcts.reform.em.annotation.domain.enumeration.AnnotationType;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationRepository;
@@ -26,7 +28,9 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 
 import javax.persistence.EntityManager;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -223,6 +227,29 @@ public class AnnotationResourceIntTest extends BaseTest {
         tag.setLabel("new tag");
         tag.setCreatedBy("system");
         tagRepository.saveAndFlush(tag);
+
+        Rectangle rectangle = new Rectangle();
+        rectangle.setAnnotation(null);
+        rectangle.setId(UUID.randomUUID());
+        Rectangle rectangle2 = new Rectangle();
+        rectangle2.setAnnotation(annotation);
+        rectangle2.setId(UUID.randomUUID());
+        Set<Rectangle> rectangles = new HashSet<>();
+        rectangles.add(rectangle);
+        rectangles.add(rectangle2);
+        annotation.setRectangles(rectangles);
+
+        Comment comment = new Comment();
+        comment.setAnnotation(null);
+        comment.setId(UUID.randomUUID());
+        Comment comment2 = new Comment();
+        comment2.setAnnotation(annotation);
+        comment2.setId(UUID.randomUUID());
+        Set<Comment> comments = new HashSet<>();
+        comments.add(comment);
+        comments.add(comment2);
+        annotation.setComments(comments);
+
         annotationRepository.saveAndFlush(annotation);
 
         int databaseSizeBeforeUpdate = annotationRepository.findAll().size();
@@ -258,6 +285,7 @@ public class AnnotationResourceIntTest extends BaseTest {
 
         // Create the Annotation
         AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
+        annotationDTO.setId(null);
         annotationDTO.setAnnotationSetId(UUID.randomUUID());
         annotationDTO.setDocumentId("DocId");
 
@@ -265,11 +293,11 @@ public class AnnotationResourceIntTest extends BaseTest {
         restLogoutMockMvc.perform(put("/api/annotations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
-            .andExpect(status().isOk());
+            .andExpect(status().isBadRequest());
 
         // Validate the Annotation in the database
         List<Annotation> annotationList = annotationRepository.findAll();
-        assertThat(annotationList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(annotationList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
