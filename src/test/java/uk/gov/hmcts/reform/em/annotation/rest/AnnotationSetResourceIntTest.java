@@ -142,7 +142,7 @@ public class AnnotationSetResourceIntTest extends BaseTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(annotationSet.getId().toString())))
             .andExpect(jsonPath("$.[*].documentId").value(hasItem(DEFAULT_DOCUMENT_ID.toString())));
     }
-    
+
     @Test
     @Transactional
     public void getAnnotationSet() throws Exception {
@@ -198,6 +198,7 @@ public class AnnotationSetResourceIntTest extends BaseTest {
     public void updateNonExistingAnnotationSet() throws Exception {
         int databaseSizeBeforeUpdate = annotationSetRepository.findAll().size();
 
+        annotationSet.setId(null);
         // Create the AnnotationSet
         AnnotationSetDTO annotationSetDTO = annotationSetMapper.toDto(annotationSet);
 
@@ -205,11 +206,11 @@ public class AnnotationSetResourceIntTest extends BaseTest {
         restLogoutMockMvc.perform(put("/api/annotation-sets")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(annotationSetDTO)))
-            .andExpect(status().isOk());
+            .andExpect(status().isBadRequest());
 
         // Validate the AnnotationSet in the database
         List<AnnotationSet> annotationSetList = annotationSetRepository.findAll();
-        assertThat(annotationSetList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(annotationSetList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test

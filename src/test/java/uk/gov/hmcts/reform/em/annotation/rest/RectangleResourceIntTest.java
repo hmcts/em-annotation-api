@@ -223,17 +223,18 @@ public class RectangleResourceIntTest extends BaseTest {
         int databaseSizeBeforeUpdate = rectangleRepository.findAll().size();
 
         // Create the Rectangle
+        rectangle.setId(null);
         RectangleDTO rectangleDTO = rectangleMapper.toDto(rectangle);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restLogoutMockMvc.perform(put("/api/rectangles")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(rectangleDTO)))
-            .andExpect(status().isOk());
+            .andExpect(status().isBadRequest());
 
         // Validate the Rectangle in the database
         List<Rectangle> rectangleList = rectangleRepository.findAll();
-        assertThat(rectangleList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(rectangleList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
