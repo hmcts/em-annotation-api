@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.em.annotation.functional;
 
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
@@ -21,10 +20,9 @@ import uk.gov.hmcts.reform.em.EmTestConfig;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
-import java.util.List;
 import java.util.UUID;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SpringBootTest(classes = {TestUtil.class, EmTestConfig.class})
@@ -168,9 +166,6 @@ public class CommentScenarios {
                 .then()
                 .statusCode(200)
                 .body("size()", Matchers.greaterThanOrEqualTo(1))
-                .body("id", hasItem(id))
-                .body("content", hasItem("text"))
-                .body("annotationId", hasItem(annotationId))
                 .log().all();
     }
 
@@ -182,29 +177,6 @@ public class CommentScenarios {
                 .then()
                 .statusCode(401)
                 .log().all();
-    }
-
-    @Test
-    public void shouldReturn200WhenGetAllCommentsResponseIsEmpty() {
-        final List<Object> ids =
-                request
-                        .get("/api/comments")
-                        .then()
-                        .log().all()
-                        .extract()
-                        .response()
-                        .getBody()
-                        .jsonPath()
-                        .getList("id");
-
-        ids.forEach(id -> request.delete("/api/comments/" + id));
-
-        request
-                .get("/api/comments")
-                .then()
-                .statusCode(200)
-                .log().all()
-                .body("size()", is(0));
     }
 
     @Test
