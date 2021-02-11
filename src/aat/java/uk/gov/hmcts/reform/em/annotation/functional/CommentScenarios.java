@@ -73,7 +73,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn400WhenCreateNewComment() {
+    public void shouldReturn400WhenCreateNewCommentWithoutId() {
         final String annotationId = UUID.randomUUID().toString();
         final JSONObject comment = new JSONObject();
         comment.put("content", "text");
@@ -88,7 +88,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenCreateNewComment() {
+    public void shouldReturn401WhenUnAuthenticatedUserCreateNewComment() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
         final String commentId = UUID.randomUUID().toString();
@@ -103,10 +103,10 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenCreateNewComment() {
-        final String annotationId = UUID.randomUUID().toString();
+    public void shouldReturn500WhenCreateNewCommentWithNonExistentAnnotationId() {
+        final String nonExistentAnnotationId = UUID.randomUUID().toString();
         final String commentId = UUID.randomUUID().toString();
-        final JSONObject comment = createCommentPayload(annotationId, commentId);
+        final JSONObject comment = createCommentPayload(nonExistentAnnotationId, commentId);
         request
                 .body(comment.toString())
                 .post("/api/comments")
@@ -144,7 +144,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenGetCommentById() {
+    public void shouldReturn401WhenUnAuthenticatedUserGetCommentById() {
         final String commentId = UUID.randomUUID().toString();
         unAuthenticatedRequest
                 .get("/api/comments/" + commentId)
@@ -171,7 +171,7 @@ public class CommentScenarios {
 
 
     @Test
-    public void shouldReturn401WhenGetAllComments() {
+    public void shouldReturn401WhenUnAuthenticatedUserGetAllComments() {
         unAuthenticatedRequest
                 .get("/api/comments")
                 .then()
@@ -200,10 +200,10 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenUpdateComment() {
+    public void shouldReturn500WhenUpdateCommentWithNonExistentAnnotationId() {
         final String commentId = UUID.randomUUID().toString();
-        final String annotationId = UUID.randomUUID().toString();
-        final JSONObject comment = createCommentPayload(annotationId, commentId);
+        final String nonExistentAnnotationId = UUID.randomUUID().toString();
+        final JSONObject comment = createCommentPayload(nonExistentAnnotationId, commentId);
         request
                 .body(comment.toString())
                 .put("/api/comments")
@@ -213,7 +213,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn400WhenUpdateComment() {
+    public void shouldReturn400WhenUpdateCommentWithoutId() {
         final JSONObject comment = new JSONObject();
         comment.put("content", "text");
         comment.put("annotationId", UUID.randomUUID());
@@ -227,7 +227,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUpdateComment() {
+    public void shouldReturn401WhenUnAuthenticatedUserUpdateComment() {
         final JSONObject comment = new JSONObject();
         comment.put("content", "text");
         comment.put("annotationId", UUID.randomUUID());
@@ -253,15 +253,15 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenDeleteCommentById() {
-        final String commentId = UUID.randomUUID().toString();
-        final ValidatableResponse deletedResponse = deleteCommentById(commentId);
+    public void shouldReturn500WhenDeleteCommentByNonExistentId() {
+        final String nonExistentId = UUID.randomUUID().toString();
+        final ValidatableResponse deletedResponse = deleteCommentById(nonExistentId);
 
         deletedResponse.statusCode(500);
     }
 
     @Test
-    public void shouldReturn401WhenDeleteComment() {
+    public void shouldReturn401WhenUnAuthenticatedUserDeleteComment() {
         unAuthenticatedRequest
                 .delete("/api/comments/" + UUID.randomUUID())
                 .then()
