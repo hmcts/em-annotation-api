@@ -29,7 +29,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @TestPropertySource(value = "classpath:application.yml")
 @RunWith(SpringIntegrationSerenityRunner.class)
 @WithTags({@WithTag("testType:Functional")})
-public class CommentScenarios {
+public class RectangleScenarios {
 
     @Autowired
     private TestUtil testUtil;
@@ -57,260 +57,276 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn201WhenCreateNewComment() {
+    public void shouldReturn201WhenCreateNewRectangle() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
-        final String commentId = UUID.randomUUID().toString();
-        final ValidatableResponse response = createComment(annotationId, commentId);
+        final String rectangleId = UUID.randomUUID().toString();
+
+        final ValidatableResponse response = createRectangle(annotationId, rectangleId);
 
         response
                 .statusCode(201)
-                .body("id", equalTo(commentId))
-                .body("content", equalTo("text"))
+                .body("x", equalTo(1f))
+                .body("y", equalTo(2f))
+                .body("width", equalTo(10f))
+                .body("height", equalTo(11f))
                 .body("annotationId", equalTo(annotationId))
-                .header("Location", equalTo("/api/comments/" + commentId))
+                .header("Location", equalTo("/api/rectangles/" + rectangleId))
                 .log().all();
     }
 
     @Test
-    public void shouldReturn400WhenCreateNewCommentWithoutId() {
-        final String annotationId = UUID.randomUUID().toString();
-        final JSONObject comment = new JSONObject();
-        comment.put("content", "text");
-        comment.put("annotationId", annotationId);
+    public void shouldReturn400WhenCreateNewRectangleWithoutId() {
+        final String newAnnotationSetId = createAnnotationSet();
+        final String annotationId = createAnnotation(newAnnotationSetId);
+        final String rectangleId = UUID.randomUUID().toString();
+        final JSONObject rectanglePayload = createRectanglePayload(annotationId, rectangleId);
+
+        rectanglePayload.remove("id");
 
         request
-                .body(comment.toString())
-                .post("/api/comments")
+                .body(rectanglePayload.toString())
+                .post("/api/rectangles")
                 .then()
                 .statusCode(400)
                 .log().all();
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserCreateNewComment() {
-        final String newAnnotationSetId = createAnnotationSet();
-        final String annotationId = createAnnotation(newAnnotationSetId);
-        final String commentId = UUID.randomUUID().toString();
-        final JSONObject comment = createCommentPayload(annotationId, commentId);
+    public void shouldReturn401WhenUnAuthenticatedUserCreateNewRectangle() {
+        final String annotationId = UUID.randomUUID().toString();
+        final String rectangleId = UUID.randomUUID().toString();
+        final JSONObject rectanglePayload = createRectanglePayload(annotationId, rectangleId);
 
         unAuthenticatedRequest
-                .body(comment.toString())
-                .post("/api/comments")
+                .body(rectanglePayload.toString())
+                .post("/api/rectangles")
                 .then()
                 .statusCode(401)
                 .log().all();
     }
 
     @Test
-    public void shouldReturn500WhenCreateNewCommentWithNonExistentAnnotationId() {
+    public void shouldReturn500WhenCreateNewRectangleWithNonExistentAnnotationId() {
         final String nonExistentAnnotationId = UUID.randomUUID().toString();
-        final String commentId = UUID.randomUUID().toString();
-        final JSONObject comment = createCommentPayload(nonExistentAnnotationId, commentId);
+        final String rectangleId = UUID.randomUUID().toString();
+        final JSONObject rectanglePayload = createRectanglePayload(nonExistentAnnotationId, rectangleId);
         request
-                .body(comment.toString())
-                .post("/api/comments")
+                .body(rectanglePayload.toString())
+                .post("/api/rectangles")
                 .then()
                 .statusCode(500)
                 .log().all();
     }
 
     @Test
-    public void shouldReturn200WhenGetCommentById() {
+    public void shouldReturn200WhenGetRectangleById() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
-        final String commentId = UUID.randomUUID().toString();
-        final ValidatableResponse response = createComment(annotationId, commentId);
+        final String rectangleId = UUID.randomUUID().toString();
+        final ValidatableResponse response = createRectangle(annotationId, rectangleId);
         final String id = extractJSONObjectFromResponse(response).getString("id");
 
         request
-                .get("/api/comments/" + id)
+                .get("/api/rectangles/" + id)
                 .then()
                 .statusCode(200)
-                .body("id", equalTo(commentId))
-                .body("content", equalTo("text"))
+                .body("x", equalTo(1f))
+                .body("y", equalTo(2f))
+                .body("width", equalTo(10f))
+                .body("height", equalTo(11f))
                 .body("annotationId", equalTo(annotationId))
                 .log().all();
     }
 
     @Test
-    public void shouldReturn404WhenGetCommentNotFoundById() {
-        final String commentId = UUID.randomUUID().toString();
+    public void shouldReturn404WhenGetRectangleNotFoundById() {
+        final String rectangleId = UUID.randomUUID().toString();
         request
-                .get("/api/comments/" + commentId)
+                .get("/api/rectangles/" + rectangleId)
                 .then()
                 .statusCode(404)
                 .log().all();
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserGetCommentById() {
-        final String commentId = UUID.randomUUID().toString();
+    public void shouldReturn401WhenUnAuthenticatedUserGetRectangleById() {
+        final String rectangleId = UUID.randomUUID().toString();
         unAuthenticatedRequest
-                .get("/api/comments/" + commentId)
+                .get("/api/rectangles/" + rectangleId)
                 .then()
                 .statusCode(401)
                 .log().all();
     }
 
     @Test
-    public void shouldReturn200WhenGetAllComments() {
+    public void shouldReturn200WhenGetAllRectangles() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
-        final String commentId = UUID.randomUUID().toString();
-        final ValidatableResponse response = createComment(annotationId, commentId);
-        final String id = extractJSONObjectFromResponse(response).getString("id");
+        final String rectangleId = UUID.randomUUID().toString();
+        createRectangle(annotationId, rectangleId);
 
         request
-                .get("/api/comments")
+                .get("/api/rectangles")
                 .then()
                 .statusCode(200)
                 .body("size()", Matchers.greaterThanOrEqualTo(1))
                 .log().all();
     }
 
-
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserGetAllComments() {
+    public void shouldReturn401WhenUnAuthenticatedUserGetAllRectangles() {
         unAuthenticatedRequest
-                .get("/api/comments")
+                .get("/api/rectangles")
                 .then()
                 .statusCode(401)
                 .log().all();
     }
 
     @Test
-    public void shouldReturn200WhenUpdateComment() {
+    public void shouldReturn200WhenUpdateRectangle() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
-        final String commentId = UUID.randomUUID().toString();
-        final ValidatableResponse response = createComment(annotationId, commentId);
-        final JSONObject comment = extractJSONObjectFromResponse(response);
-        comment.put("content", "updated text");
+        final String rectangleId = UUID.randomUUID().toString();
+        final ValidatableResponse response = createRectangle(annotationId, rectangleId);
+        final JSONObject rectangle = extractJSONObjectFromResponse(response);
+        rectangle.put("x", 3f);
+        rectangle.put("y", 4f);
 
         request
-                .body(comment.toString())
-                .put("/api/comments")
+                .body(rectangle.toString())
+                .put("/api/rectangles")
                 .then()
                 .statusCode(200)
-                .body("id", equalTo(commentId))
-                .body("content", equalTo("updated text"))
+                .body("id", equalTo(rectangleId))
+                .body("x", equalTo(3f))
+                .body("y", equalTo(4f))
+                .body("width", equalTo(10f))
+                .body("height", equalTo(11f))
                 .body("annotationId", equalTo(annotationId))
                 .log().all();
     }
 
     @Test
-    public void shouldReturn500WhenUpdateCommentWithNonExistentAnnotationId() {
-        final String commentId = UUID.randomUUID().toString();
+    public void shouldReturn500WhenUpdateRectangleWithNonExistentAnnotationId() {
+        final String rectangleId = UUID.randomUUID().toString();
         final String nonExistentAnnotationId = UUID.randomUUID().toString();
-        final JSONObject comment = createCommentPayload(nonExistentAnnotationId, commentId);
+        final JSONObject rectangle = createRectanglePayload(nonExistentAnnotationId, rectangleId);
         request
-                .body(comment.toString())
-                .put("/api/comments")
+                .body(rectangle.toString())
+                .put("/api/rectangles")
                 .then()
                 .statusCode(500)
                 .log().all();
     }
 
     @Test
-    public void shouldReturn400WhenUpdateCommentWithoutId() {
-        final JSONObject comment = new JSONObject();
-        comment.put("content", "text");
-        comment.put("annotationId", UUID.randomUUID());
+    public void shouldReturn400WhenUpdateRectangleWithoutId() {
+        final String newAnnotationSetId = createAnnotationSet();
+        final String annotationId = createAnnotation(newAnnotationSetId);
+        final String rectangleId = UUID.randomUUID().toString();
+        final JSONObject rectangle = createRectanglePayload(annotationId, rectangleId);
+
+        rectangle.remove("id");
 
         request
-                .body(comment.toString())
-                .put("/api/comments")
+                .body(rectangle.toString())
+                .put("/api/rectangles")
                 .then()
                 .statusCode(400)
                 .log().all();
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserUpdateComment() {
-        final JSONObject comment = new JSONObject();
-        comment.put("content", "text");
-        comment.put("annotationId", UUID.randomUUID());
+    public void shouldReturn401WhenUnAuthenticatedUserUpdateRectangle() {
+        final String annotationId = UUID.randomUUID().toString();
+        final String rectangleId = UUID.randomUUID().toString();
+        final JSONObject rectangle = createRectanglePayload(annotationId, rectangleId);
 
         unAuthenticatedRequest
-                .body(comment.toString())
-                .put("/api/comments")
+                .body(rectangle.toString())
+                .put("/api/rectangles")
                 .then()
                 .statusCode(401)
                 .log().all();
     }
 
     @Test
-    public void shouldReturn200WhenDeleteCommentById() {
+    public void shouldReturn200WhenDeleteRectangleById() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
-        final String commentId = UUID.randomUUID().toString();
-        final ValidatableResponse response = createComment(annotationId, commentId);
-        final String id = extractJSONObjectFromResponse(response).getString("id");
-        final ValidatableResponse deletedResponse = deleteCommentById(id);
+        final String rectangleId = UUID.randomUUID().toString();
+        final ValidatableResponse createdResponse = createRectangle(annotationId, rectangleId);
+        final String id = extractJSONObjectFromResponse(createdResponse).getString("id");
+
+        final ValidatableResponse deletedResponse = deleteRectangleById(id);
 
         deletedResponse.statusCode(200);
     }
 
     @Test
-    public void shouldReturn500WhenDeleteCommentByNonExistentId() {
-        final String nonExistentId = UUID.randomUUID().toString();
-        final ValidatableResponse deletedResponse = deleteCommentById(nonExistentId);
+    public void shouldReturn500WhenDeleteRectangleByNonExistentId() {
+        final String nonExistentRectangleId = UUID.randomUUID().toString();
+        final ValidatableResponse deletedResponse = deleteRectangleById(nonExistentRectangleId);
 
         deletedResponse.statusCode(500);
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserDeleteComment() {
+    public void shouldReturn401WhenUnAuthenticatedUserDeleteRectangle() {
         unAuthenticatedRequest
-                .delete("/api/comments/" + UUID.randomUUID())
+                .delete("/api/rectangles/" + UUID.randomUUID())
                 .then()
                 .statusCode(401)
                 .log().all();
     }
 
     @Test
-    public void shouldReturn200WhenTryToUpdateCommentAfterItHasBeenDeleted() {
+    public void shouldReturn200WhenUpdateRectangleAfterItHasBeenDeleted() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
-        final String commentId = UUID.randomUUID().toString();
-        final ValidatableResponse response = createComment(annotationId, commentId);
-        final JSONObject comment = extractJSONObjectFromResponse(response);
-        final String id = comment.getString("id");
-        deleteCommentById(id).statusCode(200);
-        comment.put("content", "new text");
+        final String rectangleId = UUID.randomUUID().toString();
+        final ValidatableResponse response = createRectangle(annotationId, rectangleId);
+        final JSONObject rectangle = extractJSONObjectFromResponse(response);
+        final String id = rectangle.getString("id");
+        deleteRectangleById(id).statusCode(200);
+        rectangle.put("x", 3f);
+        rectangle.put("y", 4f);
 
         request
-                .body(comment.toString())
-                .put("/api/comments")
+                .body(rectangle.toString())
+                .put("/api/rectangles")
                 .then()
                 .statusCode(200)
-                .body("id", equalTo(id))
-                .body("content", equalTo("new text"))
+                .body("id", equalTo(rectangleId))
+                .body("x", equalTo(3f))
+                .body("y", equalTo(4f))
+                .body("width", equalTo(10f))
+                .body("height", equalTo(11f))
                 .body("annotationId", equalTo(annotationId))
                 .log().all();
     }
 
-    private ValidatableResponse deleteCommentById(String commentId) {
+    @NotNull
+    private ValidatableResponse deleteRectangleById(String rectangleId) {
         return request
-                .delete("/api/comments/" + commentId)
+                .delete("/api/rectangles/" + rectangleId)
                 .then()
                 .log().all();
     }
 
     @NotNull
-    private ValidatableResponse createComment(String annotationId, String commentId) {
-        final JSONObject comment = createCommentPayload(annotationId, commentId);
-
+    private ValidatableResponse createRectangle(String annotationId, String rectangleId) {
+        final JSONObject rectangle = createRectanglePayload(annotationId, rectangleId);
         return request.log().all()
-                .body(comment.toString())
-                .post("/api/comments")
+                .body(rectangle.toString())
+                .post("/api/rectangles")
                 .then()
                 .statusCode(201);
     }
 
     @NotNull
-    private String createAnnotation(String newAnnotationSetId) {
+    private String createAnnotation(final String newAnnotationSetId) {
         final UUID annotationId = UUID.randomUUID();
         final JSONObject createAnnotations = new JSONObject();
         createAnnotations.put("annotationSetId", newAnnotationSetId);
@@ -353,12 +369,15 @@ public class CommentScenarios {
     }
 
     @NotNull
-    private JSONObject createCommentPayload(String annotationId, String commentId) {
-        final JSONObject comment = new JSONObject();
-        comment.put("id", commentId);
-        comment.put("content", "text");
-        comment.put("annotationId", annotationId);
-        return comment;
+    private JSONObject createRectanglePayload(String annotationId, String rectangleId) {
+        final JSONObject rectangle = new JSONObject();
+        rectangle.put("id", rectangleId);
+        rectangle.put("annotationId", annotationId);
+        rectangle.put("x", 1f);
+        rectangle.put("y", 2f);
+        rectangle.put("width", 10f);
+        rectangle.put("height", 11f);
+        return rectangle;
     }
 
     @NotNull
