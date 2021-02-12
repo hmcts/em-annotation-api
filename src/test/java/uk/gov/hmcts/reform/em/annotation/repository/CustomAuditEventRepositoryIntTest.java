@@ -92,6 +92,28 @@ public class CustomAuditEventRepositoryIntTest extends BaseTest {
     }
 
     @Test
+    public void findAuditEvent() {
+
+        Instant oneHourAgo = Instant.now().minusSeconds(3600);
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("test-key", "test-value");
+        AuditEvent event = new AuditEvent("test-user", "test-type", data);
+
+        customAuditEventRepository.add(event);
+
+        List<AuditEvent> auditEvents = customAuditEventRepository.find(event.getPrincipal(),
+                oneHourAgo, event.getType());
+
+        AuditEvent auditEvent = auditEvents.get(0);
+        assertThat(auditEvents.size()).isEqualTo(1);
+        assertThat(auditEvent.getPrincipal()).isEqualTo(event.getPrincipal());
+        assertThat(auditEvent.getType()).isEqualTo(event.getType());
+        assertThat(auditEvent.getData()).isEqualTo(event.getData());
+
+    }
+
+    @Test
     public void addAuditEventTruncateLargeData() {
         Map<String, Object> data = new HashMap<>();
         StringBuilder largeData = new StringBuilder();

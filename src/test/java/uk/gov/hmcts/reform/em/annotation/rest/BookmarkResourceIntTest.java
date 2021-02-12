@@ -260,6 +260,17 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
+    public void getBookmarksByDocumentIdNoUser() throws Exception {
+        bookmark = bookmarkRepository.saveAndFlush(bookmark);
+
+        restLogoutMockMvc.perform(get("/api/" + bookmark.getDocumentId() + "/bookmarks")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(bookmark)))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    @Transactional
     public void getBookmarksByDocumentIdNoContent() throws Exception {
         bookmark = bookmarkRepository.saveAndFlush(bookmark);
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("fabio"));
