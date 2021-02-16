@@ -1,7 +1,7 @@
 buildscript {
     dependencies {
-        classpath("net.serenity-bdd:serenity-gradle-plugin:2.3.12")
-        classpath("net.serenity-bdd:serenity-single-page-report:2.3.12")
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.3.13")
+        classpath("net.serenity-bdd:serenity-single-page-report:2.3.13")
     }
 }
 
@@ -65,8 +65,8 @@ def versions = [
         sonarPitest        : '0.5',
         h2                 : '1.4.197',
         liquibase          : '3.5.3',
-        serenity           : '2.3.12',
-        serenityreporter   : '2.3.12',
+        serenity           : '2.3.13',
+        serenityreporter   : '2.3.13',
         serenityRestAssured: '2.3.4',
         pact_version       : '4.0.11',
         hibernate          : '5.4.25.Final',
@@ -219,20 +219,22 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.3.2"
 
     //pact contract testing
+
     testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured, withoutStuff
     testCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity, withoutStuff
     testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
 
+
     contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit', version: "4.0.10", withoutAlpnApi
     contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit5', version: "4.0.10", withoutAlpnApi
     contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-java8', version: "4.0.10", withoutAlpnApi
     compile group: 'au.com.dius', name: 'pact-jvm-consumer', version: "4.0.10", withoutAlpnApi
 
-    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
-    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
-    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.3.2')
+    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.7.1")
+    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.7.1')
 
     aatCompile "uk.gov.hmcts.reform:em-test-helper:1.18.1", withoutStuff
 
