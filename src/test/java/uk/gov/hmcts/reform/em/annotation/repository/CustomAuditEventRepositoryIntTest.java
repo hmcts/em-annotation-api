@@ -48,9 +48,6 @@ public class CustomAuditEventRepositoryIntTest extends BaseTest {
     @Autowired
     private AuditEventConverter auditEventConverter;
 
-    @Autowired
-    private AuditEventService auditEventService;
-
     private CustomAuditEventRepository customAuditEventRepository;
 
     private PersistentAuditEvent testUserEvent;
@@ -103,11 +100,9 @@ public class CustomAuditEventRepositoryIntTest extends BaseTest {
     @Test
     public void findAuditEvent() {
         Instant oneHourAgo = Instant.now().minusSeconds(3600);
-
         Map<String, Object> data = new HashMap<>();
         data.put("test-key", "test-value");
         AuditEvent event = new AuditEvent("test-user", "test-type", data);
-
         customAuditEventRepository.add(event);
         List<AuditEvent> auditEvents = customAuditEventRepository.find(event.getPrincipal(),
                 oneHourAgo, event.getType());
@@ -117,7 +112,6 @@ public class CustomAuditEventRepositoryIntTest extends BaseTest {
         assertThat(auditEvent.getPrincipal()).isEqualTo(event.getPrincipal());
         assertThat(auditEvent.getType()).isEqualTo(event.getType());
         assertThat(auditEvent.getData()).isEqualTo(event.getData());
-
     }
 
     @Test
@@ -195,7 +189,6 @@ public class CustomAuditEventRepositoryIntTest extends BaseTest {
     @Test
     public void convertToAuditEventFail() {
         AuditEventConverter auditEventConverter = new AuditEventConverter();
-
         PersistentAuditEvent persistentAuditEvent = null;
         AuditEvent auditEvents = auditEventConverter.convertToAuditEvent(persistentAuditEvent);
         assertThat(auditEvents).isEqualTo(null);
@@ -207,12 +200,11 @@ public class CustomAuditEventRepositoryIntTest extends BaseTest {
 
 
     @Test
-    public void auditEventServiceTestsFindAllTest() {
+    public void auditEventServiceFindAllTest() {
         AuditEventService auditEventService = new AuditEventService(persistenceAuditEventRepository, auditEventConverter);
         Map<String, Object> data = new HashMap<>();
         data.put("test-key", "test-value");
         AuditEvent event = new AuditEvent("test-user", "test-type", data);
-
         customAuditEventRepository.add(event);
         Pageable pageable = PageRequest.of(0, 8);
 
@@ -225,15 +217,13 @@ public class CustomAuditEventRepositoryIntTest extends BaseTest {
     }
 
     @Test
-    public void auditEventServiceTestsFindByDatesTest() {
+    public void auditEventServiceFindByDatesTest() {
         Instant oneHourAgo = Instant.now().minusSeconds(3600);
         Instant oneHourAhead = Instant.now().plusSeconds(3600);
-
         AuditEventService auditEventService = new AuditEventService(persistenceAuditEventRepository, auditEventConverter);
         Map<String, Object> data = new HashMap<>();
         data.put("test-key", "test-value");
         AuditEvent event = new AuditEvent("test-user", "test-type", data);
-
         customAuditEventRepository.add(event);
         Pageable pageable = PageRequest.of(0, 8);
 
@@ -246,13 +236,12 @@ public class CustomAuditEventRepositoryIntTest extends BaseTest {
 }
 
     @Test
-    public void auditEventServiceTestsFindTest() {
+    public void auditEventServiceFindTest() {
         AuditEventService auditEventService = new AuditEventService(persistenceAuditEventRepository, auditEventConverter);
         Map<String, Object> data = new HashMap<>();
         data.put("test-key", "test-value");
         AuditEvent event = new AuditEvent("test-user", "test-type", data);
         customAuditEventRepository.add(event);
-
         List<PersistentAuditEvent> persistentAuditEvents = persistenceAuditEventRepository.findByPrincipal("test-user");
         PersistentAuditEvent persistentAuditEvent = persistentAuditEvents.get(0);
 
@@ -263,5 +252,4 @@ public class CustomAuditEventRepositoryIntTest extends BaseTest {
         assertThat(auditEvent.getPrincipal()).isEqualTo(event.getPrincipal());
         assertThat(auditEvent.getTimestamp()).isEqualTo(event.getTimestamp());
     }
-
 }

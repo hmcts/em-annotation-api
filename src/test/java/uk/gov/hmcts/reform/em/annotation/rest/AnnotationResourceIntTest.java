@@ -228,6 +228,7 @@ public class AnnotationResourceIntTest extends BaseTest {
         tag.setCreatedBy("system");
         tagRepository.saveAndFlush(tag);
 
+        // Initialize a Rectangle Set
         Rectangle rectangle = new Rectangle();
         rectangle.setAnnotation(null);
         rectangle.setId(UUID.randomUUID());
@@ -239,6 +240,7 @@ public class AnnotationResourceIntTest extends BaseTest {
         rectangles.add(rectangle2);
         annotation.setRectangles(rectangles);
 
+        // Initialize a Comment Set
         Comment comment = new Comment();
         comment.setAnnotation(null);
         comment.setId(UUID.randomUUID());
@@ -251,7 +253,6 @@ public class AnnotationResourceIntTest extends BaseTest {
         annotation.setComments(comments);
 
         annotationRepository.saveAndFlush(annotation);
-
         int databaseSizeBeforeUpdate = annotationRepository.findAll().size();
 
         // Update the annotation

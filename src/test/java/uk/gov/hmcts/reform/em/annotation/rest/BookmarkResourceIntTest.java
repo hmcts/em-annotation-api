@@ -334,12 +334,9 @@ public class BookmarkResourceIntTest extends BaseTest {
     @Test
     @Transactional
     public void deleteNonExistingBookmark() throws Exception{
-
         int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
-
         bookmark.setId(null);
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
-
         DeleteBookmarkDTO deleteBookmarkDTO = new DeleteBookmarkDTO();
         deleteBookmarkDTO.setDeleted(Arrays.asList(bookmarkDTO.getId()));
 

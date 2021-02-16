@@ -87,9 +87,7 @@ public class FilterAnnotationSetTest  extends BaseTest {
     @Test
     @Transactional
     public void testGetAllAnnotationSets() throws Exception {
-
         annotationSetRepository.saveAndFlush(annotationSet);
-
         AnnotationSetDTO annotationSetDTO = annotationSetMapper.toDto(annotationSet);
         Optional<AnnotationSetDTO> annotationSetDTOs = Optional.of(annotationSetDTO);
 
@@ -104,7 +102,6 @@ public class FilterAnnotationSetTest  extends BaseTest {
     @Test
     @Transactional
     public void testGetNonExistingAnnotationSet() throws Exception {
-
         Optional<AnnotationSetDTO> annotationSetDTOs = Optional.empty();
 
         Mockito.when(annotationSetService.findOneByDocumentId("Test")).thenReturn(annotationSetDTOs);
