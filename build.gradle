@@ -195,11 +195,21 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform', name: 'idam-client', version: '1.5.5'
 
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
-    compile group: 'org.apache.httpcomponents.client5', name: 'httpclient5', version: '5.0.3'
-    compile group: 'org.apache.httpcomponents.core5', name: 'httpcore5', version: '5.0.3'
-    compile group: 'org.apache.httpcomponents.core5', name: 'httpcore5-h2', version: '5.0.3'
     compile group: 'org.apache.httpcomponents', name: 'fluent-hc', version: '4.5.13'
-    compile group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.13'
+
+    implementation group: 'io.netty', name: 'netty-handler', version: '4.1.59.Final'
+    implementation group: 'io.netty', name: 'netty-buffer', version: '4.1.59.Final'
+    implementation group: 'io.netty', name: 'netty-transport', version: '4.1.59.Final'
+    implementation group: 'io.netty', name: 'netty-common', version: '4.1.59.Final'
+    implementation group: 'io.netty', name: 'netty-codec-http', version: '4.1.59.Final'
+    implementation group: 'io.netty', name: 'netty-codec', version: '4.1.59.Final'
+    implementation group: 'io.netty', name: 'netty-transport-native-epoll', version: '4.1.59.Final'
+    implementation group: 'io.netty', name: 'netty-resolver', version: '4.1.59.Final'
+    implementation group: 'io.netty', name: 'netty-codec-http2', version: '4.1.59.Final'
+    implementation group: 'io.netty', name: 'netty-transport-native-kqueue', version: '4.1.59.Final'
+    implementation group: 'io.netty', name: 'netty-transport-native-unix-common', version: '4.1.59.Final'
+
+
 
     annotationProcessor "org.projectlombok:lombok:1.18.18"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
