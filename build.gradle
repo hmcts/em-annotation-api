@@ -70,8 +70,7 @@ def versions = [
         serenityRestAssured: '2.3.4',
         pact_version       : '4.0.10',
         hibernate          : '5.4.25.Final',
-        logging            : '5.1.7',
-        netty           : '4.1.59.Final'
+        logging            : '5.1.7'
 ]
 
 sourceSets {
