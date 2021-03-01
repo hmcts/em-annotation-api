@@ -125,7 +125,7 @@ dependencies {
     }
 
     compile(
-            "org.springframework.boot:spring-boot:2.3.4.RELEASE",
+            "org.springframework.boot:spring-boot:2.4.3",
             "org.springframework.boot:spring-boot-starter-web:2.3.4.RELEASE",
             "org.springframework.boot:spring-boot-starter-actuator:2.3.4.RELEASE",
             "org.springframework.boot:spring-boot-starter-jdbc:2.3.4.RELEASE",
