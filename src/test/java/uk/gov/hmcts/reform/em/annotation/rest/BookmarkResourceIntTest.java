@@ -236,7 +236,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
 
-        restLogoutMockMvc.perform(put("/api/bookmarks")
+        restLogoutMockMvc.perform(put("/api/bookmarks_multiple")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(Arrays.asList(bookmarkDTO))))
                 .andExpect(status().isBadRequest());
@@ -256,6 +256,17 @@ public class BookmarkResourceIntTest extends BaseTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(bookmark.getId().toString())))
                 .andExpect(jsonPath("$.[*].name").value(hasItem(bookmark.getName())));
+    }
+
+    @Test
+    @Transactional
+    public void getBookmarksByDocumentIdNoUser() throws Exception {
+        bookmark = bookmarkRepository.saveAndFlush(bookmark);
+
+        restLogoutMockMvc.perform(get("/api/" + bookmark.getDocumentId() + "/bookmarks")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(bookmark)))
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -318,5 +329,23 @@ public class BookmarkResourceIntTest extends BaseTest {
 
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeDelete - 3);
+    }
+
+    @Test
+    @Transactional
+    public void deleteNonExistingBookmark() throws Exception{
+        int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
+        bookmark.setId(null);
+        BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
+        DeleteBookmarkDTO deleteBookmarkDTO = new DeleteBookmarkDTO();
+        deleteBookmarkDTO.setDeleted(Arrays.asList(bookmarkDTO.getId()));
+
+        restLogoutMockMvc.perform(delete("/api/bookmarks_multiple")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(deleteBookmarkDTO)))
+                .andExpect(status().isBadRequest());
+
+        List<Bookmark> bookmarkList = bookmarkRepository.findAll();
+        assertThat(bookmarkList).hasSize(databaseSizeBeforeDelete);
     }
 }
