@@ -14,12 +14,14 @@ To pull all dependencies and set up IDAM data run:
 #Cloning repo and running though docker
 git clone https://github.com/hmcts/em-annotation-app.git
 cd em-annotation-app/
-az acr login --name hmctspublic && az acr login --name hmctsprivate
+az acr login --name hmctspublic
 
-Refer to the Developer Environments page on Confluence to get the  start-local-environment.sh & docker-compose-dependencies.yml files.
+docker-compose -f docker-compose-dependencies-simulator.yml pull
+docker-compose -f docker-compose-dependencies-simulator.yml up
 
-docker-compose -f docker-compose-dependencies.yml pull
-./bin/start-local-environment.sh <DOCMOSIS_ACCESS_KEY_VALUE>
+wait for 2-3 minutes till all the dependencies in the docker are up and running.
+./gradlew clean
+./gradlew build
 ```
 
 Run below command to setup the db:
