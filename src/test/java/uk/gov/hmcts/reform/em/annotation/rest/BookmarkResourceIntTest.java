@@ -361,6 +361,4 @@ public class BookmarkResourceIntTest extends BaseTest {
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeDelete);
     }
-
-
 }
