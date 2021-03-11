@@ -265,11 +265,11 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenDeleteRectangleByNonExistentId() {
+    public void shouldReturn404WhenDeleteRectangleByNonExistentId() {
         final String nonExistentRectangleId = UUID.randomUUID().toString();
         final ValidatableResponse deletedResponse = deleteRectangleById(nonExistentRectangleId);
 
-        deletedResponse.statusCode(500);
+        deletedResponse.statusCode(404);
     }
 
     @Test

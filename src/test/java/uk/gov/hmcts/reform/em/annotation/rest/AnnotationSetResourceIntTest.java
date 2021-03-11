@@ -221,7 +221,7 @@ public class AnnotationSetResourceIntTest extends BaseTest {
 
         int databaseSizeBeforeDelete = annotationSetRepository.findAll().size();
 
-        // Get the annotationSet
+        // delete the annotationSet
         restLogoutMockMvc.perform(delete("/api/annotation-sets/{id}", annotationSet.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
@@ -229,6 +229,21 @@ public class AnnotationSetResourceIntTest extends BaseTest {
         // Validate the database is empty
         List<AnnotationSet> annotationSetList = annotationSetRepository.findAll();
         assertThat(annotationSetList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void deleteNonExistingAnnotationSet() throws Exception {
+        int databaseSizeBeforeDelete = annotationSetRepository.findAll().size();
+
+        // Delete the annotationSet
+        restLogoutMockMvc.perform(delete("/api/annotation-sets/{id}", UUID.randomUUID())
+                .accept(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isNotFound());
+
+        // Validate the database hasn't changed
+        List<AnnotationSet> annotationSetList = annotationSetRepository.findAll();
+        assertThat(annotationSetList).hasSize(databaseSizeBeforeDelete);
     }
 
     @Test

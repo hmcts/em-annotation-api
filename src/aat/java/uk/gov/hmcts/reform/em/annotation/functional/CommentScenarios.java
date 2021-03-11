@@ -253,11 +253,11 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenDeleteCommentByNonExistentId() {
+    public void shouldReturn404WhenDeleteCommentByNonExistentId() {
         final String nonExistentId = UUID.randomUUID().toString();
         final ValidatableResponse deletedResponse = deleteCommentById(nonExistentId);
 
-        deletedResponse.statusCode(500);
+        deletedResponse.statusCode(404);
     }
 
     @Test
