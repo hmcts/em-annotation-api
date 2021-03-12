@@ -245,7 +245,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
         int databaseSizeBeforeDelete = rectangleRepository.findAll().size();
 
-        // Get the rectangle
+        // Delete the rectangle
         restLogoutMockMvc.perform(delete("/api/rectangles/{id}", rectangle.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
@@ -253,6 +253,21 @@ public class RectangleResourceIntTest extends BaseTest {
         // Validate the database is empty
         List<Rectangle> rectangleList = rectangleRepository.findAll();
         assertThat(rectangleList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void deleteNonExistingRectangle() throws Exception {
+        int databaseSizeBeforeDelete = rectangleRepository.findAll().size();
+
+        // Delete the rectangle
+        restLogoutMockMvc.perform(delete("/api/rectangles/{id}", rectangle.getId())
+                .accept(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isNotFound());
+
+        // Validate the database hasn't changed
+        List<Rectangle> rectangleList = rectangleRepository.findAll();
+        assertThat(rectangleList).hasSize(databaseSizeBeforeDelete);
     }
 
     @Test

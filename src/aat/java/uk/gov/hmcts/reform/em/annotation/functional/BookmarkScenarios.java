@@ -306,11 +306,11 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenDeleteBookmarkByNonExistentId() {
+    public void shouldReturn404WhenDeleteBookmarkByNonExistentId() {
         request
                 .delete(String.format("/api/bookmarks/%s", UUID.randomUUID()))
                 .then()
-                .statusCode(500)
+                .statusCode(404)
                 .log().all();
     }
 

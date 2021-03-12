@@ -295,6 +295,19 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
+    public void deleteNonExistingBookmark() throws Exception {
+
+        int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
+        restLogoutMockMvc.perform(delete("/api/bookmarks/{id}", UUID.randomUUID())
+                .accept(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isNotFound());
+
+        List<Bookmark> bookmarkList = bookmarkRepository.findAll();
+        assertThat(bookmarkList).hasSize(databaseSizeBeforeDelete);
+    }
+
+    @Test
+    @Transactional
     public void deleteMultipleBookmarks() throws Exception {
         bookmarkRepository.saveAndFlush(bookmark);
         Bookmark updatedBookmark = bookmarkRepository.findById(bookmark.getId()).get();
@@ -333,7 +346,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void deleteNonExistingBookmark() throws Exception{
+    public void deleteMultipleNonExistingBookmark() throws Exception{
         int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
         bookmark.setId(null);
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
