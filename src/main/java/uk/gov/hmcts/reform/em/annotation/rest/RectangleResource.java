@@ -3,24 +3,30 @@ package uk.gov.hmcts.reform.em.annotation.rest;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import uk.gov.hmcts.reform.em.annotation.rest.errors.BadRequestAlertException;
 import uk.gov.hmcts.reform.em.annotation.rest.util.HeaderUtil;
 import uk.gov.hmcts.reform.em.annotation.rest.util.PaginationUtil;
+import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
 import uk.gov.hmcts.reform.em.annotation.service.RectangleService;
+import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.RectangleDTO;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,6 +42,9 @@ public class RectangleResource {
     private static final String ENTITY_NAME = "rectangle";
 
     private final RectangleService rectangleService;
+
+    @Autowired
+    public AnnotationService annotationService;
 
     public RectangleResource(RectangleService rectangleService) {
         this.rectangleService = rectangleService;
@@ -53,14 +62,28 @@ public class RectangleResource {
             @ApiResponse(code = 201, message = "Successfully created", response = RectangleDTO.class),
             @ApiResponse(code = 400, message = "rectangleDTO not valid, invalid id"),
             @ApiResponse(code = 401, message = "Unauthorised"),
+            @ApiResponse(code = 404, message = "Annotation Id not Found"),
             @ApiResponse(code = 403, message = "Forbidden"),
     })
     @PostMapping("/rectangles")
     //@Timed
     public ResponseEntity<RectangleDTO> createRectangle(@RequestBody RectangleDTO rectangleDTO) throws URISyntaxException {
         log.debug("REST request to save Rectangle : {}", rectangleDTO);
-        if (rectangleDTO.getId() == null) {
+        if (Objects.isNull(rectangleDTO.getId())||
+            StringUtils.isAllBlank(rectangleDTO.getId().toString())) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (Objects.isNull(rectangleDTO.getAnnotationId()) ||
+            StringUtils.isBlank(rectangleDTO.getAnnotationId().toString())) {
+            throw new BadRequestAlertException("Invalid Annotation id", ENTITY_NAME, "idnull");
+        }
+        Optional<AnnotationDTO> annotationDTOOptional
+            = annotationService.findOne(rectangleDTO.getAnnotationId());
+        if (Objects.isNull(annotationDTOOptional.get().getId())  ||
+            StringUtils.isBlank(annotationDTOOptional.get().getId().toString())) {
+            return ResponseEntity
+                .notFound()
+                .build();
         }
         RectangleDTO result = rectangleService.save(rectangleDTO);
         return ResponseEntity.created(new URI("/api/rectangles/" + result.getId()))
