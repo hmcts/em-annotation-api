@@ -139,5 +139,7 @@
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/annotation-sets/id_DELETE": "ignore",
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/annotation-sets_POST": "ignore",
-  "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/annotation-sets?offset=10\u0026pageNumber=10\u0026pageSize=10\u0026paged=true\u0026sort.sorted=true\u0026sort.unsorted=true\u0026unpaged=true_GET": "ignore"
+  "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/annotation-sets?offset=10\u0026pageNumber=10\u0026pageSize=10\u0026paged=true\u0026sort.sorted=true\u0026sort.unsorted=true\u0026unpaged=true_GET": "ignore",
+  "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/annotations?offset=10\u0026pageNumber=10\u0026pageSize=10\u0026paged=true\u0026sort.sorted=true\u0026sort.unsorted=true\u0026unpaged=true_GET": "ignore",
+  "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/annotations_POST": "ignore"
 }
