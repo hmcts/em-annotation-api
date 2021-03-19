@@ -7,13 +7,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 
+/*
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+*/
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.em.annotation.rest.errors.BadRequestAlertException;
@@ -23,8 +30,9 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.RectangleDTO;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class RectangleResourceTest {
+class RectangleResourceTest {
 
     @Mock
     private AnnotationService annotationService;
@@ -41,8 +49,6 @@ public class RectangleResourceTest {
 
     @BeforeAll
     public void setUp() {
-
-        //rectangleResource = new RectangleResource(rectangleService);
         MockitoAnnotations.initMocks(this);
     }
 
@@ -59,7 +65,7 @@ public class RectangleResourceTest {
     private static final Double UPDATED_HEIGHT = 2d;
 
     @Test
-    public void test_create_rectangle_data_validation_for_id()
+    void test_create_rectangle_data_validation_for_id()
         throws Exception {
         RectangleDTO rectangleDTO = createRectangleDTO();
         rectangleDTO.setId(null);
@@ -72,7 +78,7 @@ public class RectangleResourceTest {
     }
 
     @Test
-    public void test_create_rectangle_data_validation_for_annotation_id()
+    void test_create_rectangle_data_validation_for_annotation_id()
         throws Exception {
         RectangleDTO rectangleDTO = createRectangleDTO();
         rectangleDTO.setId(UUID.randomUUID());
@@ -86,7 +92,7 @@ public class RectangleResourceTest {
     }
 
     @Test
-    public void test_create_rectangle_data_validation_for_non_existant_annotation() throws Exception {
+    void test_create_rectangle_data_validation_for_non_existant_annotation() throws Exception {
 
         RectangleDTO rectangleDTO = createRectangleDTO();
         rectangleDTO.setId(UUID.randomUUID());
@@ -102,7 +108,7 @@ public class RectangleResourceTest {
     }
 
     @Test
-    public void test_create_rectangle_data_validation_for_non_existant_annotation_id() throws Exception {
+    void test_create_rectangle_data_validation_for_non_existant_annotation_id() throws Exception {
 
         RectangleDTO rectangleDTO = createRectangleDTO();
         rectangleDTO.setId(UUID.randomUUID());
@@ -119,7 +125,7 @@ public class RectangleResourceTest {
     }
 
     @Test
-    public void test_create_rectangle_positive_path() throws Exception {
+    void test_create_rectangle_positive_path() throws Exception {
 
         AnnotationDTO annotationDTO = new AnnotationDTO();
         annotationDTO.setId(UUID.randomUUID());
