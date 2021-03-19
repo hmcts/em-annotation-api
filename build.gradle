@@ -394,6 +394,7 @@ task smoke(type: Test) {
 task contract(type: Test) {
     group = 'Delivery pipeline'
     description = 'Runs the consumer Pact tests'
+    useJUnitPlatform()
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
     include "uk/gov/hmcts/reform/em/annotation/**"
