@@ -107,16 +107,17 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenCreateNewRectangleWithNonExistentAnnotationId() {
+    public void shouldReturn404WhenCreateNewRectangleWithNonExistentAnnotationId() {
+
         final String nonExistentAnnotationId = UUID.randomUUID().toString();
         final String rectangleId = UUID.randomUUID().toString();
         final JSONObject rectanglePayload = createRectanglePayload(nonExistentAnnotationId, rectangleId);
         request
-                .body(rectanglePayload.toString())
-                .post("/api/rectangles")
-                .then()
-                .statusCode(500)
-                .log().all();
+            .body(rectanglePayload.toString())
+            .post("/api/rectangles")
+            .then()
+            .statusCode(404)
+            .log().all();
     }
 
     @Test
