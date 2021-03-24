@@ -358,7 +358,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenDeleteMultipleBookmarksWithNonExistentId() {
+    public void shouldReturn404WhenDeleteMultipleBookmarksWithNonExistentId() {
         final UUID bookmarkId = UUID.randomUUID();
         final JSONObject deleteBookmarkRequest = new JSONObject();
         final JSONArray jsonArray = new JSONArray();
@@ -369,7 +369,7 @@ public class BookmarkScenarios {
                 .body(deleteBookmarkRequest.toString())
                 .delete("/api/bookmarks_multiple")
                 .then()
-                .statusCode(500)
+                .statusCode(404)
                 .log().all();
     }
 
