@@ -14,6 +14,8 @@ To pull all dependencies and set up IDAM data run:
 #Cloning repo and running though docker
 git clone https://github.com/hmcts/em-annotation-app.git
 cd em-annotation-app/
+brew install jq
+az login
 az acr login --name hmctspublic
 
 docker-compose -f docker-compose-dependencies-simulator.yml pull
@@ -32,6 +34,11 @@ Run below command to setup the db:
 Run the below to start the application:
 ```
 ./gradlew bootRun
+```
+
+You can use the below command to close active docker containers:
+```
+docker-compose -f docker-compose-dependencies-simulator.yml down
 ```
 
 ### Swagger UI
