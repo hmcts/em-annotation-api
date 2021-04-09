@@ -169,7 +169,7 @@ public class BookmarkResource {
         if (page.hasContent()) {
             return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         } else {
-            throw new EmptyResponseException("Could not find bookmarks for this document id#" + documentId);
+            return ResponseEntity.notFound().build();
         }
     }
 
