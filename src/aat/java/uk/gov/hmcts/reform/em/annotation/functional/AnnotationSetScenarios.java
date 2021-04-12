@@ -106,7 +106,7 @@ public class AnnotationSetScenarios {
         final UUID annotationSetId = UUID.randomUUID();
         final UUID documentId = UUID.randomUUID();
         final ValidatableResponse response = createAnnotationSet(annotationSetId, documentId);
-        final JSONObject annotationSet = extractJSONObjectFromResponse(response);
+        final JSONObject annotationSet = extractJsonObjectFromResponse(response);
         final String id = annotationSet.getString("id");
 
         request
@@ -168,7 +168,7 @@ public class AnnotationSetScenarios {
         final UUID annotationSetId = UUID.randomUUID();
         final UUID documentId = UUID.randomUUID();
         final ValidatableResponse response = createAnnotationSet(annotationSetId, documentId);
-        final JSONObject annotationSet = extractJSONObjectFromResponse(response);
+        final JSONObject annotationSet = extractJsonObjectFromResponse(response);
         final UUID newDocumentId = UUID.randomUUID();
         annotationSet.put("documentId", newDocumentId);
 
@@ -187,7 +187,7 @@ public class AnnotationSetScenarios {
         final UUID annotationSetId = UUID.randomUUID();
         final UUID documentId = UUID.randomUUID();
         final ValidatableResponse response = createAnnotationSet(annotationSetId, documentId);
-        final JSONObject annotationSet = extractJSONObjectFromResponse(response);
+        final JSONObject annotationSet = extractJsonObjectFromResponse(response);
         annotationSet.remove("id");
 
         request
@@ -203,7 +203,7 @@ public class AnnotationSetScenarios {
         final UUID annotationSetId = UUID.randomUUID();
         final UUID documentId = UUID.randomUUID();
         final ValidatableResponse response = createAnnotationSet(annotationSetId, documentId);
-        final JSONObject annotationSet = extractJSONObjectFromResponse(response);
+        final JSONObject annotationSet = extractJsonObjectFromResponse(response);
         final UUID newDocumentId = UUID.randomUUID();
         annotationSet.put("documentId", newDocumentId);
 
@@ -220,7 +220,7 @@ public class AnnotationSetScenarios {
         final UUID annotationSetId = UUID.randomUUID();
         final UUID documentId = UUID.randomUUID();
         final ValidatableResponse response = createAnnotationSet(annotationSetId, documentId);
-        final String id = extractJSONObjectFromResponse(response).getString("id");
+        final String id = extractJsonObjectFromResponse(response).getString("id");
         final ValidatableResponse deletedResponse = deleteAnnotationSetById(id);
 
         deletedResponse.statusCode(200);
@@ -249,8 +249,8 @@ public class AnnotationSetScenarios {
         final UUID documentId = UUID.randomUUID();
         final UUID newDocumentId = UUID.randomUUID();
         final ValidatableResponse response = createAnnotationSet(annotationSetId, documentId);
-        final String id = extractJSONObjectFromResponse(response).getString("id");
-        final JSONObject annotationSet = extractJSONObjectFromResponse(response);
+        final String id = extractJsonObjectFromResponse(response).getString("id");
+        final JSONObject annotationSet = extractJsonObjectFromResponse(response);
         deleteAnnotationSetById(id).statusCode(200);
 
         annotationSet.put("documentId", newDocumentId);
@@ -295,7 +295,7 @@ public class AnnotationSetScenarios {
 
 
     @NotNull
-    private JSONObject extractJSONObjectFromResponse(final ValidatableResponse response) {
+    private JSONObject extractJsonObjectFromResponse(final ValidatableResponse response) {
         return response.extract().response().as(JSONObject.class);
     }
 

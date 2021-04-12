@@ -135,7 +135,7 @@ public class BookmarkScenarios {
                         .then()
                         .statusCode(201);
 
-        final JSONObject newJsonObject = extractJSONObjectFromResponse(response);
+        final JSONObject newJsonObject = extractJsonObjectFromResponse(response);
         final String documentId = newJsonObject.getString("documentId");
 
         request
@@ -173,7 +173,7 @@ public class BookmarkScenarios {
     public void shouldReturn200WhenUpdateBookmark() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
-        final JSONObject jsonObject = extractJSONObjectFromResponse(response);
+        final JSONObject jsonObject = extractJsonObjectFromResponse(response);
         jsonObject.put("name", "new name");
 
         request
@@ -197,7 +197,7 @@ public class BookmarkScenarios {
     public void shouldReturn400WhenUpdateBookmarkWithBadRequestPayload() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
-        final JSONObject jsonObject = extractJSONObjectFromResponse(response);
+        final JSONObject jsonObject = extractJsonObjectFromResponse(response);
         jsonObject.remove("id");
 
         request
@@ -212,7 +212,7 @@ public class BookmarkScenarios {
     public void shouldReturn401WhenUnAuthenticatedUserUpdateBookmark() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
-        final JSONObject jsonObject = extractJSONObjectFromResponse(response);
+        final JSONObject jsonObject = extractJsonObjectFromResponse(response);
 
         unAuthenticatedRequest
                 .body(jsonObject.toString())
@@ -226,7 +226,7 @@ public class BookmarkScenarios {
     public void shouldReturn500WhenUpdateBookmarkWithoutMandatoryField() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
-        final JSONObject jsonObject = extractJSONObjectFromResponse(response);
+        final JSONObject jsonObject = extractJsonObjectFromResponse(response);
         jsonObject.remove("name");
         request
                 .body(jsonObject.toString())
@@ -240,11 +240,11 @@ public class BookmarkScenarios {
     public void shouldReturn200WhenUpdateMultipleBookmarks() {
         final UUID bookmarkId1 = UUID.randomUUID();
         final ValidatableResponse response1 = createBookmark(bookmarkId1);
-        final JSONObject jsonObject1 = extractJSONObjectFromResponse(response1);
+        final JSONObject jsonObject1 = extractJsonObjectFromResponse(response1);
 
         final UUID bookmarkId2 = UUID.randomUUID();
         final ValidatableResponse response2 = createBookmark(bookmarkId2);
-        final JSONObject jsonObject2 = extractJSONObjectFromResponse(response2);
+        final JSONObject jsonObject2 = extractJsonObjectFromResponse(response2);
 
         final JSONArray jsonArray = new JSONArray();
 
@@ -269,7 +269,7 @@ public class BookmarkScenarios {
     public void shouldReturn400WhenUpdateMultipleBookmarksWithBadRequestPayload() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
-        final JSONObject jsonObject = extractJSONObjectFromResponse(response);
+        final JSONObject jsonObject = extractJsonObjectFromResponse(response);
         final JSONArray jsonArray = new JSONArray();
         jsonObject.remove("id");
         jsonArray.put(jsonObject);
@@ -286,7 +286,7 @@ public class BookmarkScenarios {
     public void shouldReturn401WhenUnAuthenticatedUserUpdateMultipleBookmarks() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
-        final JSONObject jsonObject = extractJSONObjectFromResponse(response);
+        final JSONObject jsonObject = extractJsonObjectFromResponse(response);
         final JSONArray jsonArray = new JSONArray();
         jsonArray.put(jsonObject);
 
@@ -302,7 +302,7 @@ public class BookmarkScenarios {
     public void shouldReturn500WhenUpdateMultipleBookmarksWithoutMandatoryField() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
-        final JSONObject jsonObject = extractJSONObjectFromResponse(response);
+        final JSONObject jsonObject = extractJsonObjectFromResponse(response);
         jsonObject.remove("name");
         final JSONArray jsonArray = new JSONArray();
         jsonArray.put(jsonObject);
@@ -319,7 +319,7 @@ public class BookmarkScenarios {
     public void shouldReturn200WhenDeleteBookmarkById() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
-        final JSONObject jsonObject = extractJSONObjectFromResponse(response);
+        final JSONObject jsonObject = extractJsonObjectFromResponse(response);
         final String id = jsonObject.getString("id");
         request
                 .delete(String.format("/api/bookmarks/%s", id))
@@ -350,11 +350,11 @@ public class BookmarkScenarios {
     public void shouldReturn200WhenDeleteMultipleBookmarks() {
         final UUID bookmarkId1 = UUID.randomUUID();
         final ValidatableResponse response1 = createBookmark(bookmarkId1);
-        final JSONObject jsonObject1 = extractJSONObjectFromResponse(response1);
+        final JSONObject jsonObject1 = extractJsonObjectFromResponse(response1);
 
         final UUID bookmarkId2 = UUID.randomUUID();
         final ValidatableResponse response2 = createBookmark(bookmarkId2);
-        final JSONObject jsonObject2 = extractJSONObjectFromResponse(response2);
+        final JSONObject jsonObject2 = extractJsonObjectFromResponse(response2);
 
         final JSONObject deleteBookmarkRequest = new JSONObject();
         final JSONArray jsonArray = new JSONArray();
@@ -432,7 +432,7 @@ public class BookmarkScenarios {
     }
 
     @NotNull
-    private JSONObject extractJSONObjectFromResponse(final ValidatableResponse response) {
+    private JSONObject extractJsonObjectFromResponse(final ValidatableResponse response) {
         return response.extract().response().as(JSONObject.class);
     }
 }
