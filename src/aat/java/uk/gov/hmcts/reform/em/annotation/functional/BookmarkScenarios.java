@@ -20,9 +20,12 @@ import uk.gov.hmcts.reform.em.EmTestConfig;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
+import java.util.Arrays;
 import java.util.UUID;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SpringBootTest(classes = {TestUtil.class, EmTestConfig.class})
@@ -120,11 +123,40 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn204WhenResponseBodyIsEmptyForGivenDocId() {
+    public void shouldReturn200WhenGetAllBookmarksByDocumentId() {
+        final UUID bookmarkId = UUID.randomUUID();
+        final JSONObject jsonObject = createBookmarkRequestPayload(bookmarkId);
+        jsonObject.remove("createdBy");
+
+        final ValidatableResponse response =
+                request.log().all()
+                        .body(jsonObject.toString())
+                        .post("/api/bookmarks")
+                        .then()
+                        .statusCode(201);
+
+        final JSONObject newJsonObject = extractJSONObjectFromResponse(response);
+        final String documentId = newJsonObject.getString("documentId");
+
+        request
+                .get(String.format("/api/%s/bookmarks", documentId))
+                .then()
+                .statusCode(200)
+                .body("id", equalTo(Arrays.asList(bookmarkId.toString())))
+                .body("documentId", equalTo(Arrays.asList(documentId)))
+                .body("name", equalTo(Arrays.asList("Bookmark for test")))
+                .body("pageNumber", equalTo(Arrays.asList(1)))
+                .body("xCoordinate", equalTo(Arrays.asList(100.00f)))
+                .body("yCoordinate", equalTo(Arrays.asList(100.00f)))
+                .log().all();
+    }
+
+    @Test
+    public void shouldReturn404WhenResponseBodyIsEmptyForGivenDocId() {
         request
                 .get(String.format("/api/%s/bookmarks", UUID.randomUUID()))
                 .then()
-                .statusCode(204)
+                .statusCode(404)
                 .log().all();
     }
 

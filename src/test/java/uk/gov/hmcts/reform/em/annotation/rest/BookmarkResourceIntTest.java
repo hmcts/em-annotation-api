@@ -271,12 +271,12 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void getBookmarksByDocumentIdNoContent() throws Exception {
+    public void getBookmarksByDocumentIdNotFound() throws Exception {
         bookmark = bookmarkRepository.saveAndFlush(bookmark);
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("fabio"));
 
         restLogoutMockMvc.perform(get("/api/" + bookmark.getDocumentId() + "/bookmarks"))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNotFound());
     }
 
     @Test
