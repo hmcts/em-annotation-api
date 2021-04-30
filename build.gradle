@@ -358,8 +358,8 @@ configurations {
 
 checkstyle {
     maxWarnings = 10
+    ignoreFailures = true
     toolVersion = '8.12'
-    sourceSets = [sourceSets.aat,sourceSets.contractTest]
     reportsDir = file("$project.buildDir/reports/checkstyle")
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     configDir = new File(rootDir, 'config/checkstyle')
