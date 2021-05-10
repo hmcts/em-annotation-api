@@ -157,8 +157,7 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.logging
     compile group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.logging
     compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.logging
-    compile group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version:'0.1.0'
-    
+        
     compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"
 
     compile group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
