@@ -232,6 +232,28 @@ dependencyManagement {
         dependencySet(group: 'commons-io', version: '2.8.0') {
           entry 'commons-io'
         }
+
+        // Do not change - START
+        // Changing below will break Serenity Report generation
+        dependencySet(group: 'junit', version: '4.13') {
+            entry 'junit'
+        }
+
+        dependencySet(group: 'org.junit.jupiter', version: '5.6.3') {
+            entry 'junit-jupiter'
+            entry 'junit-jupiter-api'
+            entry 'junit-jupiter-params'
+        }
+
+        dependencySet(group: 'org.junit.vintage', version: '5.6.2') {
+            entry 'junit-vintage-engine'
+        }
+
+        dependencySet(group: 'net.bytebuddy', version: '1.10.14') {
+            entry 'byte-buddy'
+            entry 'byte-buddy-agent'
+        }
+        // Do not change - END
     }
 }
 
