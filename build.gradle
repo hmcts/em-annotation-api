@@ -182,7 +182,7 @@ dependencies {
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
     testCompile 'com.warrenstrange:googleauth:1.5.0'
 
-    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.6.3'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.7.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.3'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.3'
 
@@ -244,7 +244,7 @@ dependencyManagement {
             entry 'junit-jupiter-params'
         }
 
-        dependencySet(group: 'org.junit.vintage', version: '5.6.2') {
+        dependencySet(group: 'org.junit.vintage', version: '5.7.2') {
             entry 'junit-vintage-engine'
         }
 
