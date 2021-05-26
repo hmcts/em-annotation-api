@@ -57,7 +57,6 @@ public class CommentResource {
             @ApiResponse(code = 403, message = "Forbidden"),
     })
     @PostMapping("/comments")
-    //@Timed
     public ResponseEntity<CommentDTO> createComment(@Valid @RequestBody CommentDTO commentDTO) throws URISyntaxException {
         log.debug("REST request to save Comment : {}", commentDTO);
         if (commentDTO.getId() == null) {
@@ -88,7 +87,6 @@ public class CommentResource {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @PutMapping("/comments")
-    //@Timed
     public ResponseEntity<CommentDTO> updateComment(@Valid @RequestBody CommentDTO commentDTO) throws URISyntaxException {
         log.debug("REST request to update Comment : {}", commentDTO);
         if (commentDTO.getId() == null) {
@@ -114,7 +112,6 @@ public class CommentResource {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @GetMapping("/comments")
-    //@Timed
     public ResponseEntity<List<CommentDTO>> getAllComments(Pageable pageable) {
         log.debug("REST request to get a page of Comments");
         Page<CommentDTO> page = commentService.findAll(pageable);
@@ -136,7 +133,6 @@ public class CommentResource {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @GetMapping("/comments/{id}")
-    //@Timed
     public ResponseEntity<CommentDTO> getComment(@PathVariable UUID id) {
         log.debug("REST request to get Comment : {}", id);
         Optional<CommentDTO> commentDTO = commentService.findOne(id);
@@ -157,7 +153,6 @@ public class CommentResource {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @DeleteMapping("/comments/{id}")
-    //@Timed
     public ResponseEntity<Void> deleteComment(@PathVariable UUID id) {
         log.debug("REST request to delete Comment : {}", id);
         try {

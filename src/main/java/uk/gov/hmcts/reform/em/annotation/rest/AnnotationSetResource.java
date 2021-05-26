@@ -57,7 +57,6 @@ public class AnnotationSetResource {
             @ApiResponse(code = 403, message = "Forbidden"),
     })
     @PostMapping("/annotation-sets")
-    //@Timed
     public ResponseEntity<AnnotationSetDTO> createAnnotationSet(@RequestBody AnnotationSetDTO annotationSetDTO) throws URISyntaxException {
         log.debug("REST request to save AnnotationSet : {}", annotationSetDTO);
         if (annotationSetDTO.getId() == null) {
@@ -92,7 +91,6 @@ public class AnnotationSetResource {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @PutMapping("/annotation-sets")
-    //@Timed
     public ResponseEntity<AnnotationSetDTO> updateAnnotationSet(@RequestBody AnnotationSetDTO annotationSetDTO) throws URISyntaxException {
         log.debug("REST request to update AnnotationSet : {}", annotationSetDTO);
         if (annotationSetDTO.getId() == null) {
@@ -118,7 +116,6 @@ public class AnnotationSetResource {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @GetMapping("/annotation-sets")
-    //@Timed
     public ResponseEntity<List<AnnotationSetDTO>> getAllAnnotationSets(Pageable pageable) {
         log.debug("REST request to get a page of AnnotationSets");
         Page<AnnotationSetDTO> page = annotationSetService.findAll(pageable);
@@ -141,7 +138,6 @@ public class AnnotationSetResource {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @GetMapping("/annotation-sets/{id}")
-    //@Timed
     public ResponseEntity<AnnotationSetDTO> getAnnotationSet(@PathVariable UUID id) {
         log.debug("REST request to get AnnotationSet : {}", id);
         Optional<AnnotationSetDTO> annotationSetDTO = annotationSetService.findOne(id);
@@ -162,7 +158,6 @@ public class AnnotationSetResource {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @DeleteMapping("/annotation-sets/{id}")
-    //@Timed
     public ResponseEntity<Void> deleteAnnotationSet(@PathVariable UUID id) {
         log.debug("REST request to delete AnnotationSet : {}", id);
         try {

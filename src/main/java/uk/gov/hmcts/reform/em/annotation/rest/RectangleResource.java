@@ -69,7 +69,6 @@ public class RectangleResource {
         @ApiResponse(code = 403, message = "Forbidden"),
     })
     @PostMapping("/rectangles")
-    //@Timed
     public ResponseEntity<RectangleDTO> createRectangle(@RequestBody RectangleDTO rectangleDTO)
         throws URISyntaxException {
         log.debug("REST request to save Rectangle : {}", rectangleDTO);
@@ -111,7 +110,6 @@ public class RectangleResource {
         @ApiResponse(code = 404, message = "Not Found"),
     })
     @PutMapping("/rectangles")
-    //@Timed
     public ResponseEntity<RectangleDTO> updateRectangle(@RequestBody RectangleDTO rectangleDTO)
         throws URISyntaxException {
         log.debug("REST request to update Rectangle : {}", rectangleDTO);
@@ -138,7 +136,6 @@ public class RectangleResource {
         @ApiResponse(code = 404, message = "Not Found"),
     })
     @GetMapping("/rectangles")
-    //@Timed
     public ResponseEntity<List<RectangleDTO>> getAllRectangles(Pageable pageable) {
         log.debug("REST request to get a page of Rectangles");
         Page<RectangleDTO> page = rectangleService.findAll(pageable);
@@ -160,7 +157,6 @@ public class RectangleResource {
         @ApiResponse(code = 404, message = "Not Found"),
     })
     @GetMapping("/rectangles/{id}")
-    //@Timed
     public ResponseEntity<RectangleDTO> getRectangle(@PathVariable UUID id) {
         log.debug("REST request to get Rectangle : {}", id);
         Optional<RectangleDTO> rectangleDTO = rectangleService.findOne(id);
@@ -181,7 +177,6 @@ public class RectangleResource {
         @ApiResponse(code = 404, message = "Not Found"),
     })
     @DeleteMapping("/rectangles/{id}")
-    //@Timed
     public ResponseEntity<Void> deleteRectangle(@PathVariable UUID id) {
         log.debug("REST request to delete Rectangle : {}", id);
         try {
