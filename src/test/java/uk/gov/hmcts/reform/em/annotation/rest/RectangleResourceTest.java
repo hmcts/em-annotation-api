@@ -1,12 +1,5 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.any;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -18,11 +11,19 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
 import uk.gov.hmcts.reform.em.annotation.rest.errors.BadRequestAlertException;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
 import uk.gov.hmcts.reform.em.annotation.service.RectangleService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.RectangleDTO;
+
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
@@ -34,6 +35,9 @@ class RectangleResourceTest {
 
     @Mock
     private RectangleService rectangleService;
+
+    @Mock
+    private WebDataBinder webDataBinder;
 
     @InjectMocks
     private RectangleResource rectangleResource;
@@ -135,6 +139,12 @@ class RectangleResourceTest {
         } catch (BadRequestAlertException badRequestAlertException) {
             fail("This is not the expected exception for this test");
         }
+    }
+
+    @Test
+    public void testInitBinder() {
+        rectangleResource.initBinder(webDataBinder);
+        Mockito.verify(webDataBinder, Mockito.atLeast(1)).setDisallowedFields(Mockito.anyString());
     }
 
     private RectangleDTO createRectangleDTO() {

@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
 import uk.gov.hmcts.reform.em.annotation.service.MetadataService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.MetadataDto;
 
@@ -22,6 +23,9 @@ public class MetaDataResourceTest {
 
     @Mock
     private MetadataService metadataService;
+
+    @Mock
+    private WebDataBinder webDataBinder;
 
     private UUID documentId =  UUID.randomUUID();
 
@@ -83,6 +87,12 @@ public class MetaDataResourceTest {
         Assert.assertNull(responseEntity.getBody());
 
         Mockito.verify(metadataService, Mockito.atLeast(1)).findByDocumentId(metadataDto.getDocumentId());
+    }
+
+    @Test
+    public void testInitBinder() {
+        metaDataResource.initBinder(webDataBinder);
+        Mockito.verify(webDataBinder, Mockito.atLeast(1)).setDisallowedFields(Mockito.anyString());
     }
 
     private MetadataDto createMetadataDto() {

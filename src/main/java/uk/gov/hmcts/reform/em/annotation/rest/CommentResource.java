@@ -11,7 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import uk.gov.hmcts.reform.em.annotation.config.Constants;
 import uk.gov.hmcts.reform.em.annotation.rest.errors.BadRequestAlertException;
 import uk.gov.hmcts.reform.em.annotation.rest.util.HeaderUtil;
 import uk.gov.hmcts.reform.em.annotation.rest.util.PaginationUtil;
@@ -40,6 +42,12 @@ public class CommentResource {
 
     public CommentResource(CommentService commentService) {
         this.commentService = commentService;
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder)
+    {
+        binder.setDisallowedFields(Constants.IS_ADMIN);
     }
 
     /**
