@@ -117,7 +117,7 @@ dependencies {
 
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.0.2'
     
-    compile ('org.springframework.cloud:spring-cloud-openfeign:3.0.2') {
+    compile ('org.springframework.cloud:spring-cloud-openfeign:3.0.3') {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-actuator'
     }
 
