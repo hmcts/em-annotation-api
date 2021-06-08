@@ -50,6 +50,7 @@ repositories {
     maven {
         url 'https://repo.spring.io/libs-snapshot'
     }
+    maven { url 'https://jitpack.io' }
 }
 
 def versions = [
@@ -208,7 +209,7 @@ dependencies {
     contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.6.3")
     contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.6.3')
 
-    aatCompile "uk.gov.hmcts.reform:em-test-helper:1.18.1", withoutStuff
+    aatCompile 'com.github.hmcts:em-test-helper:1.18.2'
 
     contractTestCompile sourceSets.main.runtimeClasspath
     contractTestCompile sourceSets.test.runtimeClasspath
