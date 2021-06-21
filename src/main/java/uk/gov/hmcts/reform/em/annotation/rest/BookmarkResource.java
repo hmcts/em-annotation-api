@@ -28,11 +28,11 @@ import uk.gov.hmcts.reform.em.annotation.rest.util.PaginationUtil;
 import uk.gov.hmcts.reform.em.annotation.service.BookmarkService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.BookmarkDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.DeleteBookmarkDTO;
+import uk.gov.hmcts.reform.em.annotation.service.util.StringUtilities;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -137,22 +137,23 @@ public class BookmarkResource {
     @PutMapping("/bookmarks_multiple")
     public ResponseEntity<List<BookmarkDTO>> updateMultipleBookmarks(
         @Valid @RequestBody List<BookmarkDTO> bookmarkDTOList) {
-        log.debug("REST request to update list of Bookmark objects : {}", bookmarkDTOList);
 
         if (bookmarkDTOList.stream().anyMatch(bookmark -> bookmark.getId() == null)) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+
+        List<UUID> sanitisedList = StringUtilities.convertValidLogUUID(bookmarkDTOList.stream()
+            .map(BookmarkDTO::getId)
+            .collect(Collectors.toList()));
+
+        log.debug("REST request to update list of Bookmark objects : {}", sanitisedList);
 
         List<BookmarkDTO> result = bookmarkDTOList.stream()
             .map(bookmarkService::save)
             .collect(Collectors.toList());
 
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME,
-                bookmarkDTOList.stream()
-                    .map(BookmarkDTO::getId)
-                    .collect(Collectors.toList())
-                    .toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME,sanitisedList.toString()))
             .body(result);
     }
 
@@ -222,11 +223,14 @@ public class BookmarkResource {
     })
     @DeleteMapping("/bookmarks_multiple")
     public ResponseEntity<Void> deleteMultipleBookmarks(@Valid @RequestBody DeleteBookmarkDTO deleteBookmarkDTO) {
-        log.debug("REST request to delete list of Bookmark objects : {}", deleteBookmarkDTO.getDeleted());
 
         if (deleteBookmarkDTO.getDeleted().stream().anyMatch(Objects::isNull)) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+
+        List<UUID> sanitisedList = StringUtilities.convertValidLogUUID(deleteBookmarkDTO.getDeleted());
+
+        log.debug("REST request to delete list of Bookmark objects : {}", sanitisedList);
 
         UUID idToBeDeleted = null;
         try {
@@ -247,9 +251,7 @@ public class BookmarkResource {
 
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityDeletionAlert(
-                ENTITY_NAME,
-                new ArrayList<>(deleteBookmarkDTO.getDeleted())
-                    .toString()))
+                ENTITY_NAME, sanitisedList.toString()))
             .build();
     }
 }
