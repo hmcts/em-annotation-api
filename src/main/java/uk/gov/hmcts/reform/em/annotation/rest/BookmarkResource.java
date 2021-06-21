@@ -236,11 +236,13 @@ public class BookmarkResource {
         Optional<UUID> idToBeDeleted = Optional.empty();
         try {
             for (UUID id : deleteBookmarkDTO.getDeleted()) {
-                idToBeDeleted = Optional.of(id);
+                idToBeDeleted = Optional.ofNullable(id);
                 bookmarkService.delete(id);
             }
         } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
-            log.debug("The Delete ID is not Found " + idToBeDeleted.get());
+            if (idToBeDeleted.isPresent()) {
+                log.debug("The Delete ID is not Found " + idToBeDeleted.get());
+            }
             return ResponseEntity
                 .notFound()
                 .build();
