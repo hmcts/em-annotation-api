@@ -40,20 +40,20 @@ public class StringUtilities {
     public static List<String> convertValidLogString(List<String> logs) {
         if (CollectionUtils.isNotEmpty(logs)) {
             return logs.stream()
-                .map(text -> convertValidLogString(text))
+                .map(StringUtilities:: convertValidLogString)
                 .collect(Collectors.toList());
         } else {
-            return new ArrayList<String>();
+            return new ArrayList<>();
         }
     }
 
     public static List<UUID> convertValidLogUUID(List<UUID> logs) {
         if (CollectionUtils.isNotEmpty(logs)) {
             return logs.stream()
-                .map(text -> convertValidLogUUID(text))
+                .map(StringUtilities:: convertValidLogUUID)
                 .collect(Collectors.toList());
         } else {
-            return new ArrayList<UUID>();
+            return new ArrayList<>();
         }
     }
 }

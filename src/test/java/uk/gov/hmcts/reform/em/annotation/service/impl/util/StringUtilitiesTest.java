@@ -2,15 +2,14 @@ package uk.gov.hmcts.reform.em.annotation.service.impl.util;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.em.annotation.service.util.StringUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
-@RunWith(SpringRunner.class)
+
 public class StringUtilitiesTest {
 
     @Test
@@ -38,5 +37,10 @@ public class StringUtilitiesTest {
 
         Assert.assertEquals(initialList.size(), sanitisedList.size());
         Assert.assertEquals(safeLogStr, sanitisedList.get(0));
+    }
+
+    @Test
+    public void convertValidLogEmptyListUUID() {
+        Assert.assertNotNull(StringUtilities.convertValidLogUUID(new ArrayList<UUID>()));
     }
 }

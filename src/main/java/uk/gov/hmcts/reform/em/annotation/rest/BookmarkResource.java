@@ -33,7 +33,6 @@ import uk.gov.hmcts.reform.em.annotation.service.util.StringUtilities;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
