@@ -35,6 +35,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -232,14 +233,16 @@ public class BookmarkResource {
 
         log.debug("REST request to delete list of Bookmark objects : {}", sanitisedList);
 
-        UUID idToBeDeleted = null;
+        Optional<UUID> idToBeDeleted = Optional.empty();
         try {
             for (UUID id : deleteBookmarkDTO.getDeleted()) {
-                idToBeDeleted = id;
+                idToBeDeleted = Optional.ofNullable(id);
                 bookmarkService.delete(id);
             }
         } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
-            log.debug("The Delete ID is not Found" + idToBeDeleted);
+            if (idToBeDeleted.isPresent()) {
+                log.debug("The Delete ID is not Found : {}", idToBeDeleted.get());
+            }
             return ResponseEntity
                 .notFound()
                 .build();
