@@ -241,7 +241,7 @@ public class BookmarkResource {
             }
         } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
             if (idToBeDeleted.isPresent()) {
-                log.debug("The Delete ID is not Found " + idToBeDeleted.get());
+                log.debug("The Delete ID is not Found : {}", idToBeDeleted.get());
             }
             return ResponseEntity
                 .notFound()
