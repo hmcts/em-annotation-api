@@ -7,7 +7,6 @@ import uk.gov.hmcts.reform.em.annotation.service.util.StringUtilities;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 
 public class StringUtilitiesTest {
@@ -22,7 +21,7 @@ public class StringUtilitiesTest {
 
     @Test
     public void convertValidLogEmptyList() {
-        Assert.assertNotNull(StringUtilities.convertValidLogString(new ArrayList<String>()));
+        Assert.assertNotNull(StringUtilities.convertValidLogString(new ArrayList<>()));
     }
 
     @Test
@@ -41,6 +40,6 @@ public class StringUtilitiesTest {
 
     @Test
     public void convertValidLogEmptyListUUID() {
-        Assert.assertNotNull(StringUtilities.convertValidLogUUID(new ArrayList<UUID>()));
+        Assert.assertNotNull(StringUtilities.convertValidLogUUID(new ArrayList<>()));
     }
 }
