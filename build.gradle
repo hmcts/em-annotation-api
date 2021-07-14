@@ -199,9 +199,7 @@ dependencies {
     testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
 
-    testCompile ('com.github.hmcts:fortify-client:1.0.1') {
-        exclude group: 'org.slf4j'
-    }
+    testCompile 'com.github.hmcts:fortify-client:1.1.0.patch-1.1:all'
 
     contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit', version: versions.pact_version, withoutAlpnApi
     contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit5', version: versions.pact_version, withoutAlpnApi
