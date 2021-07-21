@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.hmcts.reform.auth.parser.idam.core.user.token.HttpComponentsBasedUserTokenParser;
 import uk.gov.hmcts.reform.auth.parser.idam.core.user.token.UserTokenParser;
+import uk.gov.hmcts.reform.authorisation.ServiceAuthorisationApi;
+import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
+import uk.gov.hmcts.reform.authorisation.validators.ServiceAuthTokenValidator;
 import uk.gov.hmcts.reform.em.annotation.authchecker.EmUserTokenDetails;
 
 @Configuration
@@ -17,4 +20,8 @@ public class EmSecurityConfiguration {
         return new HttpComponentsBasedUserTokenParser<>(userTokenParserHttpClient, baseUrl, EmUserTokenDetails.class);
     }
 
+    @Bean
+    public AuthTokenValidator authTokenValidator(final ServiceAuthorisationApi serviceAuthorisationApi) {
+        return new ServiceAuthTokenValidator(serviceAuthorisationApi);
+    }
 }
