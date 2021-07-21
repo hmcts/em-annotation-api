@@ -42,14 +42,8 @@ configurations {
 }
 
 repositories {
-    maven { url "https://dl.bintray.com/hmcts/hmcts-maven" }
-    maven { url "https://repo.spring.io/snapshot" }
-    maven { url "https://repo.spring.io/milestone" }
     jcenter()
     mavenLocal()
-    maven {
-        url 'https://repo.spring.io/libs-snapshot'
-    }
     maven { url 'https://jitpack.io' }
 }
 
@@ -92,10 +86,13 @@ sourceSets {
     }
 }
 
+configurations.all {
+    exclude module: 'com.vaadin.external.google'
+}
+
 dependencies {
 
     def withoutStuff = {
-        exclude group: 'com.vaadin.external.google', module: 'android-json'
         exclude group: 'com.sun.xml.bind', module: 'jaxb-osgi'
         exclude group: 'uk.gov.hmcts.reform', module: 'java-logging-spring'
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
