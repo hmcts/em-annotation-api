@@ -87,7 +87,7 @@ sourceSets {
 }
 
 configurations.all {
-    exclude module: 'com.vaadin.external.google'
+    exclude group: 'com.vaadin.external.google',module: 'android-json'
 }
 
 dependencies {
@@ -469,7 +469,7 @@ serenity {
 }
 
 dependencyCheck {
-    suppressionFile = 'dependency-check-suppressions.xml'
+    suppressionFile = 'config/owasp/dependency-check-suppressions.xml'
 }
 
 compileJava.dependsOn processResources
