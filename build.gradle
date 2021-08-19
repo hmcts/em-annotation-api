@@ -87,7 +87,8 @@ sourceSets {
 }
 
 configurations.all {
-    exclude module: 'com.vaadin.external.google'
+    exclude group: 'com.vaadin.external.google',module: 'android-json'
+    exclude group: 'com.nimbusds', module: 'lang-tag'
 }
 
 dependencies {
