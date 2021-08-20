@@ -373,10 +373,10 @@ configurations {
 checkstyle {
     maxWarnings = 10
     ignoreFailures = true
-    toolVersion = '8.12'
+    toolVersion = '8.29'
     reportsDir = file("$project.buildDir/reports/checkstyle")
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
-    configDir = new File(rootDir, 'config/checkstyle')
+    getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
 
 checkstyleMain.shouldRunAfter(compileJava)
