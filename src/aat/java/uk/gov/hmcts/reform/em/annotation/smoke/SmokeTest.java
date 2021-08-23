@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import uk.gov.hmcts.reform.em.EmTestConfig;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest(classes = {EmTestConfig.class})
 @RunWith(SpringIntegrationSerenityRunner.class)
 @TestPropertySource(value = "classpath:application.yml")
@@ -27,12 +29,16 @@ public class SmokeTest {
     public void testHealthEndpoint() {
 
         SerenityRest.useRelaxedHTTPSValidation();
+        assertThat(testUrl).isEqualTo("http;//");
 
         String response = SerenityRest.given()
-                .baseUri(testUrl)
-                .get("/")
-                .then()
-                .statusCode(200).extract().body().asString();
+            .baseUri(testUrl)
+            .get("/")
+            .then()
+            .statusCode(200)
+            .extract()
+            .body()
+            .asString();
 
         Assert.assertEquals(MESSAGE, response);
 
