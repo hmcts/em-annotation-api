@@ -8,7 +8,7 @@ buildscript {
 plugins {
     id 'application'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.springframework.boot' version '2.5.4'
+    id 'org.springframework.boot' version '2.4.5'
     id 'uk.gov.hmcts.java' version '0.12.12'
     id 'com.github.ben-manes.versions' version '0.39.0'
     id 'org.sonarqube' version '3.3'
@@ -37,12 +37,13 @@ targetCompatibility = 11
 mainClassName = 'uk.gov.hmcts.reform.em.annotation.Application'
 
 configurations {
-    aatCompile.extendsFrom(testCompile)
-    aatRuntime.extendsFrom(testRuntime)
+    aatImplementation.extendsFrom(testImplementation)
+    aatRuntimeOnly.extendsFrom(testRuntimeOnly)
 }
 
 repositories {
     jcenter()
+    mavenCentral()
     mavenLocal()
     maven { url 'https://jitpack.io' }
 }
@@ -198,9 +199,9 @@ dependencies {
     contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-java8', version: versions.pact_version, withoutAlpnApi
     implementation group: 'au.com.dius', name: 'pact-jvm-consumer', version: versions.pact_version, withoutAlpnApi
 
-    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
-    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
-    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.7.2')
+    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.6.3")
+    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.3")
+    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.6.3')
 
     aatImplementation group: 'org.json', name: 'json', version: '20210307'
     aatImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured, withoutStuff
@@ -209,8 +210,8 @@ dependencies {
     aatImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     aatImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
 
-    aatImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
-    aatRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
+    aatImplementation("org.junit.jupiter:junit-jupiter-api:5.6.3")
+    aatRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.3")
     aatImplementation 'com.github.hmcts:em-test-helper:1.19.1'
 
     contractTestImplementation sourceSets.main.runtimeClasspath
@@ -245,13 +246,13 @@ dependencyManagement {
             entry 'junit'
         }
 
-        dependencySet(group: 'org.junit.jupiter', version: '5.7.2') {
+        dependencySet(group: 'org.junit.jupiter', version: '5.6.3') {
             entry 'junit-jupiter'
             entry 'junit-jupiter-api'
             entry 'junit-jupiter-params'
         }
 
-        dependencySet(group: 'org.junit.vintage', version: '5.7.2') {
+        dependencySet(group: 'org.junit.vintage', version: '5.6.2') {
             entry 'junit-vintage-engine'
         }
 
@@ -267,7 +268,7 @@ dependencyManagement {
         }
 
         //CVE-2021-22118
-        dependencySet(group: 'org.springframework', version: '5.3.9') {
+        dependencySet(group: 'org.springframework', version: '5.3.8') {
             entry 'spring-aop'
             entry 'spring-aspects'
             entry 'spring-beans'
