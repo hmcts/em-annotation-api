@@ -1,7 +1,7 @@
 buildscript {
     dependencies {
-        classpath("net.serenity-bdd:serenity-gradle-plugin:2.4.34")
-        classpath("net.serenity-bdd:serenity-single-page-report:2.5.10")
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.3.13")
+        classpath("net.serenity-bdd:serenity-single-page-report:2.3.13")
     }
 }
 
@@ -57,9 +57,9 @@ def versions = [
         sonarPitest        : '0.5',
         h2                 : '1.4.197',
         liquibase          : '3.5.3',
-        serenity           : '2.5.10',
-        serenityreporter   : '2.5.10',
-        serenityRestAssured: '2.5.10',
+        serenity           : '2.3.13',
+        serenityreporter   : '2.3.13',
+        serenityRestAssured: '2.3.4',
         pact_version       : '4.0.10',
         hibernate          : '5.4.25.Final',
         logging            : '5.1.7'
@@ -107,7 +107,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
-    runtimeOnly group: 'org.springframework.cloud', name: 'spring-cloud-dependencies', version: '2020.0.3', ext: 'pom'
+
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.0.3'
 
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-openfeign', version: '3.0.3'
