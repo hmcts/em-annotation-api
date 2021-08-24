@@ -121,8 +121,8 @@ dependencies {
     implementation group:'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
     implementation group:'com.fasterxml.jackson.module', name: 'jackson-module-afterburner', version: versions.fasterXmlJackson
     implementation group:'com.fasterxml.jackson.module', name: 'jackson-module-jaxb-annotations', version: versions.fasterXmlJackson
-    
-    
+
+    implementation group: 'javax.el', name: 'javax.el-api', version: '3.0.0'
     implementation "org.zalando:problem-spring-web:0.26.2"
     implementation("io.springfox:springfox-swagger2:${versions.springfoxSwagger}")
     implementation("io.springfox:springfox-swagger-ui:${versions.springfoxSwagger}")
@@ -242,10 +242,6 @@ dependencyManagement {
 
         // Do not change - START
         // Changing below will break Serenity Report generation
-        dependencySet(group: 'junit', version: '4.13') {
-            entry 'junit'
-        }
-
         dependencySet(group: 'org.junit.jupiter', version: '5.6.3') {
             entry 'junit-jupiter'
             entry 'junit-jupiter-api'
