@@ -37,12 +37,13 @@ targetCompatibility = 11
 mainClassName = 'uk.gov.hmcts.reform.em.annotation.Application'
 
 configurations {
-    aatCompile.extendsFrom(testCompile)
-    aatRuntime.extendsFrom(testRuntime)
+    aatImplementation.extendsFrom(testImplementation)
+    aatRuntimeOnly.extendsFrom(testRuntimeOnly)
 }
 
 repositories {
     jcenter()
+    mavenCentral()
     mavenLocal()
     maven { url 'https://jitpack.io' }
 }
@@ -70,19 +71,13 @@ sourceSets {
         java {
             compileClasspath += main.output
             runtimeClasspath += main.output
-            srcDir('src/aat/java')
-        }
-        resources {
-            srcDir('src/aat/resources')
         }
     }
     contractTest {
         java {
             compileClasspath += main.output
             runtimeClasspath += main.output
-            srcDir file('src/contractTest/java')
         }
-        resources.srcDir file('src/contactTest/resources')
     }
 }
 
@@ -95,125 +90,129 @@ dependencies {
     def withoutStuff = {
         exclude group: 'com.sun.xml.bind', module: 'jaxb-osgi'
         exclude group: 'uk.gov.hmcts.reform', module: 'java-logging-spring'
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-test'
     }
 
     def withoutAlpnApi = {
         exclude group: 'org.eclipse.jetty.alpn', module: 'alpn-api'
     }
 
-    compile(
-            "org.springframework.boot:spring-boot:2.4.5",
-            "org.springframework.boot:spring-boot-starter-web:2.4.5",
-            "org.springframework.boot:spring-boot-starter-actuator:2.4.5",
-            "org.springframework.boot:spring-boot-starter-jdbc:2.4.5",
-            "org.springframework.boot:spring-boot-starter-validation:2.4.5",
-            "org.springframework.boot:spring-boot-autoconfigure:2.4.5",
-            "org.springframework.boot:spring-boot-starter-data-jpa:2.4.5"
-    )
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
 
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.0.3'
     
-    compile ('org.springframework.cloud:spring-cloud-openfeign:3.0.3') {
+    implementation ('org.springframework.cloud:spring-cloud-openfeign:3.0.3') {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-actuator'
     }
 
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.48'
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.48'
     
-    compile group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: versions.fasterXmlJackson
-    compile group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version: versions.fasterXmlJackson
-    compile group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.fasterXmlJackson
-    compile group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate5', version: versions.fasterXmlJackson
-    compile group:'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.fasterXmlJackson
-    compile group:'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.fasterXmlJackson
-    compile group:'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
-    compile group:'com.fasterxml.jackson.module', name: 'jackson-module-afterburner', version: versions.fasterXmlJackson
-    compile group:'com.fasterxml.jackson.module', name: 'jackson-module-jaxb-annotations', version: versions.fasterXmlJackson
-    
-    
-    compile "org.zalando:problem-spring-web:0.26.2"
-    compile("io.springfox:springfox-swagger2:${versions.springfoxSwagger}")
-    compile("io.springfox:springfox-swagger-ui:${versions.springfoxSwagger}")
-    compile group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
-    compile( 'org.apache.httpcomponents:httpclient:4.5.10')
-    compile "org.liquibase:liquibase-core"
-    compile "org.liquibase:liquibase-core"
-    compile("org.postgresql:postgresql:${versions.postgresql}")
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
-    compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
-    compile group: 'commons-validator', name: 'commons-validator', version: '1.7'
-    compile "javax.transaction:javax.transaction-api"
-    compile group: 'org.ehcache', name: 'ehcache', version: '3.9.5'
+    implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: versions.fasterXmlJackson
+    implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version: versions.fasterXmlJackson
+    implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.fasterXmlJackson
+    implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate5', version: versions.fasterXmlJackson
+    implementation group:'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.fasterXmlJackson
+    implementation group:'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.fasterXmlJackson
+    implementation group:'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
+    implementation group:'com.fasterxml.jackson.module', name: 'jackson-module-afterburner', version: versions.fasterXmlJackson
+    implementation group:'com.fasterxml.jackson.module', name: 'jackson-module-jaxb-annotations', version: versions.fasterXmlJackson
 
-    compile "com.zaxxer:HikariCP:5.0.0"
+    implementation group: 'javax.el', name: 'javax.el-api', version: '3.0.0'
+    implementation "org.zalando:problem-spring-web:0.26.2"
+    implementation("io.springfox:springfox-swagger2:${versions.springfoxSwagger}")
+    implementation("io.springfox:springfox-swagger-ui:${versions.springfoxSwagger}")
+    implementation group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
+    implementation( 'org.apache.httpcomponents:httpclient:4.5.10')
+    implementation "org.liquibase:liquibase-core"
+    implementation "org.liquibase:liquibase-core"
+    implementation("org.postgresql:postgresql:${versions.postgresql}")
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
+    implementation group: 'commons-validator', name: 'commons-validator', version: '1.7'
+    implementation "javax.transaction:javax.transaction-api"
+    implementation group: 'org.ehcache', name: 'ehcache', version: '3.9.5'
+
+    implementation "com.zaxxer:HikariCP:5.0.0"
     
-    compile group:'org.hibernate', name: 'hibernate-core', version: versions.hibernate
-    compile group:'org.hibernate', name: 'hibernate-jcache', version: versions.hibernate
-    compile group:'org.hibernate', name: 'hibernate-entitymanager', version: versions.hibernate
-    compile group:'org.hibernate', name: 'hibernate-envers', version: versions.hibernate
+    implementation group:'org.hibernate', name: 'hibernate-core', version: versions.hibernate
+    implementation group:'org.hibernate', name: 'hibernate-jcache', version: versions.hibernate
+    implementation group:'org.hibernate', name: 'hibernate-entitymanager', version: versions.hibernate
+    implementation group:'org.hibernate', name: 'hibernate-envers', version: versions.hibernate
     
-    compile group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.4'
-    compile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.logging
-    compile group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.logging
-    compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.logging
+    implementation group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.4'
+    implementation group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.logging
+    implementation group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.logging
+    implementation group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.logging
         
-    compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"
+    implementation "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"
 
-    compile group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
-    compile group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: versions.springSecurity
-    compile group: 'org.springframework.security', name: 'spring-security-web', version: versions.springSecurity
-    compile group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: versions.springSecurity
-    compile group: 'org.springframework.security', name: 'spring-security-oauth2-core', version: versions.springSecurity
-    compile group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
-    compile group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-web', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-core', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
 
-    compile group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '4.0.0'
-    compile group: 'uk.gov.hmcts.reform', name: 'idam-client', version: '2.0.0'
+    implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '4.0.0'
+    implementation group: 'uk.gov.hmcts.reform', name: 'idam-client', version: '2.0.0'
 
-    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 
     annotationProcessor "org.projectlombok:lombok:1.18.20"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     annotationProcessor group:'org.hibernate', name: 'hibernate-jpamodelgen', version: versions.hibernate
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor", withoutStuff
-    testCompile "org.springframework.boot:spring-boot-starter-test", withoutStuff
-    testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
-    testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
-    testCompile 'com.warrenstrange:googleauth:1.5.0'
+    testImplementation "org.springframework.boot:spring-boot-starter-test", {
+        exclude group: 'junit', module: 'junit'
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+    testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
+    testImplementation 'com.warrenstrange:googleauth:1.5.0'
 
     testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.6.3'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.3'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.3'
 
-    testCompile "org.junit.jupiter:junit-jupiter-api:5.6.3"
-    testRuntime "org.junit.jupiter:junit-jupiter-engine:5.6.3"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.3"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.3"
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.3"
 
     //pact contract testing
 
-    testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured, withoutStuff
-    testCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity, withoutStuff
-    testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
-    testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
-    testCompile group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured, withoutStuff
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity, withoutStuff
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
 
-    testCompile 'com.github.hmcts:fortify-client:1.2.0:all'
+    testImplementation 'com.github.hmcts:fortify-client:1.2.0:all'
 
-    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit', version: versions.pact_version, withoutAlpnApi
-    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit5', version: versions.pact_version, withoutAlpnApi
-    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-consumer-java8', version: versions.pact_version, withoutAlpnApi
-    compile group: 'au.com.dius', name: 'pact-jvm-consumer', version: versions.pact_version, withoutAlpnApi
+    contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-junit', version: versions.pact_version, withoutAlpnApi
+    contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-junit5', version: versions.pact_version, withoutAlpnApi
+    contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-java8', version: versions.pact_version, withoutAlpnApi
+    implementation group: 'au.com.dius', name: 'pact-jvm-consumer', version: versions.pact_version, withoutAlpnApi
 
-    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.6.3")
-    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.6.3")
+    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.6.3")
+    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.3")
     contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.6.3')
 
-    aatCompile 'com.github.hmcts:em-test-helper:1.19.1'
+    aatImplementation("org.junit.jupiter:junit-jupiter-api:5.6.3")
+    aatRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.3")
+    aatImplementation 'com.github.hmcts:em-test-helper:1.19.1'
 
-    contractTestCompile sourceSets.main.runtimeClasspath
-    contractTestCompile sourceSets.test.runtimeClasspath
+    contractTestImplementation sourceSets.main.runtimeClasspath
+    contractTestImplementation sourceSets.test.runtimeClasspath
+}
+
+processAatResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 dependencyManagement {
@@ -236,10 +235,6 @@ dependencyManagement {
 
         // Do not change - START
         // Changing below will break Serenity Report generation
-        dependencySet(group: 'junit', version: '4.13') {
-            entry 'junit'
-        }
-
         dependencySet(group: 'org.junit.jupiter', version: '5.6.3') {
             entry 'junit-jupiter'
             entry 'junit-jupiter-api'
@@ -366,8 +361,8 @@ project.tasks['sonarqube'].group = "Verification"
 project.tasks['sonarqube'].dependsOn test, jacocoTestReport
 
 configurations {
-    contractTestCompile.extendsFrom testCompile
-    contractTestRuntime.extendsFrom testRuntime
+    contractTestImplementation.extendsFrom testImplementation
+    contractTestRuntimeOnly.extendsFrom testRuntimeOnly
 }
 
 checkstyle {
@@ -376,7 +371,7 @@ checkstyle {
     toolVersion = '8.12'
     reportsDir = file("$project.buildDir/reports/checkstyle")
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
-    configDir = new File(rootDir, 'config/checkstyle')
+    getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
 
 checkstyleMain.shouldRunAfter(compileJava)
@@ -452,7 +447,7 @@ project.ext {
     pactVersion = getCheckedOutGitCommitHash()
 }
 
-def getCheckedOutGitCommitHash() {
+static def getCheckedOutGitCommitHash() {
     'git rev-parse --verify --short HEAD'.execute().text.trim()
 }
 
