@@ -203,13 +203,6 @@ dependencies {
     contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.3")
     contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.6.3')
 
-    aatImplementation group: 'org.json', name: 'json', version: '20210307'
-    aatImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured, withoutStuff
-    aatImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity, withoutStuff
-    aatImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
-    aatImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
-    aatImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
-
     aatImplementation("org.junit.jupiter:junit-jupiter-api:5.6.3")
     aatRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.3")
     aatImplementation 'com.github.hmcts:em-test-helper:1.19.1'
