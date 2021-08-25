@@ -1,7 +1,7 @@
 buildscript {
     dependencies {
         classpath("net.serenity-bdd:serenity-gradle-plugin:2.5.8")
-        classpath("net.serenity-bdd:serenity-single-page-report:2.5.8")
+        classpath("net.serenity-bdd:serenity-single-page-report:2.5.10")
     }
 }
 
@@ -58,9 +58,9 @@ def versions = [
         sonarPitest        : '0.5',
         h2                 : '1.4.197',
         liquibase          : '3.5.3',
-        serenity           : '2.5.8',
-        serenityreporter   : '2.5.8',
-        serenityRestAssured: '2.5.8',
+        serenity           : '2.5.10',
+        serenityreporter   : '2.5.10',
+        serenityRestAssured: '2.5.10',
         pact_version       : '4.0.10',
         hibernate          : '5.5.6.Final',
         logging            : '5.1.7',
@@ -169,23 +169,17 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     annotationProcessor group:'org.hibernate', name: 'hibernate-jpamodelgen', version: versions.hibernate
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor", withoutStuff
-    testImplementation "org.springframework.boot:spring-boot-starter-test", {
-        exclude group: 'junit', module: 'junit'
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
     testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
     testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
 
     testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version:versions.junit5
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version:versions.junit5
-    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:versions.junit5
 
     //pact contract testing
 
     testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured
-    testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
-    testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
 
@@ -199,9 +193,7 @@ dependencies {
     contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version:versions.junit5
     contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:versions.junit5
 
-    aatImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured
-    aatImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version:versions.junit5
-    aatRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:versions.junit5
+    aatImplementation group: 'org.json', name: 'json', version: '20210307'
     aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version:'1.20.0'
 
     contractTestImplementation sourceSets.main.runtimeClasspath
@@ -380,7 +372,7 @@ task functional(type: Test) {
 }
 
 // Serenity Reporting
-functional.finalizedBy(aggregate)
+// functional.finalizedBy(aggregate)
 
 task smoke(type: Test) {
     group = 'Delivery pipeline'
