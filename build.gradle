@@ -205,7 +205,7 @@ dependencies {
 
     aatImplementation("org.junit.jupiter:junit-jupiter-api:5.6.3")
     aatRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.3")
-    aatImplementation 'com.github.hmcts:em-test-helper:1.19.1'
+    aatImplementation 'com.github.hmcts:em-test-helper:1.20.2'
 
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
