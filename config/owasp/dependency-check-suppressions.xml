@@ -2,5 +2,6 @@
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
     <suppress>
         <cve>CVE-2020-23171</cve>
+        <cve>CVE-2021-22119</cve>
     </suppress>
 </suppressions>
