@@ -284,7 +284,7 @@ dependencyManagement {
         }
 
         //CVE-2021-22119
-        dependencySet(group: 'org.springframework.security', version: '5.5.2') {
+        dependencySet(group: 'org.springframework.security', version: '5.4.6') {
             entry 'spring-security-crypto'
         }
     }
