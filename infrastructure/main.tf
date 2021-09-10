@@ -124,6 +124,12 @@ resource "azurerm_resource_group" "rg" {
   tags = local.tags
 }
 
+data "azurerm_subnet" "postgres" {
+  name                 = "core-infra-subnet-0-${var.env}"
+  resource_group_name  = "core-infra-${var.env}"
+  virtual_network_name = "core-infra-vnet-${var.env}"
+}
+
 module "db-v11" {
   source             = "git@github.com:hmcts/cnp-module-postgres?ref=postgresql_tf"
   product            = var.product
@@ -134,6 +140,7 @@ module "db-v11" {
   postgresql_user    = var.postgresql_user_v11
   database_name      = var.database_name_v11
   postgresql_version = "11"
+  subnet_id          = data.azurerm_subnet.postgres.id
   sku_name           = "GP_Gen5_2"
   sku_tier           = "GeneralPurpose"
   common_tags        = var.common_tags
