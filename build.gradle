@@ -177,7 +177,7 @@ dependencies {
     testImplementation 'com.warrenstrange:googleauth:1.5.0'
 
     testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.6.3'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.3'
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.3"
@@ -235,7 +235,7 @@ dependencyManagement {
 
         // Do not change - START
         // Changing below will break Serenity Report generation
-        dependencySet(group: 'org.junit.jupiter', version: '5.6.3') {
+        dependencySet(group: 'org.junit.jupiter', version: '5.8.0') {
             entry 'junit-jupiter'
             entry 'junit-jupiter-api'
             entry 'junit-jupiter-params'
