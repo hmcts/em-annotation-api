@@ -118,7 +118,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
         // Validate the Rectangle in the database
         List<Rectangle> rectangleList = rectangleRepository.findAll();
-        assertThat(rectangleList).hasSize(databaseSizeBeforeCreate );
+        assertThat(rectangleList).hasSize(databaseSizeBeforeCreate);
     }
 
     @Test

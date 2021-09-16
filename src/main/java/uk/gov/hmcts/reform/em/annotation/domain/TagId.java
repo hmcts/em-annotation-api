@@ -21,10 +21,18 @@ public class TagId implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TagId tagId = (TagId) o;
+        return Objects.equals(name, tagId.name) && Objects.equals(createdBy, tagId.createdBy);
+    }
+
+    @Override
     public String toString() {
-        return "TagId{" +
-                "name=" + name +
-                ", createdBy='" + createdBy + "'" +
-                "}";
+        return "TagId{"
+                + " name='" + name + '\''
+                + ", createdBy='" + createdBy + '\''
+                + '}';
     }
 }

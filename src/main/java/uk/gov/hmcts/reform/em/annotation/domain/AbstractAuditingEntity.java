@@ -8,9 +8,14 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uk.gov.hmcts.reform.em.annotation.config.audit.EntityAuditEventListener;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
+import javax.persistence.Column;
+import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
 
 /**
  * Base abstract class for entities which will hold definitions for created, last modified by and created,
@@ -28,7 +33,7 @@ public abstract class AbstractAuditingEntity implements Serializable {
     private String createdBy;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_by",insertable = false, updatable = false)
+    @JoinColumn(name = "created_by", insertable = false, updatable = false)
     private IdamDetails createdByDetails;
 
     @CreatedDate
@@ -40,7 +45,7 @@ public abstract class AbstractAuditingEntity implements Serializable {
     private String lastModifiedBy;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="last_modified_by",insertable = false, updatable = false)
+    @JoinColumn(name = "last_modified_by", insertable = false, updatable = false)
     private IdamDetails lastModifiedByDetails;
 
     @LastModifiedDate

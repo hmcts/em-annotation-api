@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.em.annotation.domain;
 
-
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
