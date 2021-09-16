@@ -24,17 +24,22 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.BookmarkDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.DeleteBookmarkDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.BookmarkMapper;
 
-import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Test class for the CommentResource REST controller.
@@ -73,7 +78,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Before
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         final BookmarkResource bookmarkResource = new BookmarkResource(bookmarkService);
         em.persist(new IdamDetails("system"));
         em.persist(new IdamDetails("anonymous"));
@@ -346,7 +351,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void deleteMultipleNullBookmarkId() throws Exception{
+    public void deleteMultipleNullBookmarkId() throws Exception {
         int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
         bookmark.setId(null);
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
@@ -364,7 +369,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void deleteMultipleNonExistantBookmarkId() throws Exception{
+    public void deleteMultipleNonExistantBookmarkId() throws Exception {
         int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
         bookmark.setId(UUID.randomUUID());
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
