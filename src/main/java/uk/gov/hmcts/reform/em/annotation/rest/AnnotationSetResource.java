@@ -71,6 +71,7 @@ public class AnnotationSetResource {
             @ApiResponse(code = 401, message = "Unauthorised"),
             @ApiResponse(code = 403, message = "Forbidden"),
     })
+
     @PostMapping("/annotation-sets")
     public ResponseEntity<AnnotationSetDTO> createAnnotationSet(@RequestBody AnnotationSetDTO annotationSetDTO) throws URISyntaxException {
         log.debug("REST request to save AnnotationSet : {}", annotationSetDTO);
@@ -79,7 +80,8 @@ public class AnnotationSetResource {
         }
         annotationSetService.save(annotationSetDTO);
         final URI uri = new URI("/api/annotation-sets/" + annotationSetDTO.getId());
-        return annotationSetService.findOne(annotationSetDTO.getId()).map( renderedAnnotationSet ->
+
+        return annotationSetService.findOne(annotationSetDTO.getId()).map(renderedAnnotationSet ->
                 ResponseEntity.created(uri)
                     .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, annotationSetDTO.getId().toString()))
                     .body(renderedAnnotationSet)
