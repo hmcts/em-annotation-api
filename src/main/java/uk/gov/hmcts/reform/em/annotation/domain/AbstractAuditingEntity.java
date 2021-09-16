@@ -27,8 +27,8 @@ public abstract class AbstractAuditingEntity implements Serializable {
     @Column(name = "created_by", nullable = false, length = 50, updatable = false)
     private String createdBy;
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="created_by",insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "created_by",insertable = false, updatable = false)
     private IdamDetails createdByDetails;
 
     @CreatedDate
@@ -39,7 +39,7 @@ public abstract class AbstractAuditingEntity implements Serializable {
     @Column(name = "last_modified_by", length = 50)
     private String lastModifiedBy;
 
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="last_modified_by",insertable = false, updatable = false)
     private IdamDetails lastModifiedByDetails;
 

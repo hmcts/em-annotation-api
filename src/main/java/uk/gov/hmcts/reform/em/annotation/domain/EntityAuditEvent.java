@@ -3,18 +3,23 @@ package uk.gov.hmcts.reform.em.annotation.domain;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "jhi_entity_audit_event")
 
-public class EntityAuditEvent implements Serializable{
+public class EntityAuditEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,7 +38,7 @@ public class EntityAuditEvent implements Serializable{
     private String entityType;
 
     @NotNull
-    @Size(max=20)
+    @Size(max = 20)
     @Column(name = "action", length = 20, nullable = false)
     private String action;
 

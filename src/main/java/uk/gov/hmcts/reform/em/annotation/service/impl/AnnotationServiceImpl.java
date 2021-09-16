@@ -7,9 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.domain.Annotation;
-import uk.gov.hmcts.reform.em.annotation.domain.AnnotationSet;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationRepository;
-import uk.gov.hmcts.reform.em.annotation.repository.TagRepository;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationSetService;
 import uk.gov.hmcts.reform.em.annotation.service.TagService;
@@ -18,12 +16,12 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationSetDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.TagDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.PersistenceContext;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceContext;
 
 /**
  * Service Implementation for managing Annotation.
@@ -83,14 +81,14 @@ public class AnnotationServiceImpl implements AnnotationService {
 
         if (!annotationDTO.getRectangles().isEmpty()) {
             annotation.getRectangles().forEach(r -> {
-                if (r.getAnnotation() == null ) {
+                if (r.getAnnotation() == null) {
                     r.setAnnotation(annotation);
                 }
             });
         }
         if (!annotationDTO.getComments().isEmpty()) {
             annotation.getComments().forEach(r -> {
-                if (r.getAnnotation() == null ) {
+                if (r.getAnnotation() == null) {
                     r.setAnnotation(annotation);
                 }
             });
@@ -137,7 +135,7 @@ public class AnnotationServiceImpl implements AnnotationService {
     public Optional<AnnotationDTO> findOne(UUID id, boolean refresh) {
         Optional<Annotation> annotation = annotationRepository.findById(id);
         if (refresh) {
-            annotation.ifPresent( a -> {
+            annotation.ifPresent(a -> {
                 try {
                     entityManager.refresh(a);
                 } catch (EntityNotFoundException e) {

@@ -3,11 +3,8 @@ package uk.gov.hmcts.reform.em.annotation.service.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import uk.gov.hmcts.reform.em.annotation.domain.Annotation;
-import uk.gov.hmcts.reform.em.annotation.domain.Comment;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
-import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
 
-import java.util.Set;
 import java.util.UUID;
 
 /**

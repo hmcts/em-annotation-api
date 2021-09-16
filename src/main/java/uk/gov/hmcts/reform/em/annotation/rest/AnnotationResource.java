@@ -64,7 +64,7 @@ public class AnnotationResource {
         annotationService.save(annotationDTO);
 
         final URI uri = new URI("/api/annotations/" + annotationDTO.getId());
-        return annotationService.findOne(annotationDTO.getId(), true).map( renderedAnnotation ->
+        return annotationService.findOne(annotationDTO.getId(), true).map(renderedAnnotation ->
                 ResponseEntity.created(uri)
                         .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, annotationDTO.getId().toString()))
                         .body(renderedAnnotation)
