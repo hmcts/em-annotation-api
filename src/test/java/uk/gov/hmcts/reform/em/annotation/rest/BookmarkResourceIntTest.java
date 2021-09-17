@@ -123,6 +123,7 @@ public class BookmarkResourceIntTest extends BaseTest {
     @Transactional
     public void createBookmarkCreatedByNull() throws Exception {
         int databaseSizeBeforeCreate = bookmarkRepository.findAll().size();
+        assertThat(databaseSizeBeforeCreate).isZero();
         bookmark.setCreatedBy(null);
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("fabio"));
 
@@ -162,7 +163,7 @@ public class BookmarkResourceIntTest extends BaseTest {
         bookmarkRepository.saveAndFlush(bookmark);
 
         int databaseSizeBeforeUpdate = bookmarkRepository.findAll().size();
-
+        assertThat(databaseSizeBeforeUpdate).isPositive();
         Bookmark updatedBookmark = bookmarkRepository.findById(bookmark.getId()).get();
 
         em.detach(updatedBookmark);
@@ -205,13 +206,13 @@ public class BookmarkResourceIntTest extends BaseTest {
         bookmarkRepository.saveAndFlush(bookmark);
 
         int databaseSizeBeforeUpdate = bookmarkRepository.findAll().size();
-
+        assertThat(databaseSizeBeforeUpdate).isPositive();
         Bookmark updatedBookmark = bookmarkRepository.findById(bookmark.getId()).get();
 
         em.detach(updatedBookmark);
-        updatedBookmark
-                .setName("Updated Bookmark");
+        updatedBookmark.setName("Updated Bookmark");
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(updatedBookmark);
+        assertThat(bookmarkDTO).isNotNull();
         BookmarkDTO bookmarkDTO1 = bookmarkMapper.toDto(updatedBookmark);
         bookmarkDTO1.setId(UUID.randomUUID());
         bookmarkDTO1.setName("New Bookmark");
@@ -319,6 +320,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
         em.detach(updatedBookmark);
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(updatedBookmark);
+        assertThat(bookmarkDTO).isNotNull();
         BookmarkDTO bookmarkDTO1 = bookmarkMapper.toDto(updatedBookmark);
         bookmarkDTO1.setId(UUID.randomUUID());
         bookmarkDTO1.setName("New Bookmark");
@@ -335,7 +337,7 @@ public class BookmarkResourceIntTest extends BaseTest {
         bookmarkRepository.saveAndFlush(bookmarkMapper.toEntity(bookmarkDTO3));
 
         int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
-
+        assertThat(databaseSizeBeforeDelete).isPositive();
         DeleteBookmarkDTO deleteBookmarkDTO = new DeleteBookmarkDTO();
         deleteBookmarkDTO.setUpdated(bookmarkDTO3);
         deleteBookmarkDTO.setDeleted(Arrays.asList(bookmarkDTO.getId(), bookmarkDTO1.getId(), bookmarkDTO2.getId()));
@@ -353,6 +355,7 @@ public class BookmarkResourceIntTest extends BaseTest {
     @Transactional
     public void deleteMultipleNullBookmarkId() throws Exception {
         int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
+        assertThat(databaseSizeBeforeDelete).isZero();
         bookmark.setId(null);
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
         DeleteBookmarkDTO deleteBookmarkDTO = new DeleteBookmarkDTO();
@@ -371,6 +374,7 @@ public class BookmarkResourceIntTest extends BaseTest {
     @Transactional
     public void deleteMultipleNonExistantBookmarkId() throws Exception {
         int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
+        assertThat(databaseSizeBeforeDelete).isZero();
         bookmark.setId(UUID.randomUUID());
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
         DeleteBookmarkDTO deleteBookmarkDTO = new DeleteBookmarkDTO();

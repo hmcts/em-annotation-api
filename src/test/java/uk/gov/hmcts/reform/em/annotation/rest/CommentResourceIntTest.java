@@ -76,7 +76,7 @@ public class CommentResourceIntTest extends BaseTest {
     /**
      * Create an entity for this test.
      *
-     * This is a static method, as tests for other entities might also need it,
+     * <p>This is a static method, as tests for other entities might also need it,</p>
      * if they test an entity which requires the current entity.
      */
     public static Comment createEntity(EntityManager em) {
@@ -173,7 +173,7 @@ public class CommentResourceIntTest extends BaseTest {
         commentRepository.saveAndFlush(comment);
 
         int databaseSizeBeforeUpdate = commentRepository.findAll().size();
-
+        assertThat(databaseSizeBeforeUpdate).isPositive();
         // Update the comment
         Comment updatedComment = commentRepository.findById(comment.getId()).get();
         // Disconnect from session so that the updates on updatedComment are not directly saved in db

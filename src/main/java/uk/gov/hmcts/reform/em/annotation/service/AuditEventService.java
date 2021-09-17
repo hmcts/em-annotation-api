@@ -14,8 +14,7 @@ import java.util.UUID;
 
 /**
  * Service for managing audit events.
- * <p>
- * This is the default implementation to support SpringBoot Actuator AuditEventRepository
+ * <p>This is the default implementation to support SpringBoot Actuator AuditEventRepository</p>
  */
 @Service
 @Transactional

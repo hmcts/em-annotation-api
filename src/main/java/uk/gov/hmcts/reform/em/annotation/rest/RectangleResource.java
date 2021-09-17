@@ -66,8 +66,8 @@ public class RectangleResource {
      * POST  /rectangles : Create a new rectangle.
      *
      * @param rectangleDTO the rectangleDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new rectangleDTO, or with status 400 (Bad
-     * Request) if the rectangle has already an ID
+     * @return the ResponseEntity with status 201 (Created) and with body the new rectangleDTO, or
+     *      with status 400 (Bad Request) if the rectangle has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @ApiOperation(value = "Create a rectangleDTO", notes = "A POST request to create a rectangleDTO")
@@ -105,9 +105,9 @@ public class RectangleResource {
      * PUT  /rectangles : Updates an existing rectangle.
      *
      * @param rectangleDTO the rectangleDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated rectangleDTO, or with status 400 (Bad
-     * Request) if the rectangleDTO is not valid, or with status 500 (Internal Server Error) if the rectangleDTO
-     * couldn't be updated
+     * @return the ResponseEntity with status 200 (OK) and with body the updated rectangleDTO, or
+     *      with status 400 (Bad Request) if the rectangleDTO is not valid, or with status 500
+     *      (Internal Server Error) if the rectangleDTO couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @ApiOperation(value = "Update an existing rectangleDTO", notes = "A PUT request to update a rectangleDTO")
