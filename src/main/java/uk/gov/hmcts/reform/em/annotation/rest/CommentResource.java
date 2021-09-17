@@ -45,8 +45,7 @@ public class CommentResource {
     }
 
     @InitBinder
-    public void initBinder(WebDataBinder binder)
-    {
+    public void initBinder(WebDataBinder binder) {
         binder.setDisallowedFields(Constants.IS_ADMIN);
     }
 
@@ -81,8 +80,8 @@ public class CommentResource {
      *
      * @param commentDTO the commentDTO to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated commentDTO,
-     * or with status 400 (Bad Request) if the commentDTO is not valid,
-     * or with status 500 (Internal Server Error) if the commentDTO couldn't be updated
+     *      or with status 400 (Bad Request) if the commentDTO is not valid,
+     *      or with status 500 (Internal Server Error) if the commentDTO couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @ApiOperation(value = "Update an existing annotationDTO", notes = "A PUT request to update an annotationDTO")

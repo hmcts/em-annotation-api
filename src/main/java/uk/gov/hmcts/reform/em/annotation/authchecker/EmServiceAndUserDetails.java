@@ -47,11 +47,18 @@ public class EmServiceAndUserDetails extends ServiceAndUserDetails {
         this.email = email;
     }
 
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         EmServiceAndUserDetails that = (EmServiceAndUserDetails) o;
         return Objects.equals(forename, that.forename) && Objects.equals(surname, that.surname) && Objects.equals(email, that.email);
     }

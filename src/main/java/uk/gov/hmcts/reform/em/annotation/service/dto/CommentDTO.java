@@ -64,10 +64,10 @@ public class CommentDTO extends AbstractAuditingDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "CommentDTO{" +
-            "id=" + getId() +
-            ", content='" + getContent() + "'" +
-            ", annotation=" + getAnnotationId() +
-            "}";
+        return "CommentDTO{"
+                + " id=" + id
+                + ", content='" + content + '\''
+                + ", annotationId=" + annotationId
+                + '}';
     }
 }

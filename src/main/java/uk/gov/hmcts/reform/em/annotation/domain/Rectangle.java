@@ -137,12 +137,12 @@ public class Rectangle extends AbstractAuditingEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "Rectangle{" +
-            "id=" + getId() +
-            ", x=" + getX() +
-            ", y=" + getY() +
-            ", width=" + getWidth() +
-            ", height=" + getHeight() +
-            "}";
+        return "Rectangle{"
+                + " id=" + id
+                + ", x=" + x
+                + ", y=" + y
+                + ", width=" + width
+                + ", height=" + height
+                + '}';
     }
 }

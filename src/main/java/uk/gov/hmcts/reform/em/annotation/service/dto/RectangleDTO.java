@@ -92,13 +92,13 @@ public class RectangleDTO extends AbstractAuditingDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "RectangleDTO{" +
-            "id=" + getId() +
-            ", x=" + getX() +
-            ", y=" + getY() +
-            ", width=" + getWidth() +
-            ", height=" + getHeight() +
-            ", annotation=" + getAnnotationId() +
-            "}";
+        return "RectangleDTO{"
+                + " id=" + id
+                + ", x=" + x
+                + ", y=" + y
+                + ", width=" + width
+                + ", height=" + height
+                + ", annotationId=" + annotationId
+                + '}';
     }
 }
