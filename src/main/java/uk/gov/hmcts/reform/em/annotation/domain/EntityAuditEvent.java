@@ -140,18 +140,15 @@ public class EntityAuditEvent implements Serializable {
 
     @Override
     public String toString() {
-        return "EntityAuditEvent{" +
-            "id=" + id +
-            ", entityId='" + entityId + "'" +
-            ", entityType='" + entityType + "'" +
-            ", action='" + action + "'" +
-            ", entityValue='" + entityValue + "'" +
-            ", commitVersion='" + commitVersion + "'" +
-            ", modifiedBy='" + modifiedBy + "'" +
-            ", modifiedDate='" + modifiedDate + "'" +
-            '}';
+        return "EntityAuditEvent{"
+                + " id=" + id
+                + ", entityId=" + entityId
+                + ", entityType='" + entityType + '\''
+                + ", action='" + action + '\''
+                + ", entityValue='" + entityValue + '\''
+                + ", commitVersion=" + commitVersion
+                + ", modifiedBy='" + modifiedBy + '\''
+                + ", modifiedDate=" + modifiedDate
+                + '}';
     }
-
-
-
 }

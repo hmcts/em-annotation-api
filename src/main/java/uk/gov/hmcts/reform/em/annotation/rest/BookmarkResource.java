@@ -49,6 +49,8 @@ public class BookmarkResource {
     private final Logger log = LoggerFactory.getLogger(BookmarkResource.class);
 
     private static final String ENTITY_NAME = "bookmark";
+    private static final String INVALID_ID = "Invalid id";
+    private static final String NULL_ENTITY = "idnull";
 
     private final BookmarkService bookmarkService;
 
@@ -57,8 +59,7 @@ public class BookmarkResource {
     }
 
     @InitBinder
-    public void initBinder(WebDataBinder binder)
-    {
+    public void initBinder(WebDataBinder binder) {
         binder.setDisallowedFields(Constants.IS_ADMIN);
     }
 
@@ -67,7 +68,7 @@ public class BookmarkResource {
      *
      * @param bookmarkDTO the bookmarkDTO to create
      * @return the ResponseEntity with status 201 (Created) and with body the new bookmarkDTO, or with status 400 (Bad
-     * Request) if the bookmark has an invalid ID
+     *      Request) if the bookmark has an invalid ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @ApiOperation(value = "Create an bookmarkDTO", notes = "A POST request to create an bookmarkDTO")
@@ -81,7 +82,7 @@ public class BookmarkResource {
     public ResponseEntity<BookmarkDTO> createBookmark(@RequestBody BookmarkDTO bookmarkDTO) throws URISyntaxException {
         log.debug("REST request to save Bookmark : {}", bookmarkDTO);
         if (bookmarkDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException(INVALID_ID, ENTITY_NAME, NULL_ENTITY);
         }
         BookmarkDTO result = bookmarkService.save(bookmarkDTO);
         return ResponseEntity.created(new URI("/api/bookmarks/" + result.getId()))
@@ -94,8 +95,8 @@ public class BookmarkResource {
      *
      * @param bookmarkDTO the bookmarkDTO to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated bookmarkDTO, or with status 400 (Bad
-     * Request) if the bookmarkDTO is not valid, or with status 500 (Internal Server Error) if the bookmarkDTO couldn't
-     * be updated
+     *     Request) if the bookmarkDTO is not valid, or with status 500 (Internal Server Error) if the bookmarkDTO couldn't
+     *     be updated
      */
     @ApiOperation(value = "Update an existing bookmarkDTO", notes = "A PUT request to update an bookmarkDTO")
     @ApiResponses(value = {
@@ -110,7 +111,7 @@ public class BookmarkResource {
     public ResponseEntity<BookmarkDTO> updateBookmark(@Valid @RequestBody BookmarkDTO bookmarkDTO) {
         log.debug("REST request to update Bookmark : {}", bookmarkDTO);
         if (bookmarkDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException(INVALID_ID, ENTITY_NAME, NULL_ENTITY);
         }
         BookmarkDTO result = bookmarkService.save(bookmarkDTO);
         return ResponseEntity.ok()
@@ -123,8 +124,8 @@ public class BookmarkResource {
      *
      * @param bookmarkDTOList the list of bookmarkDTO objects to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated bookmarkDTO objects, or with status 400
-     * (Bad Request) if the bookmarkDTO objects are not valid, or with status 500 (Internal Server Error) if the
-     * bookmarkDTO objects couldn't be updated
+     *      (Bad Request) if the bookmarkDTO objects are not valid, or with status 500 (Internal Server Error) if the
+     *      bookmarkDTO objects couldn't be updated.
      */
     @ApiOperation(value = "Update multiple existing bookmarkDTO objects", notes = "A PUT request to update multiple bookmarkDTO objects")
     @ApiResponses(value = {
@@ -140,7 +141,7 @@ public class BookmarkResource {
         @Valid @RequestBody List<BookmarkDTO> bookmarkDTOList) {
 
         if (bookmarkDTOList.stream().anyMatch(bookmark -> bookmark.getId() == null)) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException(INVALID_ID, ENTITY_NAME, NULL_ENTITY);
         }
 
         List<UUID> sanitisedList = StringUtilities.convertValidLogUUID(bookmarkDTOList.stream()
@@ -213,7 +214,7 @@ public class BookmarkResource {
      *
      * @param deleteBookmarkDTO object containing the list of bookmarkDTO objects to delete and parent to update
      * @return the ResponseEntity with status 200 (OK), or with status 400 (Bad Request) if the bookmarkDTO objects are
-     * not valid, or with status 500 (Internal Server Error) if the bookmarkDTO objects couldn't be deleted
+     *      not valid, or with status 500 (Internal Server Error) if the bookmarkDTO objects couldn't be deleted.
      */
     @ApiOperation(value = "Delete multiple existing bookmarkDTO objects", notes = "A DELETE request to delete multiple bookmarkDTO objects")
     @ApiResponses(value = {
@@ -226,7 +227,7 @@ public class BookmarkResource {
     public ResponseEntity<Void> deleteMultipleBookmarks(@Valid @RequestBody DeleteBookmarkDTO deleteBookmarkDTO) {
 
         if (deleteBookmarkDTO.getDeleted().stream().anyMatch(Objects::isNull)) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException(INVALID_ID, ENTITY_NAME, NULL_ENTITY);
         }
 
         List<UUID> sanitisedList = StringUtilities.convertValidLogUUID(deleteBookmarkDTO.getDeleted());
@@ -240,9 +241,7 @@ public class BookmarkResource {
                 bookmarkService.delete(id);
             }
         } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
-            if (idToBeDeleted.isPresent()) {
-                log.debug("The Delete ID is not Found : {}", idToBeDeleted.get());
-            }
+            idToBeDeleted.ifPresent(uuid -> log.debug("The Delete ID is not Found : {}", uuid));
             return ResponseEntity
                 .notFound()
                 .build();

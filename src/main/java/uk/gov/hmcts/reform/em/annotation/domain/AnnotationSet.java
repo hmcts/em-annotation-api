@@ -103,9 +103,9 @@ public class AnnotationSet extends AbstractAuditingEntity implements Serializabl
 
     @Override
     public String toString() {
-        return "AnnotationSet{" +
-            "id=" + getId() +
-            ", documentId='" + getDocumentId() + "'" +
-            "}";
+        return "AnnotationSet{"
+                + " id=" + id
+                + ", documentId='" + documentId + '\''
+                + '}';
     }
 }
