@@ -85,7 +85,7 @@ public class RectangleResourceIntTest extends BaseTest {
     /**
      * Create an entity for this test.
      *
-     * This is a static method, as tests for other entities might also need it,
+     * <p>This is a static method, as tests for other entities might also need it,</p>
      * if they test an entity which requires the current entity.
      */
     public static Rectangle createEntity(EntityManager em) {
@@ -207,7 +207,7 @@ public class RectangleResourceIntTest extends BaseTest {
         rectangleRepository.saveAndFlush(rectangle);
 
         int databaseSizeBeforeUpdate = rectangleRepository.findAll().size();
-
+        assertThat(databaseSizeBeforeUpdate).isPositive();
         // Update the rectangle
         Rectangle updatedRectangle = rectangleRepository.findById(rectangle.getId()).get();
         // Disconnect from session so that the updates on updatedRectangle are not directly saved in db
