@@ -1,8 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
@@ -19,10 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MetadataServiceImpl implements MetadataService {
 
-    private final Logger log = LoggerFactory.getLogger(MetadataServiceImpl.class);
-
     private final MetadataRepository metadataRepository;
-
     private final MetadataMapper metadataMapper;
 
     private final SecurityUtils securityUtils;
@@ -32,7 +27,7 @@ public class MetadataServiceImpl implements MetadataService {
 
         Metadata metadata = metadataRepository.findByDocumentId(metadataDto.getDocumentId());
 
-        if(Objects.nonNull(metadata)) {
+        if (Objects.nonNull(metadata)) {
             metadata.setRotationAngle(metadataDto.getRotationAngle());
         } else {
             metadata = metadataMapper.toEntity(metadataDto);

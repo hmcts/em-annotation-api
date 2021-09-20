@@ -64,7 +64,7 @@ public class FilterAnnotationSetTest  extends BaseTest {
     /**
      * Create an entity for this test.
      *
-     * This is a static method, as tests for other entities might also need it,
+     * <p>This is a static method, as tests for other entities might also need it,</p>
      * if they test an entity which requires the current entity.
      */
 

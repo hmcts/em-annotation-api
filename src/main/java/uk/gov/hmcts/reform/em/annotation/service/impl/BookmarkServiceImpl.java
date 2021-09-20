@@ -62,10 +62,10 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     /**
+     * Find all document by Id.
      *
-     *
-     * @param pageable
-     * @param documentId
+     * @param pageable pageable
+     * @param documentId given documentId
      * @return
      */
     @Override

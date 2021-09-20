@@ -107,8 +107,8 @@ public class AnnotationResourceIntTest extends BaseTest {
     /**
      * Create an entity for this test.
      *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
+     * <p>This is a static method, as tests for other entities might also need it,
+     *      if they test an entity which requires the current entity.
      */
     public static Annotation createEntity(EntityManager em) {
         Annotation annotation = new Annotation()
@@ -151,7 +151,7 @@ public class AnnotationResourceIntTest extends BaseTest {
     @Transactional
     public void createAnnotationWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = annotationRepository.findAll().size();
-
+        assertThat(databaseSizeBeforeCreate).isZero();
         // Create the Annotation with an existing ID
         uuid = UUID.randomUUID();
         annotation.setId(uuid);
@@ -254,7 +254,7 @@ public class AnnotationResourceIntTest extends BaseTest {
 
         annotationRepository.saveAndFlush(annotation);
         int databaseSizeBeforeUpdate = annotationRepository.findAll().size();
-
+        assertThat(databaseSizeBeforeUpdate).isPositive();
         // Update the annotation
         Annotation updatedAnnotation = annotationRepository.findById(annotation.getId()).get();
         // Disconnect from session so that the updates on updatedAnnotation are not directly saved in db
@@ -283,7 +283,7 @@ public class AnnotationResourceIntTest extends BaseTest {
     @Transactional
     public void updateNonExistingAnnotation() throws Exception {
         int databaseSizeBeforeUpdate = annotationRepository.findAll().size();
-
+        assertThat(databaseSizeBeforeUpdate).isZero();
         // Create the Annotation
         AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
         annotationDTO.setId(null);

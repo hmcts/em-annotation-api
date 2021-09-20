@@ -52,8 +52,7 @@ public class AnnotationSetResource {
     }
 
     @InitBinder
-    public void initBinder(WebDataBinder binder)
-    {
+    public void initBinder(WebDataBinder binder) {
         binder.setDisallowedFields(Constants.IS_ADMIN);
     }
 
@@ -61,7 +60,8 @@ public class AnnotationSetResource {
      * POST  /annotation-sets : Create a new annotationSet.
      *
      * @param annotationSetDTO the annotationSetDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new annotationSetDTO, or with status 400 (Bad Request) if the annotationSet has already an ID
+     * @return the ResponseEntity with status 201 (Created) and with body the new annotationSetDTO,
+     *      or with status 400 (Bad Request) if the annotationSet has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @ApiOperation(value = "Create an annotationSetDTO", notes = "A POST request to create an annotationSetDTO")
@@ -71,6 +71,7 @@ public class AnnotationSetResource {
             @ApiResponse(code = 401, message = "Unauthorised"),
             @ApiResponse(code = 403, message = "Forbidden"),
     })
+
     @PostMapping("/annotation-sets")
     public ResponseEntity<AnnotationSetDTO> createAnnotationSet(@RequestBody AnnotationSetDTO annotationSetDTO) throws URISyntaxException {
         log.debug("REST request to save AnnotationSet : {}", annotationSetDTO);
@@ -79,7 +80,8 @@ public class AnnotationSetResource {
         }
         annotationSetService.save(annotationSetDTO);
         final URI uri = new URI("/api/annotation-sets/" + annotationSetDTO.getId());
-        return annotationSetService.findOne(annotationSetDTO.getId()).map( renderedAnnotationSet ->
+
+        return annotationSetService.findOne(annotationSetDTO.getId()).map(renderedAnnotationSet ->
                 ResponseEntity.created(uri)
                     .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, annotationSetDTO.getId().toString()))
                     .body(renderedAnnotationSet)
@@ -92,8 +94,8 @@ public class AnnotationSetResource {
      *
      * @param annotationSetDTO the annotationSetDTO to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated annotationSetDTO,
-     * or with status 400 (Bad Request) if the annotationSetDTO is not valid,
-     * or with status 500 (Internal Server Error) if the annotationSetDTO couldn't be updated
+     *      or with status 400 (Bad Request) if the annotationSetDTO is not valid,
+     *      or with status 500 (Internal Server Error) if the annotationSetDTO couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @ApiOperation(value = "Update an existing annotationSetDTO", notes = "A PUT request to update an annotationSetDTO")

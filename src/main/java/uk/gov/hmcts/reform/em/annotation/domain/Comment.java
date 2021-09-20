@@ -88,9 +88,9 @@ public class Comment extends AbstractAuditingEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "Comment{" +
-            "id=" + getId() +
-            ", content='" + getContent() + "'" +
-            "}";
+        return "Comment{"
+                + " id=" + id
+                + ", content='" + content + '\''
+                + '}';
     }
 }

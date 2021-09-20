@@ -21,7 +21,7 @@ import java.util.Arrays;
 @ComponentScan("uk.gov.hmcts.reform.em.annotation.rest")
 public class SwaggerConfiguration {
 
-    private final static String apiVersion = "0.0.1";
+    private static final String API_VERSION = "0.0.1";
 
     private static final String MODEL_REF_TYPE = "string";
     private static final String PARAMETER_TYPE = "header";
@@ -43,8 +43,8 @@ public class SwaggerConfiguration {
         return new ParameterBuilder()
             .name("Authorization")
             .description("Keyword `Bearer` followed by a valid IDAM user token")
-            .modelRef(new ModelRef("string"))
-            .parameterType("header")
+            .modelRef(new ModelRef(MODEL_REF_TYPE))
+            .parameterType(PARAMETER_TYPE)
             .required(true)
             .build();
     }
@@ -53,8 +53,8 @@ public class SwaggerConfiguration {
         return new ParameterBuilder()
             .name("ServiceAuthorization")
             .description("Valid Service-to-Service JWT token for a whitelisted micro-service")
-            .modelRef(new ModelRef("string"))
-            .parameterType("header")
+            .modelRef(new ModelRef(MODEL_REF_TYPE))
+            .parameterType(PARAMETER_TYPE)
             .required(true)
             .build();
     }
@@ -63,7 +63,7 @@ public class SwaggerConfiguration {
         return new ApiInfoBuilder()
                 .title("EM Annotation API")
                 .description("API to store and retrieve annotations for DM Store")
-                .version(apiVersion)
+                .version(API_VERSION)
                 .build();
     }
 }

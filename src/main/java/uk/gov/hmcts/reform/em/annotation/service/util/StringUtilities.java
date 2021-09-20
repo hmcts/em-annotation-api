@@ -26,6 +26,16 @@ public class StringUtilities {
         return encode;
     }
 
+    public static List<String> convertValidLogString(List<String> logs) {
+        if (CollectionUtils.isNotEmpty(logs)) {
+            return logs.stream()
+                    .map(StringUtilities:: convertValidLogString)
+                    .collect(Collectors.toList());
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
     public static UUID convertValidLogUUID(UUID log) {
         List<String> list = Arrays.asList("%0d", "\r", "%0a", "\n");
 
@@ -35,16 +45,6 @@ public class StringUtilities {
             encode = encode.replace(toReplaceStr, "");
         }
         return UUID.fromString(encode);
-    }
-
-    public static List<String> convertValidLogString(List<String> logs) {
-        if (CollectionUtils.isNotEmpty(logs)) {
-            return logs.stream()
-                .map(StringUtilities:: convertValidLogString)
-                .collect(Collectors.toList());
-        } else {
-            return new ArrayList<>();
-        }
     }
 
     public static List<UUID> convertValidLogUUID(List<UUID> logs) {
