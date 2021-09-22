@@ -48,6 +48,8 @@ public class RectangleResource {
     private final Logger log = LoggerFactory.getLogger(RectangleResource.class);
 
     private static final String ENTITY_NAME = "rectangle";
+    private static final String INVALID_ID = "Invalid id";
+    private static final String NULL_ENTITY = "idnull";
 
     @Autowired
     private RectangleService rectangleService;
@@ -56,8 +58,7 @@ public class RectangleResource {
     private AnnotationService annotationService;
 
     @InitBinder
-    public void initBinder(WebDataBinder binder)
-    {
+    public void initBinder(WebDataBinder binder) {
         binder.setDisallowedFields(Constants.IS_ADMIN);
     }
 
@@ -65,8 +66,8 @@ public class RectangleResource {
      * POST  /rectangles : Create a new rectangle.
      *
      * @param rectangleDTO the rectangleDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new rectangleDTO, or with status 400 (Bad
-     * Request) if the rectangle has already an ID
+     * @return the ResponseEntity with status 201 (Created) and with body the new rectangleDTO, or
+     *      with status 400 (Bad Request) if the rectangle has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @ApiOperation(value = "Create a rectangleDTO", notes = "A POST request to create a rectangleDTO")
@@ -82,14 +83,14 @@ public class RectangleResource {
         throws URISyntaxException {
         log.debug("REST request to save Rectangle : {}", rectangleDTO);
         if (Objects.isNull(rectangleDTO.getId())) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException(INVALID_ID, ENTITY_NAME, NULL_ENTITY);
         }
         if (Objects.isNull(rectangleDTO.getAnnotationId())) {
-            throw new BadRequestAlertException("Invalid Annotation id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Invalid Annotation id", ENTITY_NAME, NULL_ENTITY);
         }
         Optional<AnnotationDTO> annotationDTOOptional
             = annotationService.findOne(rectangleDTO.getAnnotationId());
-        if (!annotationDTOOptional.isPresent() || Objects.isNull(annotationDTOOptional.get().getId())) {
+        if (annotationDTOOptional.isEmpty() || Objects.isNull(annotationDTOOptional.get().getId())) {
             return ResponseEntity
                 .notFound()
                 .build();
@@ -104,9 +105,9 @@ public class RectangleResource {
      * PUT  /rectangles : Updates an existing rectangle.
      *
      * @param rectangleDTO the rectangleDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated rectangleDTO, or with status 400 (Bad
-     * Request) if the rectangleDTO is not valid, or with status 500 (Internal Server Error) if the rectangleDTO
-     * couldn't be updated
+     * @return the ResponseEntity with status 200 (OK) and with body the updated rectangleDTO, or
+     *      with status 400 (Bad Request) if the rectangleDTO is not valid, or with status 500
+     *      (Internal Server Error) if the rectangleDTO couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @ApiOperation(value = "Update an existing rectangleDTO", notes = "A PUT request to update a rectangleDTO")
@@ -123,7 +124,7 @@ public class RectangleResource {
         throws URISyntaxException {
         log.debug("REST request to update Rectangle : {}", rectangleDTO);
         if (rectangleDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException(INVALID_ID, ENTITY_NAME, NULL_ENTITY);
         }
         RectangleDTO result = rectangleService.save(rectangleDTO);
         return ResponseEntity.ok()

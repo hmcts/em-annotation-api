@@ -1,12 +1,15 @@
 package uk.gov.hmcts.reform.em.annotation.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * A Rectangle.
@@ -134,12 +137,12 @@ public class Rectangle extends AbstractAuditingEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "Rectangle{" +
-            "id=" + getId() +
-            ", x=" + getX() +
-            ", y=" + getY() +
-            ", width=" + getWidth() +
-            ", height=" + getHeight() +
-            "}";
+        return "Rectangle{"
+                + " id=" + id
+                + ", x=" + x
+                + ", y=" + y
+                + ", width=" + width
+                + ", height=" + height
+                + '}';
     }
 }

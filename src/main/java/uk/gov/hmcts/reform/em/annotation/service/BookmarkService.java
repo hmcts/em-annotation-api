@@ -17,11 +17,10 @@ public interface BookmarkService {
     BookmarkDTO save(BookmarkDTO bookmarkDTO);
 
     /**
-     *
-     *
-     * @param pageable
-     * @param documentId
-     * @return
+     * Find document by documentId.
+     * @param pageable pageable
+     * @param documentId documentId
+     * @return Page
      */
     Page<BookmarkDTO> findAllByDocumentId(UUID documentId, Pageable pageable);
 

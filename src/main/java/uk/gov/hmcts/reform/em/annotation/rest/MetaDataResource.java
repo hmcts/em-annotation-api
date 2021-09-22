@@ -37,8 +37,7 @@ public class MetaDataResource {
     private final MetadataService metadataService;
 
     @InitBinder
-    public void initBinder(WebDataBinder binder)
-    {
+    public void initBinder(WebDataBinder binder) {
         binder.setDisallowedFields(Constants.IS_ADMIN);
     }
 

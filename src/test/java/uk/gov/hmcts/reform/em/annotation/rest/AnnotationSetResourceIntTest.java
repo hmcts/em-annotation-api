@@ -75,7 +75,7 @@ public class AnnotationSetResourceIntTest extends BaseTest {
     /**
      * Create an entity for this test.
      *
-     * This is a static method, as tests for other entities might also need it,
+     * <p>This is a static method, as tests for other entities might also need it,</p>
      * if they test an entity which requires the current entity.
      */
     public static AnnotationSet createEntity(EntityManager em) {
@@ -172,7 +172,7 @@ public class AnnotationSetResourceIntTest extends BaseTest {
         annotationSetRepository.saveAndFlush(annotationSet);
 
         int databaseSizeBeforeUpdate = annotationSetRepository.findAll().size();
-
+        assertThat(databaseSizeBeforeUpdate).isPositive();
         // Update the annotationSet
         AnnotationSet updatedAnnotationSet = annotationSetRepository.findById(annotationSet.getId()).get();
         // Disconnect from session so that the updates on updatedAnnotationSet are not directly saved in db
