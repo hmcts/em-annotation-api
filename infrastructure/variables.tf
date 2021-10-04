@@ -150,9 +150,9 @@ variable "enable_s2s_healthcheck" {
 // Addtional
 ////////////////////////////////////////////////
 variable "postgresql_user_v11" {
-  default = "emannotationapp"
+  default = "annotation"
 }
 
 variable "database_name_v11" {
-  default = "emannotationapp"
+  default = "annotation"
 }
