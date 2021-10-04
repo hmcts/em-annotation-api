@@ -142,7 +142,7 @@ class RectangleResourceTest {
     }
 
     @Test
-    public void testInitBinder() {
+    void testInitBinder() {
         rectangleResource.initBinder(webDataBinder);
         Mockito.verify(webDataBinder, Mockito.atLeast(1)).setDisallowedFields(Mockito.anyString());
     }

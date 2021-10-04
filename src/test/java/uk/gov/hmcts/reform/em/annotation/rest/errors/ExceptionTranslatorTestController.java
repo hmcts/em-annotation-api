@@ -25,7 +25,9 @@ public class ExceptionTranslatorTestController {
     }
 
     @GetMapping("/test/no-such-element-exception")
-    public void noSuchElementException() { throw new NoSuchElementException("test no such element exception"); }
+    public void noSuchElementException() {
+        throw new NoSuchElementException("test no such element exception");
+    }
 
     @GetMapping("/test/parameterized-error")
     public void parameterizedError() {

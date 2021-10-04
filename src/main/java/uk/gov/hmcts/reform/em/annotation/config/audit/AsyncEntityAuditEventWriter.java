@@ -14,7 +14,7 @@ import java.lang.reflect.Field;
 import java.util.UUID;
 
 /**
- * Async Entity Audit Event writer
+ * Async Entity Audit Event writer.
  * This is invoked by Hibernate entity listeners to write audit event for entitities
  */
 @Component
@@ -32,27 +32,28 @@ public class AsyncEntityAuditEventWriter {
     }
 
     /**
-     * Writes audit events to DB asynchronously in a new thread
+     * Writes audit events to DB asynchronously in a new thread.
      */
     @Async
     public void writeAuditEvent(Object target, EntityAuditAction action) {
-        log.debug("-------------- Post {} audit  --------------", action.value());
+        var logAction = action != null ? action.value() : null;
+        log.debug("-------------- Post {} audit  --------------", logAction);
         try {
             EntityAuditEvent auditedEntity = prepareAuditEntity(target, action);
             if (auditedEntity != null) {
                 auditingEntityRepository.save(auditedEntity);
             }
         } catch (Exception e) {
-            log.error("Exception while persisting audit entity for {} error: {}", target, e);
+            log.error("Exception while persisting audit entity for {} error: {}", target, e.getMessage(), e);
         }
     }
 
     /**
-     * Method to prepare auditing entity
+     * Method to prepare auditing entity.
      *
-     * @param entity
-     * @param action
-     * @return
+     * @param entity takes entity
+     * @param action takes action
+     * @return will return audit event
      */
     private EntityAuditEvent prepareAuditEntity(final Object entity, EntityAuditAction action) {
         EntityAuditEvent auditedEntity = new EntityAuditEvent();
@@ -68,9 +69,12 @@ public class AsyncEntityAuditEventWriter {
             entityId = (UUID) privateLongField.get(entity);
             privateLongField.setAccessible(false);
             entityData = objectMapper.writeValueAsString(entity);
-        } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException |
-            IOException e) {
-            log.error("Exception while getting entity ID and content {}", e);
+        } catch (IllegalArgumentException
+                | IllegalAccessException
+                | NoSuchFieldException
+                | SecurityException
+                | IOException e) {
+            log.error("Exception while getting entity ID and content {}", e.getMessage(), e);
             // returning null as we dont want to raise an application exception here
             return null;
         }
@@ -86,7 +90,7 @@ public class AsyncEntityAuditEventWriter {
             auditedEntity.setModifiedDate(abstractAuditEntity.getLastModifiedDate());
             calculateVersion(auditedEntity);
         }
-        log.trace("Audit Entity --> {} ", auditedEntity.toString());
+        log.trace("Audit Entity --> {} ", auditedEntity);
         return auditedEntity;
     }
 
@@ -95,7 +99,7 @@ public class AsyncEntityAuditEventWriter {
         Integer lastCommitVersion = auditingEntityRepository.findMaxCommitVersion(auditedEntity
             .getEntityType(), auditedEntity.getEntityId());
         log.trace("Last commit version of entity => {}", lastCommitVersion);
-        if(lastCommitVersion!=null && lastCommitVersion != 0){
+        if (lastCommitVersion != null && lastCommitVersion != 0) {
             log.trace("Present. Adding version..");
             auditedEntity.setCommitVersion(lastCommitVersion + 1);
         } else {
