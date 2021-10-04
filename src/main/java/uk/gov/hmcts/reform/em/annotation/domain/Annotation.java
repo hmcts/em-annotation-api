@@ -195,15 +195,15 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "Annotation{" +
-            "id=" + id +
-            ", annotationType=" + annotationType +
-            ", page=" + page +
-            ", color='" + color + '\'' +
-            ", comments=" + comments +
-            ", tags=" + tags +
-            ", rectangles=" + rectangles +
-            ", annotationSet=" + annotationSet +
-            '}';
+        return "Annotation{"
+                + " id=" + id
+                + ", annotationType='" + annotationType + '\''
+                + ", page=" + page
+                + ", color='" + color + '\''
+                + ", comments=" + comments
+                + ", tags=" + tags
+                + ", rectangles=" + rectangles
+                + ", annotationSet=" + annotationSet
+                + '}';
     }
 }

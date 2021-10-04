@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class TestUtil {
 
-    /** MediaType for JSON UTF8 */
+    /** MediaType for JSON UTF8. */
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(
             MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
@@ -33,7 +33,7 @@ public class TestUtil {
      * @param object
      *            the object to convert
      * @return the JSON byte array
-     * @throws IOException
+     * @throws IOException when exception occurs
      */
     public static byte[] convertObjectToJsonBytes(Object object)
             throws IOException {
@@ -95,7 +95,7 @@ public class TestUtil {
     }
 
     /**
-     * Creates a matcher that matches when the examined string reprensents the same instant as the reference datetime
+     * Creates a matcher that matches when the examined string reprensents the same instant as the reference datetime.
      * @param date the reference datetime against which the examined string is checked
      */
     public static ZonedDateTimeMatcher sameInstant(ZonedDateTime date) {
@@ -109,7 +109,7 @@ public class TestUtil {
         T domainObject1 = clazz.getConstructor().newInstance();
         assertThat(domainObject1.toString()).isNotNull();
         assertThat(domainObject1).isEqualTo(domainObject1);
-        assertThat(domainObject1.hashCode()).isEqualTo(domainObject1.hashCode());
+        assertThat(domainObject1.hashCode()).hasSameHashCodeAs(domainObject1.hashCode());
         // Test with an instance of another class
         Object testOtherObject = new Object();
         assertThat(domainObject1).isNotEqualTo(testOtherObject);
@@ -118,7 +118,7 @@ public class TestUtil {
         T domainObject2 = clazz.getConstructor().newInstance();
         assertThat(domainObject1).isNotEqualTo(domainObject2);
         // HashCodes are equals because the objects are not persisted yet
-        assertThat(domainObject1.hashCode()).isEqualTo(domainObject2.hashCode());
+        assertThat(domainObject1.hashCode()).hasSameHashCodeAs(domainObject2.hashCode());
     }
 
     /**
@@ -126,7 +126,7 @@ public class TestUtil {
      * @return the FormattingConversionService
      */
     public static FormattingConversionService createFormattingConversionService() {
-        DefaultFormattingConversionService dfcs = new DefaultFormattingConversionService ();
+        DefaultFormattingConversionService dfcs = new DefaultFormattingConversionService();
         DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
         registrar.setUseIsoFormat(true);
         registrar.registerFormatters(dfcs);

@@ -45,7 +45,8 @@ public class AnnotationResource {
      * POST  /annotations : Create a new annotation.
      *
      * @param annotationDTO the annotationDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new annotationDTO, or with status 400 (Bad Request) if the annotation has already an ID
+     * @return the ResponseEntity with status 201 (Created) and with body
+     *      the new annotationDTO, or with status 400 (Bad Request) if the annotation has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @ApiOperation(value = "Create an annotationDTO", notes = "A POST request to create an annotationDTO")
@@ -64,7 +65,7 @@ public class AnnotationResource {
         annotationService.save(annotationDTO);
 
         final URI uri = new URI("/api/annotations/" + annotationDTO.getId());
-        return annotationService.findOne(annotationDTO.getId(), true).map( renderedAnnotation ->
+        return annotationService.findOne(annotationDTO.getId(), true).map(renderedAnnotation ->
                 ResponseEntity.created(uri)
                         .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, annotationDTO.getId().toString()))
                         .body(renderedAnnotation)
@@ -77,8 +78,8 @@ public class AnnotationResource {
      *
      * @param annotationDTO the annotationDTO to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated annotationDTO,
-     * or with status 400 (Bad Request) if the annotationDTO is not valid,
-     * or with status 500 (Internal Server Error) if the annotationDTO couldn't be updated
+     *      or with status 400 (Bad Request) if the annotationDTO is not valid,
+     *      or with status 500 (Internal Server Error) if the annotationDTO couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @ApiOperation(value = "Update an existing annotationDTO", notes = "A PUT request to update an annotationDTO")

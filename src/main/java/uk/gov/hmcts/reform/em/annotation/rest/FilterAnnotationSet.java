@@ -43,7 +43,7 @@ public class FilterAnnotationSet {
         log.debug("REST request to get a page of AnnotationSets");
         Optional<AnnotationSetDTO> optionalAnnotationSetDTO = annotationSetService.findOneByDocumentId(documentId);
         return optionalAnnotationSetDTO
-            .map( annotationSetDTO -> ResponseEntity.ok(annotationSetDTO))
-            .orElseThrow( () -> new ResourceNotFoundException("Could not find annotation set for this document id#" + documentId) );
+            .map(ResponseEntity::ok)
+            .orElseThrow(() -> new ResourceNotFoundException("Could not find annotation set for this document id#" + documentId));
     }
 }

@@ -19,7 +19,7 @@ public interface TagService {
     List<TagDTO> findTagByCreatedBy(String createdBy);
 
     /**
-     * Persist tag entity in the database
+     * Persist tag entity in the database.
      *
      * @param tag the tag to be persisted to the database
      */

@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
@@ -16,6 +15,11 @@ import uk.gov.hmcts.reform.em.annotation.service.mapper.MetadataMapper;
 
 import java.util.Optional;
 import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class MetadataServiceImplTest {
 
@@ -35,7 +39,7 @@ public class MetadataServiceImplTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -43,17 +47,17 @@ public class MetadataServiceImplTest {
 
         MetadataDto metadataDto = createMetadataDto();
         Metadata metadata = createMetadata();
-        Mockito.when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("testuser"));
-        Mockito.when(metadataMapper.toEntity(metadataDto)).thenReturn(metadata);
-        Mockito.when(metadataMapper.toDto(metadata)).thenReturn(metadataDto);
-        Mockito.when(metadataRepository.save(metadata)).thenReturn(metadata);
-        Mockito.when(metadataRepository.findByDocumentId(metadataDto.getDocumentId())).thenReturn(null);
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("testuser"));
+        when(metadataMapper.toEntity(metadataDto)).thenReturn(metadata);
+        when(metadataMapper.toDto(metadata)).thenReturn(metadataDto);
+        when(metadataRepository.save(metadata)).thenReturn(metadata);
+        when(metadataRepository.findByDocumentId(metadataDto.getDocumentId())).thenReturn(null);
 
         MetadataDto updatedDto = metadataService.save(metadataDto);
-
-        Mockito.verify(metadataRepository, Mockito.atLeast(1)).save(metadata);
-        Mockito.verify(metadataMapper, Mockito.atLeast(1)).toEntity(metadataDto);
-        Mockito.verify(metadataMapper, Mockito.atLeast(1)).toDto(metadata);
+        assertThat(updatedDto).isNotNull();
+        verify(metadataRepository, atLeast(1)).save(metadata);
+        verify(metadataMapper, atLeast(1)).toEntity(metadataDto);
+        verify(metadataMapper, atLeast(1)).toDto(metadata);
 
 
         Assert.assertEquals(metadataDto.getDocumentId(), updatedDto.getDocumentId());
@@ -66,17 +70,17 @@ public class MetadataServiceImplTest {
 
         MetadataDto metadataDto = createMetadataDto();
         Metadata metadata = createMetadata();
-        Mockito.when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("testuser"));
-        Mockito.when(metadataMapper.toEntity(metadataDto)).thenReturn(metadata);
-        Mockito.when(metadataMapper.toDto(metadata)).thenReturn(metadataDto);
-        Mockito.when(metadataRepository.save(metadata)).thenReturn(metadata);
-        Mockito.when(metadataRepository.findByDocumentId(metadataDto.getDocumentId())).thenReturn(metadata);
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("testuser"));
+        when(metadataMapper.toEntity(metadataDto)).thenReturn(metadata);
+        when(metadataMapper.toDto(metadata)).thenReturn(metadataDto);
+        when(metadataRepository.save(metadata)).thenReturn(metadata);
+        when(metadataRepository.findByDocumentId(metadataDto.getDocumentId())).thenReturn(metadata);
 
         MetadataDto updatedDto = metadataService.save(metadataDto);
-
-        Mockito.verify(metadataRepository, Mockito.atLeast(1)).save(metadata);
-        Mockito.verify(metadataMapper, Mockito.atLeast(0)).toEntity(metadataDto);
-        Mockito.verify(metadataMapper, Mockito.atLeast(1)).toDto(metadata);
+        assertThat(updatedDto).isNotNull();
+        verify(metadataRepository, atLeast(1)).save(metadata);
+        verify(metadataMapper, atLeast(0)).toEntity(metadataDto);
+        verify(metadataMapper, atLeast(1)).toDto(metadata);
 
 
         Assert.assertEquals(metadataDto.getDocumentId(), updatedDto.getDocumentId());
@@ -86,9 +90,7 @@ public class MetadataServiceImplTest {
 
     @Test(expected = UsernameNotFoundException.class)
     public void testSaveFailure() {
-
         MetadataDto metadataDto = createMetadataDto();
-
         metadataService.save(metadataDto);
     }
 
@@ -98,15 +100,14 @@ public class MetadataServiceImplTest {
         MetadataDto metadataDto = createMetadataDto();
         Metadata metadata = createMetadata();
 
-
-        Mockito.when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("testuser"));
-        Mockito.when(metadataRepository.findByDocumentId(metadataDto.getDocumentId()))
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("testuser"));
+        when(metadataRepository.findByDocumentId(metadataDto.getDocumentId()))
             .thenReturn(metadata);
-        Mockito.when(metadataMapper.toDto(metadata)).thenReturn(metadataDto);
+        when(metadataMapper.toDto(metadata)).thenReturn(metadataDto);
 
         MetadataDto updatedDto = metadataService.findByDocumentId(metadataDto.getDocumentId());
 
-        Mockito.verify(metadataRepository, Mockito.atLeast(1))
+        verify(metadataRepository, atLeast(1))
             .findByDocumentId(metadataDto.getDocumentId());
 
         Assert.assertEquals(metadataDto.getDocumentId(), updatedDto.getDocumentId());

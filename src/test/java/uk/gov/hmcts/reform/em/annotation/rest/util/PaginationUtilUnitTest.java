@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 /**
@@ -26,17 +27,18 @@ public class PaginationUtilUnitTest {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, baseUrl);
         List<String> strHeaders = headers.get(HttpHeaders.LINK);
         assertNotNull(strHeaders);
-        assertTrue(strHeaders.size() == 1);
+        assertEquals(1, strHeaders.size());
         String headerData = strHeaders.get(0);
-        assertTrue(headerData.split(",").length == 4);
+        assertEquals(4, headerData.split(",").length);
         String expectedData = "</api/_search/example?page=7&size=50>; rel=\"next\","
                 + "</api/_search/example?page=5&size=50>; rel=\"prev\","
                 + "</api/_search/example?page=7&size=50>; rel=\"last\","
                 + "</api/_search/example?page=0&size=50>; rel=\"first\"";
         assertEquals(expectedData, headerData);
-        List<String> xTotalCountHeaders = headers.get("X-Total-Count");
-        assertTrue(xTotalCountHeaders.size() == 1);
-        assertTrue(Long.valueOf(xTotalCountHeaders.get(0)).equals(400L));
+        final List<String> xTotalCount = headers.get("X-Total-Count");
+        assertNotNull(xTotalCount);
+        assertThat(xTotalCount.size()).isEqualTo(1);
+        assertThat(Long.valueOf(xTotalCount.get(0))).isEqualTo(400L);
     }
 
 }

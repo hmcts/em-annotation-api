@@ -1,20 +1,20 @@
 buildscript {
     dependencies {
-        classpath("net.serenity-bdd:serenity-gradle-plugin:2.3.13")
-        classpath("net.serenity-bdd:serenity-single-page-report:2.3.13")
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.6.0")
+        classpath("net.serenity-bdd:serenity-single-page-report:2.6.0")
     }
 }
 
 plugins {
     id 'application'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.springframework.boot' version '2.4.5'
-    id 'uk.gov.hmcts.java' version '0.12.12'
+    id 'org.springframework.boot' version '2.5.4'
+    id 'uk.gov.hmcts.java' version '0.12.13'
     id 'com.github.ben-manes.versions' version '0.39.0'
     id 'org.sonarqube' version '3.3'
     id 'jacoco'
     id 'checkstyle'
-    id 'au.com.dius.pact' version '4.1.8'
+    id 'au.com.dius.pact' version '4.2.11'
     id "info.solidsoft.pitest" version '1.5.2'
 
 }
@@ -51,20 +51,21 @@ repositories {
 def versions = [
         postgresql         : '42.2.20',
         springfoxSwagger   : '2.9.2',
-        springSecurity     : '5.4.7',
-        fasterXmlJackson   : '2.12.3',
+        springSecurity     : '5.5.2',
+        fasterXmlJackson   : '2.12.4',
         pitest             : '1.5.1',
         gradlePitest       : '1.3.0',
         sonarPitest        : '0.5',
         h2                 : '1.4.197',
         liquibase          : '3.5.3',
-        serenity           : '2.3.13',
-        serenityreporter   : '2.3.13',
-        serenityRestAssured: '2.3.4',
+        serenity           : '2.6.0',
+        serenityreporter   : '2.6.0',
+        serenityRestAssured: '2.6.0',
         pact_version       : '4.0.10',
-        hibernate          : '5.4.25.Final',
-        logging            : '5.1.7'
-]
+        hibernate          : '5.5.6.Final',
+        logging            : '5.1.7',
+        junit5             : '5.7.2'
+ ]
 
 sourceSets {
     aat {
@@ -123,21 +124,20 @@ dependencies {
     implementation group:'com.fasterxml.jackson.module', name: 'jackson-module-jaxb-annotations', version: versions.fasterXmlJackson
 
     implementation group: 'javax.el', name: 'javax.el-api', version: '3.0.0'
-    implementation "org.zalando:problem-spring-web:0.26.2"
-    implementation("io.springfox:springfox-swagger2:${versions.springfoxSwagger}")
-    implementation("io.springfox:springfox-swagger-ui:${versions.springfoxSwagger}")
+    implementation group: 'org.zalando', name: 'problem-spring-web', version: '0.26.2'
+    implementation group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
+    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
     implementation group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
-    implementation( 'org.apache.httpcomponents:httpclient:4.5.10')
-    implementation "org.liquibase:liquibase-core"
-    implementation "org.liquibase:liquibase-core"
-    implementation("org.postgresql:postgresql:${versions.postgresql}")
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.10'
+    implementation group: 'org.liquibase', name : 'liquibase-core'
+    implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
     implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
     implementation group: 'commons-validator', name: 'commons-validator', version: '1.7'
-    implementation "javax.transaction:javax.transaction-api"
+    implementation group: 'javax.transaction', name: 'javax.transaction-api'
     implementation group: 'org.ehcache', name: 'ehcache', version: '3.9.5'
 
-    implementation "com.zaxxer:HikariCP:5.0.0"
+    implementation group: 'com.zaxxer', name: 'HikariCP', version: '5.0.0'
     
     implementation group:'org.hibernate', name: 'hibernate-core', version: versions.hibernate
     implementation group:'org.hibernate', name: 'hibernate-jcache', version: versions.hibernate
@@ -164,48 +164,36 @@ dependencies {
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 
-    annotationProcessor "org.projectlombok:lombok:1.18.20"
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     annotationProcessor group:'org.hibernate', name: 'hibernate-jpamodelgen', version: versions.hibernate
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor", withoutStuff
-    testImplementation "org.springframework.boot:spring-boot-starter-test", {
-        exclude group: 'junit', module: 'junit'
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
+    annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', withoutStuff
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testImplementation group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
     testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
-    testImplementation 'com.warrenstrange:googleauth:1.5.0'
+    testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
 
-    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.6.3'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.3'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.3'
-
-    testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.3"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.3"
-    testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.3"
+    testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version:versions.junit5
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version:versions.junit5
 
     //pact contract testing
 
-    testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured, withoutStuff
-    testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity, withoutStuff
-    testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
 
-    testImplementation 'com.github.hmcts:fortify-client:1.2.0:all'
+    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.2.0', classifier: 'all'
 
     contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-junit', version: versions.pact_version, withoutAlpnApi
     contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-junit5', version: versions.pact_version, withoutAlpnApi
     contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-java8', version: versions.pact_version, withoutAlpnApi
     implementation group: 'au.com.dius', name: 'pact-jvm-consumer', version: versions.pact_version, withoutAlpnApi
 
-    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.6.3")
-    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.3")
-    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.6.3')
+    contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version:versions.junit5
+    contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:versions.junit5
 
-    aatImplementation("org.junit.jupiter:junit-jupiter-api:5.6.3")
-    aatRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.3")
-    aatImplementation 'com.github.hmcts:em-test-helper:1.19.1'
+    aatImplementation group: 'org.json', name: 'json', version: '20210307'
+    aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version:'1.20.0'
 
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
@@ -232,24 +220,6 @@ dependencyManagement {
         dependencySet(group: 'commons-io', version: '2.11.0') {
           entry 'commons-io'
         }
-
-        // Do not change - START
-        // Changing below will break Serenity Report generation
-        dependencySet(group: 'org.junit.jupiter', version: '5.6.3') {
-            entry 'junit-jupiter'
-            entry 'junit-jupiter-api'
-            entry 'junit-jupiter-params'
-        }
-
-        dependencySet(group: 'org.junit.vintage', version: '5.6.2') {
-            entry 'junit-vintage-engine'
-        }
-
-        dependencySet(group: 'net.bytebuddy', version: '1.11.2') {
-            entry 'byte-buddy'
-            entry 'byte-buddy-agent'
-        }
-        // Do not change - END
 
         //CVE-2021-27568
         dependencySet(group: 'net.minidev', version: '2.4.7') {
@@ -279,7 +249,7 @@ dependencyManagement {
         }
 
         //CVE-2021-28170
-        dependencySet(group: 'org.glassfish', version: '4.0.0') {
+        dependencySet(group: 'org.glassfish', version: '4.0.2') {
             entry 'jakarta.el'
         }
     }
@@ -300,6 +270,8 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/reform/em/annotation/domain/*',
     '**uk/gov/hmcts/reform/em/annotation/authchecker/*',
     '**uk/gov/hmcts/reform/em/annotation/config/*',
+    '**uk/gov/hmcts/reform/em/annotation/config/audit/*',
+    '**uk/gov/hmcts/reform/em/annotation/config/security/*',
     '**uk/gov/hmcts/reform/em/annotation/service/mapper/*',
     '**uk/gov/hmcts/reform/em/annotation/service/dto/*'
 
@@ -401,7 +373,7 @@ task functional(type: Test) {
 }
 
 // Serenity Reporting
-functional.finalizedBy(aggregate)
+// functional.finalizedBy(aggregate)
 
 task smoke(type: Test) {
     group = 'Delivery pipeline'

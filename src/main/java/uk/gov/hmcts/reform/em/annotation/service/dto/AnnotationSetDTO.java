@@ -63,9 +63,9 @@ public class AnnotationSetDTO extends AbstractAuditingDTO implements Serializabl
 
     @Override
     public String toString() {
-        return "AnnotationSetDTO{" +
-            "id=" + getId() +
-            ", documentId='" + getDocumentId() + "'" +
-            "}";
+        return "AnnotationSetDTO{"
+                + " id=" + id
+                + ", documentId='" + documentId + '\''
+                + '}';
     }
 }
