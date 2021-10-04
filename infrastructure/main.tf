@@ -7,7 +7,7 @@ locals {
   ase_name = "core-compute-${var.env}"
   local_env = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "aat" : "saat" : var.env}"
   shared_vault_name = "${var.shared_product_name}-${local.local_env}"
-  tags = "${merge(var.common_tags, map("Team Contact", "#rpe"))}"
+  tags = var.common_tags
   vaultName = "${local.app_full_name}-${var.env}"
 }
 
