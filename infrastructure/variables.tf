@@ -1,4 +1,5 @@
 variable "product" {
+  default = "em"
 }
 
 variable "shared_product_name" {
@@ -6,6 +7,7 @@ variable "shared_product_name" {
 }
 
 variable "component" {
+  default = "anno"
 }
 
 variable "team_name" {
@@ -34,7 +36,7 @@ variable "jenkins_AAD_objectId" {
   description = "(Required) The Azure AD object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault. The object ID must be unique for the list of access policies."
 }
 
-variable "common_tags" {
+variable common_tags {
   type = map(string)
 }
 ////////////////////////////////////////////////
@@ -149,3 +151,10 @@ variable "enable_s2s_healthcheck" {
 ////////////////////////////////////////////////
 // Addtional
 ////////////////////////////////////////////////
+variable "postgresql_user_v11" {
+  default = "annotation"
+}
+
+variable "database_name_v11" {
+  default = "annotation"
+}
