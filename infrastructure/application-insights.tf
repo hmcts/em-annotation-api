@@ -14,8 +14,3 @@ resource "azurerm_application_insights" "appinsights" {
     ]
   }
 }
-
-output "appInsightsInstrumentationKey" {
-  sensitive = true
-  value     = azurerm_application_insights.appinsights.instrumentation_key
-}
