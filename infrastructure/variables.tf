@@ -23,7 +23,6 @@ variable "location" {
 }
 
 variable "env" {
-  default = "demo"
 }
 
 variable "subscription" {
