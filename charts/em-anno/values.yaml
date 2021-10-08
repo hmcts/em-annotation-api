@@ -17,8 +17,8 @@ java:
         - name: anno-POSTGRES-PASS
           alias: SPRING_DATASOURCE_PASSWORD
   environment:
-    SPRING_DATASOURCE_URL: jdbc:postgresql://em-anno-postgres-db-{{ .Values.global.environment }}.postgres.database.azure.com:5432/annotation?sslmode=require
-    SPRING_DATASOURCE_USERNAME: annotation@em-anno-postgres-db-{{ .Values.global.environment }}
+    SPRING_DATASOURCE_URL: jdbc:postgresql://em-anno-postgres-db-v11-{{ .Values.global.environment }}.postgres.database.azure.com:5432/annotation?sslmode=require
+    SPRING_DATASOURCE_USERNAME: annotation@em-anno-postgres-db-v11-{{ .Values.global.environment }}
     RUN_DB_MIGRATION_ON_STARTUP: false
     IDAM_API_BASE_URI: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
     OPEN_ID_API_BASE_URI: https://idam-web-public.{{ .Values.global.environment }}.platform.hmcts.net/o
