@@ -7,6 +7,7 @@ services:
     environment:
       - microserviceKeys_em_gw=AAAAAAAAAAAAAAAA
       - microserviceKeys_ccd_gw=AAAAAAAAAAAAAAAA
+      - microserviceKeys_xui_webapp=AAAAAAAAAAAAAAAA
       - microserviceKeys_em_annotation_app=AAAAAAAAAAAAAAAA
       - JSON_CONSOLE_PRETTY_PRINT=false
       - REFORM_SERVICE_TYPE=java
