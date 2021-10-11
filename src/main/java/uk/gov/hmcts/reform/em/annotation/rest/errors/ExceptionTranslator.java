@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 public class ExceptionTranslator implements ProblemHandling {
 
     private static final String MESSAGE = "message";
+
     /**
      * Post-process the Problem payload to add the message key for the front-end if needed.
      */
