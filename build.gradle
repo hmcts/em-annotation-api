@@ -163,7 +163,7 @@ dependencies {
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.0.2'
     implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '2.0.1'
 
-    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
+    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
