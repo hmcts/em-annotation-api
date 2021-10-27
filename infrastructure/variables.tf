@@ -10,14 +10,6 @@ variable component {
   default = "anno"
 }
 
-variable team_name {
-  default = "evidence"
-}
-
-variable app_language {
-  default = "java"
-}
-
 variable location {
   default = "UK South"
 }
@@ -27,8 +19,6 @@ variable env {
 
 variable subscription {
 }
-
-variable ilbIp{}
 
 variable tenant_id {}
 
@@ -83,46 +73,6 @@ variable postgresql_user {
 variable database_name {
   default = "annotation"
 }
-////////////////////////////////////////////////
-// Logging
-////////////////////////////////////////////////
-
-variable json_console_pretty_print {
-  default = "false"
-}
-
-variable log_output {
-  default = "single"
-}
-
-variable root_logging_level {
-  default = "INFO"
-}
-
-variable log_level_spring_web {
-  default = "INFO"
-}
-
-variable log_level_dm {
-  default = "INFO"
-}
-
-variable show_sql {
-  default = "true"
-}
-
-variable endpoints_health_sensitive {
-  default = "true"
-}
-
-variable endpoints_info_sensitive {
-  default = "true"
-}
-
-variable appinsights_instrumentation_key {
-  description = "Instrumentation key of the App Insights instance this webapp should use. Module will create own App Insights resource if this is not provided"
-  default     = ""
-}
 
 variable managed_identity_object_id {
   default = ""
@@ -149,7 +99,7 @@ variable enable_s2s_healthcheck {
 }
 
 ////////////////////////////////////////////////
-// Addtional
+// db11
 ////////////////////////////////////////////////
 variable postgresql_user_v11 {
   default = "annotation"
