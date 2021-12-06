@@ -103,7 +103,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
 
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.0.4'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.0'
     
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-openfeign', version: '3.0.4', {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-actuator'
