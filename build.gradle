@@ -63,7 +63,8 @@ def versions = [
         pact_version       : '4.0.10',
         hibernate          : '5.5.6.Final',
         logging            : '5.1.7',
-        junit5             : '5.7.2'
+        junit5             : '5.7.2',
+        log4JVersion       : '2.15.0'
  ]
 
 sourceSets {
@@ -253,6 +254,11 @@ dependencyManagement {
         dependencySet(group: 'org.springframework.cloud', version: '3.0.5') {
             entry 'spring-cloud-openfeign-core'
             entry 'spring-cloud-starter-openfeign'
+        }
+
+        dependencySet(group: 'org.apache.logging.log4j', version: versions.log4JVersion) {
+            entry 'log4j-api'
+            entry 'log4j-to-slf4j'
         }
     }
 }
