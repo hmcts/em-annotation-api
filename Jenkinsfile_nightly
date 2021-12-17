@@ -59,7 +59,7 @@ withNightlyPipeline(type, product, component) {
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
     enableMutationTest()
-//    enableFortifyScan('em-anno-aat')
+    enableFortifyScan('em-anno-aat')
     enableFullFunctionalTest()
     enableSecurityScan()
     enableSlackNotifications('#em-dev-chat')
