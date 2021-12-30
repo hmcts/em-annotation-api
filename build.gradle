@@ -347,7 +347,6 @@ configurations {
 
 checkstyle {
     maxWarnings = 10
-    ignoreFailures = true
     toolVersion = '8.12'
     reportsDir = file("$project.buildDir/reports/checkstyle")
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
