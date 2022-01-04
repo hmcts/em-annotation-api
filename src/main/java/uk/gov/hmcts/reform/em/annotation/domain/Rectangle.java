@@ -16,7 +16,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "rectangle")
-
+@SuppressWarnings({"MemberName","ParameterName","MethodName"})
 public class Rectangle extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

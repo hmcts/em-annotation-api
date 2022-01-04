@@ -7,6 +7,7 @@ import java.util.UUID;
 /**
  * A DTO for the Rectangle entity.
  */
+@SuppressWarnings({"MemberName","ParameterName"})
 public class RectangleDTO extends AbstractAuditingDTO implements Serializable {
 
     private UUID id;

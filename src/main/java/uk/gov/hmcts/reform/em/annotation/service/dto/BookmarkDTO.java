@@ -6,6 +6,7 @@ import java.util.UUID;
 /**
  * A DTO for the Bookmark entity.
  */
+@SuppressWarnings({"MemberName","ParameterName"})
 public class BookmarkDTO {
 
     private UUID id;

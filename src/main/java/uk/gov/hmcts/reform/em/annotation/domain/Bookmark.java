@@ -12,6 +12,7 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "bookmark")
+@SuppressWarnings({"MemberName","ParameterName"})
 public class Bookmark implements Serializable {
 
     @Id
