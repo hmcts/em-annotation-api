@@ -6,6 +6,9 @@ import org.zalando.problem.Status;
 /**
  * Simple exception with a message, that returns an Internal Server Error code.
  */
+
+// Delete this class because it is not used?
+@SuppressWarnings("squid:S110")
 public class InternalServerErrorException extends AbstractThrowableProblem {
 
     private static final long serialVersionUID = 1L;
