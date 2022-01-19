@@ -31,11 +31,8 @@ if (!project.hasProperty('runList')) {
 
 group 'uk.gov.hmcts.reform.em.annotation'
 version '1.0.0'
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
+sourceCompatibility = 11
+targetCompatibility = 11
 
 mainClassName = 'uk.gov.hmcts.reform.em.annotation.Application'
 
