@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -31,12 +31,12 @@ public class FilterAnnotationSet {
         this.annotationSetService = annotationSetService;
     }
 
-    @ApiOperation(value = "Filter an annotationSet", notes = "A GET request to filter an annotationSetDTO")
+    @Operation(summary = "Filter an annotationSet", description = "A GET request to filter an annotationSetDTO")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = AnnotationSetDTO.class, responseContainer = "List"),
-            @ApiResponse(code = 401, message = "Unauthorised"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "401", description = "Unauthorised"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @GetMapping("/annotation-sets/filter")
     public ResponseEntity<AnnotationSetDTO> getAllAnnotationSets(@RequestParam("documentId") String documentId) {

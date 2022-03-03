@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.em.annotation.repository;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
-import uk.gov.hmcts.reform.em.annotation.BaseTest;
 import uk.gov.hmcts.reform.em.annotation.config.Constants;
 import uk.gov.hmcts.reform.em.annotation.config.audit.AuditEventConverter;
 import uk.gov.hmcts.reform.em.annotation.domain.PersistentAuditEvent;
@@ -23,11 +23,11 @@ import uk.gov.hmcts.reform.em.annotation.service.AuditEventService;
 
 import javax.servlet.http.HttpSession;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.hmcts.reform.em.annotation.repository.CustomAuditEventRepository.EVENT_DATA_COLUMN_MAX_LENGTH;
@@ -40,7 +40,8 @@ import static uk.gov.hmcts.reform.em.annotation.repository.CustomAuditEventRepos
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {Application.class})
 @Transactional
-public class CustomAuditEventRepositoryIntTest extends BaseTest {
+@Ignore
+public class CustomAuditEventRepositoryIntTest {
 
     @Autowired
     private PersistenceAuditEventRepository persistenceAuditEventRepository;

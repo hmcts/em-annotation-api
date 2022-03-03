@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -67,16 +67,16 @@ public class BookmarkResource {
      * POST  /bookmarks : Create a new bookmark.
      *
      * @param bookmarkDTO the bookmarkDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new bookmarkDTO, or with status 400 (Bad
+     * @return the ResponseEntity with status "201" (Created) and with body the new bookmarkDTO, or with status "400" (Bad
      *      Request) if the bookmark has an invalid ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @ApiOperation(value = "Create an bookmarkDTO", notes = "A POST request to create an bookmarkDTO")
+    @Operation(summary = "Create an bookmarkDTO", description = "A POST request to create an bookmarkDTO")
     @ApiResponses(value = {
-        @ApiResponse(code = 201, message = "Successfully created", response = BookmarkDTO.class),
-        @ApiResponse(code = 400, message = "bookmarkDTO not valid, invalid id"),
-        @ApiResponse(code = 401, message = "Unauthorised"),
-        @ApiResponse(code = 403, message = "Forbidden"),
+        @ApiResponse(responseCode = "201", description = "Successfully created"),
+        @ApiResponse(responseCode = "400", description = "bookmarkDTO not valid, invalid id"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
     })
     @PostMapping("/bookmarks")
     public ResponseEntity<BookmarkDTO> createBookmark(@RequestBody BookmarkDTO bookmarkDTO) throws URISyntaxException {
@@ -94,18 +94,18 @@ public class BookmarkResource {
      * PUT  /bookmarks : Updates an existing bookmark.
      *
      * @param bookmarkDTO the bookmarkDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated bookmarkDTO, or with status 400 (Bad
-     *     Request) if the bookmarkDTO is not valid, or with status 500 (Internal Server Error) if the bookmarkDTO couldn't
+     * @return the ResponseEntity with status "200" (OK) and with body the updated bookmarkDTO, or with status "400" (Bad
+     *     Request) if the bookmarkDTO is not valid, or with status "500" (Internal Server Error) if the bookmarkDTO couldn't
      *     be updated
      */
-    @ApiOperation(value = "Update an existing bookmarkDTO", notes = "A PUT request to update an bookmarkDTO")
+    @Operation(summary = "Update an existing bookmarkDTO", description = "A PUT request to update an bookmarkDTO")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Success", response = BookmarkDTO.class),
-        @ApiResponse(code = 400, message = "bookmarkDTO not valid, invalid id"),
-        @ApiResponse(code = 500, message = "bookmarkDTO couldn't be updated"),
-        @ApiResponse(code = 401, message = "Unauthorised"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Not Found"),
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "400", description = "bookmarkDTO not valid, invalid id"),
+        @ApiResponse(responseCode = "500", description = "bookmarkDTO couldn't be updated"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @PutMapping("/bookmarks")
     public ResponseEntity<BookmarkDTO> updateBookmark(@Valid @RequestBody BookmarkDTO bookmarkDTO) {
@@ -123,18 +123,18 @@ public class BookmarkResource {
      * PUT  /bookmarks_multiple : Updates multiple existing bookmarks.
      *
      * @param bookmarkDTOList the list of bookmarkDTO objects to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated bookmarkDTO objects, or with status 400
-     *      (Bad Request) if the bookmarkDTO objects are not valid, or with status 500 (Internal Server Error) if the
+     * @return the ResponseEntity with status "200" (OK) and with body the updated bookmarkDTO objects, or with status "400"
+     *      (Bad Request) if the bookmarkDTO objects are not valid, or with status "500" (Internal Server Error) if the
      *      bookmarkDTO objects couldn't be updated.
      */
-    @ApiOperation(value = "Update multiple existing bookmarkDTO objects", notes = "A PUT request to update multiple bookmarkDTO objects")
+    @Operation(summary = "Update multiple existing bookmarkDTO objects", description = "A PUT request to update multiple bookmarkDTO objects")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Success", response = BookmarkDTO.class),
-        @ApiResponse(code = 400, message = "bookmarkDTO objects not valid, invalid id"),
-        @ApiResponse(code = 500, message = "bookmarkDTO objects couldn't be updated"),
-        @ApiResponse(code = 401, message = "Unauthorised"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Not Found"),
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "400", description = "bookmarkDTO objects not valid, invalid id"),
+        @ApiResponse(responseCode = "500", description = "bookmarkDTO objects couldn't be updated"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @PutMapping("/bookmarks_multiple")
     public ResponseEntity<List<BookmarkDTO>> updateMultipleBookmarks(
@@ -163,14 +163,14 @@ public class BookmarkResource {
      * GET  /bookmarks/:documentId : get all the bookmarks for a specific document.
      *
      * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of bookmarks in body
+     * @return the ResponseEntity with status "200" (OK) and the list of bookmarks in body
      */
-    @ApiOperation(value = "Get all bookmarks for Document ID")
+    @Operation(summary = "Get all bookmarks for Document ID")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Success", response = BookmarkDTO.class, responseContainer = "List"),
-        @ApiResponse(code = 401, message = "Unauthorised"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Not Found"),
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @GetMapping("/{documentId}/bookmarks")
     public ResponseEntity<List<BookmarkDTO>> getAllDocumentBookmarks(@PathVariable UUID documentId, Pageable pageable) {
@@ -188,14 +188,14 @@ public class BookmarkResource {
      * DELETE  /bookmarks/:id : delete the "id" bookmark.
      *
      * @param id the id of the bookmarkDTO to delete
-     * @return the ResponseEntity with status 200 (OK)
+     * @return the ResponseEntity with status "200" (OK)
      */
-    @ApiOperation(value = "Delete a BookmarkDTO", notes = "A DELETE request to delete a BookmarkDTO")
+    @Operation(summary = "Delete a BookmarkDTO", description = "A DELETE request to delete a BookmarkDTO")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Success"),
-        @ApiResponse(code = 401, message = "Unauthorised"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Not Found"),
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @DeleteMapping("/bookmarks/{id}")
     public ResponseEntity<Void> deleteBookmark(@PathVariable UUID id) {
@@ -213,15 +213,15 @@ public class BookmarkResource {
      * DELETE  /bookmarks : delete multiple bookmarks.
      *
      * @param deleteBookmarkDTO object containing the list of bookmarkDTO objects to delete and parent to update
-     * @return the ResponseEntity with status 200 (OK), or with status 400 (Bad Request) if the bookmarkDTO objects are
-     *      not valid, or with status 500 (Internal Server Error) if the bookmarkDTO objects couldn't be deleted.
+     * @return the ResponseEntity with status "200" (OK), or with status "400" (Bad Request) if the bookmarkDTO objects are
+     *      not valid, or with status "500" (Internal Server Error) if the bookmarkDTO objects couldn't be deleted.
      */
-    @ApiOperation(value = "Delete multiple existing bookmarkDTO objects", notes = "A DELETE request to delete multiple bookmarkDTO objects")
+    @Operation(summary = "Delete multiple existing bookmarkDTO objects", description = "A DELETE request to delete multiple bookmarkDTO objects")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Success"),
-        @ApiResponse(code = 401, message = "Unauthorised"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Not Found"),
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @DeleteMapping("/bookmarks_multiple")
     public ResponseEntity<Void> deleteMultipleBookmarks(@Valid @RequestBody DeleteBookmarkDTO deleteBookmarkDTO) {

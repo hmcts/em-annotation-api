@@ -1,15 +1,8 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
-
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +30,13 @@ import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
 import uk.gov.hmcts.reform.em.annotation.service.RectangleService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.RectangleDTO;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * REST controller for managing Rectangle.
@@ -66,17 +66,17 @@ public class RectangleResource {
      * POST  /rectangles : Create a new rectangle.
      *
      * @param rectangleDTO the rectangleDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new rectangleDTO, or
-     *      with status 400 (Bad Request) if the rectangle has already an ID
+     * @return the ResponseEntity with status "201" (Created) and with body the new rectangleDTO, or
+     *      with status "400" (Bad Request) if the rectangle has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @ApiOperation(value = "Create a rectangleDTO", notes = "A POST request to create a rectangleDTO")
+    @Operation(summary = "Create a rectangleDTO", description = "A POST request to create a rectangleDTO")
     @ApiResponses(value = {
-        @ApiResponse(code = 201, message = "Successfully created", response = RectangleDTO.class),
-        @ApiResponse(code = 400, message = "rectangleDTO not valid, invalid id"),
-        @ApiResponse(code = 401, message = "Unauthorised"),
-        @ApiResponse(code = 404, message = "Annotation Id not Found"),
-        @ApiResponse(code = 403, message = "Forbidden"),
+        @ApiResponse(responseCode = "201", description = "Successfully created"),
+        @ApiResponse(responseCode = "400", description = "rectangleDTO not valid, invalid id"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "404", description = "Annotation Id not Found"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
     })
     @PostMapping("/rectangles")
     public ResponseEntity<RectangleDTO> createRectangle(@RequestBody RectangleDTO rectangleDTO)
@@ -105,19 +105,19 @@ public class RectangleResource {
      * PUT  /rectangles : Updates an existing rectangle.
      *
      * @param rectangleDTO the rectangleDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated rectangleDTO, or
-     *      with status 400 (Bad Request) if the rectangleDTO is not valid, or with status 500
+     * @return the ResponseEntity with status "200" (OK) and with body the updated rectangleDTO, or
+     *      with status "400" (Bad Request) if the rectangleDTO is not valid, or with status "500"
      *      (Internal Server Error) if the rectangleDTO couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @ApiOperation(value = "Update an existing rectangleDTO", notes = "A PUT request to update a rectangleDTO")
+    @Operation(summary = "Update an existing rectangleDTO", description = "A PUT request to update a rectangleDTO")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Success", response = RectangleDTO.class),
-        @ApiResponse(code = 400, message = "rectangleDTO not valid, invalid id"),
-        @ApiResponse(code = 500, message = "rectangleDTO couldn't be updated"),
-        @ApiResponse(code = 401, message = "Unauthorised"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Not Found"),
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "400", description = "rectangleDTO not valid, invalid id"),
+        @ApiResponse(responseCode = "500", description = "rectangleDTO couldn't be updated"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @PutMapping("/rectangles")
     public ResponseEntity<RectangleDTO> updateRectangle(@RequestBody RectangleDTO rectangleDTO)
@@ -136,14 +136,14 @@ public class RectangleResource {
      * GET  /rectangles : get all the rectangles.
      *
      * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of rectangles in body
+     * @return the ResponseEntity with status "200" (OK) and the list of rectangles in body
      */
-    @ApiOperation(value = "Get all comments", notes = "A GET request without a body is used to retrieve all comments")
+    @Operation(summary = "Get all comments", description = "A GET request without a body is used to retrieve all comments")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Success", response = RectangleDTO.class, responseContainer = "List"),
-        @ApiResponse(code = 401, message = "Unauthorised"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Not Found"),
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @GetMapping("/rectangles")
     public ResponseEntity<List<RectangleDTO>> getAllRectangles(Pageable pageable) {
@@ -157,14 +157,14 @@ public class RectangleResource {
      * GET  /rectangles/:id : get the "id" rectangle.
      *
      * @param id the id of the rectangleDTO to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the rectangleDTO, or with status 404 (Not Found)
+     * @return the ResponseEntity with status "200" (OK) and with body the rectangleDTO, or with status "404" (Not Found)
      */
-    @ApiOperation(value = "Get an existing rectangleDTO", notes = "A GET request to retrieve a rectangleDTO")
+    @Operation(summary = "Get an existing rectangleDTO", description = "A GET request to retrieve a rectangleDTO")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Success", response = RectangleDTO.class),
-        @ApiResponse(code = 401, message = "Unauthorised"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Not Found"),
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @GetMapping("/rectangles/{id}")
     public ResponseEntity<RectangleDTO> getRectangle(@PathVariable UUID id) {
@@ -177,14 +177,14 @@ public class RectangleResource {
      * DELETE  /rectangles/:id : delete the "id" rectangle.
      *
      * @param id the id of the rectangleDTO to delete
-     * @return the ResponseEntity with status 200 (OK)
+     * @return the ResponseEntity with status "200" (OK)
      */
-    @ApiOperation(value = "Delete a commentDTO", notes = "A DELETE request to delete a commentDTO")
+    @Operation(summary = "Delete a commentDTO", description = "A DELETE request to delete a commentDTO")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Success"),
-        @ApiResponse(code = 401, message = "Unauthorised"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Not Found"),
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @DeleteMapping("/rectangles/{id}")
     public ResponseEntity<Void> deleteRectangle(@PathVariable UUID id) {

@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.em.annotation.config.Constants;
 import uk.gov.hmcts.reform.em.annotation.rest.util.HeaderUtil;
 import uk.gov.hmcts.reform.em.annotation.service.MetadataService;
@@ -45,15 +51,15 @@ public class MetaDataResource {
      * POST  /metadata : Create a new metadata.
      *
      * @param metadataDto the metadataDto to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new metadataDto
+     * @return the ResponseEntity with status "201" (Created) and with body the new metadataDto
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @ApiOperation(value = "Create an metadataDto", notes = "A POST request to create an metadataDto")
+    @Operation(summary = "Create an metadataDto", description = "A POST request to create an metadataDto")
     @ApiResponses(value = {
-        @ApiResponse(code = 201, message = "Successfully created", response = MetadataDto.class),
-        @ApiResponse(code = 400, message = "metadataDto not valid"),
-        @ApiResponse(code = 401, message = "Unauthorised"),
-        @ApiResponse(code = 403, message = "Forbidden"),
+        @ApiResponse(responseCode = "201", description = "Successfully created"),
+        @ApiResponse(responseCode = "400", description = "metadataDto not valid"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
     })
     @PostMapping("/")
     public ResponseEntity<MetadataDto> createMetaData(@Validated @RequestBody MetadataDto metadataDto) throws URISyntaxException {
@@ -72,14 +78,14 @@ public class MetaDataResource {
     /**
      * GET  /metadata/:documentId : get the metadata for a specific document.
      *
-     * @return the ResponseEntity with status 200 (OK)
+     * @return the ResponseEntity with status "200" (OK)
      */
-    @ApiOperation(value = "Get the metadata for Document ID")
+    @Operation(summary = "Get the metadata for Document ID")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Success", response = MetadataDto.class),
-        @ApiResponse(code = 401, message = "Unauthorised"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Not Found"),
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @GetMapping("/{documentId}")
     public ResponseEntity<MetadataDto> getMetadata(@PathVariable UUID documentId) {
