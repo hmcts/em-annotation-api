@@ -127,7 +127,7 @@ dependencies {
     implementation group: 'org.zalando', name: 'problem-spring-web', version: '0.26.2'
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
-    implementation group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
+    implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.10'
     implementation group: 'org.liquibase', name : 'liquibase-core'
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
