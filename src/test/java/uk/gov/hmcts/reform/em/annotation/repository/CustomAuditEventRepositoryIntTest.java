@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.repository;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,6 @@ import static uk.gov.hmcts.reform.em.annotation.repository.CustomAuditEventRepos
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {Application.class})
 @Transactional
-@Ignore
 public class CustomAuditEventRepositoryIntTest {
 
     @Autowired
