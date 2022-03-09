@@ -53,4 +53,12 @@
                                  referencedTableName="jhi_persistent_audit_event"/>
     </changeSet>
 
+    <changeSet  author="yogesh(manual)"  id="20220310-1">
+        <renameColumn  columnDataType="varchar(255)"
+                       newColumnName="audit_data"
+                       oldColumnName="value"
+                       remarks="Value is now a reserved word."
+                       tableName="jhi_persistent_audit_evt_data"/>
+    </changeSet>
+
 </databaseChangeLog>
