@@ -43,7 +43,8 @@ spring:
           oidc:
             client-id: microservicekey-em-annotation-app
             client-secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
-
+  main:
+    allow-circular-references: true # Need this for the Mapper library to work
 
 #liquibase:
 #
