@@ -15,7 +15,7 @@ plugins {
     id 'jacoco'
     id 'checkstyle'
     id 'au.com.dius.pact' version '4.2.11'
-    id "info.solidsoft.pitest" version '1.5.2'
+    id "info.solidsoft.pitest" version '1.7.4'
 
 }
 
