@@ -169,5 +169,6 @@
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/bookmarks/id_DELETE":"ignore",
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/comments_POST":"ignore",
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/metadata/_POST":"ignore",
-  "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/bookmarks_PUT":"ignore"
+  "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/bookmarks_PUT":"ignore",
+  "100000_A Client Error response code was returned by the server_http://em-anno-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore"
 }
