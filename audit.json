@@ -170,5 +170,22 @@
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/comments_POST":"ignore",
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/metadata/_POST":"ignore",
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/bookmarks_PUT":"ignore",
-  "100000_A Client Error response code was returned by the server_http://em-anno-aat.service.core-compute-aat.internal/v3/api-docs_GET": "ignore"
+  "100000_A Client Error response code was returned by the server_http://em-anno-aat.service.core-compute-aat.internal/v3/api-docs_GET": "ignore",
+  "10010_Cookie No HttpOnly Flag_http://em-anno-aat.service.core-compute-aat.internal/api/comments?pageable=_GET": "ignore",
+  "10010_Cookie No HttpOnly Flag_http://em-anno-aat.service.core-compute-aat.internal/api/rectangles?pageable=_GET": "ignore",
+  "10010_Cookie No HttpOnly Flag_http://em-anno-aat.service.core-compute-aat.internal/api/rectangles_POST": "ignore",
+  "10054_Cookie without SameSite Attribute_http://em-anno-aat.service.core-compute-aat.internal/api/comments?pageable=_GET": "ignore",
+  "10054_Cookie without SameSite Attribute_http://em-anno-aat.service.core-compute-aat.internal/api/rectangles?pageable=_GET": "ignore",
+  "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/comments?pageable=_GET": "ignore",
+  "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/rectangles?pageable=_GET": "ignore",
+  "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/rectangles_POST": "ignore",
+  "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/rectangles_PUT": "ignore",
+  "10021_X-Content-Type-Options Header Missing_http://em-anno-aat.service.core-compute-aat.internal/_GET": "ignore",
+  "100000_A Client Error response code was returned by the server_http://em-anno-aat.service.core-compute-aat.internal/api/annotation-sets?pageable=_GET": "ignore",
+  "100000_A Client Error response code was returned by the server_http://em-anno-aat.service.core-compute-aat.internal/api/annotations?pageable=_GET": "ignore",
+  "100000_A Client Error response code was returned by the server_http://em-anno-aat.service.core-compute-aat.internal/api/comments?pageable=_GET": "ignore",
+  "100000_A Client Error response code was returned by the server_http://em-anno-aat.service.core-compute-aat.internal/api/documentId/bookmarks?pageable=_GET": "ignore",
+  "100000_A Client Error response code was returned by the server_http://em-anno-aat.service.core-compute-aat.internal/api/rectangles?pageable=_GET": "ignore",
+  "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/api/comments?pageable=_GET": "ignore",
+  "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/api/rectangles?pageable=_GET": "ignore"
 }
