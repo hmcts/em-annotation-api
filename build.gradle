@@ -191,7 +191,7 @@ dependencies {
     contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version:versions.junit5
     contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:versions.junit5
 
-    aatImplementation group: 'org.json', name: 'json', version: '20211205'
+    aatImplementation group: 'org.json', name: 'json', version: '20220320'
     aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version:'1.21.2'
 
     contractTestImplementation sourceSets.main.runtimeClasspath
