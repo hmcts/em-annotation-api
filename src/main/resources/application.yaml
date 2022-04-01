@@ -46,6 +46,17 @@ spring:
   main:
     allow-circular-references: true # Need this for the Mapper library to work
 
+  spring:
+    flyway:
+      out-of-order: false
+      ignore-missing-migrations: true
+      sql-migration-prefix: 'V'
+    #  repeatable-sql-migration-prefix: 'RRR'
+      sql-migration-separator: '__'
+      sql-migration-suffixes: ['.sql', '.pkg', '.pkb']
+      baseline-on-migrate: true
+      baseline-version: 1
+
 #liquibase:
 #
 #  enabled: ${ENABLE_DB_MIGRATE:true}
