@@ -2,6 +2,7 @@ buildscript {
     dependencies {
         classpath("net.serenity-bdd:serenity-gradle-plugin:2.6.0")
         classpath("net.serenity-bdd:serenity-single-page-report:2.6.0")
+        classpath ("com.h2database:h2:1.4.197")
     }
 }
 
@@ -16,7 +17,25 @@ plugins {
     id 'checkstyle'
     id 'au.com.dius.pact' version '4.2.11'
     id "info.solidsoft.pitest" version '1.5.2'
+    id "org.flywaydb.flyway" version "8.5.5"
+}
 
+flyway {
+    url = 'jdbc:postgresql://localhost:5444/emannotationapp'
+    project.ext['flyway.user']='emannotationapp'
+    project.ext['flyway.password']='emannotationapp'
+    locations = [
+            // Add this when Java-based migrations are used
+            'classpath:src/main/resources/db/changelog/'
+    ]
+    flywayMigrate.dependsOn classes
+    sqlMigrationPrefix = 'Migration-'
+    repeatableSqlMigrationPrefix = 'RRR'
+    sqlMigrationSeparator = '__'
+    sqlMigrationSuffixes = ['.sql', '.pkg', '.pkb']
+    baselineOnMigrate = true
+    outOfOrder = true
+    baselineVersion=0001
 }
 
 apply plugin: 'java'
