@@ -17,7 +17,7 @@ plugins {
     id 'checkstyle'
     id 'au.com.dius.pact' version '4.2.11'
     id "info.solidsoft.pitest" version '1.5.2'
-    id "org.flywaydb.flyway" version "8.5.5"
+    id "org.flywaydb.flyway" version '8.5.5'
 }
 
 flyway {
@@ -29,6 +29,12 @@ flyway {
 //            'classpath:src/main/resources/db/migration/*.sql'
             'filesystem:src/main/resources/db/migration/*.sql'
     ]
+//    outOfOrder = true
+//    sqlMigrationPrefix = 'V'
+//    sqlMigrationSeparator = '__'
+//    sqlMigrationSuffixes = ['.sql', '.pkg', '.pkb']
+//    baselineOnMigrate = true
+//    baselineVersion = 1
     flywayMigrate.dependsOn classes
 }
 
