@@ -272,7 +272,7 @@ public class BookmarkResourceIntTest extends BaseTest {
         restLogoutMockMvc.perform(get("/api/" + bookmark.getDocumentId() + "/bookmarks")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(bookmark)))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
