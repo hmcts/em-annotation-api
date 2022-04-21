@@ -1,7 +1,9 @@
 package uk.gov.hmcts.reform.em.annotation.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
 import uk.gov.hmcts.reform.em.annotation.domain.Metadata;
@@ -16,6 +18,8 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class MetadataServiceImpl implements MetadataService {
+
+    private final Logger log = LoggerFactory.getLogger(MetadataServiceImpl.class);
 
     private final MetadataRepository metadataRepository;
     private final MetadataMapper metadataMapper;
@@ -32,7 +36,11 @@ public class MetadataServiceImpl implements MetadataService {
         } else {
             metadata = metadataMapper.toEntity(metadataDto);
             metadata.setCreatedBy(securityUtils.getCurrentUserLogin()
-                .orElseThrow(() -> new UsernameNotFoundException("User not found.")));
+                .orElseThrow(() -> {
+                    log.error(String.format("User not found for Metadata with documentId : %s ",
+                            metadataDto.getDocumentId()));
+                    return new BadCredentialsException("Bad credentials.");
+                }));
         }
         metadata = metadataRepository.save(metadata);
 
