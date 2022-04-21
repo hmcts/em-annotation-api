@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
@@ -51,8 +51,11 @@ public class BookmarkServiceImpl implements BookmarkService {
         log.debug("Request to save Bookmark : {}", bookmarkDTO);
         if (bookmarkDTO.getCreatedBy() == null) {
             bookmarkDTO.setCreatedBy(
-                    securityUtils.getCurrentUserLogin()
-                            .orElseThrow(() -> new UsernameNotFoundException("User not found."))
+                securityUtils.getCurrentUserLogin()
+                    .orElseThrow(() -> {
+                        log.error(String.format("User not found for Bookmark with Id : %s ", bookmarkDTO.getId()));
+                        return new BadCredentialsException("Bad credentials.");
+                    })
             );
         }
 
@@ -74,7 +77,8 @@ public class BookmarkServiceImpl implements BookmarkService {
         if (user.isPresent()) {
             return bookmarkRepository.findByDocumentIdAndCreatedBy(documentId, user.get(), pageable).map(bookmarkMapper::toDto);
         } else {
-            throw new UsernameNotFoundException("User not found");
+            log.error(String.format("User not found for Document with Id : %s ", documentId));
+            throw new BadCredentialsException("Bad credentials.");
         }
     }
 

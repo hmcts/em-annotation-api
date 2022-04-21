@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.authentication.BadCredentialsException;
 import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
 import uk.gov.hmcts.reform.em.annotation.domain.Metadata;
 import uk.gov.hmcts.reform.em.annotation.repository.MetadataRepository;
@@ -17,9 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class MetadataServiceImplTest {
 
@@ -88,7 +86,7 @@ public class MetadataServiceImplTest {
 
     }
 
-    @Test(expected = UsernameNotFoundException.class)
+    @Test(expected = BadCredentialsException.class)
     public void testSaveFailure() {
         MetadataDto metadataDto = createMetadataDto();
         metadataService.save(metadataDto);
