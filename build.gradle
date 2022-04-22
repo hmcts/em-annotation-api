@@ -258,11 +258,9 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/reform/em/annotation/appinsights/*',
     '**uk/gov/hmcts/reform/em/annotation/domain/*',
     '**uk/gov/hmcts/reform/em/annotation/authchecker/*',
-    '**uk/gov/hmcts/reform/em/annotation/config/*',
-    '**uk/gov/hmcts/reform/em/annotation/config/audit/*',
-    '**uk/gov/hmcts/reform/em/annotation/config/security/*',
-    '**uk/gov/hmcts/reform/em/annotation/service/mapper/*',
-    '**uk/gov/hmcts/reform/em/annotation/service/dto/*'
+    '**uk/gov/hmcts/reform/em/annotation/config/**/*',
+    '**uk/gov/hmcts/reform/em/annotation/service/dto/*',
+    '**uk/gov/hmcts/reform/em/annotation/info/*'
 
 ]
 
