@@ -122,7 +122,7 @@ dependencies {
 
     implementation group: 'javax.el', name: 'javax.el-api', version: '3.0.0'
     implementation group: 'org.zalando', name: 'problem-spring-web', version: '0.26.2'
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.7'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.8'
     implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.10'
     implementation group: 'org.liquibase', name : 'liquibase-core', version: '4.8.0'
