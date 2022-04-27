@@ -1,8 +1,12 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +25,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
+@Tag(name = "AnnotationSet Filter Service", description = "Endpoint for filtering AnnotationSet.")
 public class FilterAnnotationSet {
 
     private final Logger log = LoggerFactory.getLogger(FilterAnnotationSet.class);
@@ -31,7 +36,14 @@ public class FilterAnnotationSet {
         this.annotationSetService = annotationSetService;
     }
 
-    @Operation(summary = "Filter an annotationSet", description = "A GET request to filter an annotationSetDTO")
+    @Operation(summary = "Filter an annotationSet", description = "A GET request to filter an annotationSetDTO",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string"))})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "401", description = "Unauthorised"),

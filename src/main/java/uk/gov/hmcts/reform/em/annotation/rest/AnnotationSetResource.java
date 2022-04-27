@@ -1,8 +1,12 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -39,6 +43,7 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping("/api")
+@Tag(name = "AnnotationSet Service", description = "Endpoint for managing AnnotationSet.")
 public class AnnotationSetResource {
 
     private final Logger log = LoggerFactory.getLogger(AnnotationSetResource.class);
@@ -64,7 +69,14 @@ public class AnnotationSetResource {
      *      or with status "400" (Bad Request) if the annotationSet has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @Operation(summary = "Create an annotationSetDTO", description = "A POST request to create an annotationSetDTO")
+    @Operation(summary = "Create an annotationSetDTO", description = "A POST request to create an annotationSetDTO",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string"))})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Successfully created"),
             @ApiResponse(responseCode = "400", description = "annotationSetDTO not valid, invalid id"),
@@ -98,7 +110,15 @@ public class AnnotationSetResource {
      *      or with status "500" (Internal Server Error) if the annotationSetDTO couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @Operation(summary = "Update an existing annotationSetDTO", description = "A PUT request to update an annotationSetDTO")
+    @Operation(summary = "Update an existing annotationSetDTO", description = "A PUT request to update "
+            + "an annotationSetDTO",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string"))})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "400", description = "annotationSetDTO not valid, invalid id"),
@@ -125,7 +145,15 @@ public class AnnotationSetResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status "200" (OK) and the list of annotationSets in body
      */
-    @Operation(summary = "Get all annotationSets", description = "A GET request without a body is used to retrieve all annotationSets")
+    @Operation(summary = "Get all annotationSets", description = "A GET request without a body is used to retrieve "
+            + "all annotationSets",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string"))})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "401", description = "Unauthorised"),
@@ -146,7 +174,18 @@ public class AnnotationSetResource {
      * @param id the id of the annotationSetDTO to retrieve
      * @return the ResponseEntity with status "200" (OK) and with body the annotationSetDTO, or with status "404" (Not Found)
      */
-    @Operation(summary = "Get an existing annotationSetDTO", description = "A GET request to retrieve an annotationSetDTO")
+    @Operation(summary = "Get an existing annotationSetDTO", description = "A GET request to retrieve "
+            + "an annotationSetDTO",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.PATH, name = "id",
+                            description = "AnnotationSet Id", required = true,
+                            schema = @Schema(type = "UUID"))})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "204", description = "No Content"),
@@ -167,7 +206,17 @@ public class AnnotationSetResource {
      * @param id the id of the annotationSetDTO to delete
      * @return the ResponseEntity with status "200" (OK)
      */
-    @Operation(summary = "Delete an annotationSetDTO", description = "A DELETE request to delete an annotationSetDTO")
+    @Operation(summary = "Delete an annotationSetDTO", description = "A DELETE request to delete an annotationSetDTO",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.PATH, name = "id",
+                            description = "AnnotationSet Id", required = true,
+                            schema = @Schema(type = "UUID"))})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "401", description = "Unauthorised"),

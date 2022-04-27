@@ -1,8 +1,12 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -44,6 +48,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Bookmark Service", description = "Endpoint for managing Bookmarks.")
 public class BookmarkResource {
 
     private final Logger log = LoggerFactory.getLogger(BookmarkResource.class);
@@ -71,7 +76,14 @@ public class BookmarkResource {
      *      Request) if the bookmark has an invalid ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @Operation(summary = "Create an bookmarkDTO", description = "A POST request to create an bookmarkDTO")
+    @Operation(summary = "Create an bookmarkDTO", description = "A POST request to create an bookmarkDTO",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Successfully created"),
         @ApiResponse(responseCode = "400", description = "bookmarkDTO not valid, invalid id"),
@@ -98,7 +110,14 @@ public class BookmarkResource {
      *     Request) if the bookmarkDTO is not valid, or with status "500" (Internal Server Error) if the bookmarkDTO couldn't
      *     be updated
      */
-    @Operation(summary = "Update an existing bookmarkDTO", description = "A PUT request to update an bookmarkDTO")
+    @Operation(summary = "Update an existing bookmarkDTO", description = "A PUT request to update an bookmarkDTO",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "400", description = "bookmarkDTO not valid, invalid id"),
@@ -127,7 +146,15 @@ public class BookmarkResource {
      *      (Bad Request) if the bookmarkDTO objects are not valid, or with status "500" (Internal Server Error) if the
      *      bookmarkDTO objects couldn't be updated.
      */
-    @Operation(summary = "Update multiple existing bookmarkDTO objects", description = "A PUT request to update multiple bookmarkDTO objects")
+    @Operation(summary = "Update multiple existing bookmarkDTO objects",
+            description = "A PUT request to update multiple bookmarkDTO objects",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "400", description = "bookmarkDTO objects not valid, invalid id"),
@@ -165,7 +192,17 @@ public class BookmarkResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status "200" (OK) and the list of bookmarks in body
      */
-    @Operation(summary = "Get all bookmarks for Document ID")
+    @Operation(summary = "Get all bookmarks for Document ID",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.PATH, name = "documentId",
+                            description = "Document Id", required = true,
+                            schema = @Schema(type = "UUID"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "401", description = "Unauthorised"),
@@ -190,7 +227,17 @@ public class BookmarkResource {
      * @param id the id of the bookmarkDTO to delete
      * @return the ResponseEntity with status "200" (OK)
      */
-    @Operation(summary = "Delete a BookmarkDTO", description = "A DELETE request to delete a BookmarkDTO")
+    @Operation(summary = "Delete a BookmarkDTO", description = "A DELETE request to delete a BookmarkDTO",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.PATH, name = "id",
+                            description = "Bookmark Id", required = true,
+                            schema = @Schema(type = "UUID"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "401", description = "Unauthorised"),
@@ -216,7 +263,15 @@ public class BookmarkResource {
      * @return the ResponseEntity with status "200" (OK), or with status "400" (Bad Request) if the bookmarkDTO objects are
      *      not valid, or with status "500" (Internal Server Error) if the bookmarkDTO objects couldn't be deleted.
      */
-    @Operation(summary = "Delete multiple existing bookmarkDTO objects", description = "A DELETE request to delete multiple bookmarkDTO objects")
+    @Operation(summary = "Delete multiple existing bookmarkDTO objects",
+            description = "A DELETE request to delete multiple bookmarkDTO objects",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "401", description = "Unauthorised"),

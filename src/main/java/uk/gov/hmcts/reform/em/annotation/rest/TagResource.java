@@ -1,8 +1,12 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -21,6 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Tags Service", description = "Endpoint for managing Tags.")
 public class TagResource {
     private final Logger log = LoggerFactory.getLogger(TagResource.class);
 
@@ -36,7 +41,17 @@ public class TagResource {
      * @param createdBy the id of the user whose tags to retrieve
      * @return the ResponseEntity with status "200" (OK) and with body the annotationDTO, or with status '404' (Not Found)
      */
-    @Operation(summary = "Get list of tags created by user", description = "A GET request to retrieve a list of tags")
+    @Operation(summary = "Get list of tags created by user", description = "A GET request to retrieve a list of tags",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.PATH, name = "createdBy",
+                            description = "Created By", required = true,
+                            schema = @Schema(type = "string"))})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "401", description = "Unauthorised"),
