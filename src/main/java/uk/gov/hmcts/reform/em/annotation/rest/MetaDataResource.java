@@ -1,8 +1,12 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +38,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/metadata")
 @RequiredArgsConstructor
+@Tag(name = "Metadata Service", description = "Endpoint for managing Metadata.")
 public class MetaDataResource {
 
     private final Logger log = LoggerFactory.getLogger(MetaDataResource.class);
@@ -54,7 +59,14 @@ public class MetaDataResource {
      * @return the ResponseEntity with status "201" (Created) and with body the new metadataDto
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @Operation(summary = "Create an metadataDto", description = "A POST request to create an metadataDto")
+    @Operation(summary = "Create an metadataDto", description = "A POST request to create an metadataDto",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Successfully created"),
         @ApiResponse(responseCode = "400", description = "metadataDto not valid"),
@@ -80,7 +92,17 @@ public class MetaDataResource {
      *
      * @return the ResponseEntity with status "200" (OK)
      */
-    @Operation(summary = "Get the metadata for Document ID")
+    @Operation(summary = "Get the metadata for Document ID",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.PATH, name = "documentId",
+                            description = "Document Id", required = true,
+                            schema = @Schema(type = "UUID"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "401", description = "Unauthorised"),

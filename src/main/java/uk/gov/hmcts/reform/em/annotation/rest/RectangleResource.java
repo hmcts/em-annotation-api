@@ -1,8 +1,12 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +47,7 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Rectangle Service", description = "Endpoint for managing Rectangles.")
 public class RectangleResource {
 
     private final Logger log = LoggerFactory.getLogger(RectangleResource.class);
@@ -70,7 +75,14 @@ public class RectangleResource {
      *      with status "400" (Bad Request) if the rectangle has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @Operation(summary = "Create a rectangleDTO", description = "A POST request to create a rectangleDTO")
+    @Operation(summary = "Create a rectangleDTO", description = "A POST request to create a rectangleDTO",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Successfully created"),
         @ApiResponse(responseCode = "400", description = "rectangleDTO not valid, invalid id"),
@@ -110,7 +122,14 @@ public class RectangleResource {
      *      (Internal Server Error) if the rectangleDTO couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @Operation(summary = "Update an existing rectangleDTO", description = "A PUT request to update a rectangleDTO")
+    @Operation(summary = "Update an existing rectangleDTO", description = "A PUT request to update a rectangleDTO",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "400", description = "rectangleDTO not valid, invalid id"),
@@ -138,7 +157,15 @@ public class RectangleResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status "200" (OK) and the list of rectangles in body
      */
-    @Operation(summary = "Get all comments", description = "A GET request without a body is used to retrieve all comments")
+    @Operation(summary = "Get all comments", description = "A GET request without a body is used to retrieve "
+            + "all comments",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "401", description = "Unauthorised"),
@@ -159,7 +186,17 @@ public class RectangleResource {
      * @param id the id of the rectangleDTO to retrieve
      * @return the ResponseEntity with status "200" (OK) and with body the rectangleDTO, or with status "404" (Not Found)
      */
-    @Operation(summary = "Get an existing rectangleDTO", description = "A GET request to retrieve a rectangleDTO")
+    @Operation(summary = "Get an existing rectangleDTO", description = "A GET request to retrieve a rectangleDTO",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.PATH, name = "id",
+                            description = "Rectangle Id", required = true,
+                            schema = @Schema(type = "UUID"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "401", description = "Unauthorised"),
@@ -179,7 +216,17 @@ public class RectangleResource {
      * @param id the id of the rectangleDTO to delete
      * @return the ResponseEntity with status "200" (OK)
      */
-    @Operation(summary = "Delete a commentDTO", description = "A DELETE request to delete a commentDTO")
+    @Operation(summary = "Delete a commentDTO", description = "A DELETE request to delete a commentDTO",
+            parameters = {
+                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                            description = "Authorization (Idam Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                            description = "Service Authorization (S2S Bearer token)", required = true,
+                            schema = @Schema(type = "string")),
+                    @Parameter(in = ParameterIn.PATH, name = "id",
+                            description = "Rectangle Id", required = true,
+                            schema = @Schema(type = "UUID"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "401", description = "Unauthorised"),
