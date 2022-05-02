@@ -63,7 +63,8 @@ def versions = [
         logging            : '5.1.7',
         junit5             : '5.8.2',
         log4JVersion       : '2.17.0',
-        mapstruct          : '1.4.2.Final'
+        mapstruct          : '1.4.2.Final',
+        springcloud        : '3.1.2'
  ]
 
 sourceSets {
@@ -105,9 +106,9 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
 
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.1'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: versions.springcloud
     
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-openfeign', version: '3.1.0', {
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-openfeign', version: versions.springcloud, {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-actuator'
     }
     
@@ -218,12 +219,6 @@ dependencyManagement {
         //CVE-2021-28170
         dependencySet(group: 'org.glassfish', version: '4.0.2') {
             entry 'jakarta.el'
-        }
-
-        //CVE-2021-22044
-        dependencySet(group: 'org.springframework.cloud', version: '3.1.2') {
-            entry 'spring-cloud-openfeign-core'
-            entry 'spring-cloud-starter-openfeign'
         }
 
         //CVE-2021-43797
