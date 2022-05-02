@@ -221,6 +221,11 @@ dependencyManagement {
             entry 'jakarta.el'
         }
 
+        //CVE-2021-22044
+        dependencySet(group: 'org.springframework.cloud', version: versions.springcloud) {
+            entry 'spring-cloud-openfeign-core'
+        }
+
         //CVE-2021-43797
         dependencySet(group: 'io.netty', version: '4.1.76.Final') {
             entry 'netty-buffer'
