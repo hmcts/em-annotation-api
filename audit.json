@@ -176,6 +176,7 @@
   "10010_Cookie No HttpOnly Flag_http://em-anno-aat.service.core-compute-aat.internal/api/rectangles_POST": "ignore",
   "10054_Cookie without SameSite Attribute_http://em-anno-aat.service.core-compute-aat.internal/api/comments?pageable=_GET": "ignore",
   "10054_Cookie without SameSite Attribute_http://em-anno-aat.service.core-compute-aat.internal/api/rectangles?pageable=_GET": "ignore",
+  "10054_Cookie without SameSite Attribute_http://em-anno-aat.service.core-compute-aat.internal/api/bookmarks_PUT":  "ignore",
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/comments?pageable=_GET": "ignore",
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/rectangles?pageable=_GET": "ignore",
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/rectangles_POST": "ignore",
