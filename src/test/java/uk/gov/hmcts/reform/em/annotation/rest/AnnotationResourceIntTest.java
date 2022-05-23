@@ -172,6 +172,32 @@ public class AnnotationResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
+    public void createAnnotationWithExistingDocIdAndCreatedBy() throws Exception {
+        int databaseSizeBeforeCreate = annotationRepository.findAll().size();
+        assertThat(databaseSizeBeforeCreate).isZero();
+        // Create the Annotation with an existing ID
+        uuid = UUID.randomUUID();
+        annotation.setId(uuid);
+        AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
+        annotationDTO.setAnnotationSetId(UUID.randomUUID());
+        annotationDTO.setDocumentId("DocId");
+
+        restLogoutMockMvc.perform(post("/api/annotations")
+                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                        .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
+                .andExpect(status().isCreated());
+
+        annotationDTO.setAnnotationSetId(UUID.randomUUID());
+
+        restLogoutMockMvc.perform(post("/api/annotations")
+                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                        .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    @Transactional
     public void getAllAnnotations() throws Exception {
         // Initialize the database
         Tag tag = new Tag();
@@ -277,6 +303,31 @@ public class AnnotationResourceIntTest extends BaseTest {
         Annotation testAnnotation = annotationList.get(annotationList.size() - 1);
         assertThat(testAnnotation.getAnnotationType()).isEqualTo(UPDATED_ANNOTATION_TYPE.toString());
         assertThat(testAnnotation.getPage()).isEqualTo(UPDATED_PAGE);
+    }
+
+    @Test
+    @Transactional
+    public void updateAnnotationWithExistingDocIdAndCreatedBy() throws Exception {
+        int databaseSizeBeforeCreate = annotationRepository.findAll().size();
+        assertThat(databaseSizeBeforeCreate).isZero();
+        // Create the Annotation with an existing ID
+        uuid = UUID.randomUUID();
+        annotation.setId(uuid);
+        AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
+        annotationDTO.setAnnotationSetId(UUID.randomUUID());
+        annotationDTO.setDocumentId("DocId");
+
+        restLogoutMockMvc.perform(post("/api/annotations")
+                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                        .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
+                .andExpect(status().isCreated());
+
+        annotationDTO.setAnnotationSetId(UUID.randomUUID());
+
+        restLogoutMockMvc.perform(put("/api/annotations")
+                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                        .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
