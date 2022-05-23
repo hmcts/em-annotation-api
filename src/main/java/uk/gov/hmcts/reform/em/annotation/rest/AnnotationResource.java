@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -81,7 +82,13 @@ public class AnnotationResource {
         if (annotationDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        annotationService.save(annotationDTO);
+        try {
+            annotationService.save(annotationDTO);
+        } catch (PSQLException psqlException) {
+            log.error("REST request to create and save Annotation had issue : {}", annotationDTO);
+            return ResponseEntity.badRequest().build();
+        }
+
 
         final URI uri = new URI("/api/annotations/" + annotationDTO.getId());
         return annotationService.findOne(annotationDTO.getId(), true).map(renderedAnnotation ->
@@ -123,7 +130,13 @@ public class AnnotationResource {
         if (annotationDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AnnotationDTO result = annotationService.save(annotationDTO);
+        AnnotationDTO result = null;
+        try {
+            result = annotationService.save(annotationDTO);
+        } catch (PSQLException psqlException) {
+            log.error("REST request to update and save Annotation had issue : {}", annotationDTO);
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, annotationDTO.getId().toString()))
             .body(result);

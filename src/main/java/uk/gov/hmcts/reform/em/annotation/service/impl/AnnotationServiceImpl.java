@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.service.impl;
 
+import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -62,7 +63,7 @@ public class AnnotationServiceImpl implements AnnotationService {
      * @return the persisted entity
      */
     @Override
-    public AnnotationDTO save(AnnotationDTO annotationDTO) {
+    public AnnotationDTO save(AnnotationDTO annotationDTO) throws PSQLException {
         log.debug("Request to save Annotation : {}", annotationDTO);
         final Annotation annotation = annotationMapper.toEntity(annotationDTO);
 
