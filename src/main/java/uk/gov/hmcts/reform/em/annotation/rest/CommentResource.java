@@ -66,7 +66,8 @@ public class CommentResource {
      * POST  /comments : Create a new comment.
      *
      * @param commentDTO the commentDTO to create
-     * @return the ResponseEntity with status "201" (Created) and with body the new commentDTO, or with status "400" (Bad Request) if the comment has already an ID
+     * @return the ResponseEntity with status "201" (Created) and with body the new commentDTO,
+     * or with status "400" (Bad Request) if the comment has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @Operation(summary = "Create an commentDTO", description = "A POST request to create a commentDTO",

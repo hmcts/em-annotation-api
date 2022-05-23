@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,7 @@ import uk.gov.hmcts.reform.em.annotation.rest.util.PaginationUtil;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 
+import javax.validation.ConstraintViolationException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -84,7 +86,7 @@ public class AnnotationResource {
         }
         try {
             annotationService.save(annotationDTO);
-        } catch (PSQLException psqlException) {
+        } catch (PSQLException | ConstraintViolationException | DataIntegrityViolationException exception) {
             log.error("REST request to create and save Annotation had issue : {}", annotationDTO);
             return ResponseEntity.badRequest().build();
         }
@@ -133,7 +135,7 @@ public class AnnotationResource {
         AnnotationDTO result = null;
         try {
             result = annotationService.save(annotationDTO);
-        } catch (PSQLException psqlException) {
+        } catch (PSQLException | ConstraintViolationException | DataIntegrityViolationException exception) {
             log.error("REST request to update and save Annotation had issue : {}", annotationDTO);
             return ResponseEntity.badRequest().build();
         }
