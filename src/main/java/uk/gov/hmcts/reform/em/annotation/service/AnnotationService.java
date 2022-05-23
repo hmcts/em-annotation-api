@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.service;
 
+import org.postgresql.util.PSQLException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
@@ -18,7 +19,7 @@ public interface AnnotationService {
      * @param annotationDTO the entity to save
      * @return the persisted entity
      */
-    AnnotationDTO save(AnnotationDTO annotationDTO);
+    AnnotationDTO save(AnnotationDTO annotationDTO) throws PSQLException;
 
     /**
      * Get all the annotations.
