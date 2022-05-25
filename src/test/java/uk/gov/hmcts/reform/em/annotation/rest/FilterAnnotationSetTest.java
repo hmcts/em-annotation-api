@@ -21,6 +21,7 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationSetDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationSetMapper;
 
 import javax.persistence.EntityManager;
+import javax.validation.ConstraintViolationException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -110,5 +111,18 @@ public class FilterAnnotationSetTest  extends BaseTest {
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(annotationSetDTOs)))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    public void testGetAnnotationSetConstraintViolation() throws Exception {
+        Optional<AnnotationSetDTO> annotationSetDTOs = Optional.empty();
+
+        Mockito.when(annotationSetService.findOneByDocumentId("Test")).thenThrow(ConstraintViolationException.class);
+
+        restLogoutMockMvc.perform(get("/api/annotation-sets/filter?documentId=Test")
+                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                        .content(TestUtil.convertObjectToJsonBytes(annotationSetDTOs)))
+                .andExpect(status().isBadRequest());
     }
 }

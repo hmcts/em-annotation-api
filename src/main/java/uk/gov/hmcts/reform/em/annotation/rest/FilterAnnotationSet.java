@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import uk.gov.hmcts.reform.em.annotation.rest.errors.ResourceNotFoundException;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationSetService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationSetDTO;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Optional;
 
 /**
@@ -53,7 +55,16 @@ public class FilterAnnotationSet {
     @GetMapping("/annotation-sets/filter")
     public ResponseEntity<AnnotationSetDTO> getAllAnnotationSets(@RequestParam("documentId") String documentId) {
         log.debug("REST request to get a page of AnnotationSets");
-        Optional<AnnotationSetDTO> optionalAnnotationSetDTO = annotationSetService.findOneByDocumentId(documentId);
+
+        Optional<AnnotationSetDTO> optionalAnnotationSetDTO = Optional.empty();
+        try {
+            optionalAnnotationSetDTO = annotationSetService.findOneByDocumentId(documentId);
+        } catch (ConstraintViolationException | DataIntegrityViolationException exception) {
+            log.error("constraintViolation : {} for documentId : {} ",
+                    exception.getMessage(), documentId);
+            return ResponseEntity.badRequest().build();
+        }
+
         return optionalAnnotationSetDTO
             .map(ResponseEntity::ok)
             .orElseThrow(() -> new ResourceNotFoundException("Could not find annotation set for this document id#" + documentId));
