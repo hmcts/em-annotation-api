@@ -56,7 +56,7 @@ public class FilterAnnotationSet {
     public ResponseEntity<AnnotationSetDTO> getAllAnnotationSets(@RequestParam("documentId") String documentId) {
         log.debug("REST request to get a page of AnnotationSets");
 
-        Optional<AnnotationSetDTO> optionalAnnotationSetDTO = null;
+        Optional<AnnotationSetDTO> optionalAnnotationSetDTO = Optional.empty();
         try {
             optionalAnnotationSetDTO = annotationSetService.findOneByDocumentId(documentId);
         } catch (ConstraintViolationException | DataIntegrityViolationException exception) {
