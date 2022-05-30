@@ -58,8 +58,7 @@ public class SecurityUtilsTest {
                 .header("Header Name", "Header Value")
                 .claim(SecurityUtils.TOKEN_NAME, ACCESS_TOKEN)
                 .build();
-        Collection<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("SCOPE_read");
-        jwtAuthenticationToken = new JwtAuthenticationToken(jwt, authorities);
+        jwtAuthenticationToken = new JwtAuthenticationToken(jwt);
 
         securityUtils = new SecurityUtils(idamRepository);
         FieldUtils.writeField(securityUtils, "authTokenValidator", authTokenValidator, true);
