@@ -9,8 +9,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +19,6 @@ import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
 import uk.gov.hmcts.reform.em.annotation.repository.IdamRepository;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 
