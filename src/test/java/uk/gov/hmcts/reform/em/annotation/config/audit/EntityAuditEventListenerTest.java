@@ -61,7 +61,7 @@ public class EntityAuditEventListenerTest {
     }
 
     @AfterAll
-    static void tearDown() {
+    static void tearDownAll() {
         EntityAuditEventListener.setBeanFactory(originalBeanFactory);
     }
 
