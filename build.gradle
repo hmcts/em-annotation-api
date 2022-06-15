@@ -1,3 +1,5 @@
+import uk.gov.hmcts.rse.AuthMode
+
 buildscript {
     dependencies {
         classpath("net.serenity-bdd:serenity-gradle-plugin:2.6.0")
@@ -16,6 +18,7 @@ plugins {
     id 'checkstyle'
     id 'au.com.dius.pact' version '4.2.11'
     id "info.solidsoft.pitest" version '1.5.2'
+    id 'com.github.hmcts.rse-cft-lib' version '0.17.152'
 
 }
 
@@ -197,6 +200,8 @@ dependencies {
 
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
+
+    cftlibImplementation 'org.springframework.boot:spring-boot-devtools'
 }
 
 processAatResources {
@@ -419,6 +424,10 @@ pact {
         pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
         version = project.pactVersion
     }
+}
+
+bootWithCCD {
+    authMode = AuthMode.Local
 }
 
 serenity {

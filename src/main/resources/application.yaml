@@ -38,7 +38,7 @@ spring:
       client:
         provider:
           oidc:
-            issuer-uri: ${OPEN_ID_API_BASE_URI:http://localhost:5001/o}
+            issuer-uri: ${OPEN_ID_API_BASE_URI:http://localhost:5000/o}
         registration:
           oidc:
             client-id: microservicekey-em-annotation-app
@@ -103,7 +103,7 @@ info:
 auth:
   idam:
     client:
-      baseUrl: ${IDAM_API_BASE_URI:http://localhost:5001}
+      baseUrl: ${IDAM_API_BASE_URI:http://localhost:5000}
   provider:
     service:
       client:
@@ -118,7 +118,7 @@ idam:
   s2s-authorised:
     services: ${S2S_NAMES_WHITELIST:sscs,divorce,ccd,em_npa_app,em_api,em_gw,ccd_gw,ccd_data,divorce_document_upload,divorce_document_generator,probate_backend,jui_webapp,pui_webapp,xui_webapp}
   api:
-    url: ${IDAM_API_BASE_URI:http://localhost:5001}
+    url: ${IDAM_API_BASE_URI:http://localhost:5000}
     client:
       id: microservicekey-em-annotation-app
       secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
