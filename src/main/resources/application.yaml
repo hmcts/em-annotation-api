@@ -107,12 +107,12 @@ auth:
   provider:
     service:
       client:
-        baseUrl: ${S2S_BASE_URI:http://localhost:4502}
+        baseUrl: ${S2S_BASE_URI:http://localhost:8489}
 
 # service-auth-provider-client lib
 idam:
   s2s-auth:
-    url: ${S2S_BASE_URI:http://localhost:4502}
+    url: ${S2S_BASE_URI:http://localhost:8489}
     totp_secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
     microservice: ${S2S_SERVICE_NAME:em_annotation_app}
   s2s-authorised:
