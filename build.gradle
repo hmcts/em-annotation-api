@@ -2,7 +2,7 @@ import uk.gov.hmcts.rse.AuthMode
 
 buildscript {
     dependencies {
-        classpath("net.serenity-bdd:serenity-gradle-plugin:2.6.0")
+        classpath("net.serenity-bdd:serenity-gradle-plugin:3.2.5")
         classpath("net.serenity-bdd:serenity-single-page-report:2.6.0")
     }
 }
