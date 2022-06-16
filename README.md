@@ -9,36 +9,65 @@
 Annotation API is a backend service to store and retrieve annotations.
 
 ## Quickstart.
-To pull all dependencies and set up IDAM data run:
+#### To clone repo and prepare to pull containers:
 ```bash
-#Cloning repo and running though docker
 git clone https://github.com/hmcts/em-annotation-app.git
 cd em-annotation-app/
 brew install jq
 az login
 az acr login --name hmctspublic
+```
 
-docker-compose -f docker-compose-dependencies-simulator.yml pull
-docker-compose -f docker-compose-dependencies-simulator.yml up
+There are two methods to start the containers and run the application. 
 
-wait for 2-3 minutes till all the dependencies in the docker are up and running.
+Method 1 is the recommended option for improved performance and debugging.
+Method 2 is currently maintained for support.
+
+#### To start the docker containers:
+
+Method 1:
+```
+docker-compose -f docker-compose-dependencies-db.yml pull
+docker-compose -f docker-compose-dependencies-db.yml up
+```
+
+Method 2:
+```
+./bin/start-local-environment.sh
+```
+#### Clean and build for both methods:
+```
 ./gradlew clean
 ./gradlew build
 ```
 
-Run below command to setup the db:
+#### Run below command to setup the db for both methods:
 ```
 ./gradlew migratePostgresDatabase
 ```
 
-Run the below to start the application:
+#### To start the application:
+
+Method 1:
+```
+./gradlew bootWithCCD
+```
+
+Method 2:
 ```
 ./gradlew bootRun
 ```
 
-You can use the below command to close active docker containers:
+#### To remove docker containers after stopping the run:
+Method 1:
 ```
-docker-compose -f docker-compose-dependencies-simulator.yml down
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -f status=exited -q)
+```
+
+Method 2:
+```
+docker-compose -f docker-compose-dependencies.yml down
 ```
 
 ### Swagger UI
