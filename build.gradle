@@ -435,6 +435,8 @@ pact {
 
 bootWithCCD {
     authMode = AuthMode.Local
+    environment 'ENABLE_LIQUIBASE', true
+    environment 'RSE_LIB_ADDITIONAL_DATABASES', 'emannotationapp'
 }
 
 serenity {
