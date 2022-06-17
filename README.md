@@ -14,8 +14,6 @@ Annotation API is a backend service to store and retrieve annotations.
 git clone https://github.com/hmcts/em-annotation-app.git
 cd em-annotation-app/
 brew install jq
-az login
-az acr login --name hmctspublic
 ```
 
 There are two methods to start the containers and run the application. 
@@ -68,6 +66,16 @@ docker rm $(docker ps -a -f status=exited -q)
 Method 2:
 ```
 docker-compose -f docker-compose-dependencies.yml down
+```
+
+#### Potential issues and solutions
+Port 5000 is already in use on Monterey macs:
+
+Disable AirPlay receiver
+
+Authentication issues causing containers to not start:
+```
+docker logout hmctspublic.azurecr.io
 ```
 
 ### Swagger UI
