@@ -71,7 +71,7 @@ docker-compose -f docker-compose-dependencies.yml down
 #### Potential issues and solutions
 Port 5000 is already in use on Monterey macs:
 
-Disable AirPlay
+Disable AirPlay receiver
 
 Authentication issues causing containers to not start:
 ```
