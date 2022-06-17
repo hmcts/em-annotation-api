@@ -20,7 +20,7 @@ services:
       - PACKAGES_VERSION=unkown
       - TESTING_SUPPORT_ENABLED=true
     ports:
-      - 4502:8489
+      - 8489:8489
 
   idam-api:
     image: hmctspublic.azurecr.io/idam/api:stable
@@ -59,7 +59,7 @@ services:
       - REFORM_TEAM=idam
       - REFORM_ENVIRONMENT=local
     ports:
-      - 5001:5000
+      - 5000:5000
 
   idam-web-public:
     image: hmctspublic.azurecr.io/idam/web-public:stable
