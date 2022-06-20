@@ -96,7 +96,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
-      - 6432:6432
+      - 6432:5432
 
   fr-am:
     image: hmctsprivate.azurecr.io/idam/idam-fr-am:latest
