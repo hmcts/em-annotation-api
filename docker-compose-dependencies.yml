@@ -96,7 +96,7 @@ services:
     - POSTGRES_USER=emannotationapp
     - POSTGRES_PASSWORD=emannotationapp
     ports:
-    - 5444:5432
+    - 6432:6432
 
   fr-am:
     image: hmctsprivate.azurecr.io/idam/idam-fr-am:latest
