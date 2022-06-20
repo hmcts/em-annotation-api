@@ -47,7 +47,7 @@ services:
     restart: always
     environment:
       - POSTGRES_DB=emannotationapp
-      - POSTGRES_USER=emannotationapp
-      - POSTGRES_PASSWORD=emannotationapp
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     ports:
-      - 5444:5432
+      - 6432:5432
