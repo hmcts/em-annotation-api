@@ -16,42 +16,37 @@ cd em-annotation-app/
 brew install jq
 ```
 
-There are two methods to start the containers and run the application. 
-
-Method 1 is the recommended option for improved performance and debugging.
-Method 2 is currently maintained for support.
-
-#### To start the docker containers:
-
-Method 1:
-```
-docker-compose -f docker-compose-dependencies-db.yml pull
-docker-compose -f docker-compose-dependencies-db.yml up
-```
-
-Method 2:
-```
-./bin/start-local-environment.sh
-```
-#### Clean and build for both methods:
+#### Clean and build the application:
 ```
 ./gradlew clean
 ./gradlew build
 ```
 
-#### Run below command to setup the db for both methods:
-```
-./gradlew migratePostgresDatabase
-```
+There are two methods to start the containers and run the application. 
 
-#### To start the application:
+Method 1 is the recommended option for improved performance and debugging.
+Method 2 is currently maintained for support.
 
-Method 1:
+
+#### Method 1:
+
 ```
 ./gradlew bootWithCCD
 ```
 
-Method 2:
+#### Method 2:
+
+To start the docker containers:
+```
+./bin/start-local-environment.sh
+```
+
+To setup the db:
+```
+./gradlew migratePostgresDatabase
+```
+
+To start the application:
 ```
 ./gradlew bootRun
 ```
