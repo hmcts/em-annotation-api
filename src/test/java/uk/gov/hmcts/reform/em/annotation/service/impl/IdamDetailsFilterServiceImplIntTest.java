@@ -11,6 +11,7 @@ import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.BaseTest;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 import uk.gov.hmcts.reform.em.annotation.repository.IdamDetailsRepository;
+import uk.gov.hmcts.reform.em.annotation.rest.TestSecurityConfiguration;
 import uk.gov.hmcts.reform.em.annotation.service.IdamDetailsFilterService;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
@@ -25,7 +26,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {Application.class})
+@SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
 public class IdamDetailsFilterServiceImplIntTest extends BaseTest {
 
     @Autowired
