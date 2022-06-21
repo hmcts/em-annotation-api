@@ -27,7 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest
+@SpringBootTest(classes = {TestSecurityConfiguration.class})
 class RectangleResourceTest {
 
     @Mock

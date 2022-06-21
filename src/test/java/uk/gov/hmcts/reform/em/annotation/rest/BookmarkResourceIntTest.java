@@ -47,7 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see BookmarkResource
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {Application.class})
+@SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
 public class BookmarkResourceIntTest extends BaseTest {
 
     @Autowired

@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see CommentResource
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {Application.class})
+@SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
 public class CommentResourceIntTest extends BaseTest {
 
     private static final String DEFAULT_CONTENT = "AAAAAAAAAA";

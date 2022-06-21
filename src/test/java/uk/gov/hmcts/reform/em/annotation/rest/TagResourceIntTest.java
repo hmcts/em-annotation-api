@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see TagResource
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {Application.class})
+@SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
 public class TagResourceIntTest extends BaseTest {
 
     private static final String INVALID_USER = "invalid_user";

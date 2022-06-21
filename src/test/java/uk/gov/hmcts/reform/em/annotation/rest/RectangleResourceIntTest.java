@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see RectangleResource
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {Application.class})
+@SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
 public class RectangleResourceIntTest extends BaseTest {
 
     private static final Double DEFAULT_X = 1d;
