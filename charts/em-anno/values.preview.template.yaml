@@ -16,3 +16,6 @@ java:
     ENABLE_METADATA_ENDPOINT: true
   postgresql:
     enabled: true
+    auth:
+      username: emannotationapp
+      password: emannotationapp
