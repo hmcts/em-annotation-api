@@ -253,5 +253,6 @@
   "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/api/annotation-sets?pageable=_GET": "ignore",
   "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/api/metadata/_GET": "ignore",
   "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/api/rectangles/_GET": "ignore",
+  "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/api/comments/_DELETE": "ignore",
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/annotation-sets/_GET": "ignore"
 }
