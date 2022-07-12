@@ -216,14 +216,14 @@ public class AnnotationSetScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenDeleteAnnotationSetById() {
+    public void shouldReturn204WhenDeleteAnnotationSetById() {
         final UUID annotationSetId = UUID.randomUUID();
         final UUID documentId = UUID.randomUUID();
         final ValidatableResponse response = createAnnotationSet(annotationSetId, documentId);
         final String id = extractJsonObjectFromResponse(response).getString("id");
         final ValidatableResponse deletedResponse = deleteAnnotationSetById(id);
 
-        deletedResponse.statusCode(200);
+        deletedResponse.statusCode(204);
     }
 
     @Test
@@ -244,14 +244,14 @@ public class AnnotationSetScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenUpdateAnnotationSetAfterItHasBeenDeleted() {
+    public void shouldReturn204WhenUpdateAnnotationSetAfterItHasBeenDeleted() {
         final UUID annotationSetId = UUID.randomUUID();
         final UUID documentId = UUID.randomUUID();
         final UUID newDocumentId = UUID.randomUUID();
         final ValidatableResponse response = createAnnotationSet(annotationSetId, documentId);
         final String id = extractJsonObjectFromResponse(response).getString("id");
         final JSONObject annotationSet = extractJsonObjectFromResponse(response);
-        deleteAnnotationSetById(id).statusCode(200);
+        deleteAnnotationSetById(id).statusCode(204);
 
         annotationSet.put("documentId", newDocumentId);
 

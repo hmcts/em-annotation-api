@@ -204,7 +204,7 @@ public class AnnotationSetResource {
      * DELETE  /annotation-sets/:id : delete the "id" annotationSet.
      *
      * @param id the id of the annotationSetDTO to delete
-     * @return the ResponseEntity with status "200" (OK)
+     * @return the ResponseEntity with status "204" (No Content)
      */
     @Operation(summary = "Delete an annotationSetDTO", description = "A DELETE request to delete an annotationSetDTO",
             parameters = {
@@ -218,7 +218,7 @@ public class AnnotationSetResource {
                             description = "AnnotationSet Id", required = true,
                             schema = @Schema(type = "UUID"))})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "204", description = "No Content"),
             @ApiResponse(responseCode = "401", description = "Unauthorised"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
@@ -228,7 +228,7 @@ public class AnnotationSetResource {
         log.debug("REST request to delete AnnotationSet : {}", id);
         try {
             annotationSetService.delete(id);
-            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+            return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
         } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.notFound().build();
         }
