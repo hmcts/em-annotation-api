@@ -224,7 +224,7 @@ public class AnnotationSetResourceIntTest extends BaseTest {
         // delete the annotationSet
         restLogoutMockMvc.perform(delete("/api/annotation-sets/{id}", annotationSet.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isOk());
+            .andExpect(status().isNoContent());
 
         // Validate the database is empty
         List<AnnotationSet> annotationSetList = annotationSetRepository.findAll();
