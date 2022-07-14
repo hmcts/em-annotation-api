@@ -117,7 +117,7 @@ public class MetaDataResource {
 
         if (Objects.isNull(metadataDto)
                 || Objects.isNull(metadataDto.getRotationAngle())) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().body(metadataDto);
     }

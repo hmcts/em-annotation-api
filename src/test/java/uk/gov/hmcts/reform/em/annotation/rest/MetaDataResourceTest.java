@@ -68,7 +68,7 @@ public class MetaDataResourceTest {
         ResponseEntity<MetadataDto> responseEntity = metaDataResource.getMetadata(metadataDto.getDocumentId());
 
         Assert.assertNotNull(responseEntity);
-        Assert.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        Assert.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         Assert.assertNull(responseEntity.getBody());
 
         Mockito.verify(metadataService, Mockito.atLeast(1)).findByDocumentId(metadataDto.getDocumentId());
@@ -83,7 +83,7 @@ public class MetaDataResourceTest {
         ResponseEntity<MetadataDto> responseEntity = metaDataResource.getMetadata(metadataDto.getDocumentId());
 
         Assert.assertNotNull(responseEntity);
-        Assert.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        Assert.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         Assert.assertNull(responseEntity.getBody());
 
         Mockito.verify(metadataService, Mockito.atLeast(1)).findByDocumentId(metadataDto.getDocumentId());

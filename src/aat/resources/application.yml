@@ -52,7 +52,7 @@ s2s:
     xuiWebappServiceName: ${XUI_WEBAPP_SERVICE_NAME:xui_webapp}
 
 toggle:
-  enable_metadata_endpoint: ${ENABLE_METADATA_ENDPOINT:false}
+  enable_metadata_endpoint: ${ENABLE_METADATA_ENDPOINT:true}
 
 ccd-def:
   api:

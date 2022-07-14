@@ -155,7 +155,7 @@ public class MetadataScenarios {
     }
 
     @Test
-    public void shouldReturn204WhenGetMetadataByNonExistentDocumentId() {
+    public void shouldReturn404WhenGetMetadataByNonExistentDocumentId() {
         // If the Endpoint Toggles are enabled, continue, if not skip and ignore
         Assume.assumeTrue(toggleProperties.isEnableMetadataEndpoint());
 
@@ -164,7 +164,7 @@ public class MetadataScenarios {
         request
                 .get("/api/metadata/" + documentId)
                 .then()
-                .statusCode(204)
+                .statusCode(404)
                 .log().all();
     }
 
