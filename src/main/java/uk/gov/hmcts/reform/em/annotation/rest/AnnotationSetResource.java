@@ -197,7 +197,7 @@ public class AnnotationSetResource {
     public ResponseEntity<AnnotationSetDTO> getAnnotationSet(@PathVariable UUID id) {
         log.debug("REST request to get AnnotationSet : {}", id);
         Optional<AnnotationSetDTO> annotationSetDTO = annotationSetService.findOne(id);
-        return ResponseUtil.wrapOrNoContent(annotationSetDTO);
+        return ResponseUtil.wrapOrNotFound(annotationSetDTO);
     }
 
     /**

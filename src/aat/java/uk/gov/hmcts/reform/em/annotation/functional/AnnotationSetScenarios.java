@@ -119,13 +119,13 @@ public class AnnotationSetScenarios {
     }
 
     @Test
-    public void shouldReturn204WhenGetAnnotationSetNotFoundById() {
+    public void shouldReturn404WhenGetAnnotationSetNotFoundById() {
         final String annotationSetId = UUID.randomUUID().toString();
 
         request
                 .get("/api/annotation-sets/" + annotationSetId)
                 .then()
-                .statusCode(204)
+                .statusCode(404)
                 .log().all();
     }
 
