@@ -9,15 +9,20 @@ import org.hamcrest.Matchers;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import uk.gov.hmcts.reform.em.EmTestConfig;
+import uk.gov.hmcts.reform.em.annotation.rest.TagResource;
+import uk.gov.hmcts.reform.em.annotation.service.TagService;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
@@ -32,8 +37,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @WithTags({@WithTag("testType:Functional")})
 public class TagScenarios {
 
+    private final Logger log = LoggerFactory.getLogger(TagResource.class);
+
     @Autowired
     private TestUtil testUtil;
+
+    @Autowired
+    private TagService tagService;
 
     @Value("${test.url}")
     private String testUrl;
@@ -90,10 +100,18 @@ public class TagScenarios {
 
     @Test
     public void shouldReturn404WhenGetTagByCreatedByNotFound() {
+        final String annotationSetId = createAnnotationSet();
+        final String annotationId = UUID.randomUUID().toString();
+        JSONObject annotationPayload = createAnnotationPayload(annotationId, annotationSetId);
+
+        Assert.assertNull(tagService.findTagByCreatedBy("foo"));
+        log.info("tag: " + annotationPayload.get("tags"));
+
         request
                 .get("/api/tags/foo")
                 .then()
-                .statusCode(200) //FIXME should return 404
+                .statusCode(404)
+                .body("[0].createdBy", equalTo(null))
                 .log().all();
     }
 
