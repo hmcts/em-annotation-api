@@ -219,37 +219,10 @@ dependencyManagement {
           entry 'commons-io'
         }
 
-        //CVE-2021-27568
-        dependencySet(group: 'net.minidev', version: '2.4.7') {
-            entry 'json-smart'
-        }
-
-        //CVE-2021-28170
-        dependencySet(group: 'org.glassfish', version: '4.0.2') {
-            entry 'jakarta.el'
-        }
-
         //CVE-2021-22044
         dependencySet(group: 'org.springframework.cloud', version: versions.springcloud) {
             entry 'spring-cloud-openfeign-core'
             entry 'spring-cloud-starter-openfeign'
-        }
-
-        //CVE-2021-43797
-        dependencySet(group: 'io.netty', version: '4.1.77.Final') {
-            entry 'netty-buffer'
-            entry 'netty-codec'
-            entry 'netty-codec-http'
-            entry 'netty-codec-http2'
-            entry 'netty-common'
-            entry 'netty-handler'
-            entry 'netty-resolver'
-            entry 'netty-transport'
-            entry 'netty-transport-native-epoll'
-            entry 'netty-transport-native-kqueue'
-            entry 'netty-transport-classes-epoll'
-            entry 'netty-transport-classes-kqueue'
-            entry 'netty-transport-native-unix-common'
         }
 
         //CVE-2022-23437
