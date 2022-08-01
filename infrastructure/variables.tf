@@ -108,3 +108,11 @@ variable postgresql_user_v11 {
 variable database_name_v11 {
   default = "annotation"
 }
+
+variable sku_name {
+  default = "GP_Gen5_4"
+}
+
+variable sku_capacity {
+  default = "4"
+}
