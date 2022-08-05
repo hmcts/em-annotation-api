@@ -18,9 +18,6 @@ spring:
       hibernate:
         temp:
           use_jdbc_metadata_defaults: false
-  liquibase:
-    change-log: classpath:/db/db.changelog-master.xml
-    enabled: ${ENABLE_LIQUIBASE:false}
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:6432/emannotationapp}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
@@ -45,11 +42,9 @@ spring:
             client-secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
   main:
     allow-circular-references: true # Need this for the Mapper library to work
-
-#liquibase:
-#
-#  enabled: ${ENABLE_DB_MIGRATE:true}
-#  change-log: classpath:/db/db.changelog-master.xml
+  flyway:
+    baseline-on-migrate: true
+    baseline-version: 1
 
 management:
   endpoint:
