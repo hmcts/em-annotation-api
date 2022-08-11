@@ -115,7 +115,7 @@ CREATE TABLE public.jhi_persistent_audit_evt_data (
 );
 
 CREATE TABLE public.metadata (
-    id uuid NOT NULL,
+    id bigint NOT NULL,
     created_by character varying(50) NOT NULL,
     document_id uuid NOT NULL,
     rotation_angle integer NOT NULL
