@@ -128,7 +128,7 @@ data "azurerm_key_vault_secret" "app_insights_connection_string" {
 resource "azurerm_key_vault_secret" "local_app_insights_connection_string" {
   name         = "app-insights-connection-string"
   value        = data.azurerm_key_vault_secret.app_insights_connection_string.value
-  key_vault_id = data.azurerm_key_vault.local_key_vault.id
+  key_vault_id = data.azurerm_key_vault.key_vault.id
 }
 
 resource "azurerm_resource_group" "rg" {
