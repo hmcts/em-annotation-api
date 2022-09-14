@@ -17,7 +17,7 @@ plugins {
     id 'jacoco'
     id 'checkstyle'
     id 'au.com.dius.pact' version '4.2.11'
-    id "info.solidsoft.pitest" version '1.9.0'
+    id "info.solidsoft.pitest" version '1.5.2'
     id 'com.github.hmcts.rse-cft-lib' version '0.19.296'
     id 'org.flywaydb.flyway' version '9.3.0'
 }
@@ -33,12 +33,8 @@ if (!project.hasProperty('runList')) {
 
 group 'uk.gov.hmcts.reform.em.annotation'
 version '1.0.0'
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
+sourceCompatibility = 11
+targetCompatibility = 11
 
 mainClassName = 'uk.gov.hmcts.reform.em.annotation.Application'
 
@@ -297,6 +293,7 @@ pitest {
     outputFormats = ['XML', 'HTML','CSV']
     mutationThreshold = 5
     coverageThreshold = 0
+    maxMutationsPerClass = 15
     jvmArgs = ['-Xms1G','-Xmx3G']
     timestampedReports = false
     failWhenNoMutations = false
@@ -342,10 +339,6 @@ idea {
         testSourceDirs += project.sourceSets.contractTest.java.srcDirs
         testResourceDirs += project.sourceSets.contractTest.resources.srcDirs
     }
-}
-
-tasks.withType(JavaExec).configureEach {
-    javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
 }
 
 test {
