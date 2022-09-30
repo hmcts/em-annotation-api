@@ -118,7 +118,7 @@ public class BookmarkScenarios {
                 .body(bookmarkRequestPayload.toString())
                 .post("/api/bookmarks")
                 .then()
-                .statusCode(500)
+                .statusCode(409)
                 .log().all();
     }
 
@@ -232,7 +232,7 @@ public class BookmarkScenarios {
                 .body(jsonObject.toString())
                 .put("/api/bookmarks")
                 .then()
-                .statusCode(500)
+                .statusCode(409)
                 .log().all();
     }
 
@@ -311,7 +311,7 @@ public class BookmarkScenarios {
                 .body(jsonArray.toString())
                 .put("/api/bookmarks_multiple")
                 .then()
-                .statusCode(500)
+                .statusCode(409)
                 .log().all();
     }
 
