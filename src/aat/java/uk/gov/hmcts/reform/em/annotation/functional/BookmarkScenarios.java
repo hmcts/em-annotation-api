@@ -109,7 +109,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenCreateNewBookmarkWithoutMandatoryField() {
+    public void shouldReturn409WhenCreateNewBookmarkWithoutMandatoryField() {
         final UUID bookmarkId = UUID.randomUUID();
         final JSONObject bookmarkRequestPayload = createBookmarkRequestPayload(bookmarkId);
         bookmarkRequestPayload.remove("name");
@@ -223,7 +223,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenUpdateBookmarkWithoutMandatoryField() {
+    public void shouldReturn409WhenUpdateBookmarkWithoutMandatoryField() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
@@ -299,7 +299,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenUpdateMultipleBookmarksWithoutMandatoryField() {
+    public void shouldReturn409WhenUpdateMultipleBookmarksWithoutMandatoryField() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
