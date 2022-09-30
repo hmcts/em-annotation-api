@@ -99,7 +99,7 @@ public class ExceptionTranslatorTestController {
         throw new FeignException.BadGateway("feign bad gateway", createFeignRequest(), null, new HashMap<>());
     }
 
-    @org.jetbrains.annotations.NotNull
+    @NotNull
     private static Request createFeignRequest() {
         return Request.create(Request.HttpMethod.GET, "url",
                 new HashMap<>(), null, new RequestTemplate());
