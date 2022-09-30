@@ -109,7 +109,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenCreateNewBookmarkWithoutMandatoryField() {
+    public void shouldReturn409WhenCreateNewBookmarkWithoutMandatoryField() {
         final UUID bookmarkId = UUID.randomUUID();
         final JSONObject bookmarkRequestPayload = createBookmarkRequestPayload(bookmarkId);
         bookmarkRequestPayload.remove("name");
@@ -118,7 +118,7 @@ public class BookmarkScenarios {
                 .body(bookmarkRequestPayload.toString())
                 .post("/api/bookmarks")
                 .then()
-                .statusCode(500)
+                .statusCode(409)
                 .log().all();
     }
 
@@ -223,7 +223,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenUpdateBookmarkWithoutMandatoryField() {
+    public void shouldReturn409WhenUpdateBookmarkWithoutMandatoryField() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
@@ -232,7 +232,7 @@ public class BookmarkScenarios {
                 .body(jsonObject.toString())
                 .put("/api/bookmarks")
                 .then()
-                .statusCode(500)
+                .statusCode(409)
                 .log().all();
     }
 
@@ -299,7 +299,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenUpdateMultipleBookmarksWithoutMandatoryField() {
+    public void shouldReturn409WhenUpdateMultipleBookmarksWithoutMandatoryField() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
@@ -311,7 +311,7 @@ public class BookmarkScenarios {
                 .body(jsonArray.toString())
                 .put("/api/bookmarks_multiple")
                 .then()
-                .statusCode(500)
+                .statusCode(409)
                 .log().all();
     }
 

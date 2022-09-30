@@ -1,6 +1,11 @@
 package uk.gov.hmcts.reform.em.annotation.rest.errors;
 
+import feign.FeignException;
+import feign.Request;
+import feign.RequestTemplate;
+import feign.RetryableException;
 import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -8,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -68,6 +75,34 @@ public class ExceptionTranslatorTestController {
     @GetMapping("/test/internal-server-error")
     public void internalServerError() {
         throw new RuntimeException();
+    }
+
+    @GetMapping("/test/data-integrity-violation")
+    public void dataIntegrityViolation() {
+        throw new DataIntegrityViolationException("Data Integrity Violation");
+    }
+
+    @GetMapping("/test/retryable-exception")
+    public void retryableException() {
+        throw new RetryableException(503, "Retryable Exception", Request.HttpMethod.GET, Date.valueOf(LocalDate.now()),
+                createFeignRequest());
+    }
+
+    @GetMapping("/test/feign-gateway-timeout")
+    public void feignGatewayTimeout() {
+        throw new FeignException.GatewayTimeout("feign gateway timeout", createFeignRequest(), null, new HashMap<>());
+    }
+
+
+    @GetMapping("/test/feign-bad-gateway")
+    public void feignBadGateway() {
+        throw new FeignException.BadGateway("feign bad gateway", createFeignRequest(), null, new HashMap<>());
+    }
+
+    @NotNull
+    private static Request createFeignRequest() {
+        return Request.create(Request.HttpMethod.GET, "url",
+                new HashMap<>(), null, new RequestTemplate());
     }
 
     public static class TestDTO {

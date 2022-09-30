@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.em.annotation.rest.errors;
 
+import feign.FeignException;
 import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -128,6 +130,24 @@ public class ExceptionTranslator implements ProblemHandling {
         Problem problem = Problem.builder()
                 .withStatus(Status.UNAUTHORIZED)
                 .with(MESSAGE, ErrorConstants.ERR_UNAUTHORISED)
+                .build();
+        return create(ex, problem, request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleDataIntegrityViolation(DataIntegrityViolationException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+                .withStatus(Status.CONFLICT)
+                .with(MESSAGE, ErrorConstants.ERR_DATA_INTEGRITY)
+                .build();
+        return create(ex, problem, request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleFeignException(FeignException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+                .withStatus(Status.valueOf(ex.status()))
+                .with(MESSAGE, ex.getMessage())
                 .build();
         return create(ex, problem, request);
     }
