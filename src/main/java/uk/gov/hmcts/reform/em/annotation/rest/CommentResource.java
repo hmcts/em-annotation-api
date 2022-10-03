@@ -91,7 +91,7 @@ public class CommentResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         if (commentDTO.getAnnotationId() == null) {
-            throw new BadRequestAlertException("Invalid annotation id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Invalid annotation id", ENTITY_NAME, "annotationidnull");
         }
         CommentDTO result = commentService.save(commentDTO);
         return ResponseEntity.created(new URI("/api/comments/" + result.getId()))
@@ -131,7 +131,7 @@ public class CommentResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         if (commentDTO.getAnnotationId() == null) {
-            throw new BadRequestAlertException("Invalid annotation id", ENTITY_NAME, "idnull");
+            throw new BadRequestAlertException("Invalid annotation id", ENTITY_NAME, "annotationidnull");
         }
         CommentDTO result = commentService.save(commentDTO);
         return ResponseEntity.ok()
