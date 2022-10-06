@@ -4,6 +4,8 @@ import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;
 import feign.RetryableException;
+import org.postgresql.util.PSQLException;
+import org.postgresql.util.PSQLState;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -80,6 +82,16 @@ public class ExceptionTranslatorTestController {
     @GetMapping("/test/data-integrity-violation")
     public void dataIntegrityViolation() {
         throw new DataIntegrityViolationException("Data Integrity Violation");
+    }
+
+    @GetMapping("/test/psql-key-violation")
+    public void PSQLException() throws PSQLException {
+        throw new PSQLException("duplicate key value violates unique constraint", PSQLState.CHECK_VIOLATION);
+    }
+
+    @GetMapping("/test/psql-exception")
+    public void PSQLKeyViolation() throws PSQLException {
+        throw new PSQLException("PSQL Exception", PSQLState.CHECK_VIOLATION);
     }
 
     @GetMapping("/test/retryable-exception")

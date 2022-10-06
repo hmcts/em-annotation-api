@@ -148,6 +148,17 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
+    public void testPSQLException() throws Exception {
+        restLogoutMockMvc.perform(get("/test/psql-key-violation"))
+                .andExpect(status().isConflict())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
+
+        restLogoutMockMvc.perform(get("/test/psql-exception"))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
+    }
+
+    @Test
     public void testRetryableException() throws Exception {
         restLogoutMockMvc.perform(get("/test/retryable-exception"))
                 .andExpect(status().isServiceUnavailable())

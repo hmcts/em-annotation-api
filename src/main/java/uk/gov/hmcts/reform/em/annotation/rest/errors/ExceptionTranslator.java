@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.em.annotation.rest.errors;
 
 import feign.FeignException;
+import org.postgresql.util.PSQLException;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -147,6 +148,23 @@ public class ExceptionTranslator implements ProblemHandling {
     public ResponseEntity<Problem> handleFeignException(FeignException ex, NativeWebRequest request) {
         Problem problem = Problem.builder()
                 .withStatus(Status.valueOf(ex.status()))
+                .with(MESSAGE, ex.getMessage())
+                .build();
+        return create(ex, problem, request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handlePSQLException(PSQLException ex, NativeWebRequest request) {
+        if (ex.getMessage().contains("duplicate key value violates unique constraint")) {
+            Problem problem = Problem.builder()
+                    .withStatus(Status.CONFLICT)
+                    .with(MESSAGE, ex.getMessage())
+                    .build();
+            return create(ex, problem, request);
+        }
+        Problem problem = Problem.builder()
+                //Responding with 500 for now as psql exception currently lacks method to get http status code
+                .withStatus(Status.INTERNAL_SERVER_ERROR)
                 .with(MESSAGE, ex.getMessage())
                 .build();
         return create(ex, problem, request);
