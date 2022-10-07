@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.em.annotation.rest.errors;
 
 import feign.FeignException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -140,6 +141,15 @@ public class ExceptionTranslator implements ProblemHandling {
         Problem problem = Problem.builder()
                 .withStatus(Status.CONFLICT)
                 .with(MESSAGE, ErrorConstants.ERR_DATA_INTEGRITY)
+                .build();
+        return create(ex, problem, request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleConstraintViolation(ConstraintViolationException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+                .withStatus(Status.UNPROCESSABLE_ENTITY)
+                .with(MESSAGE, ErrorConstants.ERR_CONSTRAINT_VIOLATION)
                 .build();
         return create(ex, problem, request);
     }
