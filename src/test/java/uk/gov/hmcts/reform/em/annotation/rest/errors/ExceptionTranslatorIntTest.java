@@ -148,6 +148,14 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
+    public void testConstraintViolation() throws Exception {
+        restLogoutMockMvc.perform(get("/test/constraint-violation"))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.message").value("error.constraintViolation"));
+    }
+
+    @Test
     public void testPSQLException() throws Exception {
         restLogoutMockMvc.perform(get("/test/psql-key-violation"))
                 .andExpect(status().isConflict())
