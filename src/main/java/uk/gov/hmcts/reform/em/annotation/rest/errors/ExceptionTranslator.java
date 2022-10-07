@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.em.annotation.rest.errors;
 import feign.FeignException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +37,8 @@ import java.util.stream.Collectors;
  */
 @ControllerAdvice
 public class ExceptionTranslator implements ProblemHandling {
+    
+    private final Logger log = LoggerFactory.getLogger(ExceptionTranslator.class);
 
     private static final String MESSAGE = "message";
 
@@ -165,6 +169,7 @@ public class ExceptionTranslator implements ProblemHandling {
 
     @ExceptionHandler
     public ResponseEntity<Problem> handlePSQLException(PSQLException ex, NativeWebRequest request) {
+        log.error(ex.getMessage());
         if (ex.getMessage().contains("duplicate key value violates unique constraint")) {
             Problem problem = Problem.builder()
                     .withStatus(Status.CONFLICT)
