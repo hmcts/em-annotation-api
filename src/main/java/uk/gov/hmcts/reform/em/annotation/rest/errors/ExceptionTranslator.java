@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.em.annotation.rest.errors;
 
 import feign.FeignException;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
 import org.springframework.dao.ConcurrencyFailureException;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
  * The error response follows RFC7807 - Problem Details for HTTP APIs (https://tools.ietf.org/html/rfc7807)
  */
 @ControllerAdvice
+@Slf4j
 public class ExceptionTranslator implements ProblemHandling {
 
     private static final String MESSAGE = "message";
@@ -165,6 +167,7 @@ public class ExceptionTranslator implements ProblemHandling {
 
     @ExceptionHandler
     public ResponseEntity<Problem> handlePSQLException(PSQLException ex, NativeWebRequest request) {
+        log.error(ex.getMessage());
         if (ex.getMessage().contains("duplicate key value violates unique constraint")) {
             Problem problem = Problem.builder()
                     .withStatus(Status.CONFLICT)
