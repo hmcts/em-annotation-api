@@ -169,7 +169,7 @@ public class ExceptionTranslator implements ProblemHandling {
 
     @ExceptionHandler
     public ResponseEntity<Problem> handlePSQLException(PSQLException ex, NativeWebRequest request) {
-        log.error(ex.getMessage());
+        log.error("Em-Annotation sql exception : {} ",ex.getMessage());
         if (ex.getMessage().contains("duplicate key value violates unique constraint")) {
             Problem problem = Problem.builder()
                     .withStatus(Status.CONFLICT)
