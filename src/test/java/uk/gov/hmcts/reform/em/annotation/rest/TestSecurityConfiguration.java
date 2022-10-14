@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepo
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
+import uk.gov.hmcts.reform.em.annotation.config.security.AnnotationServiceAuthFilter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +28,7 @@ public class TestSecurityConfiguration {
     }
 
     @MockBean
-    ServiceAuthFilter serviceAuthFilter;
+    AnnotationServiceAuthFilter serviceAuthFilter;
 
     @MockBean
     private JwtDecoder jwtDecoder;

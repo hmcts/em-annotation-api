@@ -14,7 +14,6 @@ import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
-import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -27,13 +26,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${oidc.issuer}")
     private String issuerOverride;
 
-    private ServiceAuthFilter serviceAuthFilter;
+    private AnnotationServiceAuthFilter serviceAuthFilter;
 
     private JwtAuthenticationConverter jwtAuthenticationConverter;
 
 
     public SecurityConfiguration(final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter,
-                                 final ServiceAuthFilter serviceAuthFilter) {
+                                 final AnnotationServiceAuthFilter serviceAuthFilter) {
         this.serviceAuthFilter = serviceAuthFilter;
         this.jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
