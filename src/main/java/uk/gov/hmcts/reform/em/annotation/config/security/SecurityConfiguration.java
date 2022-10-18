@@ -29,9 +29,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private ServiceAuthFilter serviceAuthFilter;
 
+    private JwtAuthenticationConverter jwtAuthenticationConverter;
 
-    public SecurityConfiguration(final ServiceAuthFilter serviceAuthFilter) {
+
+    public SecurityConfiguration(final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter,
+                                 final ServiceAuthFilter serviceAuthFilter) {
         this.serviceAuthFilter = serviceAuthFilter;
+        this.jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
     }
 
     @Override
@@ -63,6 +68,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2ResourceServer()
                 .jwt()
+                .jwtAuthenticationConverter(jwtAuthenticationConverter)
                 .and()
                 .and()
                 .oauth2Client();
