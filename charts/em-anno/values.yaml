@@ -31,10 +31,6 @@ java:
     REFORM_SERVICE_NAME: rpa-em-annotation-api
     REFORM_TEAM: rpa-em-annotation-api
     JSON_CONSOLE_PRETTY_PRINT: false
-    LOG_OUTPUT: single
-    ROOT_LOGGING_LEVEL: INFO
-    LOG_LEVEL_SPRING_WEB: INFO
-    LOG_LEVEL_DM: INFO
     SHOW_SQL: false
     ENDPOINTS_HEALTH_SENSITIVE: false
     ENDPOINTS_INFO_SENSITIVE: false

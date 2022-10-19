@@ -154,10 +154,7 @@ dependencies {
     }
 
     implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.logging
-    implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.logging
-    implementation group: 'com.github.hmcts.java-logging', name: 'logging-spring', version: versions.logging
 
-        
     implementation group: 'org.mapstruct', name: 'mapstruct', version: versions.mapstruct
 
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
@@ -252,7 +249,6 @@ bootJar {
 
 def coverageExclusionList = [
     '**uk/gov/hmcts/reform/em/annotation/Application*',
-    '**uk/gov/hmcts/reform/em/annotation/appinsights/*',
     '**uk/gov/hmcts/reform/em/annotation/domain/*',
     '**uk/gov/hmcts/reform/em/annotation/authchecker/*',
     '**uk/gov/hmcts/reform/em/annotation/config/**/*',
@@ -279,7 +275,6 @@ jacocoTestReport {
 pitest {
     targetClasses = ['uk.gov.hmcts.reform.em.annotation.*']
     excludedClasses = [
-                    'uk.gov.hmcts.reform.em.annotation.appinsights.*' ,
                     'uk.gov.hmcts.reform.em.annotation.authchecker.*' ,
                     'uk.gov.hmcts.reform.em.annotation.config.*',
                     'uk.gov.hmcts.reform.em.annotation.info.*',
