@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.em.annotation.authchecker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
@@ -9,9 +11,13 @@ import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.ServiceDetails;
 
 public class EmAuthCheckerUserDetailsService implements AuthenticationUserDetailsService<PreAuthenticatedAuthenticationToken> {
 
+    private final Logger log = LoggerFactory.getLogger(EmAuthCheckerUserDetailsService.class);
+
     @Override
     public org.springframework.security.core.userdetails.UserDetails loadUserDetails(PreAuthenticatedAuthenticationToken token)
             throws UsernameNotFoundException {
+
+        log.info("EmAuthCheckerUserDetailsService loadUserDetails called");
 
         Object principal = token.getPrincipal();
 
