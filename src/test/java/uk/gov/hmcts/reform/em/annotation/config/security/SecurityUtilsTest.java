@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.em.annotation.config.security;
 
-import com.microsoft.applicationinsights.boot.dependencies.apachecommons.lang3.reflect.FieldUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,16 +14,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
 import uk.gov.hmcts.reform.em.annotation.repository.IdamRepository;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.util.Map;
 import java.util.Optional;
 
-import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.ACCESS_TOKEN;
 
@@ -32,9 +28,6 @@ import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterN
 public class SecurityUtilsTest {
     @Mock
     private IdamRepository idamRepository;
-
-    @Mock
-    private AuthTokenValidator authTokenValidator;
 
     private SecurityUtils securityUtils;
 
@@ -45,6 +38,7 @@ public class SecurityUtilsTest {
 
     @Mock
     protected SecurityContext securityContext;
+
 
     @Before
     public void setUp() throws Exception {
@@ -58,7 +52,7 @@ public class SecurityUtilsTest {
         jwtAuthenticationToken = new JwtAuthenticationToken(jwt);
 
         securityUtils = new SecurityUtils(idamRepository);
-        FieldUtils.writeField(securityUtils, "authTokenValidator", authTokenValidator, true);
+
     }
 
     @Test
@@ -132,16 +126,6 @@ public class SecurityUtilsTest {
         Assert.assertFalse(securityUtils.getCurrentUserLogin().isPresent());
     }
 
-    @Test
-    @DisplayName("ServiceName uses authTokenValidator")
-    public void testGetServiceName() {
-        final String serviceName = "Service Name";
-        when(authTokenValidator.getServiceName(any(String.class))).thenReturn(serviceName);
-
-        securityUtils.getServiceName(random(5, true, false));
-
-        verify(authTokenValidator, times(1)).getServiceName(anyString());
-    }
 
 }
 
