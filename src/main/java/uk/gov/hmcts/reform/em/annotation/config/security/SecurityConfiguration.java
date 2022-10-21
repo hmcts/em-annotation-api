@@ -81,7 +81,7 @@ public class SecurityConfiguration {
         // We are using issuerOverride instead of issuerUri as SIDAM has the wrong issuer at the moment
         OAuth2TokenValidator<Jwt> withTimestamp = new JwtTimestampValidator();
         //Add the JwtIssuerValidator back in after Idam issue is resolved
-        OAuth2TokenValidator<Jwt> withIssuer = new JwtIssuerValidator(issuerOverride);
+        //OAuth2TokenValidator<Jwt> withIssuer = new JwtIssuerValidator(issuerOverride);
         OAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(withTimestamp);
 
         jwtDecoder.setJwtValidator(validator);
