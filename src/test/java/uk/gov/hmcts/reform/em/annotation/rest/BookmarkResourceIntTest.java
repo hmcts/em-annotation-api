@@ -228,9 +228,9 @@ public class BookmarkResourceIntTest extends BaseTest {
         // Validate the Comment in the database
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeUpdate + 2);
-        Bookmark testBookmark = bookmarkList.get(bookmarkList.size() - 1);
+        Bookmark testBookmark = bookmarkList.get(bookmarkList.size() - 2);
         assertThat(testBookmark.getName()).isEqualTo("Another new Bookmark");
-        testBookmark = bookmarkList.get(bookmarkList.size() - 2);
+        testBookmark = bookmarkList.get(bookmarkList.size() - 3);
         assertThat(testBookmark.getName()).isEqualTo("New Bookmark");
     }
 
