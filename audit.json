@@ -184,6 +184,7 @@
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/bookmarks_PUT": "ignore",
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/bookmarks_multiple_DELETE": "ignore",
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/bookmarks_multiple_PUT": "ignore",
+  "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/annotation-sets/_DELETE": "ignore",
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/comments/_DELETE": "ignore",
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/comments/_GET": "ignore",
   "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/api/comments/id_GET": "ignore",
