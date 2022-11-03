@@ -55,7 +55,7 @@ repositories {
 
 def versions = [
         postgresql         : '42.4.1',
-        springSecurity     : '5.7.1',
+        springSecurity     : '5.7.5',
         fasterXmlJackson   : '2.14.0-rc1',
         pitest             : '1.5.1',
         gradlePitest       : '1.3.0',
@@ -114,11 +114,11 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
 
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: versions.springcloud
-    
+
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-openfeign', version: versions.springcloud, {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-actuator'
     }
-    
+
     implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: versions.fasterXmlJackson
     implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version: versions.fasterXmlJackson
     implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.fasterXmlJackson
@@ -143,7 +143,7 @@ dependencies {
     implementation group: 'org.ehcache', name: 'ehcache', version: '3.10.2'
 
     implementation group: 'com.zaxxer', name: 'HikariCP', version: '5.0.1'
-    
+
     implementation group:'org.hibernate', name: 'hibernate-core', version: versions.hibernate
     implementation group:'org.hibernate', name: 'hibernate-jcache', version: versions.hibernate
     implementation group:'org.hibernate', name: 'hibernate-entitymanager', version: versions.hibernate
@@ -216,29 +216,32 @@ processAatResources {
 }
 
 dependencyManagement {
-    dependencies {
-
-        //CVE-2021-29425
-        dependencySet(group: 'commons-io', version: '2.11.0') {
-          entry 'commons-io'
-        }
-
-        //CVE-2021-22044
-        dependencySet(group: 'org.springframework.cloud', version: versions.springcloud) {
-            entry 'spring-cloud-openfeign-core'
-            entry 'spring-cloud-starter-openfeign'
-        }
-
-        //CVE-2022-23437
-        dependencySet(group: 'xerces', version: '2.12.2') {
-            entry 'xercesImpl'
-        }
-
-        //CVE-2022-25857
-        dependencySet(group: 'org.yaml', version: '1.33') {
-            entry 'snakeyaml'
-        }
+  dependencies {
+    //CVE-2021-29425
+    dependencySet(group: 'commons-io', version: '2.11.0') {
+      entry 'commons-io'
     }
+
+    //CVE-2021-22044
+    dependencySet(group: 'org.springframework.cloud', version: versions.springcloud) {
+      entry 'spring-cloud-openfeign-core'
+      entry 'spring-cloud-starter-openfeign'
+    }
+
+    //CVE-2022-23437
+    dependencySet(group: 'xerces', version: '2.12.2') {
+      entry 'xercesImpl'
+    }
+
+    //CVE-2022-25857
+    dependencySet(group: 'org.yaml', version: '1.33') {
+      entry 'snakeyaml'
+    }
+    // CVE-2022-31692 - CVE-2022-31690
+    dependencySet(group: 'org.springframework.security', version: '5.7.5') {
+      entry 'spring-security-crypto'
+    }
+  }
 }
 
 bootJar {
