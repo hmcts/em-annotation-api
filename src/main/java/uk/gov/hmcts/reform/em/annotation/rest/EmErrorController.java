@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Error controller class to rethrow errors occurring outside of controller methods from inside a controller.
+ * This enables existing exception handlers to act regarding the error.
+ */
 @Controller
 public class ErrorControllerImpl implements ErrorController {
     @GetMapping("/error")
