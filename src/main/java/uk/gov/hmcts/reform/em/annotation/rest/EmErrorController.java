@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServletRequest;
  * This enables existing exception handlers to act regarding the error.
  */
 @Controller
-public class ErrorControllerImpl implements ErrorController {
+public class EmErrorController implements ErrorController {
+
     @GetMapping("/error")
     public void handleError(HttpServletRequest request) throws Throwable {
         if (request.getAttribute(javax.servlet.RequestDispatcher.ERROR_EXCEPTION) != null) {
