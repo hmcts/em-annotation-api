@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +16,14 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class EmErrorController implements ErrorController {
 
+    private final Logger log = LoggerFactory.getLogger(EmErrorController.class);
+
     @GetMapping("/error")
     public void handleError(HttpServletRequest request) throws Throwable {
         if (request.getAttribute(javax.servlet.RequestDispatcher.ERROR_EXCEPTION) != null) {
-            throw (Throwable) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
+            Throwable throwable = (Throwable) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
+            log.error("EM Annotation Error Controller : {}", throwable.getMessage());
+            throw throwable;
         }
     }
 }
