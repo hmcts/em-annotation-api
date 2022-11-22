@@ -44,7 +44,6 @@ java {
 mainClassName = 'uk.gov.hmcts.reform.em.annotation.Application'
 
 configurations {
-    flywayMigration
     aatImplementation.extendsFrom(testImplementation)
     aatRuntimeOnly.extendsFrom(testRuntimeOnly)
 }
@@ -424,7 +423,6 @@ pact {
 }
 
 bootWithCCD {
-    group = 'build'
     authMode = AuthMode.Local
     environment 'RSE_LIB_ADDITIONAL_DATABASES', 'emannotationapp'
 }
