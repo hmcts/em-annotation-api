@@ -11,14 +11,8 @@ public class FlywayNoOpStrategy implements FlywayMigrationStrategy {
 
     @Override
     public void migrate(Flyway flyway) {
-        if (flyway.info() != null) {
-            log.info("Database before migration done {}", flyway.info().all());
-        }
+        log.info("FlywayNoOpStrategy invoked");
 
-        Flyway.configure()
-                .baselineOnMigrate(true)
-                .load();
-        log.info("Database migration done {}", flyway.info().all());
         Stream.of(flyway.info().all())
                 .filter(info -> !info.getState().isApplied())
                 .findFirst()
