@@ -1,5 +1,6 @@
 import uk.gov.hmcts.rse.AuthMode
 
+
 buildscript {
     dependencies {
         classpath("net.serenity-bdd:serenity-gradle-plugin:2.6.0")
@@ -43,6 +44,7 @@ java {
 mainClassName = 'uk.gov.hmcts.reform.em.annotation.Application'
 
 configurations {
+    flywayMigration
     aatImplementation.extendsFrom(testImplementation)
     aatRuntimeOnly.extendsFrom(testRuntimeOnly)
 }
@@ -447,7 +449,6 @@ flyway {
 
 task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
     baselineOnMigrate = true
-    baselineVersion = '1'
     if (project.hasProperty("dburl")) {
         url = "jdbc:postgresql://${dburl}"
     }
