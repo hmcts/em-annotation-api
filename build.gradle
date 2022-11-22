@@ -443,9 +443,6 @@ flyway {
     password = System.getenv('FLYWAY_PASSWORD')
     baselineOnMigrate = true
     baselineVersion = '1'
-    pluginConfiguration [
-      baselineMigrationPrefix = 'V1'
-    ]
 }
 
 task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
