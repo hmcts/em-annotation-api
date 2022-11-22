@@ -8,9 +8,13 @@ import java.util.stream.Stream;
 
 public class FlywayNoOpStrategy implements FlywayMigrationStrategy {
     Logger log = Logger.getLogger(FlywayNoOpStrategy.class);
+
     @Override
     public void migrate(Flyway flyway) {
-        log.info("Database before migration done {}", flyway.info().all());
+        if (flyway.info() != null) {
+            log.info("Database before migration done {}", flyway.info().all());
+        }
+
         Flyway.configure()
                 .baselineOnMigrate(true)
                 .load();
