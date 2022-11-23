@@ -15,7 +15,7 @@ public class FlywayNoOpStrategy implements FlywayMigrationStrategy {
         log.info("FlywayNoOpStrategy invoked");
 
         Stream.of(flyway.info().all())
-                .peek(migrationInfo -> log.info("detailed info {}", migrationInfo))
+                .peek(migrationInfo -> log.info("Info of script {} : state {}", migrationInfo.getScript(), migrationInfo.getState()))
                 .filter(info -> !"V1__baseline_migration.sql".equals(info.getScript()))
                 .filter(info -> !info.getState().isApplied())
                 .findFirst()
