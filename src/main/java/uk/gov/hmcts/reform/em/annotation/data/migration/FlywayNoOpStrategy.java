@@ -12,7 +12,7 @@ public class FlywayNoOpStrategy implements FlywayMigrationStrategy {
 
     @Override
     public void migrate(Flyway flyway) {
-        log.info("FlywayNoOpStrategy invoked");
+        log.info("FlywayNoOpStrategy invoked to migrate");
 
         Stream.of(flyway.info().all())
                 .peek(migrationInfo -> log.info("Info of script {} : state {}", migrationInfo.getScript(), migrationInfo.getState()))
