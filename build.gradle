@@ -133,7 +133,7 @@ dependencies {
     implementation group: 'org.zalando', name: 'jackson-datatype-problem', version: versions.zalando
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.13'
     implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
-    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.8.3'
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
@@ -169,7 +169,7 @@ dependencies {
     implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '2.1.1'
 
     implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
-    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
 
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
     annotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: versions.mapstruct
