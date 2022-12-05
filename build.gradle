@@ -169,7 +169,6 @@ dependencies {
     implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '2.1.1'
 
     implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
-    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
 
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
     annotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: versions.mapstruct
