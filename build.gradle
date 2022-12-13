@@ -149,10 +149,6 @@ dependencies {
     implementation group:'org.hibernate', name: 'hibernate-entitymanager', version: versions.hibernate
     implementation group:'org.hibernate', name: 'hibernate-envers', version: versions.hibernate
 
-    implementation group: 'com.github.hmcts', name: 'auth-checker-lib', version: '2.1.5', {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
-    }
-
     implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.logging
 
     implementation group: 'org.mapstruct', name: 'mapstruct', version: versions.mapstruct
@@ -255,7 +251,6 @@ bootJar {
 def coverageExclusionList = [
     '**uk/gov/hmcts/reform/em/annotation/Application*',
     '**uk/gov/hmcts/reform/em/annotation/domain/*',
-    '**uk/gov/hmcts/reform/em/annotation/authchecker/*',
     '**uk/gov/hmcts/reform/em/annotation/service/dto/*',
     '**uk/gov/hmcts/reform/em/annotation/info/*',
     '**uk/gov/hmcts/reform/em/annotation/data/migration/PendingMigrationScriptException*',
@@ -279,7 +274,6 @@ jacocoTestReport {
 pitest {
     targetClasses = ['uk.gov.hmcts.reform.em.annotation.*']
     excludedClasses = [
-                    'uk.gov.hmcts.reform.em.annotation.authchecker.*' ,
                     'uk.gov.hmcts.reform.em.annotation.config.*',
                     'uk.gov.hmcts.reform.em.annotation.info.*',
                     'uk.gov.hmcts.reform.em.annotation.Application.java',
