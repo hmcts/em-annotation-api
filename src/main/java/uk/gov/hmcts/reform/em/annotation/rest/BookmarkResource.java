@@ -210,8 +210,8 @@ public class BookmarkResource {
         @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @GetMapping("/{documentId}/bookmarks")
-    public ResponseEntity<List<BookmarkDTO>> getAllDocumentBookmarks(@PathVariable UUID documentId, Pageable pageable) {
-        log.debug("REST request to get a page of Bookmarks");
+    public ResponseEntity<List<BookmarkDTO>> getAllDocumentBookmarks(@PathVariable UUID documentId) {
+        log.debug("REST request to get all Bookmarks");
         Pageable unpaged = Pageable.unpaged();
         Page<BookmarkDTO> page = bookmarkService.findAllByDocumentId(documentId, unpaged);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/bookmarks");
