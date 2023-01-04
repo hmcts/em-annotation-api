@@ -20,7 +20,9 @@ import uk.gov.hmcts.reform.em.EmTestConfig;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -148,6 +150,32 @@ public class BookmarkScenarios {
                 .body("pageNumber", equalTo(Arrays.asList(1)))
                 .body("xCoordinate", equalTo(Arrays.asList(100.00f)))
                 .body("yCoordinate", equalTo(Arrays.asList(100.00f)))
+                .log().all();
+    }
+
+    @Test
+    public void shouldReturn200WhenGetAllBookmarksMoreThan20ByDocumentId() {
+        List<String> bookMarks = new ArrayList<>();
+
+        for (int i = 0; i < 30; i++) {
+            final UUID bookmarkId = UUID.randomUUID();
+            final JSONObject jsonObject = createBookmarkRequestPayload(bookmarkId);
+            jsonObject.remove("createdBy");
+
+            final ValidatableResponse response =
+                    request.log().all()
+                            .body(jsonObject.toString())
+                            .post("/api/bookmarks")
+                            .then()
+                            .statusCode(201);
+            bookMarks.add(bookmarkId.toString());
+        }
+
+        request
+                .get(String.format("/api/%s/bookmarks", documentId))
+                .then()
+                .statusCode(200)
+                .body("id", equalTo(bookMarks))
                 .log().all();
     }
 
