@@ -45,13 +45,15 @@ public class BookmarkScenarios {
     @Rule
     public RetryRule retryRule = new RetryRule(3);
 
-    private final UUID documentId = UUID.randomUUID();
+    private UUID documentId;
 
     private RequestSpecification request;
     private RequestSpecification unAuthenticatedRequest;
 
     @Before
     public void setupRequestSpecification() {
+        documentId = UUID.randomUUID();
+
         request = testUtil
                 .authRequest()
                 .baseUri(testUrl)
