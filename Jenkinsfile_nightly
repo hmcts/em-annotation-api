@@ -58,10 +58,10 @@ withNightlyPipeline(type, product, component) {
 
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
-    //enableMutationTest()
-    //enableFortifyScan('em-anno-aat')
+    enableMutationTest()
+    enableFortifyScan('em-anno-aat')
     enableFullFunctionalTest()
-    //enableSecurityScan()
+    enableSecurityScan()
     enableSlackNotifications('#em-dev-chat')
     after('fortify-scan') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
