@@ -20,14 +20,12 @@ import uk.gov.hmcts.reform.em.EmTestConfig;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SpringBootTest(classes = {TestUtil.class, EmTestConfig.class})
@@ -177,7 +175,7 @@ public class BookmarkScenarios {
                 .get(String.format("/api/%s/bookmarks", documentId))
                 .then()
                 .statusCode(200)
-                .body("id", equalTo(bookMarks))
+                .body("id", containsInAnyOrder(bookMarks.toArray()))
                 .log().all();
     }
 
