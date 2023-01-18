@@ -187,7 +187,7 @@ dependencies {
 
     testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.17.6'
 
-    testImplementation group: 'org.mockito', name: 'mockito-inline', version: '4.11.0'
+    testImplementation group: 'org.mockito', name: 'mockito-inline', version: '5.0.0'
 
     contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-junit', version: versions.pact_version, withoutAlpnApi
     contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-junit5', version: versions.pact_version, withoutAlpnApi
