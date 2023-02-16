@@ -88,6 +88,21 @@ public class CommentScenarios {
     }
 
     @Test
+    public void shouldReturn400WhenCreateNewCommentWithoutAnnotationId() {
+        final String commentId = UUID.randomUUID().toString();
+        final JSONObject comment = new JSONObject();
+        comment.put("content", "text");
+        comment.put("id", commentId);
+
+        request
+                .body(comment.toString())
+                .post("/api/comments")
+                .then()
+                .statusCode(400)
+                .log().all();
+    }
+
+    @Test
     public void shouldReturn401WhenUnAuthenticatedUserCreateNewComment() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
@@ -217,6 +232,20 @@ public class CommentScenarios {
         final JSONObject comment = new JSONObject();
         comment.put("content", "text");
         comment.put("annotationId", UUID.randomUUID());
+
+        request
+                .body(comment.toString())
+                .put("/api/comments")
+                .then()
+                .statusCode(400)
+                .log().all();
+    }
+
+    @Test
+    public void shouldReturn400WhenUpdateCommentWithoutAnnotationId() {
+        final JSONObject comment = new JSONObject();
+        comment.put("content", "text");
+        comment.put("id", UUID.randomUUID());
 
         request
                 .body(comment.toString())

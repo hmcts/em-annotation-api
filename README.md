@@ -17,6 +17,9 @@ brew install jq
 ```
 
 #### Clean and build the application:
+
+Requires docker desktop running
+
 ```
 ./gradlew clean
 ./gradlew build
