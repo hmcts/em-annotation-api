@@ -1,6 +1,12 @@
 package uk.gov.hmcts.reform.em.annotation.rest.errors;
 
+import feign.FeignException;
+import org.hibernate.exception.ConstraintViolationException;
+import org.postgresql.util.PSQLException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,6 +37,8 @@ import java.util.stream.Collectors;
  */
 @ControllerAdvice
 public class ExceptionTranslator implements ProblemHandling {
+    
+    private final Logger log = LoggerFactory.getLogger(ExceptionTranslator.class);
 
     private static final String MESSAGE = "message";
 
@@ -128,6 +136,51 @@ public class ExceptionTranslator implements ProblemHandling {
         Problem problem = Problem.builder()
                 .withStatus(Status.UNAUTHORIZED)
                 .with(MESSAGE, ErrorConstants.ERR_UNAUTHORISED)
+                .build();
+        return create(ex, problem, request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleDataIntegrityViolation(DataIntegrityViolationException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+                .withStatus(Status.CONFLICT)
+                .with(MESSAGE, ErrorConstants.ERR_DATA_INTEGRITY)
+                .build();
+        return create(ex, problem, request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleConstraintViolation(ConstraintViolationException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+                .withStatus(Status.UNPROCESSABLE_ENTITY)
+                .with(MESSAGE, ErrorConstants.ERR_CONSTRAINT_VIOLATION)
+                .build();
+        return create(ex, problem, request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleFeignException(FeignException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+                .withStatus(Status.valueOf(ex.status()))
+                .with(MESSAGE, ex.getMessage())
+                .build();
+        return create(ex, problem, request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handlePSQLException(PSQLException ex, NativeWebRequest request) {
+        log.info("Em-Annotation sql exception : {} ",ex.getMessage());
+        if (ex.getMessage().contains("duplicate key value violates unique constraint")) {
+            Problem problem = Problem.builder()
+                    .withStatus(Status.CONFLICT)
+                    .with(MESSAGE, ex.getMessage())
+                    .build();
+            return create(ex, problem, request);
+        }
+        Problem problem = Problem.builder()
+                //Responding with 500 for now as psql exception currently lacks method to get http status code
+                .withStatus(Status.INTERNAL_SERVER_ERROR)
+                .with(MESSAGE, ex.getMessage())
                 .build();
         return create(ex, problem, request);
     }

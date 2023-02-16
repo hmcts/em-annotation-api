@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,15 +11,19 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.BaseTest;
+import uk.gov.hmcts.reform.em.annotation.domain.Annotation;
 import uk.gov.hmcts.reform.em.annotation.domain.Comment;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 import uk.gov.hmcts.reform.em.annotation.repository.CommentRepository;
 import uk.gov.hmcts.reform.em.annotation.rest.errors.ExceptionTranslator;
 import uk.gov.hmcts.reform.em.annotation.service.CommentService;
+import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
+import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.CommentMapper;
 
 import javax.persistence.EntityManager;
@@ -65,6 +70,9 @@ public class CommentResourceIntTest extends BaseTest {
 
     private Comment comment;
 
+    @Autowired
+    private AnnotationMapper annotationMapper;
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
@@ -94,12 +102,31 @@ public class CommentResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void createCommentUUIDNull() throws Exception {
+    public void createComment() throws Exception {
         int databaseSizeBeforeCreate = commentRepository.findAll().size();
+
+        CommentDTO commentDTO = commentMapper.toDto(comment);
+        commentDTO.setAnnotationId(createAnnotation());
+
+        restLogoutMockMvc.perform(post("/api/comments")
+                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                        .content(TestUtil.convertObjectToJsonBytes(commentDTO)))
+                .andExpect(status().isCreated());
+
+        // Validate the Comment in the database
+        List<Comment> commentList = commentRepository.findAll();
+        assertThat(commentList).hasSize(databaseSizeBeforeCreate + 1);
+    }
+
+    @Test
+    @Transactional
+    public void createCommentUUIDNull() throws Exception {
+        final int databaseSizeBeforeCreate = commentRepository.findAll().size();
 
         // Create the Comment
         CommentDTO commentDTO = commentMapper.toDto(comment);
         commentDTO.setId(null);
+        commentDTO.setAnnotationId(createAnnotation());
         restLogoutMockMvc.perform(post("/api/comments")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(commentDTO)))
@@ -108,26 +135,6 @@ public class CommentResourceIntTest extends BaseTest {
         // Validate the Comment in the database
         List<Comment> commentList = commentRepository.findAll();
         assertThat(commentList).hasSize(databaseSizeBeforeCreate);
-    }
-
-    @Test
-    @Transactional
-    public void createCommentWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = commentRepository.findAll().size();
-
-        // Create the Comment with an existing ID
-        comment.setId(UUID.randomUUID());
-        CommentDTO commentDTO = commentMapper.toDto(comment);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restLogoutMockMvc.perform(post("/api/comments")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(commentDTO)))
-            .andExpect(status().isCreated());
-
-        // Validate the Comment in the database
-        List<Comment> commentList = commentRepository.findAll();
-        assertThat(commentList).hasSize(databaseSizeBeforeCreate + 1);
     }
 
     @Test
@@ -181,6 +188,7 @@ public class CommentResourceIntTest extends BaseTest {
         updatedComment
             .content(UPDATED_CONTENT);
         CommentDTO commentDTO = commentMapper.toDto(updatedComment);
+        commentDTO.setAnnotationId(createAnnotation());
 
         restLogoutMockMvc.perform(put("/api/comments")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -285,5 +293,22 @@ public class CommentResourceIntTest extends BaseTest {
         UUID uuid = UUID.randomUUID();
         assertThat(commentMapper.fromId(uuid).getId()).isEqualTo(uuid);
         assertThat(commentMapper.fromId(null)).isNull();
+    }
+
+    private UUID createAnnotation() throws Exception {
+        Annotation annotation = AnnotationResourceIntTest.createEntity(em);
+        AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
+        annotationDTO.setAnnotationSetId(UUID.randomUUID());
+        annotationDTO.setDocumentId("DocId");
+
+        MvcResult result = restLogoutMockMvc.perform(post("/api/annotations")
+                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                        .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        JSONObject jsonObject = new JSONObject(content);
+        return UUID.fromString((String) jsonObject.get("id"));
     }
 }

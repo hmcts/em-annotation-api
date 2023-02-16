@@ -17,50 +17,25 @@ brew install jq
 ```
 
 #### Clean and build the application:
+
+Requires docker desktop running
+
 ```
 ./gradlew clean
 ./gradlew build
 ```
 
-There are two methods to start the containers and run the application. 
-
-Method 1 is the recommended option for improved performance and debugging.
-Method 2 is currently maintained for support.
-
-
-#### Method 1:
+#### To run the application:
 
 ```
 ./gradlew bootWithCCD
 ```
 
-#### Method 2:
-
-To start the docker containers:
-```
-./bin/start-local-environment.sh
-```
-
-To setup the db:
-```
-./gradlew migratePostgresDatabase
-```
-
-To start the application:
-```
-./gradlew bootRun
-```
-
 #### To remove docker containers after stopping the run:
-Method 1:
+
 ```
 docker stop $(docker ps -a -q)
 docker rm $(docker ps -a -f status=exited -q)
-```
-
-Method 2:
-```
-docker-compose -f docker-compose-dependencies.yml down
 ```
 
 #### Potential issues and solutions
