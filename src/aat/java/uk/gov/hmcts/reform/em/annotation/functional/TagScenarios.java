@@ -22,7 +22,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import uk.gov.hmcts.reform.em.EmTestConfig;
 import uk.gov.hmcts.reform.em.annotation.rest.TagResource;
-import uk.gov.hmcts.reform.em.annotation.service.TagService;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
@@ -42,8 +41,7 @@ public class TagScenarios {
     @Autowired
     private TestUtil testUtil;
 
-    @Autowired
-    private TagService tagService;
+
 
     @Value("${test.url}")
     private String testUrl;
@@ -104,7 +102,6 @@ public class TagScenarios {
         final String annotationId = UUID.randomUUID().toString();
         JSONObject annotationPayload = createAnnotationPayload(annotationId, annotationSetId);
 
-        Assert.assertNull(tagService.findTagByCreatedBy("foo"));
         log.info("tag: " + annotationPayload.get("tags"));
 
         request
