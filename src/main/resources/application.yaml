@@ -18,11 +18,8 @@ spring:
       hibernate:
         temp:
           use_jdbc_metadata_defaults: false
-  liquibase:
-    change-log: classpath:/db/db.changelog-master.xml
-    enabled: ${ENABLE_LIQUIBASE:false}
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:6432/emannotationapp}
+    url: jdbc:postgresql://${SPRING_DATASOURCE_HOST:localhost}:${SPRING_DATASOURCE_PORT:6432}/${SPRING_DATASOURCE_NAME:emannotationapp}${SPRING_DATASOURCE_OPTIONS:?ssl=disable}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:postgres}
     tomcat:
@@ -45,11 +42,9 @@ spring:
             client-secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
   main:
     allow-circular-references: true # Need this for the Mapper library to work
-
-#liquibase:
-#
-#  enabled: ${ENABLE_DB_MIGRATE:true}
-#  change-log: classpath:/db/db.changelog-master.xml
+#  flyway:
+#    enabled: ${RUN_DB_MIGRATION_ON_STARTUP:true}
+#    locations: classpath:db.migration
 
 management:
   endpoint:
@@ -146,3 +141,12 @@ oidc:
 springdoc:
   packagesToScan: uk.gov.hmcts.reform.em.annotation.rest
   pathsToMatch: /**
+
+dbMigration:
+  # When true, the app will run DB migration on startup.
+  # Otherwise, it will just check if all migrations have been applied (and fail to start if not).
+  runOnStartup: ${RUN_DB_MIGRATION_ON_STARTUP:true}
+
+logging:
+  level:
+    uk.gov.hmcts.reform.authorisation.filters: DEBUG

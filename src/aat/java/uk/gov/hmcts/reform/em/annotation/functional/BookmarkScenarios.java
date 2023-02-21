@@ -20,12 +20,12 @@ import uk.gov.hmcts.reform.em.EmTestConfig;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
-import java.util.Arrays;
-import java.util.UUID;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SpringBootTest(classes = {TestUtil.class, EmTestConfig.class})
@@ -43,13 +43,15 @@ public class BookmarkScenarios {
     @Rule
     public RetryRule retryRule = new RetryRule(3);
 
-    private final UUID documentId = UUID.randomUUID();
+    private UUID documentId;
 
     private RequestSpecification request;
     private RequestSpecification unAuthenticatedRequest;
 
     @Before
     public void setupRequestSpecification() {
+        documentId = UUID.randomUUID();
+
         request = testUtil
                 .authRequest()
                 .baseUri(testUrl)
@@ -109,7 +111,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenCreateNewBookmarkWithoutMandatoryField() {
+    public void shouldReturn409WhenCreateNewBookmarkWithoutMandatoryField() {
         final UUID bookmarkId = UUID.randomUUID();
         final JSONObject bookmarkRequestPayload = createBookmarkRequestPayload(bookmarkId);
         bookmarkRequestPayload.remove("name");
@@ -118,7 +120,7 @@ public class BookmarkScenarios {
                 .body(bookmarkRequestPayload.toString())
                 .post("/api/bookmarks")
                 .then()
-                .statusCode(500)
+                .statusCode(409)
                 .log().all();
     }
 
@@ -148,6 +150,32 @@ public class BookmarkScenarios {
                 .body("pageNumber", equalTo(Arrays.asList(1)))
                 .body("xCoordinate", equalTo(Arrays.asList(100.00f)))
                 .body("yCoordinate", equalTo(Arrays.asList(100.00f)))
+                .log().all();
+    }
+
+    @Test
+    public void shouldReturn200WhenGetAllBookmarksMoreThan20ByDocumentId() {
+        List<String> bookMarks = new ArrayList<>();
+
+        for (int i = 0; i < 30; i++) {
+            final UUID bookmarkId = UUID.randomUUID();
+            final JSONObject jsonObject = createBookmarkRequestPayload(bookmarkId);
+            jsonObject.remove("createdBy");
+
+            final ValidatableResponse response =
+                    request.log().all()
+                            .body(jsonObject.toString())
+                            .post("/api/bookmarks")
+                            .then()
+                            .statusCode(201);
+            bookMarks.add(bookmarkId.toString());
+        }
+
+        request
+                .get(String.format("/api/%s/bookmarks", documentId))
+                .then()
+                .statusCode(200)
+                .body("id", containsInAnyOrder(bookMarks.toArray()))
                 .log().all();
     }
 
@@ -223,7 +251,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenUpdateBookmarkWithoutMandatoryField() {
+    public void shouldReturn409WhenUpdateBookmarkWithoutMandatoryField() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
@@ -232,7 +260,7 @@ public class BookmarkScenarios {
                 .body(jsonObject.toString())
                 .put("/api/bookmarks")
                 .then()
-                .statusCode(500)
+                .statusCode(409)
                 .log().all();
     }
 
@@ -299,7 +327,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenUpdateMultipleBookmarksWithoutMandatoryField() {
+    public void shouldReturn409WhenUpdateMultipleBookmarksWithoutMandatoryField() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
@@ -311,7 +339,7 @@ public class BookmarkScenarios {
                 .body(jsonArray.toString())
                 .put("/api/bookmarks_multiple")
                 .then()
-                .statusCode(500)
+                .statusCode(409)
                 .log().all();
     }
 

@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.em.annotation.config.audit;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
-import com.microsoft.applicationinsights.boot.dependencies.apachecommons.lang3.reflect.FieldUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -29,29 +29,26 @@ public class EntityAuditEventListenerTest {
     private AsyncEntityAuditEventWriter asyncEntityAuditEventWriter;
 
     @Mock
-    private BeanFactory beanFactory;
+    private BeanFactory beanFactory ;
 
     private static final BeanFactory originalBeanFactory;
+    private final String noBeanFound = "No bean found for AsyncEntityAuditEventWriter";
+    private static Field beanFactoryField;
 
     static {
         try {
-            originalBeanFactory = (BeanFactory) FieldUtils.readDeclaredStaticField(
-                    EntityAuditEventListener.class, "beanFactory", true);
-        } catch (IllegalAccessException e) {
+
+            beanFactoryField = Class.forName(EntityAuditEventListener.class.getName()).getDeclaredField("beanFactory");
+            // Allow modification on the field
+            beanFactoryField.setAccessible(true);
+
+            originalBeanFactory = (BeanFactory)beanFactoryField.get(Class.forName(EntityAuditEventListener.class.getName()));
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private final String noBeanFound;
 
-    {
-        try {
-            noBeanFound = (String) FieldUtils.readDeclaredStaticField(
-                    EntityAuditEventListener.class, "NO_BEAN_FOUND", true);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Before
     public void setUp() {
@@ -67,10 +64,11 @@ public class EntityAuditEventListenerTest {
 
 
     @Test
-    public void testSetBeanFactory() throws IllegalAccessException {
+    public void testSetBeanFactory() throws Exception {
         EntityAuditEventListener.setBeanFactory(beanFactory);
-        BeanFactory beanFactory1 = (BeanFactory) FieldUtils.readDeclaredStaticField(
-                EntityAuditEventListener.class, "beanFactory", true);
+
+        var beanFactory1 = (BeanFactory)beanFactoryField.get(Class.forName(EntityAuditEventListener.class.getName()));
+
         Assert.assertEquals(beanFactory1, beanFactory);
     }
 

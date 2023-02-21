@@ -21,8 +21,10 @@ module "db-v11" {
   database_name      = var.database_name_v11
   postgresql_version = "11"
   subnet_id          = data.azurerm_subnet.postgres.id
-  sku_name           = "GP_Gen5_2"
+  sku_name           = var.sku_name
+  sku_capacity       = var.sku_capacity
   sku_tier           = "GeneralPurpose"
+  storage_mb         = var.database_storage_mb
   common_tags        = var.common_tags
   subscription       = var.subscription
 }
@@ -115,6 +117,17 @@ data "azurerm_key_vault_secret" "app_insights_key" {
 resource "azurerm_key_vault_secret" "local_app_insights_key" {
   name         = "AppInsightsInstrumentationKey"
   value        = data.azurerm_key_vault_secret.app_insights_key.value
+  key_vault_id = data.azurerm_key_vault.key_vault.id
+}
+
+data "azurerm_key_vault_secret" "app_insights_connection_string" {
+  name         = "app-insights-connection-string"
+  key_vault_id = data.azurerm_key_vault.product.id
+}
+
+resource "azurerm_key_vault_secret" "local_app_insights_connection_string" {
+  name         = "app-insights-connection-string"
+  value        = data.azurerm_key_vault_secret.app_insights_connection_string.value
   key_vault_id = data.azurerm_key_vault.key_vault.id
 }
 

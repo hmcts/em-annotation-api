@@ -139,4 +139,53 @@ public class ExceptionTranslatorIntTest extends BaseTest {
             .andExpect(jsonPath("$.title").value("Internal Server Error"));
     }
 
+    @Test
+    public void testDataIntegrityViolation() throws Exception {
+        restLogoutMockMvc.perform(get("/test/data-integrity-violation"))
+                .andExpect(status().isConflict())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.message").value("error.dataIntegrityViolation"));
+    }
+
+    @Test
+    public void testConstraintViolation() throws Exception {
+        restLogoutMockMvc.perform(get("/test/constraint-violation"))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.message").value("error.constraintViolation"));
+    }
+
+    @Test
+    public void testPSQLException() throws Exception {
+        restLogoutMockMvc.perform(get("/test/psql-key-violation"))
+                .andExpect(status().isConflict())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
+
+        restLogoutMockMvc.perform(get("/test/psql-exception"))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
+    }
+
+    @Test
+    public void testRetryableException() throws Exception {
+        restLogoutMockMvc.perform(get("/test/retryable-exception"))
+                .andExpect(status().isServiceUnavailable())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
+    }
+
+    @Test
+    public void testFeignGatewayTimeout() throws Exception {
+        restLogoutMockMvc.perform(get("/test/feign-gateway-timeout"))
+                .andExpect(status().isGatewayTimeout())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
+    }
+
+    @Test
+    public void testFeignBadGateway() throws Exception {
+        restLogoutMockMvc.perform(get("/test/feign-bad-gateway"))
+                .andExpect(status().isBadGateway())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
+    }
+
+
 }
