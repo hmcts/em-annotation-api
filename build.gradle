@@ -20,7 +20,7 @@ plugins {
     id 'au.com.dius.pact' version '4.2.11'
     id "info.solidsoft.pitest" version '1.9.0'
     id 'com.github.hmcts.rse-cft-lib' version '0.19.590'
-    id 'org.flywaydb.flyway' version '9.15.0'
+    id 'org.flywaydb.flyway' version '9.15.1'
 }
 
 apply plugin: 'java'
@@ -168,7 +168,7 @@ dependencies {
 
     implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.26'
 
-    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.26'
     annotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: versions.mapstruct
     annotationProcessor group:'org.hibernate', name: 'hibernate-jpamodelgen', version: versions.hibernate
     annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', withoutStuff
@@ -223,7 +223,7 @@ dependencyManagement {
           entry 'snakeyaml'
       }
       // CVE-2022-31692 - CVE-2022-31690
-      dependencySet(group: 'org.springframework.security', version: '6.0.1') {
+      dependencySet(group: 'org.springframework.security', version: '6.0.2') {
           entry 'spring-security-crypto'
       }
       //CVE-2022-45143
