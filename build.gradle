@@ -132,7 +132,7 @@ dependencies {
     implementation group: 'javax.el', name: 'javax.el-api', version: '3.0.0'
     implementation group: 'org.zalando', name: 'problem-spring-web', version: versions.zalando
     implementation group: 'org.zalando', name: 'jackson-datatype-problem', version: versions.zalando
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.14'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.15'
     implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.15.2'
