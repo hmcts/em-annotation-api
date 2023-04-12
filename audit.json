@@ -260,5 +260,14 @@
   "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/api/rectangles_POST": "ignore",
   "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/api/rectangles_PUT": "ignore",
   "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/api/tags/createdBy_GET": "ignore",
-  "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/v3/api-docs_GET": "ignore"
+  "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/v3/api-docs_GET": "ignore",
+  "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/v3/api-docs_GET": "ignore",
+  "10010_Cookie No HttpOnly Flag_http://em-anno-aat.service.core-compute-aat.internal_GET": "ignore",
+  "10010_Cookie No HttpOnly Flag_http://em-anno-aat.service.core-compute-aat.internal/robots.txt_GET": "ignore",
+  "10054_Cookie without SameSite Attribute_http://em-anno-aat.service.core-compute-aat.internal_GET": "ignore",
+  "10054_Cookie without SameSite Attribute_http://em-anno-aat.service.core-compute-aat.internal/robots.txt_GET": "ignore",
+  "10096_Timestamp Disclosure - Unix_http://em-anno-aat.service.core-compute-aat.internal/robots.txt_GET": "ignore",
+  "10021_X-Content-Type-Options Header Missing_http://em-anno-aat.service.core-compute-aat.internal_GET": "ignore",
+  "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal_GET": "ignore",
+  "90033_Loosely Scoped Cookie_http://em-anno-aat.service.core-compute-aat.internal/robots.txt_GET": "ignore"
 }
