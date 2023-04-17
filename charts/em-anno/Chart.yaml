@@ -1,7 +1,7 @@
 apiVersion: v2
 name: em-anno
 home: https://github.com/hmcts/em-annotation-api
-version: 1.0.18
+version: 2.0.0
 description: Helm chart for the HMCTS EM Annotation API
 maintainers:
   - name: HMCTS EM Team
@@ -9,3 +9,11 @@ dependencies:
   - name: java
     version: 4.1.0
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
+  - name: xui-webapp
+    version: ~1.0.0
+    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
+    condition: xui-webapp.enabled
+  - name: idam-pr
+    version: ~2.3.0
+    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
+    condition: idam-pr.enabled
