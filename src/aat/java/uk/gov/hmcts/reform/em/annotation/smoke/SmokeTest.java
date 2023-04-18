@@ -18,7 +18,7 @@ import uk.gov.hmcts.reform.em.EmTestConfig;
 @WithTags({@WithTag("testType:Smoke")})
 public class SmokeTest {
 
-    private static final String MESSAGE = "Welcome to EM Annotation API!";
+    private static final String MESSAGE = "{\"message\":\"Welcome to EM Annotation API!\"}";
 
     @Value("${test.url}")
     private String testUrl;
