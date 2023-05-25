@@ -20,7 +20,7 @@ plugins {
     id 'au.com.dius.pact' version '4.2.11'
     id "info.solidsoft.pitest" version '1.9.0'
     id 'com.github.hmcts.rse-cft-lib' version '0.19.683'
-    id 'org.flywaydb.flyway' version '9.19.0'
+    id 'org.flywaydb.flyway' version '9.19.1'
 }
 
 apply plugin: 'java'
@@ -166,9 +166,9 @@ dependencies {
     implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.0'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.5'
 
-    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.26'
+    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.28'
 
-    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.26'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.28'
     annotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: versions.mapstruct
     annotationProcessor group:'org.hibernate', name: 'hibernate-jpamodelgen', version: versions.hibernate
     annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', withoutStuff
