@@ -162,7 +162,7 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
 
-    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.1.1'
+    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.1.0'
     implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.1'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.5'
 
