@@ -1,13 +1,13 @@
 package uk.gov.hmcts.reform.em.annotation.testutil;
 
 import io.restassured.specification.RequestSpecification;
+import jakarta.annotation.PostConstruct;
 import net.serenitybdd.rest.SerenityRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.em.test.idam.IdamHelper;
 import uk.gov.hmcts.reform.em.test.s2s.S2sHelper;
 
-import javax.annotation.PostConstruct;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
