@@ -27,7 +27,7 @@ import uk.gov.hmcts.reform.em.annotation.service.AnnotationSetService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

@@ -26,7 +26,7 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.CommentMapper;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.UUID;
 

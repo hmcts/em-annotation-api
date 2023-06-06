@@ -22,7 +22,7 @@ import uk.gov.hmcts.reform.em.annotation.service.RectangleService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.RectangleDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.RectangleMapper;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.UUID;
 

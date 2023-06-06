@@ -22,7 +22,7 @@ import uk.gov.hmcts.reform.em.annotation.domain.PersistentAuditEvent;
 import uk.gov.hmcts.reform.em.annotation.rest.TestSecurityConfiguration;
 import uk.gov.hmcts.reform.em.annotation.service.AuditEventService;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.HashMap;
