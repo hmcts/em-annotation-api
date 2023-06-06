@@ -34,7 +34,7 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.BookmarkDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.DeleteBookmarkDTO;
 import uk.gov.hmcts.reform.em.annotation.service.util.StringUtilities;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;

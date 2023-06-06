@@ -19,7 +19,7 @@ import uk.gov.hmcts.reform.em.annotation.rest.errors.ResourceNotFoundException;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationSetService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationSetDTO;
 
-import javax.validation.ConstraintViolationException;
+import jakarta.validation.ConstraintViolationException;
 import java.util.Optional;
 
 /**

@@ -32,7 +32,7 @@ import uk.gov.hmcts.reform.em.annotation.rest.util.PaginationUtil;
 import uk.gov.hmcts.reform.em.annotation.service.CommentService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
