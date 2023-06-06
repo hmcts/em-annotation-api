@@ -6,8 +6,8 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Error controller class to rethrow errors occurring outside of controller methods from inside a controller.
@@ -20,7 +20,7 @@ public class EmErrorController implements ErrorController {
 
     @GetMapping("/error")
     public void handleError(HttpServletRequest request) throws Throwable {
-        if (request.getAttribute(javax.servlet.RequestDispatcher.ERROR_EXCEPTION) != null) {
+        if (request.getAttribute(jakarta.servlet.RequestDispatcher.ERROR_EXCEPTION) != null) {
             Throwable throwable = (Throwable) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
             log.error("EM Annotation Error Controller : {}", throwable.getMessage());
             throw throwable;

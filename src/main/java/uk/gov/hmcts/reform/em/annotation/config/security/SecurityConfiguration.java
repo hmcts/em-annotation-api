@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.em.annotation.config.security;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -18,7 +18,7 @@ import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
@@ -27,7 +27,7 @@ public class SecurityConfiguration {
     @Value("${oidc.issuer}")
     private String issuerOverride;
 
-    private ServiceAuthFilter serviceAuthFilter;
+    private final ServiceAuthFilter serviceAuthFilter;
 
     private JwtAuthenticationConverter jwtAuthenticationConverter;
 
@@ -41,7 +41,7 @@ public class SecurityConfiguration {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/swagger-ui.html",
+        return (web) -> web.ignoring().requestMatchers("/swagger-ui.html",
                 "/swagger-ui/**",
                 "/swagger-resources/**",
                 "/v3/**",
@@ -63,7 +63,7 @@ public class SecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/**").authenticated()
+                .requestMatchers("/api/**").authenticated()
                 .and()
                 .oauth2ResourceServer()
                 .jwt()
