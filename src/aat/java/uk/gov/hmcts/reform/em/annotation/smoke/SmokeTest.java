@@ -29,7 +29,10 @@ public class SmokeTest {
                 .baseUri(testUrl)
                 .get("/")
                 .then()
-                .statusCode(200).extract().body().asString();
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString();
 
         Assert.assertEquals(MESSAGE, response);
 
