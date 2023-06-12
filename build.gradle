@@ -131,7 +131,7 @@ dependencies {
     implementation group: 'org.zalando', name: 'jackson-datatype-problem', version: '0.27.1'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.7.0'
     implementation group: 'com.google.guava', name: 'guava', version: '32.0.0-jre'
-    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.19.3'
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
