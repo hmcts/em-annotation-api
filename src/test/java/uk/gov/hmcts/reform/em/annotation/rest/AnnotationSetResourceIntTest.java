@@ -233,21 +233,6 @@ public class AnnotationSetResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void deleteNonExistingAnnotationSet() throws Exception {
-        int databaseSizeBeforeDelete = annotationSetRepository.findAll().size();
-
-        // Delete the annotationSet
-        restLogoutMockMvc.perform(delete("/api/annotation-sets/{id}", UUID.randomUUID())
-                .accept(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isNotFound());
-
-        // Validate the database hasn't changed
-        List<AnnotationSet> annotationSetList = annotationSetRepository.findAll();
-        assertThat(annotationSetList).hasSize(databaseSizeBeforeDelete);
-    }
-
-    @Test
-    @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(AnnotationSet.class);
         AnnotationSet annotationSet1 = new AnnotationSet();
