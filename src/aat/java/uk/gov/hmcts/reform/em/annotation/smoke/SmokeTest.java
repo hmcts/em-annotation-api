@@ -8,13 +8,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import uk.gov.hmcts.reform.em.EmTestConfig;
 
-@ContextConfiguration(classes = {EmTestConfig.class})
-@RunWith(SpringIntegrationSerenityRunner.class)
 @TestPropertySource(value = "classpath:application.yml")
+@RunWith(SpringIntegrationSerenityRunner.class)
 @WithTags({@WithTag("testType:Smoke")})
 public class SmokeTest {
 
@@ -28,14 +25,16 @@ public class SmokeTest {
 
         SerenityRest.useRelaxedHTTPSValidation();
 
-        String response = SerenityRest.given()
-                .baseUri(testUrl)
-                .get("/")
-                .then()
-                .statusCode(200)
-                .extract()
-                .body()
-                .asString();
+        String response =
+                SerenityRest
+                        .given()
+                        .baseUri(testUrl)
+                        .get("/")
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .body()
+                        .asString();
 
         Assert.assertEquals(MESSAGE, response);
 
