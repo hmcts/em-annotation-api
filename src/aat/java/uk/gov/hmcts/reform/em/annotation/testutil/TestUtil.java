@@ -4,8 +4,6 @@ import io.restassured.specification.RequestSpecification;
 import jakarta.annotation.PostConstruct;
 import net.serenitybdd.rest.SerenityRest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.em.test.idam.IdamHelper;
@@ -17,8 +15,6 @@ import java.util.stream.Stream;
 
 @Service
 @Configuration
-@EnableFeignClients
-@ComponentScan({ "uk.gov.hmcts.reform.em" })
 public class TestUtil {
 
     @Autowired
