@@ -4,6 +4,8 @@ import io.restassured.specification.RequestSpecification;
 import jakarta.annotation.PostConstruct;
 import net.serenitybdd.rest.SerenityRest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.em.test.idam.IdamHelper;
 import uk.gov.hmcts.reform.em.test.s2s.S2sHelper;
@@ -13,6 +15,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
+@Configuration
+@ComponentScan({ "uk.gov.hmcts.reform" })
 public class TestUtil {
 
     @Autowired
