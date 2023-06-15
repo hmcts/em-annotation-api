@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.junit.Assume;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import uk.gov.hmcts.reform.em.EmTestConfig;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.annotation.testutil.ToggleProperties;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
@@ -29,12 +27,11 @@ import java.util.UUID;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@SpringBootTest(classes = {TestUtil.class, EmTestConfig.class})
+@SpringBootTest(classes = {TestUtil.class})
 @TestPropertySource(value = "classpath:application.yml")
 @EnableConfigurationProperties(ToggleProperties.class)
 @RunWith(SpringIntegrationSerenityRunner.class)
 @WithTags({@WithTag("testType:Functional")})
-@Ignore
 public class MetadataScenarios {
 
     @Autowired
