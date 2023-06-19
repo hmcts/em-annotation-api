@@ -82,9 +82,6 @@ public class AnnotationResourceIntTest extends BaseTest {
     private AnnotationService annotationService;
 
     @Autowired
-    private CcdService ccdService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
