@@ -25,12 +25,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 import uk.gov.hmcts.reform.em.annotation.rest.errors.BadRequestAlertException;
 import uk.gov.hmcts.reform.em.annotation.rest.util.HeaderUtil;
 import uk.gov.hmcts.reform.em.annotation.rest.util.PaginationUtil;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
+import uk.gov.hmcts.reform.em.annotation.service.CcdService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -52,8 +55,11 @@ public class AnnotationResource {
 
     private final AnnotationService annotationService;
 
-    public AnnotationResource(AnnotationService annotationService) {
+    private final CcdService ccdService;
+
+    public AnnotationResource(AnnotationService annotationService, CcdService ccdService) {
         this.annotationService = annotationService;
+        this.ccdService = ccdService;
     }
 
     /**
@@ -79,11 +85,13 @@ public class AnnotationResource {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
     })
     @PostMapping("/annotations")
-    public ResponseEntity<AnnotationDTO> createAnnotation(@RequestBody AnnotationDTO annotationDTO) throws URISyntaxException {
+    public ResponseEntity<AnnotationDTO> createAnnotation(HttpServletRequest request,  @RequestBody AnnotationDTO annotationDTO) throws URISyntaxException {
         log.debug("REST request to save Annotation : {}", annotationDTO);
         if (annotationDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        CaseDetails caseDetails = ccdService.getCaseDetails(request.getHeader("Authorization"),
+                request.getHeader("serviceAuthorization"), annotationDTO.getAnnotationSetId().toString());
         try {
             annotationService.save(annotationDTO);
         } catch (PSQLException | ConstraintViolationException | DataIntegrityViolationException exception) {

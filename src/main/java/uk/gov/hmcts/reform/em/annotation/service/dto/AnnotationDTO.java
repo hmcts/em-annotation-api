@@ -34,6 +34,12 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String documentId;
 
+    private String caseId = null;
+
+    private String jurisdiction = null;
+
+    private String appellant = null;
+
     public String getDocumentId() {
         return documentId;
     }
@@ -104,6 +110,30 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getCaseId() {
+        return caseId;
+    }
+
+    public void setCaseId(String caseId) {
+        this.caseId = caseId;
+    }
+
+    public String getJurisdiction() {
+        return jurisdiction;
+    }
+
+    public void setJurisdiction(String jurisdiction) {
+        this.jurisdiction = jurisdiction;
+    }
+
+    public String getAppellant() {
+        return appellant;
+    }
+
+    public void setAppellant(String appellant) {
+        this.appellant = appellant;
     }
 
     @Override
