@@ -220,7 +220,6 @@ public class AnnotationSetResource {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "401", description = "Unauthorised"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @DeleteMapping("/annotation-sets/{id}")
     public ResponseEntity<Void> deleteAnnotationSet(@PathVariable UUID id) {

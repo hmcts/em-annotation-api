@@ -230,12 +230,12 @@ public class RectangleResource {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "401", description = "Unauthorised"),
         @ApiResponse(responseCode = "403", description = "Forbidden"),
-        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @DeleteMapping("/rectangles/{id}")
     public ResponseEntity<Void> deleteRectangle(@PathVariable UUID id) {
         log.debug("REST request to delete Rectangle : {}", id);
         rectangleService.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString()))
+            .build();
     }
 }

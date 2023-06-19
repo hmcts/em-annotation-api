@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -31,7 +32,6 @@ import uk.gov.hmcts.reform.em.annotation.rest.util.PaginationUtil;
 import uk.gov.hmcts.reform.em.annotation.service.CommentService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
 
-import jakarta.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -66,7 +66,7 @@ public class CommentResource {
      *
      * @param commentDTO the commentDTO to create
      * @return the ResponseEntity with status "201" (Created) and with body the new commentDTO,
-     * or with status "400" (Bad Request) if the comment has already an ID
+     *      or with status "400" (Bad Request) if the comment has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @Operation(summary = "Create an commentDTO", description = "A POST request to create a commentDTO",
@@ -218,7 +218,6 @@ public class CommentResource {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "401", description = "Unauthorised"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @DeleteMapping("/comments/{id}")
     public ResponseEntity<Void> deleteComment(@PathVariable UUID id) {

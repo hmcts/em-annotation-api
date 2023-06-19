@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,6 @@ import uk.gov.hmcts.reform.em.annotation.rest.util.PaginationUtil;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 
-import jakarta.validation.ConstraintViolationException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -222,7 +222,6 @@ public class AnnotationResource {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "401", description = "Unauthorised"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @DeleteMapping("/annotations/{id}")
     public ResponseEntity<Void> deleteAnnotation(@PathVariable UUID id) {

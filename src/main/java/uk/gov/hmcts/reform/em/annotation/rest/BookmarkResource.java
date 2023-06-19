@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -33,12 +34,10 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.BookmarkDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.DeleteBookmarkDTO;
 import uk.gov.hmcts.reform.em.annotation.service.util.StringUtilities;
 
-import jakarta.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -242,13 +241,13 @@ public class BookmarkResource {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "401", description = "Unauthorised"),
         @ApiResponse(responseCode = "403", description = "Forbidden"),
-        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @DeleteMapping("/bookmarks/{id}")
     public ResponseEntity<Void> deleteBookmark(@PathVariable UUID id) {
         log.debug("REST request to delete Bookmark : {}", id);
         bookmarkService.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString()))
+            .build();
     }
 
     /**
@@ -271,7 +270,6 @@ public class BookmarkResource {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "401", description = "Unauthorised"),
         @ApiResponse(responseCode = "403", description = "Forbidden"),
-        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @DeleteMapping("/bookmarks_multiple")
     public ResponseEntity<Void> deleteMultipleBookmarks(@Valid @RequestBody DeleteBookmarkDTO deleteBookmarkDTO) {
@@ -284,12 +282,7 @@ public class BookmarkResource {
 
         log.debug("REST request to delete list of Bookmark objects : {}", sanitisedList);
 
-        Optional<UUID> idToBeDeleted = Optional.empty();
-            for (UUID id : deleteBookmarkDTO.getDeleted()) {
-                idToBeDeleted = Optional.ofNullable(id);
-                bookmarkService.delete(id);
-            idToBeDeleted.ifPresent(uuid -> log.debug("The Delete ID is not Found : {}", uuid));
-        }
+        bookmarkService.deleteAllById(deleteBookmarkDTO.getDeleted());
 
         if (!Objects.isNull(deleteBookmarkDTO.getUpdated())) {
             bookmarkService.save(deleteBookmarkDTO.getUpdated());
