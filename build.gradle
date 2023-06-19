@@ -192,7 +192,7 @@ dependencies {
     contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version:versions.junit5
     contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:versions.junit5
 
-    aatImplementation group: 'org.json', name: 'json', version: '20230227'
+    aatImplementation group: 'org.json', name: 'json', version: '20230618'
     aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version:'2.0.4'
 
     contractTestImplementation sourceSets.main.runtimeClasspath
@@ -221,7 +221,7 @@ dependencyManagement {
           entry 'commons-fileupload'
       }
       //CVE-2022-45688
-      dependencySet(group: 'org.json', version: '20230227') {
+      dependencySet(group: 'org.json', version: '20230618') {
           entry 'json'
       }
       //CVE-2020-13956
