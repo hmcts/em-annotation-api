@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -248,13 +247,8 @@ public class BookmarkResource {
     @DeleteMapping("/bookmarks/{id}")
     public ResponseEntity<Void> deleteBookmark(@PathVariable UUID id) {
         log.debug("REST request to delete Bookmark : {}", id);
-        try {
-            bookmarkService.delete(id);
-            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString()))
-                .build();
-        } catch (EmptyResultDataAccessException e) {
-            return ResponseEntity.notFound().build();
-        }
+        bookmarkService.delete(id);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
     /**
@@ -291,16 +285,10 @@ public class BookmarkResource {
         log.debug("REST request to delete list of Bookmark objects : {}", sanitisedList);
 
         Optional<UUID> idToBeDeleted = Optional.empty();
-        try {
             for (UUID id : deleteBookmarkDTO.getDeleted()) {
                 idToBeDeleted = Optional.ofNullable(id);
                 bookmarkService.delete(id);
-            }
-        } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
             idToBeDeleted.ifPresent(uuid -> log.debug("The Delete ID is not Found : {}", uuid));
-            return ResponseEntity
-                .notFound()
-                .build();
         }
 
         if (!Objects.isNull(deleteBookmarkDTO.getUpdated())) {
