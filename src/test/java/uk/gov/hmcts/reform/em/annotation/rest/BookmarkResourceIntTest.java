@@ -301,6 +301,19 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
+    public void deleteNonExistingBookmark() throws Exception {
+
+        int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
+        restLogoutMockMvc.perform(delete("/api/bookmarks/{id}", UUID.randomUUID())
+                .accept(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
+
+        List<Bookmark> bookmarkList = bookmarkRepository.findAll();
+        assertThat(bookmarkList).hasSize(databaseSizeBeforeDelete);
+    }
+
+    @Test
+    @Transactional
     public void deleteMultipleBookmarks() throws Exception {
         bookmarkRepository.saveAndFlush(bookmark);
         Bookmark updatedBookmark = bookmarkRepository.findById(bookmark.getId()).get();
@@ -352,6 +365,25 @@ public class BookmarkResourceIntTest extends BaseTest {
                         .contentType(TestUtil.APPLICATION_JSON_UTF8)
                         .content(TestUtil.convertObjectToJsonBytes(deleteBookmarkDTO)))
                 .andExpect(status().isBadRequest());
+
+        List<Bookmark> bookmarkList = bookmarkRepository.findAll();
+        assertThat(bookmarkList).hasSize(databaseSizeBeforeDelete);
+    }
+
+    @Test
+    @Transactional
+    public void deleteMultipleNonExistantBookmarkId() throws Exception {
+        int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
+        assertThat(databaseSizeBeforeDelete).isZero();
+        bookmark.setId(UUID.randomUUID());
+        BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
+        DeleteBookmarkDTO deleteBookmarkDTO = new DeleteBookmarkDTO();
+        deleteBookmarkDTO.setDeleted(Arrays.asList(bookmarkDTO.getId()));
+
+        restLogoutMockMvc.perform(delete("/api/bookmarks_multiple")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(deleteBookmarkDTO)))
+            .andExpect(status().isOk());
 
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeDelete);

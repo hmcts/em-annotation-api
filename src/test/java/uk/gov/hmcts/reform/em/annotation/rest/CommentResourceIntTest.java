@@ -242,6 +242,22 @@ public class CommentResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
+    public void deleteNonExistingComment() throws Exception {
+
+        int databaseSizeBeforeDelete = commentRepository.findAll().size();
+
+        // Delete the comment
+        restLogoutMockMvc.perform(delete("/api/comments/{id}", UUID.randomUUID())
+                .accept(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
+
+        // Validate the database is empty
+        List<Comment> commentList = commentRepository.findAll();
+        assertThat(commentList).hasSize(databaseSizeBeforeDelete);
+    }
+
+    @Test
+    @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Comment.class);
         Comment comment1 = new Comment();

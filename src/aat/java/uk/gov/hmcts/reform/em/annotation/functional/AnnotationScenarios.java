@@ -263,11 +263,11 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void shouldReturn404WhenDeleteAnnotationByNonExistentId() {
+    public void shouldReturn200WhenDeleteAnnotationByNonExistentId() {
         final String nonExistentAnnotationId = UUID.randomUUID().toString();
         final ValidatableResponse deletedResponse = deleteAnnotationById(nonExistentAnnotationId);
 
-        deletedResponse.statusCode(404);
+        deletedResponse.statusCode(200);
     }
 
     @Test

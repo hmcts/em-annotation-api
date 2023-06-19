@@ -226,11 +226,11 @@ public class AnnotationSetScenarios {
     }
 
     @Test
-    public void shouldReturn404WhenDeleteAnnotationSetByNonExistentId() {
+    public void shouldReturn200WhenDeleteAnnotationSetByNonExistentId() {
         final String nonExistentAnnotationSetId = UUID.randomUUID().toString();
         final ValidatableResponse deletedResponse = deleteAnnotationSetById(nonExistentAnnotationSetId);
 
-        deletedResponse.statusCode(404);
+        deletedResponse.statusCode(200);
     }
 
     @Test
@@ -256,7 +256,7 @@ public class AnnotationSetScenarios {
 
         request
                 .body(annotationSet.toString())
-                .put("/api/annotation-sets/")
+                .put("/api/annotation-sets")
                 .then()
                 .statusCode(200)
                 .body("id", equalTo(annotationSetId.toString()))
