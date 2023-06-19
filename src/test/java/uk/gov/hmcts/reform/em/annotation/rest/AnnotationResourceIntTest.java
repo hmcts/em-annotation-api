@@ -24,7 +24,6 @@ import uk.gov.hmcts.reform.em.annotation.repository.TagRepository;
 import uk.gov.hmcts.reform.em.annotation.rest.errors.ExceptionTranslator;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationSetService;
-import uk.gov.hmcts.reform.em.annotation.service.CcdService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 
