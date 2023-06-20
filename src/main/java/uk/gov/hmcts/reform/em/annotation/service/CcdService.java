@@ -44,6 +44,7 @@ public class CcdService {
 
     public CaseDetails getCaseDetails(String authorisation, String serviceAuthorisation, String caseId) {
         String serviceAuth = authTokenGenerator.generate();
+        log.info("serviceAuth value is {}", serviceAuth);
         return coreCaseDataApi.getCase(authorisation,
                 serviceAuth, "1584612819251434");
     }
