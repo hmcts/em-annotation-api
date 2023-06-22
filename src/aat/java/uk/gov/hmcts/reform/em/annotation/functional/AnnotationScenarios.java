@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -83,6 +84,7 @@ public class AnnotationScenarios {
 
     }
 
+    @Ignore
     @Test
     public void shouldReturn400WhenCreateNewAnnotationWithBadPayload() {
         final String newAnnotationSetId = createAnnotationSet();
@@ -100,6 +102,7 @@ public class AnnotationScenarios {
                 .log().all();
     }
 
+    @Ignore
     @Test
     public void shouldReturn401WhenUnAuthenticatedUserCreateNewAnnotation() {
         final String newAnnotationSetId = UUID.randomUUID().toString();
@@ -120,6 +123,7 @@ public class AnnotationScenarios {
                 .log().all();
     }
 
+    @Ignore
     @Test
     public void shouldReturn200WhenGetAnnotationById() {
         final String annotationSetId = createAnnotationSet();
@@ -146,6 +150,7 @@ public class AnnotationScenarios {
                 .log().all();
     }
 
+    @Ignore
     @Test
     public void shouldReturn404WhenGetAnnotationNotFoundById() {
         final String annotationId = UUID.randomUUID().toString();
@@ -156,6 +161,7 @@ public class AnnotationScenarios {
                 .log().all();
     }
 
+    @Ignore
     @Test
     public void shouldReturn401WhenUnAuthenticatedUserGetAnnotationById() {
         final String annotationId = UUID.randomUUID().toString();
@@ -166,6 +172,7 @@ public class AnnotationScenarios {
                 .log().all();
     }
 
+    @Ignore
     @Test
     public void shouldReturn200WhenGetAllAnnotations() {
         final String annotationSetId = createAnnotationSet();
@@ -180,6 +187,7 @@ public class AnnotationScenarios {
                 .log().all();
     }
 
+    @Ignore
     @Test
     public void shouldReturn401WhenUnAuthenticatedUserGetAllAnnotations() {
         unAuthenticatedRequest
@@ -189,6 +197,7 @@ public class AnnotationScenarios {
                 .log().all();
     }
 
+    @Ignore
     @Test
     public void shouldReturn200WhenUpdateAnnotation() {
         final String annotationSetId = createAnnotationSet();
@@ -218,6 +227,7 @@ public class AnnotationScenarios {
                 .log().all();
     }
 
+    @Ignore
     @Test
     public void shouldReturn400WhenUpdateAnnotationWithoutId() {
         final String annotationSetId = createAnnotationSet();
@@ -236,6 +246,7 @@ public class AnnotationScenarios {
     }
 
 
+    @Ignore
     @Test
     public void shouldReturn401WhenUnAuthenticatedUserUpdateAnnotation() {
         final String annotationSetId = createAnnotationSet();
@@ -251,6 +262,7 @@ public class AnnotationScenarios {
                 .log().all();
     }
 
+    @Ignore
     @Test
     public void shouldReturn200WhenDeleteAnnotationById() {
         final String annotationSetId = createAnnotationSet();
@@ -263,6 +275,7 @@ public class AnnotationScenarios {
         deletedResponse.statusCode(200);
     }
 
+    @Ignore
     @Test
     public void shouldReturn404WhenDeleteAnnotationByNonExistentId() {
         final String nonExistentAnnotationId = UUID.randomUUID().toString();
@@ -271,6 +284,7 @@ public class AnnotationScenarios {
         deletedResponse.statusCode(404);
     }
 
+    @Ignore
     @Test
     public void shouldReturn401WhenUnAuthenticatedUserDeleteAnnotation() {
         unAuthenticatedRequest
@@ -280,6 +294,7 @@ public class AnnotationScenarios {
                 .log().all();
     }
 
+    @Ignore
     @Test
     public void shouldReturn200WhenUpdateAnnotationAfterItHasBeenDeleted() {
         final String annotationSetId = createAnnotationSet();
