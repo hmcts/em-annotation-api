@@ -9,8 +9,8 @@ import uk.gov.hmcts.reform.em.test.s2s.S2sHelper;
 
 import javax.annotation.PostConstruct;
 import java.util.UUID;
-//import java.util.stream.Collectors;
-//import java.util.stream.Stream;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class TestUtil {
@@ -29,15 +29,15 @@ public class TestUtil {
     @PostConstruct
     void postConstruct() {
         SerenityRest.useRelaxedHTTPSValidation();
-        //idamHelper.createUser("em5313tester@b.com", Stream.of("caseworker", "caseworker-sscs", "caseworker-sscs-superuser").collect(Collectors.toList()));
-        idamAuth = idamHelper.authenticateUser("emtestsuperuser@mailinator.com");
+        idamHelper.createUser("a@b.com", Stream.of("caseworker", "caseworker-sscs", "caseworker-sscs-superuser").collect(Collectors.toList()));
+        idamAuth = idamHelper.authenticateUser("a@b.com");
         s2sAuth = s2sHelper.getS2sToken();
     }
 
     public RequestSpecification authRequest() {
         return SerenityRest
                 .given()
-                .header("Authorization", idamHelper.authenticateUser("emtestsuperuser@mailinator.com"))
+                .header("Authorization", idamHelper.authenticateUser("a@b.com"))
                 .header("ServiceAuthorization", s2sHelper.getS2sToken());
     }
 
