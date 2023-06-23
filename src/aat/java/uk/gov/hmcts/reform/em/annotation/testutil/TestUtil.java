@@ -29,7 +29,7 @@ public class TestUtil {
     @PostConstruct
     void postConstruct() {
         SerenityRest.useRelaxedHTTPSValidation();
-        idamHelper.createUser("a@b.com", Stream.of("caseworker", "caseworker-sscs", "caseworker-sscs-superuser").collect(Collectors.toList()));
+        idamHelper.createUser("a@b.com", Stream.of("caseworker").collect(Collectors.toList()));
         idamAuth = idamHelper.authenticateUser("a@b.com");
         s2sAuth = s2sHelper.getS2sToken();
     }
