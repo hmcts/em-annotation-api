@@ -37,7 +37,7 @@ public class TestUtil {
     public RequestSpecification authRequest() {
         return SerenityRest
                 .given()
-                .header("Authorization", idamHelper.authenticateUser("a@b.com"))
+                .header("Authorization", idamHelper.authenticateUser("em5313tester@b.com"))
                 .header("ServiceAuthorization", s2sHelper.getS2sToken());
     }
 
