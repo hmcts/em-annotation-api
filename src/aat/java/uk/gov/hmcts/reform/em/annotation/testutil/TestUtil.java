@@ -29,15 +29,15 @@ public class TestUtil {
     @PostConstruct
     void postConstruct() {
         SerenityRest.useRelaxedHTTPSValidation();
-        idamHelper.createUser("EM5316testuser@b.com", Stream.of("caseworker, caseworker-sscs").collect(Collectors.toList()));
-        idamAuth = idamHelper.authenticateUser("EM5316testuser.com");
+        idamHelper.createUser("EM5316testuser@test.local", Stream.of("caseworker, caseworker-sscs").collect(Collectors.toList()));
+        idamAuth = idamHelper.authenticateUser("EM5316testuser@test.local");
         s2sAuth = s2sHelper.getS2sToken();
     }
 
     public RequestSpecification authRequest() {
         return SerenityRest
                 .given()
-                .header("Authorization", idamHelper.authenticateUser("EM5316testuser@b.com"))
+                .header("Authorization", idamHelper.authenticateUser("EM5316testuser@test.local"))
                 .header("ServiceAuthorization", s2sHelper.getS2sToken());
     }
 
