@@ -30,25 +30,25 @@ public class CcdService {
         this.authTokenGenerator = authTokenGenerator;
     }
 
-    public AnnotationDTO fetchAppellantDetails(AnnotationDTO annotationDTO, String authorisation) {
+    public String fetchAppellantDetails(AnnotationDTO annotationDTO, String authorisation) {
         if (Objects.isNull(annotationDTO.getCaseId())) {
-            return annotationDTO;
+            return annotationDTO.getAppellant();
         }
         if (Objects.nonNull(annotationDTO.getAppellant())) {
-            return annotationDTO;
+            return annotationDTO.getAppellant();
         }
         if (!(annotationDTO.getJurisdiction().equals("SSCS") || annotationDTO.getJurisdiction().equals("IA"))) {
-            return annotationDTO;
+            return annotationDTO.getAppellant();
         }
         CaseDetails caseDetails = getCaseDetails(authorisation, authTokenGenerator.generate(), annotationDTO.getCaseId());
         Map<String, Map<String, String> > appellant = (Map<String, Map<String, String>>) caseDetails.getData().get("appellant");
         Map<String, String> name = appellant.get("name");
 
-        annotationDTO.setAppellant(name.values()
+        return (name.values()
                 .stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(";")));
-        return annotationDTO;
+
     }
 
     public CaseDetails getCaseDetails(String authorisation, String serviceAuthorisation, String caseId) {

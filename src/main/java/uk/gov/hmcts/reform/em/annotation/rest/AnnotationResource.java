@@ -90,7 +90,8 @@ public class AnnotationResource {
         if (annotationDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        annotationDTO = ccdService.fetchAppellantDetails(annotationDTO, request.getHeader("Authorization"));
+        annotationDTO.setAppellant(
+                ccdService.fetchAppellantDetails(annotationDTO, request.getHeader("Authorization")));
 
         try {
             annotationService.save(annotationDTO);
@@ -101,10 +102,9 @@ public class AnnotationResource {
 
 
         final URI uri = new URI("/api/annotations/" + annotationDTO.getId());
-        AnnotationDTO finalAnnotationDTO = annotationDTO;
         return annotationService.findOne(annotationDTO.getId(), true).map(renderedAnnotation ->
                 ResponseEntity.created(uri)
-                        .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, finalAnnotationDTO.getId().toString()))
+                        .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, annotationDTO.getId().toString()))
                         .body(renderedAnnotation)
                 )
                 .orElse(ResponseEntity.badRequest().build());
