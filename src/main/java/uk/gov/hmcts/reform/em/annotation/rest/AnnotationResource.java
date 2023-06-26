@@ -92,6 +92,7 @@ public class AnnotationResource {
         annotationDTO.setAppellant(
                 ccdService.fetchAppellantDetails(annotationDTO, request.getHeader("Authorization")));
 
+        log.info("annotationDTO value is {}", annotationDTO);
         try {
             annotationService.save(annotationDTO);
         } catch (PSQLException | ConstraintViolationException | DataIntegrityViolationException exception) {
