@@ -18,7 +18,7 @@ public class Bookmark implements Serializable {
     @Id
     private UUID id;
 
-    @Size(min = 1, max = 30)
+    @Size(min = 0, max = 30)
     @Column(name = "name", length = 30, nullable = false)
     private String name;
 
