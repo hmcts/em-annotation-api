@@ -40,7 +40,7 @@ public class CcdService {
         }
         CaseDetails caseDetails = getCaseDetails(authorisation, authTokenGenerator.generate(), annotationDTO.getCaseId());
         Map appeal = (Map<String, Map<String, String>>) caseDetails.getData().get("appeal");
-        Map<String, Map<String, String>> appellant = (Map<String, Map<String, String>>) caseDetails.getData().get("appellant");
+        Map<String, Map<String, String>> appellant = (Map<String, Map<String, String>>) appeal.get("appellant");
         Map<String, String> name = appellant.get("name");
 
         return (name.values()
