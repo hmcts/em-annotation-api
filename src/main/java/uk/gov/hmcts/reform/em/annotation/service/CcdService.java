@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.em.annotation.service;
 
-import com.google.gson.JsonObject;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -41,7 +39,7 @@ public class CcdService {
             return annotationDTO.getAppellant();
         }
         CaseDetails caseDetails = getCaseDetails(authorisation, authTokenGenerator.generate(), annotationDTO.getCaseId());
-        Map<String, Map<String, String> > appellant = (Map<String, Map<String, String>>) caseDetails.getData().get("appellant");
+        Map<String, Map<String, String>> appellant = (Map<String, Map<String, String>>) caseDetails.getData().get("appellant");
         Map<String, String> name = appellant.get("name");
 
         return (name.values()
