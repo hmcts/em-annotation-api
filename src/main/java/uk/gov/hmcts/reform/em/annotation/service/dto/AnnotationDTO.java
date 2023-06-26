@@ -34,11 +34,11 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String documentId;
 
-    private String caseId = null;
+    private String caseId;
 
-    private String jurisdiction = null;
+    private String jurisdiction;
 
-    private String appellant = null;
+    private String appellant;
 
     public String getDocumentId() {
         return documentId;
