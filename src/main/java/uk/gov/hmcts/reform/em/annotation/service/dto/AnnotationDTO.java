@@ -154,20 +154,20 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "AnnotationDTO{" +
-                "id=" + id +
-                ", annotationType='" + annotationType + '\'' +
-                ", page=" + page +
-                ", color='" + color + '\'' +
-                ", annotationSetId=" + annotationSetId +
-                ", comments=" + comments +
-                ", tags=" + tags +
-                ", rectangles=" + rectangles +
-                ", documentId='" + documentId + '\'' +
-                ", caseId='" + caseId + '\'' +
-                ", jurisdiction='" + jurisdiction + '\'' +
-                ", appellant='" + appellant + '\'' +
-                '}';
+        return "AnnotationDTO{"
+                + " id=" + id
+                + ", annotationType='" + annotationType + '\''
+                + ", page=" + page
+                + ", color='" + color + '\''
+                + ", annotationSetId=" + annotationSetId
+                + ", comments=" + comments
+                + ", tags=" + tags
+                + ", rectangles=" + rectangles
+                + ", documentId='" + documentId + '\''
+                + ", caseId='" + caseId + '\''
+                + ", jurisdiction='" + jurisdiction + '\''
+                + ", appellant='" + appellant + '\''
+                + '}';
     }
 
     @Override
