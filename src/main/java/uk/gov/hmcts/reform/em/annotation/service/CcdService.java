@@ -51,7 +51,7 @@ public class CcdService {
                 .collect(Collectors.joining(" ")));
 
         JSONObject jsonObject = new JSONObject(caseDetails.getData());
-        return JsonPath.read(jsonObject, "appeal.appellant.name");
+        return JsonPath.read(jsonObject.toString(), "appeal.appellant.name");
 
 
     }
