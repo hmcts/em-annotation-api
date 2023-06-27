@@ -44,7 +44,7 @@ public class CcdService {
 
         JSONObject jsonObject = new JSONObject(caseDetails.getData());
         if (annotationDTO.getJurisdiction().equals("IA")) {
-            return JsonPath.read(jsonObject.toString(), "appellantnamefordisplay").toString();
+            return JsonPath.read(jsonObject.toString(), "appellantNameForDisplay").toString();
         }
         String jsonPath = "appeal.appellant.name";
         LinkedHashMap<String, String> appellantName =  JsonPath.read(jsonObject.toString(), jsonPath);
