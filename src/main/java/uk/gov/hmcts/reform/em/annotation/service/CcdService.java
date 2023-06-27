@@ -10,6 +10,7 @@ import uk.gov.hmcts.reform.ccd.client.CoreCaseDataApi;
 import uk.gov.hmcts.reform.ccd.client.model.*;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -51,7 +52,11 @@ public class CcdService {
                 .collect(Collectors.joining(" ")));
 
         JSONObject jsonObject = new JSONObject(caseDetails.getData());
-        return JsonPath.read(jsonObject.toString(), "appeal.appellant.name");
+        LinkedHashMap<String, String> appellantName =  JsonPath.read(jsonObject.toString(), "appeal.appellant.name");
+        return appellantName.values()
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(" "));
 
 
     }
