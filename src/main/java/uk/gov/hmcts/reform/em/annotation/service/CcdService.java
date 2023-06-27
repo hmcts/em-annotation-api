@@ -43,7 +43,11 @@ public class CcdService {
         CaseDetails caseDetails = getCaseDetails(authorisation, authTokenGenerator.generate(), annotationDTO.getCaseId());
 
         JSONObject jsonObject = new JSONObject(caseDetails.getData());
-        LinkedHashMap<String, String> appellantName =  JsonPath.read(jsonObject.toString(), "appeal.appellant.name");
+        if (annotationDTO.getJurisdiction().equals("IA")) {
+            return JsonPath.read(jsonObject.toString(), "appellantnamefordisplay").toString();
+        }
+        String jsonPath = "appeal.appellant.name";
+        LinkedHashMap<String, String> appellantName =  JsonPath.read(jsonObject.toString(), jsonPath);
         return appellantName.values()
                 .stream()
                 .map(Object::toString)
