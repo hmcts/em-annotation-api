@@ -11,7 +11,6 @@ import uk.gov.hmcts.reform.ccd.client.model.*;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
