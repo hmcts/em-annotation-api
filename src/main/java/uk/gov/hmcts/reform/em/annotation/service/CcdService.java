@@ -42,14 +42,6 @@ public class CcdService {
             return annotationDTO.getAppellant();
         }
         CaseDetails caseDetails = getCaseDetails(authorisation, authTokenGenerator.generate(), annotationDTO.getCaseId());
-        Map appeal = (Map<String, Map<String, String>>) caseDetails.getData().get("appeal");
-        Map<String, Map<String, String>> appellant = (Map<String, Map<String, String>>) appeal.get("appellant");
-        Map<String, String> name = appellant.get("name");
-
-        String appellantStr = (name.values()
-                .stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(" ")));
 
         JSONObject jsonObject = new JSONObject(caseDetails.getData());
         LinkedHashMap<String, String> appellantName =  JsonPath.read(jsonObject.toString(), "appeal.appellant.name");
