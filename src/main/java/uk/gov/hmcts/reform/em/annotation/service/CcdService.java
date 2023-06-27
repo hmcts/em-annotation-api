@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.em.annotation.service;
 
-import com.google.gson.JsonObject;
 import com.jayway.jsonpath.JsonPath;
 import org.json.JSONObject;
 import org.slf4j.Logger;
