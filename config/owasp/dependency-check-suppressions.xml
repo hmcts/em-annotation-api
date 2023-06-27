@@ -6,10 +6,7 @@
         </notes>
         <cve>CVE-2022-45688</cve>
     </suppress>
-    <!--netty vulnerabilities, 4.1.86 cause other vulnerabilities -->
-    <suppress until="2023-04-04">
-        <cve>CVE-2022-41881</cve>
-        <cve>CVE-2022-41915</cve>
+    <suppress until="2023-07-07">
+        <cve>CVE-2023-35116</cve>
     </suppress>
-    <!--netty vulnerabilities -->
 </suppressions>
