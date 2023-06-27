@@ -395,7 +395,7 @@ public class AnnotationScenarios {
         createAnnotations.put("rectangles", rectangles);
 
         createAnnotations.put("jurisdiction", "IA");
-        createAnnotations.put("caseId", "1686652708506883");
+        createAnnotations.put("caseId", "1637158638130471");
 
         return createAnnotations;
     }
