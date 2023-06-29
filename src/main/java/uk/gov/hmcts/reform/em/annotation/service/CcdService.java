@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.em.annotation.service;
 
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,9 +54,14 @@ public class CcdService {
         ArrayList<String> paths = jurisdictionPaths.get(annotationDTO.getJurisdiction());
 
         StringBuilder stringBuilder = new StringBuilder();
-        for (String path : paths) {
-            stringBuilder.append(" ");
-            stringBuilder.append(JsonPath.read(jsonObject.toString(), path).toString());
+        try {
+            for (String path : paths) {
+                stringBuilder.append(" ");
+                stringBuilder.append(JsonPath.read(jsonObject.toString(), path).toString());
+            }
+        }
+        catch (PathNotFoundException pathNotFoundException) {
+            return annotationDTO.getCommentHeader();
         }
 
         return stringBuilder.toString().trim();

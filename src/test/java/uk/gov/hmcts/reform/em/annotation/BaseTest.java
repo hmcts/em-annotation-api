@@ -64,7 +64,7 @@ public abstract class BaseTest {
         restLogoutMockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 
         Mockito.when(authTokenGenerator.generate()).thenReturn("Bearer x");
-        Mockito.when(ccdService.getCaseDetails(anyString(), anyString(), anyString()))
+        Mockito.when(ccdService.getCaseDetails(anyString(), anyString()))
                 .thenReturn(Mockito.mock(CaseDetails.class));
     }
 }
