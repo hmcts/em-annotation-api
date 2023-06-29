@@ -166,7 +166,7 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
                 + ", documentId='" + documentId + '\''
                 + ", caseId='" + caseId + '\''
                 + ", jurisdiction='" + jurisdiction + '\''
-                + ", appellant='" + commentHeader + '\''
+                + ", commentHeader='" + commentHeader + '\''
                 + '}';
     }
 
