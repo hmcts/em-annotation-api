@@ -48,7 +48,7 @@ public class CcdService {
         if (!jurisdictionPaths.containsKey(annotationDTO.getJurisdiction())) {
             return annotationDTO.getCommentHeader();
         }
-        CaseDetails caseDetails = getCaseDetails(authorisation, authTokenGenerator.generate(), annotationDTO.getCaseId());
+        CaseDetails caseDetails = getCaseDetails(authorisation, annotationDTO.getCaseId());
         JSONObject jsonObject = new JSONObject(caseDetails.getData());
         ArrayList<String> paths = jurisdictionPaths.get(annotationDTO.getJurisdiction());
 
@@ -61,7 +61,7 @@ public class CcdService {
         return stringBuilder.toString().trim();
     }
 
-    public CaseDetails getCaseDetails(String authorisation, String serviceAuthorisation, String caseId) {
+    public CaseDetails getCaseDetails(String authorisation, String caseId) {
         String serviceAuth = authTokenGenerator.generate();
         CaseDetails caseDetails = coreCaseDataApi.getCase(authorisation,
                 serviceAuth, caseId);
