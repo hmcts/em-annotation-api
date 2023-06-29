@@ -43,7 +43,7 @@ public class CcdService {
         if (Objects.nonNull(annotationDTO.getCommentHeader())) {
             return annotationDTO.getCommentHeader();
         }
-        HashMap <String, ArrayList<String>> jurisdictionPaths = commentHeaderConfig.getJurisdictionPaths();
+        HashMap<String, ArrayList<String>> jurisdictionPaths = commentHeaderConfig.getJurisdictionPaths();
 
         if (!jurisdictionPaths.containsKey(annotationDTO.getJurisdiction())) {
             return annotationDTO.getCommentHeader();
