@@ -156,3 +156,12 @@ core_case_data:
     url: ${CCD_DATA_API_URL:http://ccd-data-store-api-aat.service.core-compute-aat.internal}
     #http://localhost:4452
     #http://ccd-data-store-api-aat.service.core-compute-aat.internal
+configuration:
+  comment-header:
+    jurisdiction-paths:
+      IA:
+        - appellantNameForDisplay
+      SSCS:
+        - appeal.appellant.name.title
+        - appeal.appellant.name.firstName
+        - appeal.appellant.name.lastName

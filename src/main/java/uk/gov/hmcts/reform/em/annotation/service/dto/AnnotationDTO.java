@@ -38,7 +38,7 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
 
     private String jurisdiction;
 
-    private String appellant;
+    private String commentHeader;
 
     public String getDocumentId() {
         return documentId;
@@ -128,12 +128,12 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
         this.jurisdiction = jurisdiction;
     }
 
-    public String getAppellant() {
-        return appellant;
+    public String getCommentHeader() {
+        return commentHeader;
     }
 
-    public void setAppellant(String appellant) {
-        this.appellant = appellant;
+    public void setCommentHeader(String commentHeader) {
+        this.commentHeader = commentHeader;
     }
 
     @Override
@@ -166,7 +166,7 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
                 + ", documentId='" + documentId + '\''
                 + ", caseId='" + caseId + '\''
                 + ", jurisdiction='" + jurisdiction + '\''
-                + ", appellant='" + appellant + '\''
+                + ", appellant='" + commentHeader + '\''
                 + '}';
     }
 
