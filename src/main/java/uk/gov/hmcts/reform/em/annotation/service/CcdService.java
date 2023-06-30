@@ -54,13 +54,14 @@ public class CcdService {
         ArrayList<String> paths = jurisdictionPaths.get(annotationDTO.getJurisdiction());
 
         StringBuilder stringBuilder = new StringBuilder();
-        try {
-            for (String path : paths) {
-                stringBuilder.append(" ");
+        for (String path : paths) {
+            try {
                 stringBuilder.append(JsonPath.read(jsonObject.toString(), path).toString());
+                stringBuilder.append(" ");
+            } catch (PathNotFoundException ignored) {
             }
         }
-        catch (PathNotFoundException pathNotFoundException) {
+        if (stringBuilder.length() == 0) {
             return annotationDTO.getCommentHeader();
         }
 
