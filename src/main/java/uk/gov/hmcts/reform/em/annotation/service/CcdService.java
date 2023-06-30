@@ -37,7 +37,7 @@ public class CcdService {
         this.commentHeaderConfig = commentHeaderConfig;
     }
 
-    public String fetchAppellantDetails(AnnotationDTO annotationDTO, String authorisation) {
+    public String buildCommentHeader(AnnotationDTO annotationDTO, String authorisation) {
         if (Objects.isNull(annotationDTO.getCaseId())) {
             return annotationDTO.getCommentHeader();
         }

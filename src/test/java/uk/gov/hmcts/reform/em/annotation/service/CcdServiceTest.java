@@ -63,7 +63,7 @@ public class CcdServiceTest {
     }
 
     @Test
-    void should_startCcdEvent() {
+    void getCaseDetails() {
         given(authTokenGenerator.generate()).willReturn(serviceToken);
         given(coreCaseDataApi.getCase(jwt, serviceToken, caseId)).willReturn(caseDetails);
         ccdService.getCaseDetails(jwt, caseId);
@@ -71,47 +71,47 @@ public class CcdServiceTest {
     }
 
     @Test
-    void should_return_default_with_null_caseId() {
+    void commentHeaderWithNullCaseId() {
         annotationDTO.setCaseId(null);
-        String commentHeader = ccdService.fetchAppellantDetails(annotationDTO, jwt);
+        String commentHeader = ccdService.buildCommentHeader(annotationDTO, jwt);
         assertNull(commentHeader);
         verifyNoInteractions(coreCaseDataApi);
     }
 
     @Test
-    void should_return_default_with_nonNull_commentHeader() {
+    void commentHeaderWithExistingValue() {
         annotationDTO.setCommentHeader("commentHeader");
-        String commentHeader = ccdService.fetchAppellantDetails(annotationDTO, jwt);
+        String commentHeader = ccdService.buildCommentHeader(annotationDTO, jwt);
         assertEquals("commentHeader", commentHeader);
         verifyNoInteractions(coreCaseDataApi);
     }
 
     @Test
-    void should_return_default_with_invalidJurisdiction() {
+    void commentHeaderWithInvalidJurisdiction() {
         annotationDTO.setJurisdiction("invalid jurisdiction");
         given(commentHeaderConfig.getJurisdictionPaths()).willReturn(jurisdictionPaths);
-        String commentHeader = ccdService.fetchAppellantDetails(annotationDTO, jwt);
+        String commentHeader = ccdService.buildCommentHeader(annotationDTO, jwt);
         assertNull(commentHeader);
         verifyNoInteractions(coreCaseDataApi);
     }
 
     @Test
-    void should_return_default_with_invalid_path() {
+    void commentHeaderWithInvalidPath() {
         given(authTokenGenerator.generate()).willReturn(serviceToken);
         given(coreCaseDataApi.getCase(jwt, serviceToken, caseId)).willReturn(caseDetails);
         annotationDTO.setJurisdiction("invalid path jurisdiction");
         given(commentHeaderConfig.getJurisdictionPaths()).willReturn(jurisdictionPaths);
-        String commentHeader = ccdService.fetchAppellantDetails(annotationDTO, jwt);
+        String commentHeader = ccdService.buildCommentHeader(annotationDTO, jwt);
         assertNull(commentHeader);
         verify(coreCaseDataApi).getCase(jwt, serviceToken, caseId);
     }
 
     @Test
-    void should_return_new_header_with_valid_path() {
+    void buildCommentHeader() {
         given(authTokenGenerator.generate()).willReturn(serviceToken);
         given(coreCaseDataApi.getCase(jwt, serviceToken, caseId)).willReturn(caseDetails);
         given(commentHeaderConfig.getJurisdictionPaths()).willReturn(jurisdictionPaths);
-        String commentHeader = ccdService.fetchAppellantDetails(annotationDTO, jwt);
+        String commentHeader = ccdService.buildCommentHeader(annotationDTO, jwt);
         assertEquals("Value1 Value21", commentHeader);
         verify(coreCaseDataApi).getCase(jwt, serviceToken, caseId);
     }

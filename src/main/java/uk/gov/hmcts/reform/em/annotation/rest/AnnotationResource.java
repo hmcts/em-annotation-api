@@ -90,7 +90,7 @@ public class AnnotationResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         annotationDTO.setCommentHeader(
-                ccdService.fetchAppellantDetails(annotationDTO, request.getHeader("Authorization")));
+                ccdService.buildCommentHeader(annotationDTO, request.getHeader("Authorization")));
 
         log.info("annotationDTO value is {}", annotationDTO);
         try {
