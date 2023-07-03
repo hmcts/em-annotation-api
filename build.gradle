@@ -231,6 +231,11 @@ dependencyManagement {
       dependencySet(group: 'org.json', version: '20230618') {
           entry 'json'
       }
+
+      //CVE-2023-34462
+      dependencySet(group: 'io.netty', version: '4.1.94.Final') {
+          entry 'netty-all'
+      }
   }
 }
 
