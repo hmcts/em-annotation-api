@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
@@ -82,7 +83,7 @@ public class AnnotationResource {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
     })
     @PostMapping("/annotations")
-    public ResponseEntity<AnnotationDTO> createAnnotation(HttpServletRequest request,  @RequestBody AnnotationDTO annotationDTO) throws URISyntaxException {
+    public ResponseEntity<AnnotationDTO> createAnnotation(HttpServletRequest request, @RequestBody AnnotationDTO annotationDTO) throws URISyntaxException {
         log.debug("REST request to save Annotation : {}", annotationDTO);
         if (annotationDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
