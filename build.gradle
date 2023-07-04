@@ -124,7 +124,7 @@ dependencies {
     implementation group: 'org.zalando', name: 'problem-spring-web', version: '0.29.1'
     implementation group: 'org.zalando', name: 'jackson-datatype-problem', version: '0.27.1'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.1.0'
-    implementation group: 'com.google.guava', name: 'guava', version: '32.0.1-jre'
+    implementation group: 'com.google.guava', name: 'guava', version: '32.1.1-jre'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.19.4'
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
@@ -166,7 +166,7 @@ dependencies {
 
     testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version:versions.junit5
     aatRuntimeOnly group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.0'
-    aatRuntimeOnly group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.2'
+    aatRuntimeOnly group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.3'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version:versions.junit5
 
     //pact contract testing
