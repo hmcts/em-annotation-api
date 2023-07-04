@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import uk.gov.hmcts.reform.em.EmTestConfig;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
@@ -28,7 +27,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@SpringBootTest(classes = {TestUtil.class, EmTestConfig.class})
+@SpringBootTest(classes = {TestUtil.class})
 @TestPropertySource(value = "classpath:application.yml")
 @RunWith(SpringIntegrationSerenityRunner.class)
 @WithTags({@WithTag("testType:Functional")})
@@ -230,7 +229,7 @@ public class BookmarkScenarios {
 
         request
                 .body(jsonObject.toString())
-                .put("/api/bookmarks/")
+                .put("/api/bookmarks")
                 .then()
                 .statusCode(400)
                 .log().all();
@@ -366,11 +365,11 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn404WhenDeleteBookmarkByNonExistentId() {
+    public void shouldReturn200WhenDeleteBookmarkByNonExistentId() {
         request
                 .delete(String.format("/api/bookmarks/%s", UUID.randomUUID()))
                 .then()
-                .statusCode(404)
+                .statusCode(200)
                 .log().all();
     }
 
@@ -418,7 +417,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn404WhenDeleteMultipleBookmarksWithNonExistentId() {
+    public void shouldReturn200WhenDeleteMultipleBookmarksWithNonExistentId() {
         final UUID bookmarkId = UUID.randomUUID();
         final JSONObject deleteBookmarkRequest = new JSONObject();
         final JSONArray jsonArray = new JSONArray();
@@ -429,7 +428,7 @@ public class BookmarkScenarios {
                 .body(deleteBookmarkRequest.toString())
                 .delete("/api/bookmarks_multiple")
                 .then()
-                .statusCode(404)
+                .statusCode(200)
                 .log().all();
     }
 

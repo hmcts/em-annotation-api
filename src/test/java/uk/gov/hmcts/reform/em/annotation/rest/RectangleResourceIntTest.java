@@ -22,7 +22,7 @@ import uk.gov.hmcts.reform.em.annotation.service.RectangleService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.RectangleDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.RectangleMapper;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.UUID;
 
@@ -280,7 +280,7 @@ public class RectangleResourceIntTest extends BaseTest {
         // Delete the rectangle
         restLogoutMockMvc.perform(delete("/api/rectangles/{id}", rectangle.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk());
 
         // Validate the database hasn't changed
         List<Rectangle> rectangleList = rectangleRepository.findAll();

@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.em.annotation.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
 /**
  * A DTO for the Comment entity.

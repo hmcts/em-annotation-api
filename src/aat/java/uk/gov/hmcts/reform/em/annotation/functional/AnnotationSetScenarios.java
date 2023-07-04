@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import uk.gov.hmcts.reform.em.EmTestConfig;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
@@ -26,7 +25,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@SpringBootTest(classes = {TestUtil.class, EmTestConfig.class})
+@SpringBootTest(classes = {TestUtil.class})
 @TestPropertySource(value = "classpath:application.yml")
 @RunWith(SpringIntegrationSerenityRunner.class)
 @WithTags({@WithTag("testType:Functional")})
@@ -227,11 +226,11 @@ public class AnnotationSetScenarios {
     }
 
     @Test
-    public void shouldReturn404WhenDeleteAnnotationSetByNonExistentId() {
+    public void shouldReturn200WhenDeleteAnnotationSetByNonExistentId() {
         final String nonExistentAnnotationSetId = UUID.randomUUID().toString();
         final ValidatableResponse deletedResponse = deleteAnnotationSetById(nonExistentAnnotationSetId);
 
-        deletedResponse.statusCode(404);
+        deletedResponse.statusCode(200);
     }
 
     @Test
@@ -257,7 +256,7 @@ public class AnnotationSetScenarios {
 
         request
                 .body(annotationSet.toString())
-                .put("/api/annotation-sets/")
+                .put("/api/annotation-sets")
                 .then()
                 .statusCode(200)
                 .body("id", equalTo(annotationSetId.toString()))

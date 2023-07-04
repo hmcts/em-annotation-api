@@ -29,7 +29,7 @@ public class EntityAuditEventListenerTest {
     private AsyncEntityAuditEventWriter asyncEntityAuditEventWriter;
 
     @Mock
-    private BeanFactory beanFactory ;
+    private BeanFactory beanFactory;
 
     private static final BeanFactory originalBeanFactory;
     private final String noBeanFound = "No bean found for AsyncEntityAuditEventWriter";

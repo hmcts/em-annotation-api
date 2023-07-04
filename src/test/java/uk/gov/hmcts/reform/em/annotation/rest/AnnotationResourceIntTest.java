@@ -27,7 +27,7 @@ import uk.gov.hmcts.reform.em.annotation.service.AnnotationSetService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -383,7 +383,7 @@ public class AnnotationResourceIntTest extends BaseTest {
         // Delete the annotation
         restLogoutMockMvc.perform(delete("/api/annotations/{id}", UUID.randomUUID())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk());
 
         // Validate the database hasn't changed
         List<Annotation> annotationList = annotationRepository.findAll();

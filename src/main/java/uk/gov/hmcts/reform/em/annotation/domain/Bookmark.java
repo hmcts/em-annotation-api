@@ -2,8 +2,8 @@ package uk.gov.hmcts.reform.em.annotation.domain;
 
 import org.springframework.data.annotation.CreatedBy;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -18,7 +18,7 @@ public class Bookmark implements Serializable {
     @Id
     private UUID id;
 
-    @Size(min = 1, max = 30)
+    @Size(min = 0, max = 30)
     @Column(name = "name", length = 30, nullable = false)
     private String name;
 

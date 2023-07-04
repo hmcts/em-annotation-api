@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.service.dto;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 import java.util.UUID;
 
 /**

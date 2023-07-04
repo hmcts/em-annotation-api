@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.em.annotation.service.BookmarkService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.BookmarkDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.BookmarkMapper;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -91,5 +92,11 @@ public class BookmarkServiceImpl implements BookmarkService {
     public void delete(UUID id) {
         log.debug("Request to delete Bookmark : {}", id);
         bookmarkRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAllById(List<UUID> ids) {
+        log.debug("Request to delete Bookmarks : {}", ids);
+        bookmarkRepository.deleteAllById(ids);
     }
 }

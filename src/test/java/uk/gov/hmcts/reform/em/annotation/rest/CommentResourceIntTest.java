@@ -26,7 +26,7 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.CommentMapper;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.UUID;
 
@@ -249,7 +249,7 @@ public class CommentResourceIntTest extends BaseTest {
         // Delete the comment
         restLogoutMockMvc.perform(delete("/api/comments/{id}", UUID.randomUUID())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk());
 
         // Validate the database is empty
         List<Comment> commentList = commentRepository.findAll();

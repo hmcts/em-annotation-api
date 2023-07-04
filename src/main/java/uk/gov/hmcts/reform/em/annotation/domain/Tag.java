@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.em.annotation.domain;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 
 /**
