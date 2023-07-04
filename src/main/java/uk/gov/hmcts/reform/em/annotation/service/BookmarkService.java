@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uk.gov.hmcts.reform.em.annotation.service.dto.BookmarkDTO;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface BookmarkService {
@@ -30,4 +31,11 @@ public interface BookmarkService {
      * @param id the id of the entity
      */
     void delete(UUID id);
+
+    /**
+     * Delete list of bookmarks.
+     *
+     * @param ids of the entity
+     */
+    void deleteAllById(List<UUID> ids);
 }

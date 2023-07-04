@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.em.annotation.service.dto;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 /**

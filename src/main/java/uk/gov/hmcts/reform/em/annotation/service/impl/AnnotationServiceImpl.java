@@ -20,9 +20,9 @@ import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
 
 /**
  * Service Implementation for managing Annotation.

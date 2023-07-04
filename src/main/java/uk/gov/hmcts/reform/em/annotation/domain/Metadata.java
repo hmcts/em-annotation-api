@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.em.annotation.domain;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.UUID;
 

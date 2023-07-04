@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.repository;
 
+import jakarta.servlet.http.HttpSession;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +22,7 @@ import uk.gov.hmcts.reform.em.annotation.domain.PersistentAuditEvent;
 import uk.gov.hmcts.reform.em.annotation.rest.TestSecurityConfiguration;
 import uk.gov.hmcts.reform.em.annotation.service.AuditEventService;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.HashMap;
@@ -139,7 +140,7 @@ public class CustomAuditEventRepositoryIntTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setSession(session);
         request.setRemoteAddr("1.2.3.4");
-        WebAuthenticationDetails details = new WebAuthenticationDetails(request);
+        WebAuthenticationDetails details = new WebAuthenticationDetails((HttpServletRequest) request);
         Map<String, Object> data = new HashMap<>();
         data.put("test-key", details);
         AuditEvent event = new AuditEvent("test-user", "test-type", data);

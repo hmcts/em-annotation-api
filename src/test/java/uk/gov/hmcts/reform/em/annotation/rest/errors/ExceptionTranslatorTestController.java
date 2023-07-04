@@ -14,8 +14,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -139,7 +139,6 @@ public class ExceptionTranslatorTestController {
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "test response status")
-    @SuppressWarnings("serial")
     public static class TestResponseStatusException extends RuntimeException {
     }
 
