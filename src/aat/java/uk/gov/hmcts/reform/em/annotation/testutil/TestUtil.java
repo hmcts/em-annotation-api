@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
+import uk.gov.hmcts.reform.em.test.ccddata.CcdDataHelper;
 import uk.gov.hmcts.reform.em.test.idam.IdamHelper;
 import uk.gov.hmcts.reform.em.test.s2s.S2sHelper;
 
@@ -25,16 +27,21 @@ public class TestUtil {
     @Autowired
     private S2sHelper s2sHelper;
 
+    @Autowired
+    private CcdDataHelper ccdDataHelper;
+
     private String idamAuth;
     private String s2sAuth;
 
     private UUID documentId = UUID.randomUUID();
 
+    private final String username = "em5316testuser@mailinator.com";
+
     @PostConstruct
     void postConstruct() {
         SerenityRest.useRelaxedHTTPSValidation();
-        //idamHelper.createUser("em5316testuser@mailinator.com", Stream.of("caseworker, caseworker-sscs").collect(Collectors.toList()));
-        idamAuth = idamHelper.authenticateUser("em5316testuser@mailinator.com");
+        //idamHelper.createUser(username, Stream.of("caseworker", "caseworker-publiclaw").collect(Collectors.toList()));
+        idamAuth = idamHelper.authenticateUser(username);
         s2sAuth = s2sHelper.getS2sToken();
     }
 
@@ -94,6 +101,10 @@ public class TestUtil {
         return SerenityRest
                 .given()
                 .header("ServiceAuthorization", s2sAuth);
+    }
+
+    public CaseDetails createCase(String jurisdiction, String caseType, Object data) {
+        return ccdDataHelper.createCase(username, jurisdiction, caseType, "createCase", data);
     }
 
 }
