@@ -51,15 +51,15 @@ public class AnnotationScenarios {
 
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
-    public final String createCaseTemplate = """
-            {
-                "caseTitle": "HELLO",
-                "caseOwner": "world",
-                "caseCreationDate": null,
-                "caseDescription": null,
-                "caseComments": null,
-                "appeal": null
-              }""";
+    public final String createCaseTemplate = "{\n"
+            + "    \"caseTitle\": null,\n"
+            + "    \"caseOwner\": null,\n"
+            + "    \"caseCreationDate\": null,\n"
+            + "    \"caseDescription\": null,\n"
+            + "    \"caseComments\": null,\n"
+            + "    \"caseDocuments\": [%s]\n"
+            + "  }";
+    
     private String caseId = null;
 
     @Before
