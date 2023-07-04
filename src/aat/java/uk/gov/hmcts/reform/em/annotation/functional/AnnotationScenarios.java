@@ -55,7 +55,7 @@ public class AnnotationScenarios {
             + "    \"caseOwner\": null,\n"
             + "    \"caseCreationDate\": null,\n"
             + "    \"caseDescription\": null,\n"
-            + "    \"caseComments\": null,\n"
+            + "    \"caseComments\": null\n"
             + "  }";
     
     private String caseId = null;
