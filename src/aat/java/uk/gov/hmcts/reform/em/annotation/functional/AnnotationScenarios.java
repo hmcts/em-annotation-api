@@ -120,7 +120,24 @@ public class AnnotationScenarios {
             .statusCode(201)
             .log().all();
 
-        response.log().all();
+        response
+            .statusCode(201)
+            .body("id", equalTo(annotationId))
+            .body("page", is(1))
+            .body("color", is("d1d1d1"))
+            .body("comments", Matchers.hasSize(1))
+            .body("comments[0].content", is("text"))
+            .body("comments[0].annotationId", is(annotationId))
+            .body("rectangles", Matchers.hasSize(1))
+            .body("rectangles[0].annotationId", is(annotationId))
+            .body("rectangles[0].x", is(0f))
+            .body("rectangles[0].y", is(0f))
+            .body("rectangles[0].width", is(10f))
+            .body("rectangles[0].height", is(11f))
+            .body("caseId", is(caseId))
+            .body("jusrisdiction", is("PUBLICLAW"))
+            .body("commentHeader", is("title owner"))
+            .header("Location", equalTo("/api/annotations/" + annotationId)).log().all();
 
     }
 
