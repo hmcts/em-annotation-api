@@ -13,8 +13,8 @@ import uk.gov.hmcts.reform.em.test.idam.IdamHelper;
 import uk.gov.hmcts.reform.em.test.s2s.S2sHelper;
 
 import java.util.UUID;
-//import java.util.stream.Collectors;
-//import java.util.stream.Stream;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @ComponentScan({"uk.gov.hmcts.reform.em.test.idam",
@@ -37,12 +37,12 @@ public class TestUtil {
 
     private UUID documentId = UUID.randomUUID();
 
-    private final String username = "em5316testuser@mailinator.com";
+    private final String username = "emAnnotationTestUser@test.local";
 
     @PostConstruct
     void postConstruct() {
         SerenityRest.useRelaxedHTTPSValidation();
-        //idamHelper.createUser(username, Stream.of("caseworker", "caseworker-publiclaw").collect(Collectors.toList()));
+        idamHelper.createUser(username, Stream.of("caseworker", "caseworker-publiclaw").collect(Collectors.toList()));
         idamAuth = idamHelper.authenticateUser(username);
         s2sAuth = s2sHelper.getS2sToken();
     }
@@ -50,7 +50,7 @@ public class TestUtil {
     public RequestSpecification authRequest() {
         return SerenityRest
                 .given()
-                .header("Authorization", idamHelper.authenticateUser("em5316testuser@mailinator.com"))
+                .header("Authorization", idamHelper.authenticateUser(username))
                 .header("ServiceAuthorization", s2sHelper.getS2sToken());
     }
 

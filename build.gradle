@@ -439,6 +439,8 @@ pact {
 bootWithCCD {
     authMode = AuthMode.Local
     environment 'RSE_LIB_ADDITIONAL_DATABASES', 'emannotationapp'
+    environment 'DATA_STORE_S2S_AUTHORISED_SERVICES', 'ccd_gw,em_annotation_app'
+
 }
 
 serenity {
