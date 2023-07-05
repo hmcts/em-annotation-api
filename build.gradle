@@ -65,7 +65,7 @@ def versions = [
         log4JVersion       : '2.20.0',
         mapstruct          : '1.4.2.Final',
         springcloud        : '4.0.2',
- ]
+]
 
 sourceSets {
     aat {
@@ -206,77 +206,76 @@ processAatResources {
 }
 
 dependencyManagement {
-  dependencies {
-      //CVE-2022-23437
-      dependencySet(group: 'xerces', version: '2.12.2') {
-          entry 'xercesImpl'
-      }
-      //CVE-2022-1471
-      dependencySet(group: 'org.yaml', version: '2.0') {
-          entry 'snakeyaml'
-      }
-      
-      //CVE-2023-24998
-      dependencySet(group: 'commons-fileupload', version: '1.5') {
-          entry 'commons-fileupload'
-      }
-      //CVE-2022-45688
-      dependencySet(group: 'org.json', version: '20230618') {
-          entry 'json'
-      }
-      //CVE-2020-13956
-      dependencySet(group: 'org.apache.httpcomponents', version: '4.5.14') {
-          entry 'fluent-hc'
-      }
+    dependencies {
+        //CVE-2022-23437
+        dependencySet(group: 'xerces', version: '2.12.2') {
+            entry 'xercesImpl'
+        }
+        //CVE-2022-1471
+        dependencySet(group: 'org.yaml', version: '2.0') {
+            entry 'snakeyaml'
+        }
 
-      //CVE-2023-34462
-      dependencySet(group: 'io.netty', version: '4.1.94.Final') {
-          entry 'netty-buffer'
-          entry 'netty-codec'
-          entry 'netty-codec-dns'
-          entry 'netty-codec-http'
-          entry 'netty-codec-http2'
-          entry 'netty-codec-socks'
-          entry 'netty-common'
-          entry 'netty-handler'
-          entry 'netty-handler-proxy'
-          entry 'netty-resolver'
-          entry 'netty-resolver-dns'
-          entry 'netty-resolver-dns-classes-macos'
-          entry 'netty-resolver-dns-native-macos'
-          entry 'netty-transport'
-          entry 'netty-transport-classes-epoll'
-          entry 'netty-transport-classes-kqueue'
-          entry 'netty-transport-native-epoll'
-          entry 'netty-transport-native-kqueue'
-          entry 'netty-transport-native-unix-common'
-      }
+        //CVE-2023-24998
+        dependencySet(group: 'commons-fileupload', version: '1.5') {
+            entry 'commons-fileupload'
+        }
+        //CVE-2022-45688
+        dependencySet(group: 'org.json', version: '20230618') {
+            entry 'json'
+        }
+        //CVE-2020-13956
+        dependencySet(group: 'org.apache.httpcomponents', version: '4.5.14') {
+            entry 'fluent-hc'
+        }
 
-      // CVE-2023-34981
-      dependencySet(group: 'org.apache.tomcat.embed', version: '11.0.0-M4') {
-          entry 'tomcat-embed-core'
-          entry 'tomcat-embed-websocket'
-      }
-  }
+        //CVE-2023-34462
+        dependencySet(group: 'io.netty', version: '4.1.94.Final') {
+            entry 'netty-buffer'
+            entry 'netty-codec'
+            entry 'netty-codec-dns'
+            entry 'netty-codec-http'
+            entry 'netty-codec-http2'
+            entry 'netty-codec-socks'
+            entry 'netty-common'
+            entry 'netty-handler'
+            entry 'netty-handler-proxy'
+            entry 'netty-resolver'
+            entry 'netty-resolver-dns'
+            entry 'netty-resolver-dns-classes-macos'
+            entry 'netty-resolver-dns-native-macos'
+            entry 'netty-transport'
+            entry 'netty-transport-classes-epoll'
+            entry 'netty-transport-classes-kqueue'
+            entry 'netty-transport-native-epoll'
+            entry 'netty-transport-native-kqueue'
+            entry 'netty-transport-native-unix-common'
+        }
+
+        // CVE-2023-34981
+        dependencySet(group: 'org.apache.tomcat.embed', version: '11.0.0-M4') {
+            entry 'tomcat-embed-core'
+            entry 'tomcat-embed-websocket'
+        }
+    }
 }
 
 bootJar {
-    baseName 'em-annotation-app'
-    archiveName = "$baseName"+".jar"
-    destinationDir = file("$rootDir/build/libs")
+    getArchiveFileName().set(provider {
+        'em-annotation-app.jar'
+    })
     manifest {
         attributes 'Implementation-Title': project.name, 'Implementation-Version': project.version
     }
 }
-
 def coverageExclusionList = [
-    '**uk/gov/hmcts/reform/em/annotation/Application*',
-    '**uk/gov/hmcts/reform/em/annotation/domain/*',
-    '**uk/gov/hmcts/reform/em/annotation/service/dto/*',
-    '**uk/gov/hmcts/reform/em/annotation/info/*',
-    '**uk/gov/hmcts/reform/em/annotation/data/migration/PendingMigrationScriptException*',
-    '**uk/gov/hmcts/reform/em/annotation/data/migration/FlywayNoOpStrategy*',
-    '**uk/gov/hmcts/reform/em/annotation/config/FlywayConfiguration*'
+        '**uk/gov/hmcts/reform/em/annotation/Application*',
+        '**uk/gov/hmcts/reform/em/annotation/domain/*',
+        '**uk/gov/hmcts/reform/em/annotation/service/dto/*',
+        '**uk/gov/hmcts/reform/em/annotation/info/*',
+        '**uk/gov/hmcts/reform/em/annotation/data/migration/PendingMigrationScriptException*',
+        '**uk/gov/hmcts/reform/em/annotation/data/migration/FlywayNoOpStrategy*',
+        '**uk/gov/hmcts/reform/em/annotation/config/FlywayConfiguration*'
 
 ]
 
@@ -295,10 +294,10 @@ jacocoTestReport {
 pitest {
     targetClasses = ['uk.gov.hmcts.reform.em.annotation.*']
     excludedClasses = [
-                    'uk.gov.hmcts.reform.em.annotation.config.*',
-                    'uk.gov.hmcts.reform.em.annotation.info.*',
-                    'uk.gov.hmcts.reform.em.annotation.Application.java',
-                    'uk.gov.hmcts.reform.em.annotation.service.util.*'
+            'uk.gov.hmcts.reform.em.annotation.config.*',
+            'uk.gov.hmcts.reform.em.annotation.info.*',
+            'uk.gov.hmcts.reform.em.annotation.Application.java',
+            'uk.gov.hmcts.reform.em.annotation.service.util.*'
     ]
 
     enableDefaultIncrementalAnalysis = true
@@ -321,7 +320,7 @@ pitest {
 sonarqube {
     properties {
         property "sonar.projectName", "${rootProject.name}"
-        property "sonar.coverage.jacoco.xmlReportPaths", "${jacocoTestReport.reports.xml.destination.path}"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${jacocoTestReport.reports.xml.outputLocation}"
         property "sonar.exclusions", coverageExclusionList.join(", ")
         property "sonar.test.exclusions", "**/test/**"
         property "sonar.pitest.mode", "reuseReport"
