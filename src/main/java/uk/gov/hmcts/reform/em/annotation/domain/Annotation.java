@@ -47,6 +47,15 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
     @JsonIgnoreProperties("annotations")
     private AnnotationSet annotationSet;
 
+    @Column(name = "case_id")
+    private String caseId;
+
+    @Column(name = "jurisdiction")
+    private String jurisdiction;
+
+    @Column(name = "comment_header")
+    private String commentHeader;
+
     public String getColor() {
         return color;
     }
@@ -159,6 +168,30 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
         this.rectangles = rectangles;
     }
 
+    public String getCaseId() {
+        return caseId;
+    }
+
+    public void setCaseId(String caseId) {
+        this.caseId = caseId;
+    }
+
+    public String getJurisdiction() {
+        return jurisdiction;
+    }
+
+    public void setJurisdiction(String jurisdiction) {
+        this.jurisdiction = jurisdiction;
+    }
+
+    public String getCommentHeader() {
+        return commentHeader;
+    }
+
+    public void setCommentHeader(String commentHeader) {
+        this.commentHeader = commentHeader;
+    }
+
     public AnnotationSet getAnnotationSet() {
         return annotationSet;
     }
@@ -200,6 +233,9 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
                 + ", annotationType='" + annotationType + '\''
                 + ", page=" + page
                 + ", color='" + color + '\''
+                + ", caseId='" + caseId + '\''
+                + ", jurisdiction='" + jurisdiction + '\''
+                + ", commentHeader='" + commentHeader + '\''
                 + ", comments=" + comments
                 + ", tags=" + tags
                 + ", rectangles=" + rectangles
