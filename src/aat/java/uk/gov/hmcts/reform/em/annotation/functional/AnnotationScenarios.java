@@ -57,8 +57,6 @@ public class AnnotationScenarios {
             + "    \"caseDescription\": null,\n"
             + "    \"caseComments\": null\n"
             + "  }";
-    
-    private String caseId = null;
 
     @Before
     public void setupRequestSpecification() {
@@ -100,10 +98,10 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void commentheaderShouldReturn201WhenCreateNewAnnotation() throws Exception {
+    public void ShouldReturn201WhenCreateNewAnnotationWithCaseId() throws Exception {
         CaseDetails caseDetails = testUtil.createCase("PUBLICLAW", "CCD_BUNDLE_MVP_TYPE_ASYNC",
                 objectMapper.readTree(String.format(createCaseTemplate)));
-        caseId = String.valueOf(caseDetails.getId());
+        String caseId = String.valueOf(caseDetails.getId());
 
         final String annotationSetId = createAnnotationSet();
         final String annotationId = UUID.randomUUID().toString();
