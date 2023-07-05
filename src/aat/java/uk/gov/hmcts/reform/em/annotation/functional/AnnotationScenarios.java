@@ -135,7 +135,7 @@ public class AnnotationScenarios {
             .body("rectangles[0].width", is(10f))
             .body("rectangles[0].height", is(11f))
             .body("caseId", is(caseId))
-            .body("jusrisdiction", is("PUBLICLAW"))
+            .body("jurisdiction", is("PUBLICLAW"))
             .body("commentHeader", is("title owner"))
             .header("Location", equalTo("/api/annotations/" + annotationId)).log().all();
 
