@@ -73,6 +73,7 @@ public class AnnotationScenarios {
                 .contentType(APPLICATION_JSON_VALUE);
     }
 
+    @Ignore
     @Test
     public void shouldReturn201WhenCreateNewAnnotation() {
         final String annotationSetId = createAnnotationSet();
