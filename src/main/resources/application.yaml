@@ -167,3 +167,6 @@ configuration:
         - appeal.appellant.name.title
         - appeal.appellant.name.firstName
         - appeal.appellant.name.lastName
+      PUBLICLAW:
+        - caseTitle
+        - caseOwner
