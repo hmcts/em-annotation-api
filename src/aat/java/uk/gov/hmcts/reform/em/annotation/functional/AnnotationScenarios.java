@@ -51,8 +51,8 @@ public class AnnotationScenarios {
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     public final String createCaseTemplate = "{\n"
-            + "    \"caseTitle\": null,\n"
-            + "    \"caseOwner\": null,\n"
+            + "    \"caseTitle\": \"title\",\n"
+            + "    \"caseOwner\": \"owner\",\n"
             + "    \"caseCreationDate\": null,\n"
             + "    \"caseDescription\": null,\n"
             + "    \"caseComments\": null\n"
@@ -106,7 +106,19 @@ public class AnnotationScenarios {
 
         final String annotationSetId = createAnnotationSet();
         final String annotationId = UUID.randomUUID().toString();
-        final ValidatableResponse response = createAnnotation(annotationId, annotationSetId);
+
+        JSONObject annotation = createAnnotationPayload(annotationId, annotationSetId);
+
+        annotation.put("jurisdiction", "PUBLICLAW");
+        annotation.put("caseId", caseId);
+
+        final ValidatableResponse response = request
+            .body(annotation)
+            .post("/api/annotations")
+            .then()
+            .statusCode(201)
+            .log().all();
+
         response.log().all();
 
     }
@@ -420,9 +432,6 @@ public class AnnotationScenarios {
         rectangle.put("height", 11f);
         rectangles.put(0, rectangle);
         createAnnotations.put("rectangles", rectangles);
-
-        createAnnotations.put("jurisdiction", "SSCS");
-        createAnnotations.put("caseId", caseId);
 
         return createAnnotations;
     }
