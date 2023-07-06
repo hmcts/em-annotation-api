@@ -76,7 +76,6 @@ public class CcdService {
             return true;
         }
         if (!jurisdictionPaths.containsKey(annotationDTO.getJurisdiction())) {
-            log.info("jurisdictionPaths value is {}", jurisdictionPaths);
             return true;
         }
         return false;
@@ -84,11 +83,8 @@ public class CcdService {
 
     protected CaseDetails getCaseDetails(String authorisation, String caseId) {
         String serviceAuth = authTokenGenerator.generate();
-        CaseDetails caseDetails = coreCaseDataApi.getCase(authorisation,
+        return coreCaseDataApi.getCase(authorisation,
                 serviceAuth, caseId);
-        log.info("caseDetails value is {}", caseDetails);
-        log.info("caseDetails.data value is {}", caseDetails.getData());
-        return caseDetails;
 
     }
 }

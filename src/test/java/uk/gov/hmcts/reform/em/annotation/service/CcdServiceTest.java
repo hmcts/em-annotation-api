@@ -34,8 +34,8 @@ public class CcdServiceTest {
     @InjectMocks
     private CcdService ccdService;
 
-    private final String caseId = "test_case_id";
-    private final String jwt = "jtw_test";
+    private final String caseId = "case_id_test";
+    private final String jwt = "jwt_test";
     private final String serviceToken = "service_token";
 
     private final Map<String, Object> caseData = Map.of("Key1", "Value1",

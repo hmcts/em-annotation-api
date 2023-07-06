@@ -88,10 +88,10 @@ public class AnnotationResource {
         if (annotationDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+
         annotationDTO.setCommentHeader(
                 ccdService.buildCommentHeader(annotationDTO, request.getHeader("Authorization")));
 
-        log.info("annotationDTO value is {}", annotationDTO);
         try {
             annotationService.save(annotationDTO);
         } catch (PSQLException | ConstraintViolationException | DataIntegrityViolationException exception) {
