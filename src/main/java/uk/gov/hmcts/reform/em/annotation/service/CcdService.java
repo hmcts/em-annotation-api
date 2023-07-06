@@ -48,14 +48,14 @@ public class CcdService {
         JSONObject jsonObject = new JSONObject(caseDetails.getData());
         ArrayList<String> paths = jurisdictionPaths.get(annotationDTO.getJurisdiction());
 
-        String commentHeader = buildCommentHeader(jsonObject, paths);
+        String commentHeader = buildCommentHeaderString(jsonObject, paths);
         if (commentHeader.isEmpty()) {
             return annotationDTO.getCommentHeader();
         }
         return commentHeader;
     }
 
-    private String buildCommentHeader(JSONObject jsonObject, ArrayList<String> paths) {
+    private String buildCommentHeaderString(JSONObject jsonObject, ArrayList<String> paths) {
         StringBuilder stringBuilder = new StringBuilder();
         for (String path : paths) {
             try {
