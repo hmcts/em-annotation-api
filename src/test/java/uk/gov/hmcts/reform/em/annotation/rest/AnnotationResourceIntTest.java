@@ -22,7 +22,6 @@ import uk.gov.hmcts.reform.em.annotation.domain.enumeration.AnnotationType;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationRepository;
 import uk.gov.hmcts.reform.em.annotation.repository.TagRepository;
 import uk.gov.hmcts.reform.em.annotation.rest.errors.ExceptionTranslator;
-import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationSetService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
@@ -76,9 +75,6 @@ public class AnnotationResourceIntTest extends BaseTest {
 
     @Autowired
     private AnnotationMapper annotationMapper;
-    
-    @Autowired
-    private AnnotationService annotationService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -99,7 +95,6 @@ public class AnnotationResourceIntTest extends BaseTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AnnotationResource annotationResource = new AnnotationResource(annotationService, ccdService);
         em.persist(new IdamDetails("system"));
         em.persist(new IdamDetails("anonymous"));
     }

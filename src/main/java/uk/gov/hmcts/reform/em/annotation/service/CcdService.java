@@ -69,7 +69,7 @@ public class CcdService {
         return stringBuilder.toString().trim();
     }
 
-    public CaseDetails getCaseDetails(String authorisation, String caseId) {
+    protected CaseDetails getCaseDetails(String authorisation, String caseId) {
         String serviceAuth = authTokenGenerator.generate();
         CaseDetails caseDetails = coreCaseDataApi.getCase(authorisation,
                 serviceAuth, caseId);
