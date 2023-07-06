@@ -50,7 +50,7 @@ public class AnnotationScenarios {
 
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
-    public final String createCaseTemplate = "{\n"
+    public final String caseData = "{\n"
             + "    \"caseTitle\": \"title\",\n"
             + "    \"caseOwner\": \"owner\",\n"
             + "    \"caseCreationDate\": null,\n"
@@ -100,7 +100,7 @@ public class AnnotationScenarios {
     @Test
     public void ShouldReturn201WhenCreateNewAnnotationWithCaseId() throws Exception {
         CaseDetails caseDetails = testUtil.createCase("PUBLICLAW", "CCD_BUNDLE_MVP_TYPE_ASYNC",
-                objectMapper.readTree(String.format(createCaseTemplate)));
+                objectMapper.readTree(caseData));
         String caseId = String.valueOf(caseDetails.getId());
 
         final String annotationSetId = createAnnotationSet();
