@@ -38,22 +38,24 @@ public class CcdService {
     }
 
     public String buildCommentHeader(AnnotationDTO annotationDTO, String authorisation) {
-        if (Objects.isNull(annotationDTO.getCaseId())) {
-            return annotationDTO.getCommentHeader();
-        }
-        if (Objects.nonNull(annotationDTO.getCommentHeader())) {
-            return annotationDTO.getCommentHeader();
-        }
         HashMap<String, ArrayList<String>> jurisdictionPaths = commentHeaderConfig.getJurisdictionPaths();
 
-        if (!jurisdictionPaths.containsKey(annotationDTO.getJurisdiction())) {
-            log.info("jurisdictionPaths value is {}", jurisdictionPaths);
+        if (useExistingCommentHeader(annotationDTO, jurisdictionPaths)) {
             return annotationDTO.getCommentHeader();
         }
+
         CaseDetails caseDetails = getCaseDetails(authorisation, annotationDTO.getCaseId());
         JSONObject jsonObject = new JSONObject(caseDetails.getData());
         ArrayList<String> paths = jurisdictionPaths.get(annotationDTO.getJurisdiction());
 
+        String commentHeader = buildCommentHeader(jsonObject, paths);
+        if (commentHeader.isEmpty()) {
+            return annotationDTO.getCommentHeader();
+        }
+        return commentHeader;
+    }
+
+    private String buildCommentHeader(JSONObject jsonObject, ArrayList<String> paths) {
         StringBuilder stringBuilder = new StringBuilder();
         for (String path : paths) {
             try {
@@ -61,12 +63,23 @@ public class CcdService {
                 stringBuilder.append(" ");
             } catch (PathNotFoundException ignored) {
             }
-        }
-        if (stringBuilder.length() == 0) {
-            return annotationDTO.getCommentHeader();
-        }
-
+        };
         return stringBuilder.toString().trim();
+    }
+
+    private boolean useExistingCommentHeader(AnnotationDTO annotationDTO,
+                                             HashMap<String, ArrayList<String>> jurisdictionPaths) {
+        if (Objects.isNull(annotationDTO.getCaseId())) {
+            return true;
+        }
+        if (Objects.nonNull(annotationDTO.getCommentHeader())) {
+            return true;
+        }
+        if (!jurisdictionPaths.containsKey(annotationDTO.getJurisdiction())) {
+            log.info("jurisdictionPaths value is {}", jurisdictionPaths);
+            return true;
+        }
+        return false;
     }
 
     protected CaseDetails getCaseDetails(String authorisation, String caseId) {
