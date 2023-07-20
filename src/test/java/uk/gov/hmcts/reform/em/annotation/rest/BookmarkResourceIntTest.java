@@ -282,7 +282,7 @@ public class BookmarkResourceIntTest extends BaseTest {
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("fabio"));
 
         restLogoutMockMvc.perform(get("/api/" + bookmark.getDocumentId() + "/bookmarks"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNoContent());
     }
 
     @Test

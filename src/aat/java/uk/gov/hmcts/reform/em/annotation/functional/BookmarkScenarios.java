@@ -179,11 +179,11 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn404WhenResponseBodyIsEmptyForGivenDocId() {
+    public void shouldReturn204WhenResponseBodyIsEmptyForGivenDocId() {
         request
                 .get(String.format("/api/%s/bookmarks", UUID.randomUUID()))
                 .then()
-                .statusCode(404)
+                .statusCode(204)
                 .log().all();
     }
 
