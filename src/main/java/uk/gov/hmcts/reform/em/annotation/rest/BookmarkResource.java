@@ -187,7 +187,6 @@ public class BookmarkResource {
     /**
      * GET  /bookmarks/:documentId : get all the bookmarks for a specific document.
      *
-     * @param pageable the pagination information
      * @return the ResponseEntity with status "200" (OK) and the list of bookmarks in body
      */
     @Operation(summary = "Get all bookmarks for Document ID",
@@ -203,9 +202,9 @@ public class BookmarkResource {
                             schema = @Schema(type = "UUID"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "204", description = "No Content"),
         @ApiResponse(responseCode = "401", description = "Unauthorised"),
         @ApiResponse(responseCode = "403", description = "Forbidden"),
-        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @GetMapping("/{documentId}/bookmarks")
     public ResponseEntity<List<BookmarkDTO>> getAllDocumentBookmarks(@PathVariable UUID documentId) {
@@ -216,7 +215,7 @@ public class BookmarkResource {
         if (page.hasContent()) {
             return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.noContent().build();
         }
     }
 
