@@ -61,7 +61,7 @@ public class FilterAnnotationSetScenarios {
                 .get("/api/annotation-sets/filter")
                 .then()
                 .assertThat()
-                .statusCode(404)
+                .statusCode(204)
                 .log().all();
     }
 
