@@ -14,7 +14,7 @@ plugins {
     id 'au.com.dius.pact' version '4.2.14'
     id "info.solidsoft.pitest" version '1.9.0'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '3.0.0'
-    id 'com.github.hmcts.rse-cft-lib' version '0.19.755'
+    id 'com.github.hmcts.rse-cft-lib' version '0.19.778'
     id 'org.flywaydb.flyway' version '9.21.1'
 }
 
@@ -124,12 +124,12 @@ dependencies {
 
     implementation group: 'org.zalando', name: 'problem-spring-web', version: '0.29.1'
     implementation group: 'org.zalando', name: 'jackson-datatype-problem', version: '0.27.1'
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.1.0'
-    implementation group: 'com.google.guava', name: 'guava', version: '32.1.1-jre'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.2.0'
+    implementation group: 'com.google.guava', name: 'guava', version: '32.1.2-jre'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.21.1'
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.13.0'
     implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
     implementation group: 'commons-validator', name: 'commons-validator', version: '1.7'
     implementation group: 'org.ehcache', name: 'ehcache', version: '3.10.8'
@@ -216,7 +216,7 @@ dependencyManagement {
             entry 'xercesImpl'
         }
         //CVE-2022-1471
-        dependencySet(group: 'org.yaml', version: '2.0') {
+        dependencySet(group: 'org.yaml', version: '2.1') {
             entry 'snakeyaml'
         }
 
