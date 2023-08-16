@@ -46,12 +46,16 @@ public class SecurityUtils {
                         return (String) authentication.getPrincipal();
                     } else if (authentication instanceof JwtAuthenticationToken) {
                         Jwt jwt = ((JwtAuthenticationToken) authentication).getToken();
-                        if (Boolean.TRUE.equals(jwt.hasClaim(TOKEN_NAME)) && jwt.getClaim(TOKEN_NAME).equals(ACCESS_TOKEN)) {
-                            uk.gov.hmcts.reform.idam.client.models.UserInfo userInfo = idamRepository.getUserInfo(jwt.getTokenValue());
+                        if (Boolean.TRUE.equals(jwt.hasClaim(TOKEN_NAME))
+                                && jwt.getClaim(TOKEN_NAME).equals(ACCESS_TOKEN)) {
+                            uk.gov.hmcts.reform.idam.client.models.UserInfo userInfo =
+                                    idamRepository.getUserInfo(jwt.getTokenValue());
                             return userInfo.getUid();
                         }
                     } else if (authentication.getPrincipal() instanceof DefaultOidcUser) {
-                        Map<String, Object> attributes = ((DefaultOidcUser) authentication.getPrincipal()).getAttributes();
+                        Map<String, Object> attributes = ((DefaultOidcUser) authentication
+                                .getPrincipal())
+                                .getAttributes();
                         if (attributes.containsKey("preferred_username")) {
                             return (String) attributes.get("preferred_username");
                         }

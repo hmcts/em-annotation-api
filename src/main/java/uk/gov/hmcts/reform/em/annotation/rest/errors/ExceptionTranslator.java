@@ -1,6 +1,9 @@
 package uk.gov.hmcts.reform.em.annotation.rest.errors;
 
 import feign.FeignException;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import jakarta.servlet.http.HttpServletRequest;
 import org.hibernate.exception.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
@@ -23,9 +26,6 @@ import org.zalando.problem.spring.web.advice.ProblemHandling;
 import org.zalando.problem.violations.ConstraintViolationProblem;
 import uk.gov.hmcts.reform.em.annotation.rest.util.HeaderUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -83,7 +83,9 @@ public class ExceptionTranslator implements ProblemHandling {
     }
 
     @Override
-    public ResponseEntity<Problem> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @Nonnull NativeWebRequest request) {
+    public ResponseEntity<Problem> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex,
+            @Nonnull NativeWebRequest request) {
         BindingResult result = ex.getBindingResult();
         List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
             .map(f -> new FieldErrorVM(f.getObjectName(), f.getField(), f.getCode()))
@@ -109,8 +111,13 @@ public class ExceptionTranslator implements ProblemHandling {
     }
 
     @ExceptionHandler
-    public ResponseEntity<Problem> handleBadRequestAlertException(BadRequestAlertException ex, NativeWebRequest request) {
-        return create(ex, request, HeaderUtil.createFailureAlert(ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
+    public ResponseEntity<Problem> handleBadRequestAlertException(
+            BadRequestAlertException ex,
+            NativeWebRequest request) {
+        return create(ex, request, HeaderUtil.createFailureAlert(
+                ex.getEntityName(),
+                ex.getErrorKey(),
+                ex.getMessage()));
     }
 
     @ExceptionHandler
@@ -141,7 +148,9 @@ public class ExceptionTranslator implements ProblemHandling {
     }
 
     @ExceptionHandler
-    public ResponseEntity<Problem> handleDataIntegrityViolation(DataIntegrityViolationException ex, NativeWebRequest request) {
+    public ResponseEntity<Problem> handleDataIntegrityViolation(
+            DataIntegrityViolationException ex,
+            NativeWebRequest request) {
         Problem problem = Problem.builder()
                 .withStatus(Status.CONFLICT)
                 .with(MESSAGE, ErrorConstants.ERR_DATA_INTEGRITY)
@@ -150,7 +159,9 @@ public class ExceptionTranslator implements ProblemHandling {
     }
 
     @ExceptionHandler
-    public ResponseEntity<Problem> handleConstraintViolation(ConstraintViolationException ex, NativeWebRequest request) {
+    public ResponseEntity<Problem> handleConstraintViolation(
+            ConstraintViolationException ex,
+            NativeWebRequest request) {
         Problem problem = Problem.builder()
                 .withStatus(Status.UNPROCESSABLE_ENTITY)
                 .with(MESSAGE, ErrorConstants.ERR_CONSTRAINT_VIOLATION)
@@ -168,7 +179,7 @@ public class ExceptionTranslator implements ProblemHandling {
     }
 
     @ExceptionHandler
-    public ResponseEntity<Problem> handlePSQLException(PSQLException ex, NativeWebRequest request) {
+    public ResponseEntity<Problem> handlePsqlException(PSQLException ex, NativeWebRequest request) {
         log.info("Em-Annotation sql exception : {} ",ex.getMessage());
         if (ex.getMessage().contains("duplicate key value violates unique constraint")) {
             Problem problem = Problem.builder()

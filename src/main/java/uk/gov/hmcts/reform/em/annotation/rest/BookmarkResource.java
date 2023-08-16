@@ -70,18 +70,18 @@ public class BookmarkResource {
      * POST  /bookmarks : Create a new bookmark.
      *
      * @param bookmarkDTO the bookmarkDTO to create
-     * @return the ResponseEntity with status "201" (Created) and with body the new bookmarkDTO, or with status "400" (Bad
-     *      Request) if the bookmark has an invalid ID
+     * @return the ResponseEntity with status "201" (Created) and with body the new bookmarkDTO,
+     *      or with status "400" (Bad Request) if the bookmark has an invalid ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @Operation(summary = "Create an bookmarkDTO", description = "A POST request to create an bookmarkDTO",
             parameters = {
-                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
-                            description = "Authorization (Idam Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
-                            description = "Service Authorization (S2S Bearer token)", required = true,
-                            schema = @Schema(type = "string"))})
+                @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                        description = "Authorization (Idam Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                        description = "Service Authorization (S2S Bearer token)", required = true,
+                        schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Successfully created"),
         @ApiResponse(responseCode = "400", description = "bookmarkDTO not valid, invalid id"),
@@ -104,18 +104,19 @@ public class BookmarkResource {
      * PUT  /bookmarks : Updates an existing bookmark.
      *
      * @param bookmarkDTO the bookmarkDTO to update
-     * @return the ResponseEntity with status "200" (OK) and with body the updated bookmarkDTO, or with status "400" (Bad
-     *     Request) if the bookmarkDTO is not valid, or with status "500" (Internal Server Error) if the bookmarkDTO couldn't
-     *     be updated
+     * @return the ResponseEntity with status "200" (OK) and with body the updated bookmarkDTO,
+     *      or with status "400" (Bad Request) if the bookmarkDTO is not valid,
+     *      or with status "500" (Internal Server Error)
+     *      if the bookmarkDTO couldn't be updated
      */
     @Operation(summary = "Update an existing bookmarkDTO", description = "A PUT request to update an bookmarkDTO",
             parameters = {
-                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
-                            description = "Authorization (Idam Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
-                            description = "Service Authorization (S2S Bearer token)", required = true,
-                            schema = @Schema(type = "string"))})
+                @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                        description = "Authorization (Idam Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                        description = "Service Authorization (S2S Bearer token)", required = true,
+                        schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "400", description = "bookmarkDTO not valid, invalid id"),
@@ -140,19 +141,20 @@ public class BookmarkResource {
      * PUT  /bookmarks_multiple : Updates multiple existing bookmarks.
      *
      * @param bookmarkDTOList the list of bookmarkDTO objects to update
-     * @return the ResponseEntity with status "200" (OK) and with body the updated bookmarkDTO objects, or with status "400"
-     *      (Bad Request) if the bookmarkDTO objects are not valid, or with status "500" (Internal Server Error) if the
+     * @return the ResponseEntity with status "200" (OK) and with body the updated bookmarkDTO objects,
+     *      or with status "400" (Bad Request) if the bookmarkDTO objects are not valid,
+     *      or with status "500" (Internal Server Error) if the
      *      bookmarkDTO objects couldn't be updated.
      */
     @Operation(summary = "Update multiple existing bookmarkDTO objects",
             description = "A PUT request to update multiple bookmarkDTO objects",
             parameters = {
-                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
-                            description = "Authorization (Idam Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
-                            description = "Service Authorization (S2S Bearer token)", required = true,
-                            schema = @Schema(type = "string"))})
+                @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                        description = "Authorization (Idam Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                        description = "Service Authorization (S2S Bearer token)", required = true,
+                        schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "400", description = "bookmarkDTO objects not valid, invalid id"),
@@ -191,15 +193,15 @@ public class BookmarkResource {
      */
     @Operation(summary = "Get all bookmarks for Document ID",
             parameters = {
-                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
-                            description = "Authorization (Idam Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
-                            description = "Service Authorization (S2S Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.PATH, name = "documentId",
-                            description = "Document Id", required = true,
-                            schema = @Schema(type = "UUID"))})
+                @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                        description = "Authorization (Idam Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                        description = "Service Authorization (S2S Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.PATH, name = "documentId",
+                        description = "Document Id", required = true,
+                        schema = @Schema(type = "UUID"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "204", description = "No Content"),
@@ -227,15 +229,15 @@ public class BookmarkResource {
      */
     @Operation(summary = "Delete a BookmarkDTO", description = "A DELETE request to delete a BookmarkDTO",
             parameters = {
-                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
-                            description = "Authorization (Idam Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
-                            description = "Service Authorization (S2S Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.PATH, name = "id",
-                            description = "Bookmark Id", required = true,
-                            schema = @Schema(type = "UUID"))})
+                @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                        description = "Authorization (Idam Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                        description = "Service Authorization (S2S Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.PATH, name = "id",
+                        description = "Bookmark Id", required = true,
+                        schema = @Schema(type = "UUID"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "401", description = "Unauthorised"),
@@ -253,18 +255,19 @@ public class BookmarkResource {
      * DELETE  /bookmarks : delete multiple bookmarks.
      *
      * @param deleteBookmarkDTO object containing the list of bookmarkDTO objects to delete and parent to update
-     * @return the ResponseEntity with status "200" (OK), or with status "400" (Bad Request) if the bookmarkDTO objects are
-     *      not valid, or with status "500" (Internal Server Error) if the bookmarkDTO objects couldn't be deleted.
+     * @return the ResponseEntity with status "200" (OK), or with status "400" (Bad Request),
+     *      if the bookmarkDTO objects are not valid, or with status "500" (Internal Server Error)
+     *      if the bookmarkDTO objects couldn't be deleted.
      */
     @Operation(summary = "Delete multiple existing bookmarkDTO objects",
             description = "A DELETE request to delete multiple bookmarkDTO objects",
             parameters = {
-                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
-                            description = "Authorization (Idam Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
-                            description = "Service Authorization (S2S Bearer token)", required = true,
-                            schema = @Schema(type = "string"))})
+                @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                        description = "Authorization (Idam Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                        description = "Service Authorization (S2S Bearer token)", required = true,
+                        schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "401", description = "Unauthorised"),
