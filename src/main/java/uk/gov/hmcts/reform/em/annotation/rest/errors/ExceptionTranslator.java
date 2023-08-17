@@ -36,6 +36,7 @@ import java.util.stream.Collectors;
  * The error response follows RFC7807 - Problem Details for HTTP APIs (https://tools.ietf.org/html/rfc7807)
  */
 @ControllerAdvice
+@SuppressWarnings({"AbbreviationAsWordInName"})
 public class ExceptionTranslator implements ProblemHandling {
     
     private final Logger log = LoggerFactory.getLogger(ExceptionTranslator.class);
@@ -179,7 +180,7 @@ public class ExceptionTranslator implements ProblemHandling {
     }
 
     @ExceptionHandler
-    public ResponseEntity<Problem> handlePsqlException(PSQLException ex, NativeWebRequest request) {
+    public ResponseEntity<Problem> handlePSQLException(PSQLException ex, NativeWebRequest request) {
         log.info("Em-Annotation sql exception : {} ",ex.getMessage());
         if (ex.getMessage().contains("duplicate key value violates unique constraint")) {
             Problem problem = Problem.builder()
