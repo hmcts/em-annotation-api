@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
+import jakarta.persistence.EntityManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +29,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import jakarta.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -46,6 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see BookmarkResource
  */
+@SuppressWarnings({"AbbreviationAsWordInName"})
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
 public class BookmarkResourceIntTest extends BaseTest {
@@ -222,7 +223,8 @@ public class BookmarkResourceIntTest extends BaseTest {
 
         restLogoutMockMvc.perform(put("/api/bookmarks_multiple")
                         .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                        .content(TestUtil.convertObjectToJsonBytes(Arrays.asList(bookmarkDTO, bookmarkDTO1, bookmarkDTO2))))
+                        .content(TestUtil.convertObjectToJsonBytes(Arrays.asList(
+                                bookmarkDTO, bookmarkDTO1, bookmarkDTO2))))
                 .andExpect(status().isOk());
 
         // Validate the Comment in the database

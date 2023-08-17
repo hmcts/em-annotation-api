@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
+import jakarta.servlet.RequestDispatcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -7,8 +8,6 @@ import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.BaseTest;
-
-import jakarta.servlet.RequestDispatcher;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,7 +26,8 @@ public class EmErrorControllerIntTest extends BaseTest {
     @Test
     public void testException() throws Exception {
         restLogoutMockMvc.perform(get("/error")
-                        .requestAttr(RequestDispatcher.ERROR_EXCEPTION, new IllegalStateException("Test Exception"))
+                        .requestAttr(RequestDispatcher.ERROR_EXCEPTION,
+                                new IllegalStateException("Test Exception"))
                 )
                 .andExpect(status().isInternalServerError());
     }
@@ -35,7 +35,8 @@ public class EmErrorControllerIntTest extends BaseTest {
     @Test
     public void testHandledException() throws Exception {
         restLogoutMockMvc.perform(get("/error")
-                        .requestAttr(RequestDispatcher.ERROR_EXCEPTION, new ConcurrencyFailureException("Test concurrency failure"))
+                        .requestAttr(RequestDispatcher.ERROR_EXCEPTION,
+                                new ConcurrencyFailureException("Test concurrency failure"))
                 )
                 .andExpect(status().isConflict());
     }

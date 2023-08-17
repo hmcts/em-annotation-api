@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
+import jakarta.persistence.EntityManager;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,20 +27,25 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.CommentMapper;
 
-import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 /**
  * Test class for the CommentResource REST controller.
  *
  * @see CommentResource
  */
+
+@SuppressWarnings({"AbbreviationAsWordInName"})
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
 public class CommentResourceIntTest extends BaseTest {

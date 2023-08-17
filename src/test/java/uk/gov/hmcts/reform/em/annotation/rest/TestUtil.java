@@ -22,6 +22,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class TestUtil {
 
+    private TestUtil() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instatiated");
+    }
+
     /** MediaType for JSON UTF8. */
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(
             MediaType.APPLICATION_JSON.getType(),
