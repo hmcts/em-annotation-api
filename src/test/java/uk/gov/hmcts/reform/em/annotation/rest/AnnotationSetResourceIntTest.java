@@ -71,7 +71,7 @@ public class AnnotationSetResourceIntTest extends BaseTest {
 
     @Before
     public void setup() {
-        MockitoAnnotations.openMocks(this);
+        MockitoAnnotations.initMocks(this);
         final AnnotationSetResource annotationSetResource = new AnnotationSetResource(annotationSetService);
         em.persist(new IdamDetails("system"));
         em.persist(new IdamDetails("anonymous"));

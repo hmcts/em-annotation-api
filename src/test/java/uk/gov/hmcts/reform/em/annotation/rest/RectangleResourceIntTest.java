@@ -84,7 +84,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
     @Before
     public void setup() {
-        MockitoAnnotations.openMocks(this);
+        MockitoAnnotations.initMocks(this);
         em.persist(new IdamDetails("system"));
         em.persist(new IdamDetails("anonymous"));
     }

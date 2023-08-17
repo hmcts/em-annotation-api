@@ -80,7 +80,7 @@ public class CommentResourceIntTest extends BaseTest {
 
     @Before
     public void setup() {
-        MockitoAnnotations.openMocks(this);
+        MockitoAnnotations.initMocks(this);
         final CommentResource commentResource = new CommentResource(commentService);
         em.persist(new IdamDetails("system"));
         em.persist(new IdamDetails("anonymous"));

@@ -48,7 +48,7 @@ class RectangleResourceTest {
 
     @BeforeAll
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
+        MockitoAnnotations.initMocks(this);
     }
 
     private static final Double DEFAULT_X = 1d;
@@ -98,7 +98,7 @@ class RectangleResourceTest {
         Mockito.when(annotationService.findOne(rectangleDTO.getAnnotationId())).thenReturn(Optional.empty());
         try {
             ResponseEntity<RectangleDTO> responseEntity = rectangleResource.createRectangle(rectangleDTO);
-            assertEquals(404, responseEntity.getStatusCode().value());
+            assertEquals(404, responseEntity.getStatusCodeValue());
         } catch (BadRequestAlertException badRequestAlertException) {
             fail("This is not the expected exception for this test");
         }
@@ -115,7 +115,7 @@ class RectangleResourceTest {
             .thenReturn(Optional.of(new AnnotationDTO()));
         try {
             ResponseEntity<RectangleDTO> responseEntity = rectangleResource.createRectangle(rectangleDTO);
-            assertEquals(404, responseEntity.getStatusCode().value());
+            assertEquals(404, responseEntity.getStatusCodeValue());
         } catch (BadRequestAlertException badRequestAlertException) {
             fail("This is not the expected exception for this test");
         }
@@ -135,7 +135,7 @@ class RectangleResourceTest {
         Mockito.when(rectangleService.save(any())).thenReturn(rectangleDTO);
         try {
             ResponseEntity<RectangleDTO> responseEntity = rectangleResource.createRectangle(rectangleDTO);
-            assertEquals(201, responseEntity.getStatusCode().value());
+            assertEquals(201, responseEntity.getStatusCodeValue());
         } catch (BadRequestAlertException badRequestAlertException) {
             fail("This is not the expected exception for this test");
         }

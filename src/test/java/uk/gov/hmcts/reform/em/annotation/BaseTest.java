@@ -46,7 +46,7 @@ public abstract class BaseTest {
     @Before
     public void setupMocks() {
 
-        MockitoAnnotations.openMocks(this);
+        MockitoAnnotations.initMocks(this);
 
         doReturn(authentication).when(securityContext).getAuthentication();
         SecurityContextHolder.setContext(securityContext);
