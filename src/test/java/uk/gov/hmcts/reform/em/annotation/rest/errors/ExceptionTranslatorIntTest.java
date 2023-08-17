@@ -23,7 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see ExceptionTranslator
  */
 @RunWith(SpringRunner.class)
-@SuppressWarnings({"AbbreviationAsWordInName"})
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
 public class ExceptionTranslatorIntTest extends BaseTest {
 
@@ -159,7 +158,7 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
-    public void testPSQLException() throws Exception {
+    public void testPsqlException() throws Exception {
         restLogoutMockMvc.perform(get("/test/psql-key-violation"))
                 .andExpect(status().isConflict())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));

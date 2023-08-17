@@ -43,7 +43,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see RectangleResource
  */
 
-@SuppressWarnings({"AbbreviationAsWordInName"})
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
 public class RectangleResourceIntTest extends BaseTest {
@@ -113,7 +112,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void createRectangleUUIDNull() throws Exception {
+    public void createRectangleUuidNull() throws Exception {
         int databaseSizeBeforeCreate = rectangleRepository.findAll().size();
 
         // Create the Rectangle

@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-@SuppressWarnings({"MethodName","AbbreviationAsWordInName"})
 @RestController
 public class ExceptionTranslatorTestController {
 
@@ -99,12 +98,12 @@ public class ExceptionTranslatorTestController {
     }
 
     @GetMapping("/test/psql-key-violation")
-    public void PSQLException() throws PSQLException {
+    public void psqlException() throws PSQLException {
         throw new PSQLException("duplicate key value violates unique constraint", PSQLState.CHECK_VIOLATION);
     }
 
     @GetMapping("/test/psql-exception")
-    public void PSQLKeyViolation() throws PSQLException {
+    public void psqlKeyViolation() throws PSQLException {
         throw new PSQLException("PSQL Exception", PSQLState.CHECK_VIOLATION);
     }
 

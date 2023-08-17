@@ -45,7 +45,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see CommentResource
  */
 
-@SuppressWarnings({"AbbreviationAsWordInName"})
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
 public class CommentResourceIntTest extends BaseTest {
@@ -126,7 +125,7 @@ public class CommentResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void createCommentUUIDNull() throws Exception {
+    public void createCommentUuidNull() throws Exception {
         final int databaseSizeBeforeCreate = commentRepository.findAll().size();
 
         // Create the Comment

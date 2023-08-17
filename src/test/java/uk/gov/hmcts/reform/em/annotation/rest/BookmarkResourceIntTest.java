@@ -46,7 +46,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see BookmarkResource
  */
-@SuppressWarnings({"AbbreviationAsWordInName"})
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
 public class BookmarkResourceIntTest extends BaseTest {
@@ -104,7 +103,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void createBookmarkUUIDNull() throws Exception {
+    public void createBookmarkUuidNull() throws Exception {
         int databaseSizeBeforeCreate = bookmarkRepository.findAll().size();
 
         // Create the Comment
