@@ -65,20 +65,21 @@ public class AnnotationResource {
      */
     @Operation(summary = "Create an annotationDTO", description = "A POST request to create an annotationDTO",
             parameters = {
-                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
-                            description = "Authorization (Idam Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
-                            description = "Service Authorization (S2S Bearer token)", required = true,
-                            schema = @Schema(type = "string"))})
+                @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                        description = "Authorization (Idam Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                        description = "Service Authorization (S2S Bearer token)", required = true,
+                        schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Successfully created"),
-            @ApiResponse(responseCode = "400", description = "annotationDTO not valid, invalid id"),
-            @ApiResponse(responseCode = "401", description = "Unauthorised"),
-            @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "201", description = "Successfully created"),
+        @ApiResponse(responseCode = "400", description = "annotationDTO not valid, invalid id"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
     })
     @PostMapping("/annotations")
-    public ResponseEntity<AnnotationDTO> createAnnotation(@RequestBody AnnotationDTO annotationDTO) throws URISyntaxException {
+    public ResponseEntity<AnnotationDTO> createAnnotation(@RequestBody AnnotationDTO annotationDTO)
+            throws URISyntaxException {
         log.debug("REST request to save Annotation : {}", annotationDTO);
         if (annotationDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -111,22 +112,23 @@ public class AnnotationResource {
      */
     @Operation(summary = "Update an existing annotationDTO", description = "A PUT request to update an annotationDTO",
             parameters = {
-                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
-                            description = "Authorization (Idam Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
-                            description = "Service Authorization (S2S Bearer token)", required = true,
-                            schema = @Schema(type = "string"))})
+                @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                        description = "Authorization (Idam Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                        description = "Service Authorization (S2S Bearer token)", required = true,
+                        schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Success"),
-            @ApiResponse(responseCode = "400", description = "annotationDTO not valid, invalid id"),
-            @ApiResponse(responseCode = "500", description = "annotationDTO couldn't be updated"),
-            @ApiResponse(responseCode = "401", description = "Unauthorised"),
-            @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found"),
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "400", description = "annotationDTO not valid, invalid id"),
+        @ApiResponse(responseCode = "500", description = "annotationDTO couldn't be updated"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @PutMapping("/annotations")
-    public ResponseEntity<AnnotationDTO> updateAnnotation(@RequestBody AnnotationDTO annotationDTO) throws URISyntaxException {
+    public ResponseEntity<AnnotationDTO> updateAnnotation(@RequestBody AnnotationDTO annotationDTO)
+            throws URISyntaxException {
         log.debug("REST request to update Annotation : {}", annotationDTO);
         if (annotationDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -149,19 +151,20 @@ public class AnnotationResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status "200" (OK) and the list of annotations in body
      */
-    @Operation(summary = "Get all annotations", description = "A GET request without a body is used to retrieve all annotations",
+    @Operation(summary = "Get all annotations",
+            description = "A GET request without a body is used to retrieve all annotations",
             parameters = {
-                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
-                            description = "Authorization (Idam Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
-                            description = "Service Authorization (S2S Bearer token)", required = true,
-                            schema = @Schema(type = "string"))})
+                @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                        description = "Authorization (Idam Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                        description = "Service Authorization (S2S Bearer token)", required = true,
+                        schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Success"),
-            @ApiResponse(responseCode = "401", description = "Unauthorised"),
-            @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found"),
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @GetMapping("/annotations")
     public ResponseEntity<List<AnnotationDTO>> getAllAnnotations(Pageable pageable) {
@@ -175,24 +178,25 @@ public class AnnotationResource {
      * GET  /annotations/:id : get the "id" annotation.
      *
      * @param id the id of the annotationDTO to retrieve
-     * @return the ResponseEntity with status "200" (OK) and with body the annotationDTO, or with status "404" (Not Found)
+     * @return the ResponseEntity with status "200" (OK) and with body the annotationDTO,
+     *      or with status "404" (Not Found)
      */
     @Operation(summary = "Get an existing annotationDTO", description = "A GET request to retrieve an annotationDTO",
             parameters = {
-                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
-                            description = "Authorization (Idam Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
-                            description = "Service Authorization (S2S Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.PATH, name = "id",
-                            description = "Annotation Id", required = true,
-                            schema = @Schema(type = "UUID"))})
+                @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                        description = "Authorization (Idam Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                        description = "Service Authorization (S2S Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.PATH, name = "id",
+                        description = "Annotation Id", required = true,
+                        schema = @Schema(type = "UUID"))})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Success"),
-            @ApiResponse(responseCode = "401", description = "Unauthorised"),
-            @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found"),
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @GetMapping("/annotations/{id}")
     public ResponseEntity<AnnotationDTO> getAnnotation(@PathVariable UUID id) {
@@ -209,19 +213,19 @@ public class AnnotationResource {
      */
     @Operation(summary = "Delete an annotationDTO", description = "A DELETE request to delete an annotationDTO",
             parameters = {
-                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
-                            description = "Authorization (Idam Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
-                            description = "Service Authorization (S2S Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.PATH, name = "id",
-                            description = "Annotation Id", required = true,
-                            schema = @Schema(type = "UUID"))})
+                @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                        description = "Authorization (Idam Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                        description = "Service Authorization (S2S Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.PATH, name = "id",
+                        description = "Annotation Id", required = true,
+                        schema = @Schema(type = "UUID"))})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Success"),
-            @ApiResponse(responseCode = "401", description = "Unauthorised"),
-            @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
     })
     @DeleteMapping("/annotations/{id}")
     public ResponseEntity<Void> deleteAnnotation(@PathVariable UUID id) {

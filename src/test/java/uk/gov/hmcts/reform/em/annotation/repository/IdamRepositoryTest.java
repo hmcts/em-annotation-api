@@ -13,7 +13,9 @@ import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 /**
@@ -35,7 +37,12 @@ public class IdamRepositoryTest {
     @DisplayName("UserInfo should be called by IdamClient ")
     public void testGetUserInfo() {
 
-        final UserInfo userInfo = UserInfo.builder().uid("100").givenName("John").familyName("Doe").roles(asList("Admin", "CaseWorker")).build();
+        final UserInfo userInfo = UserInfo.builder()
+                .uid("100")
+                .givenName("John")
+                .familyName("Doe")
+                .roles(asList("Admin", "CaseWorker"))
+                .build();
         when(idamClient.getUserInfo(any(String.class))).thenReturn(userInfo);
 
         idamRepository.getUserInfo(random(5, true, false));

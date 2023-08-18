@@ -1,9 +1,13 @@
 package uk.gov.hmcts.reform.em.annotation.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.UUID;
 

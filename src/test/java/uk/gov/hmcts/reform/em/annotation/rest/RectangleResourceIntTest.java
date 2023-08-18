@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
+import jakarta.persistence.EntityManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,20 +23,26 @@ import uk.gov.hmcts.reform.em.annotation.service.RectangleService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.RectangleDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.RectangleMapper;
 
-import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 /**
  * Test class for the RectangleResource REST controller.
  *
  * @see RectangleResource
  */
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
 public class RectangleResourceIntTest extends BaseTest {
@@ -105,7 +112,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void createRectangleUUIDNull() throws Exception {
+    public void createRectangleUuidNull() throws Exception {
         int databaseSizeBeforeCreate = rectangleRepository.findAll().size();
 
         // Create the Rectangle

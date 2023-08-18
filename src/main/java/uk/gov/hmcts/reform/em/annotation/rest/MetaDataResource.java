@@ -61,12 +61,12 @@ public class MetaDataResource {
      */
     @Operation(summary = "Create an metadataDto", description = "A POST request to create an metadataDto",
             parameters = {
-                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
-                            description = "Authorization (Idam Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
-                            description = "Service Authorization (S2S Bearer token)", required = true,
-                            schema = @Schema(type = "string"))})
+                @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                        description = "Authorization (Idam Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                        description = "Service Authorization (S2S Bearer token)", required = true,
+                        schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Successfully created"),
         @ApiResponse(responseCode = "400", description = "metadataDto not valid"),
@@ -74,7 +74,8 @@ public class MetaDataResource {
         @ApiResponse(responseCode = "403", description = "Forbidden"),
     })
     @PostMapping("/")
-    public ResponseEntity<MetadataDto> createMetaData(@Validated @RequestBody MetadataDto metadataDto) throws URISyntaxException {
+    public ResponseEntity<MetadataDto> createMetaData(@Validated @RequestBody MetadataDto metadataDto)
+            throws URISyntaxException {
 
         log.debug("REST request to save Metadata : {}", metadataDto);
 
@@ -83,8 +84,10 @@ public class MetaDataResource {
         final URI uri = new URI("/api/metadata/" + createdMetadataDto.getDocumentId());
 
         return ResponseEntity.created(uri)
-                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, createdMetadataDto.getDocumentId().toString()))
-                .body(createdMetadataDto);
+                .headers(HeaderUtil.createEntityCreationAlert(
+                        ENTITY_NAME,
+                        createdMetadataDto.getDocumentId().toString()))
+                        .body(createdMetadataDto);
     }
 
     /**
@@ -94,15 +97,15 @@ public class MetaDataResource {
      */
     @Operation(summary = "Get the metadata for Document ID",
             parameters = {
-                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
-                            description = "Authorization (Idam Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
-                            description = "Service Authorization (S2S Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.PATH, name = "documentId",
-                            description = "Document Id", required = true,
-                            schema = @Schema(type = "UUID"))})
+                @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                        description = "Authorization (Idam Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                        description = "Service Authorization (S2S Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.PATH, name = "documentId",
+                        description = "Document Id", required = true,
+                        schema = @Schema(type = "UUID"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "401", description = "Unauthorised"),

@@ -70,13 +70,14 @@ public class BookmarkServiceImpl implements BookmarkService {
      *
      * @param pageable pageable
      * @param documentId given documentId
-     * @return
+     * @return bookmark Repository
      */
     @Override
     public Page<BookmarkDTO> findAllByDocumentId(UUID documentId, Pageable pageable) {
         Optional<String> user = securityUtils.getCurrentUserLogin();
         if (user.isPresent()) {
-            return bookmarkRepository.findByDocumentIdAndCreatedBy(documentId, user.get(), pageable).map(bookmarkMapper::toDto);
+            return bookmarkRepository.findByDocumentIdAndCreatedBy(documentId, user.get(), pageable)
+                    .map(bookmarkMapper::toDto);
         } else {
             log.error(String.format("User not found for Document with Id : %s ", documentId));
             throw new BadCredentialsException("Bad credentials.");

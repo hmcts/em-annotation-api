@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.repository;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +23,6 @@ import uk.gov.hmcts.reform.em.annotation.domain.PersistentAuditEvent;
 import uk.gov.hmcts.reform.em.annotation.rest.TestSecurityConfiguration;
 import uk.gov.hmcts.reform.em.annotation.service.AuditEventService;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.HashMap;
@@ -59,7 +59,8 @@ public class CustomAuditEventRepositoryIntTest {
 
     @Before
     public void setup() {
-        customAuditEventRepository = new CustomAuditEventRepository(persistenceAuditEventRepository, auditEventConverter);
+        customAuditEventRepository =
+                new CustomAuditEventRepository(persistenceAuditEventRepository, auditEventConverter);
         persistenceAuditEventRepository.deleteAll();
 
         testUserEvent = new PersistentAuditEvent();
@@ -199,7 +200,8 @@ public class CustomAuditEventRepositoryIntTest {
 
     @Test
     public void auditEventServiceFindAllTest() {
-        AuditEventService auditEventService = new AuditEventService(persistenceAuditEventRepository, auditEventConverter);
+        AuditEventService auditEventService =
+                new AuditEventService(persistenceAuditEventRepository, auditEventConverter);
         Map<String, Object> data = new HashMap<>();
         data.put("test-key", "test-value");
         AuditEvent event = new AuditEvent("test-user", "test-type", data);
@@ -218,7 +220,8 @@ public class CustomAuditEventRepositoryIntTest {
     public void auditEventServiceFindByDatesTest() {
         Instant oneHourAgo = Instant.now().minusSeconds(3600);
         Instant oneHourAhead = Instant.now().plusSeconds(3600);
-        AuditEventService auditEventService = new AuditEventService(persistenceAuditEventRepository, auditEventConverter);
+        AuditEventService auditEventService =
+                new AuditEventService(persistenceAuditEventRepository, auditEventConverter);
         Map<String, Object> data = new HashMap<>();
         data.put("test-key", "test-value");
         AuditEvent event = new AuditEvent("test-user", "test-type", data);
@@ -235,7 +238,8 @@ public class CustomAuditEventRepositoryIntTest {
 
     @Test
     public void auditEventServiceFindTest() {
-        AuditEventService auditEventService = new AuditEventService(persistenceAuditEventRepository, auditEventConverter);
+        AuditEventService auditEventService =
+                new AuditEventService(persistenceAuditEventRepository, auditEventConverter);
         Map<String, Object> data = new HashMap<>();
         data.put("test-key", "test-value");
         AuditEvent event = new AuditEvent("test-user", "test-type", data);
