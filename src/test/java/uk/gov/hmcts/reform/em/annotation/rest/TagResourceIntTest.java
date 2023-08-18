@@ -62,7 +62,7 @@ public class TagResourceIntTest extends BaseTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         final TagResource tagResource = new TagResource(tagService);
         em.persist(new IdamDetails("system"));
         em.persist(new IdamDetails("anonymous"));
