@@ -13,7 +13,9 @@ import uk.gov.hmcts.reform.em.annotation.rest.TestSecurityConfiguration;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Test class for the ExceptionTranslator controller advice.
@@ -156,7 +158,7 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
-    public void testPSQLException() throws Exception {
+    public void testPsqlException() throws Exception {
         restLogoutMockMvc.perform(get("/test/psql-key-violation"))
                 .andExpect(status().isConflict())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));

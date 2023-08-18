@@ -39,24 +39,25 @@ public class TagResource {
      * GET  /tags/:id : get the tags "createdBy" user.
      *
      * @param createdBy the id of the user whose tags to retrieve
-     * @return the ResponseEntity with status "200" (OK) and with body the annotationDTO, or with status '404' (Not Found)
+     * @return the ResponseEntity with status "200" (OK) and with body the annotationDTO,
+     *      or with status '404' (Not Found)
      */
     @Operation(summary = "Get list of tags created by user", description = "A GET request to retrieve a list of tags",
             parameters = {
-                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
-                            description = "Authorization (Idam Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
-                            description = "Service Authorization (S2S Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.PATH, name = "createdBy",
-                            description = "Created By", required = true,
-                            schema = @Schema(type = "string"))})
+                @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                        description = "Authorization (Idam Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                        description = "Service Authorization (S2S Bearer token)", required = true,
+                        schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.PATH, name = "createdBy",
+                        description = "Created By", required = true,
+                        schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Success"),
-            @ApiResponse(responseCode = "401", description = "Unauthorised"),
-            @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Not Found"),
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @GetMapping("/tags/{createdBy}")
     public ResponseEntity<List<TagDTO>> getTagsCreatedBy(@PathVariable String createdBy) {

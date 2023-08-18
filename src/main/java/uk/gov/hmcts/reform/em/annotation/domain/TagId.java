@@ -8,7 +8,9 @@ public class TagId implements Serializable {
     private String name;
     private String createdBy;
 
-    public TagId() {}
+    public TagId() {
+
+    }
 
     public TagId(String name, String createdBy) {
         this.name = name;

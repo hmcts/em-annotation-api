@@ -16,7 +16,10 @@ import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class SecurityConfigurationTest {
@@ -43,7 +46,8 @@ class SecurityConfigurationTest {
     void jwtDecoderSetsValidator() {
         NimbusJwtDecoder nimbusJwtDecoder = mock(NimbusJwtDecoder.class);
         try (MockedStatic<JwtDecoders> jwtDecoderMockedStatic = Mockito.mockStatic(JwtDecoders.class)) {
-            jwtDecoderMockedStatic.when(() -> JwtDecoders.fromOidcIssuerLocation(anyString())).thenReturn(nimbusJwtDecoder);
+            jwtDecoderMockedStatic.when(() ->
+                    JwtDecoders.fromOidcIssuerLocation(anyString())).thenReturn(nimbusJwtDecoder);
             assertEquals(nimbusJwtDecoder, securityConfiguration.jwtDecoder());
             verify(nimbusJwtDecoder, times(1)).setJwtValidator(any());
         }

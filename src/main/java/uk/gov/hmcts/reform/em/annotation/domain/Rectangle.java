@@ -1,15 +1,15 @@
 package uk.gov.hmcts.reform.em.annotation.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A Rectangle.

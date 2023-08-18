@@ -31,7 +31,8 @@ public class AnnotationSetServiceImpl implements AnnotationSetService {
 
     private final SecurityUtils securityUtils;
 
-    public AnnotationSetServiceImpl(AnnotationSetRepository annotationSetRepository, AnnotationSetMapper annotationSetMapper,
+    public AnnotationSetServiceImpl(AnnotationSetRepository annotationSetRepository,
+                                    AnnotationSetMapper annotationSetMapper,
                                     final SecurityUtils securityUtils) {
         this.annotationSetRepository = annotationSetRepository;
         this.annotationSetMapper = annotationSetMapper;

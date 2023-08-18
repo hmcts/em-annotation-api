@@ -33,7 +33,10 @@ class JwtGrantedAuthoritiesConverterTest {
 
     @Test
     void shouldAuthoritiesEmaptyIfNoMatchingToken() {
-        Jwt jwt = new Jwt("tokenNotValid", Instant.now(), Instant.now().plusSeconds(120), Map.of("header1", "value1"), Map.of("claim1", "1"));
+        Jwt jwt = new Jwt("tokenNotValid", Instant.now(),
+                Instant.now().plusSeconds(120),
+                Map.of("header1", "value1"),
+                Map.of("claim1", "1"));
         var authorities = jwtGrantedAuthoritiesConverter.convert(jwt);
         verify(idamRepository, never()).getUserInfo(any());
         verify(idamDetailsFilterService, never()).saveIdamDetails(any());
@@ -42,7 +45,10 @@ class JwtGrantedAuthoritiesConverterTest {
 
     @Test
     void shouldHaveAuthoritiesEmaptyIfNoMatchingToken() {
-        Jwt jwt = new Jwt("tokenName", Instant.now(), Instant.now().plusSeconds(120), Map.of("header1", "value1"), Map.of("tokenName", "access_token"));
+        Jwt jwt = new Jwt("tokenName", Instant.now(),
+                Instant.now().plusSeconds(120),
+                Map.of("header1", "value1"),
+                Map.of("tokenName", "access_token"));
         var authorities = jwtGrantedAuthoritiesConverter.convert(jwt);
         verify(idamRepository, times(1)).getUserInfo(any());
         verify(idamDetailsFilterService, times(1)).saveIdamDetails(any());
