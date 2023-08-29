@@ -214,7 +214,7 @@ dependencyManagement {
             entry 'xercesImpl'
         }
         //CVE-2022-1471
-        dependencySet(group: 'org.yaml', version: '2.1') {
+        dependencySet(group: 'org.yaml', version: '2.2') {
             entry 'snakeyaml'
         }
 
