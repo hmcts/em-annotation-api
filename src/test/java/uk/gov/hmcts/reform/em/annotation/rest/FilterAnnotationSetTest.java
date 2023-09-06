@@ -110,7 +110,7 @@ public class FilterAnnotationSetTest  extends BaseTest {
         restLogoutMockMvc.perform(get("/api/annotation-sets/filter?documentId=Test")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(annotationSetDTOs)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNoContent());
     }
 
     @Test

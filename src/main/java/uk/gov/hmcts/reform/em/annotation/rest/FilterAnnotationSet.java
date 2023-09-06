@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.reform.em.annotation.rest.errors.ResourceNotFoundException;
+import uk.gov.hmcts.reform.em.annotation.rest.errors.EmptyResponseException;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationSetService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationSetDTO;
 
@@ -67,7 +67,7 @@ public class FilterAnnotationSet {
 
         return optionalAnnotationSetDTO
             .map(ResponseEntity::ok)
-            .orElseThrow(() -> new ResourceNotFoundException("Could not find annotation set for this document id#"
+            .orElseThrow(() -> new EmptyResponseException("Could not find annotation set for this document id#"
                     + documentId));
     }
 }
