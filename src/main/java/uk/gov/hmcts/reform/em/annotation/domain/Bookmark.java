@@ -1,9 +1,12 @@
 package uk.gov.hmcts.reform.em.annotation.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedBy;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.UUID;
 

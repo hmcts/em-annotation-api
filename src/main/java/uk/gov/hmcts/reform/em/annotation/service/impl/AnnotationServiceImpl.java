@@ -1,5 +1,8 @@
 package uk.gov.hmcts.reform.em.annotation.service.impl;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
 import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +23,6 @@ import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.PersistenceContext;
 
 /**
  * Service Implementation for managing Annotation.
@@ -67,7 +67,8 @@ public class AnnotationServiceImpl implements AnnotationService {
         log.debug("Request to save Annotation : {}", annotationDTO);
         final Annotation annotation = annotationMapper.toEntity(annotationDTO);
 
-        Optional<AnnotationSetDTO> existingAnnotationSet = annotationSetService.findOne(annotationDTO.getAnnotationSetId());
+        Optional<AnnotationSetDTO> existingAnnotationSet =
+                annotationSetService.findOne(annotationDTO.getAnnotationSetId());
         if (!existingAnnotationSet.isPresent()) {
             AnnotationSetDTO annotationSetDTO = new AnnotationSetDTO();
             annotationSetDTO.setId(annotationDTO.getAnnotationSetId());

@@ -4,6 +4,8 @@ import feign.FeignException;
 import feign.Request;
 import feign.RequestTemplate;
 import feign.RetryableException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.exception.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
 import org.postgresql.util.PSQLState;
@@ -12,10 +14,14 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -92,12 +98,12 @@ public class ExceptionTranslatorTestController {
     }
 
     @GetMapping("/test/psql-key-violation")
-    public void PSQLException() throws PSQLException {
+    public void psqlException() throws PSQLException {
         throw new PSQLException("duplicate key value violates unique constraint", PSQLState.CHECK_VIOLATION);
     }
 
     @GetMapping("/test/psql-exception")
-    public void PSQLKeyViolation() throws PSQLException {
+    public void psqlKeyViolation() throws PSQLException {
         throw new PSQLException("PSQL Exception", PSQLState.CHECK_VIOLATION);
     }
 

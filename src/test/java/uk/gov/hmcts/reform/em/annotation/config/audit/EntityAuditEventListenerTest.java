@@ -19,7 +19,12 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EntityAuditEventListenerTest {
@@ -42,7 +47,8 @@ public class EntityAuditEventListenerTest {
             // Allow modification on the field
             beanFactoryField.setAccessible(true);
 
-            originalBeanFactory = (BeanFactory)beanFactoryField.get(Class.forName(EntityAuditEventListener.class.getName()));
+            originalBeanFactory = (BeanFactory)beanFactoryField
+                    .get(Class.forName(EntityAuditEventListener.class.getName()));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
