@@ -57,7 +57,7 @@ def versions = [
         sonarPitest        : '0.5',
         serenity           : '3.7.0',
         serenityreporter   : '3.7.0',
-        serenityRestAssured: '3.7.0',
+        serenityRestAssured: '4.0.12',
         pact_version       : '4.0.10',
         hibernate          : '6.1.7.Final',
         logging            : '6.0.1',
