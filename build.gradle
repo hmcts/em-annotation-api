@@ -314,7 +314,7 @@ configurations {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '10.12.3'
+    toolVersion = '10.12.4'
     reportsDir = file("$project.buildDir/reports/checkstyle")
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
