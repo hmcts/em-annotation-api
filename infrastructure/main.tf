@@ -15,7 +15,6 @@ locals {
   shared_vault_name = "${var.shared_product_name}-${local.local_env}"
   tags = var.common_tags
   vaultName = "${local.app_full_name}-${var.env}"
-  count        = var.env == "perftest" ? 1 : 0
 }
 
 module "db-v11" {
@@ -153,7 +152,6 @@ data "azurerm_subnet" "postgres" {
 
 # FlexiServer v15
 module "db-v15" {
-  count                = local.count
   providers = {
     azurerm.postgres_network = azurerm.cft_vnet
   }
@@ -183,35 +181,30 @@ module "db-v15" {
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER-V15" {
-  count        = local.count
   name         = "${var.component}-POSTGRES-USER-V15"
   value        = module.db-v15.username
   key_vault_id = data.azurerm_key_vault.key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS-V15" {
-  count        = local.count
   name         = "${var.component}-POSTGRES-PASS-V15"
   value        = module.db-v15.password
   key_vault_id = data.azurerm_key_vault.key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST-V15" {
-  count        = local.count
   name         = "${var.component}-POSTGRES-HOST-V15"
   value        = module.db-v15.fqdn
   key_vault_id = data.azurerm_key_vault.key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_PORT-V15" {
-  count        = local.count
   name         = "${var.component}-POSTGRES-PORT-V15"
   value        = "5432"
   key_vault_id = data.azurerm_key_vault.key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-V15" {
-  count        = local.count
   name         = "${var.component}-POSTGRES-DATABASE-V15"
   value        = "emstitch"
   key_vault_id = data.azurerm_key_vault.key_vault.id
