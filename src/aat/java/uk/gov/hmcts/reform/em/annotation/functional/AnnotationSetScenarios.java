@@ -5,7 +5,6 @@ import io.restassured.specification.RequestSpecification;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
-import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -193,7 +192,8 @@ public class AnnotationSetScenarios {
         final UUID newDocumentId = UUID.randomUUID();
         annotationSet.put("documentId", newDocumentId);
         JSONArray annotations = annotationSet.getJSONArray("annotations");
-        annotations.put(1, extractJsonObjectFromResponse(createAnnotation(UUID.randomUUID().toString(), annotationSetId.toString())));
+        annotations.put(1, extractJsonObjectFromResponse(
+            createAnnotation(UUID.randomUUID().toString(), annotationSetId.toString())));
         annotationSet.put("annotations", annotations);
 
         request
