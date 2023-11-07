@@ -166,7 +166,7 @@ module "db-v15" {
   business_area        = "CFT"
   pgsql_databases      = [
     {
-      name : "emstitch"
+      name : "annotation"
     }
   ]
   pgsql_server_configuration = [
