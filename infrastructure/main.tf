@@ -206,6 +206,6 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT-V15" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-V15" {
   name         = "${var.component}-POSTGRES-DATABASE-V15"
-  value        = "emstitch"
+  value        = "annotation"
   key_vault_id = data.azurerm_key_vault.key_vault.id
 }
