@@ -164,9 +164,11 @@ module "db-v15" {
   pgsql_version        = "15"
   admin_user_object_id = var.jenkins_AAD_objectId
   business_area        = "CFT"
+  # The original subnet is full, this is required to use the new subnet for new databases
+  subnet_suffix        = "expanded"
   pgsql_databases      = [
     {
-      name : "emstitch"
+      name : "annotation"
     }
   ]
   pgsql_server_configuration = [
@@ -206,6 +208,6 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT-V15" {
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-V15" {
   name         = "${var.component}-POSTGRES-DATABASE-V15"
-  value        = "emstitch"
+  value        = "annotation"
   key_vault_id = data.azurerm_key_vault.key_vault.id
 }
