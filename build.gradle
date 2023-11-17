@@ -279,7 +279,12 @@ def coverageExclusionList = [
         '**uk/gov/hmcts/reform/em/annotation/info/*',
         '**uk/gov/hmcts/reform/em/annotation/data/migration/PendingMigrationScriptException*',
         '**uk/gov/hmcts/reform/em/annotation/data/migration/FlywayNoOpStrategy*',
-        '**uk/gov/hmcts/reform/em/annotation/config/FlywayConfiguration*'
+        '**uk/gov/hmcts/reform/em/annotation/config/FlywayConfiguration*',
+        '**uk/gov/hmcts/reform/em/annotation/config/BatchConfiguration*',
+        '**uk/gov/hmcts/reform/em/annotation/batch/EntityValueProcessor*',
+
+
+
 
 ]
 
