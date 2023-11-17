@@ -281,11 +281,7 @@ def coverageExclusionList = [
         '**uk/gov/hmcts/reform/em/annotation/data/migration/FlywayNoOpStrategy*',
         '**uk/gov/hmcts/reform/em/annotation/config/FlywayConfiguration*',
         '**uk/gov/hmcts/reform/em/annotation/config/BatchConfiguration*',
-        '**uk/gov/hmcts/reform/em/annotation/batch/EntityValueProcessor*',
-
-
-
-
+        '**uk/gov/hmcts/reform/em/annotation/batch/EntityValueProcessor*'
 ]
 
 jacocoTestReport {
