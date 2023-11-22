@@ -50,8 +50,8 @@ repositories {
 
 def versions = [
         postgresql         : '42.7.0',
-        springSecurity     : '6.1.5',
-        fasterXmlJackson   : '2.15.3',
+        springSecurity     : '6.2.0',
+        fasterXmlJackson   : '2.16.0',
         pitest             : '1.5.1',
         gradlePitest       : '1.3.0',
         sonarPitest        : '0.5',
@@ -127,7 +127,7 @@ dependencies {
     implementation group:'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.fasterXmlJackson
     implementation group:'com.fasterxml.jackson.core', name: 'jackson-databind',version: versions.fasterXmlJackson
     implementation group:'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
-    implementation group:'com.fasterxml.jackson.module', name: 'jackson-module-afterburner', version: versions.fasterXmlJackson
+    implementation group:'com.fasterxml.jackson.module', name: 'jackson-module-blackbird', version: versions.fasterXmlJackson
 
     implementation group: 'org.zalando', name: 'problem-spring-web', version: '0.29.1'
     implementation group: 'org.zalando', name: 'jackson-datatype-problem', version: '0.27.1'
