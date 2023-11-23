@@ -49,7 +49,7 @@ repositories {
 }
 
 def versions = [
-        postgresql         : '42.6.0',
+        postgresql         : '42.7.0',
         springSecurity     : '6.2.0',
         fasterXmlJackson   : '2.16.0',
         pitest             : '1.5.1',
