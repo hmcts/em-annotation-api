@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -40,10 +39,6 @@ public class EntityAuditEvent implements Serializable {
     @Size(max = 20)
     @Column(name = "action", length = 20, nullable = false)
     private String action;
-
-    @Lob
-    @Column(name = "entity_value")
-    private String entityValue;
 
     @Column(name = "entity_value_v2", columnDefinition = "text")
     private String entityValueV2;
@@ -93,14 +88,6 @@ public class EntityAuditEvent implements Serializable {
 
     public void setAction(String action) {
         this.action = action;
-    }
-
-    public String getEntityValue() {
-        return entityValue;
-    }
-
-    public void setEntityValue(String entityValue) {
-        this.entityValue = entityValue;
     }
 
     public String getEntityValueV2() {
@@ -167,7 +154,6 @@ public class EntityAuditEvent implements Serializable {
                 + ", entityId=" + entityId
                 + ", entityType='" + entityType + '\''
                 + ", action='" + action + '\''
-                + ", entityValue='" + entityValue + '\''
                 + ", commitVersion=" + commitVersion
                 + ", modifiedBy='" + modifiedBy + '\''
                 + ", modifiedDate=" + modifiedDate
