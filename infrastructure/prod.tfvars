@@ -7,5 +7,5 @@ sku_name = "GP_Gen5_8"
 sku_capacity = "8"
 
 //v15 DB
-pgsql_sku        = "GP_Standard_D8ds_v4"
+pgsql_sku        = "GP_Standard_D4ds_v4"
 pgsql_storage_mb = "262144"
