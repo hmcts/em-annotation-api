@@ -43,9 +43,6 @@ public class EntityAuditEvent implements Serializable {
     @Column(name = "entity_value_v2", columnDefinition = "text")
     private String entityValueV2;
 
-    @Column(name = "entity_value_migrated")
-    private boolean entityValueMigrated;
-
     @Column(name = "commit_version")
     private Integer commitVersion;
 
@@ -96,14 +93,6 @@ public class EntityAuditEvent implements Serializable {
 
     public void setEntityValueV2(String entityValueV2) {
         this.entityValueV2 = entityValueV2;
-    }
-
-    public boolean isEntityValueMigrated() {
-        return entityValueMigrated;
-    }
-
-    public void setEntityValueMigrated(boolean entityValueMigrated) {
-        this.entityValueMigrated = entityValueMigrated;
     }
 
     public Integer getCommitVersion() {
