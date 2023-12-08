@@ -3,14 +3,6 @@ server:
 spring:
   application:
     name: EM Annotation App
-  batch:
-    entityValueCopy:
-      cronJobSchedule: ${ENTITY_VALUE_COPY_CRONJOB_SCHEDULE:0 0/5 * * * *} # Every 5 minutes
-      pageSize: ${ENTITY_VALUE_COPY_PAGE_SIZE:50}
-      chunkSize: ${ENTITY_VALUE_COPY_CHUNK_SIZE:50}
-      maxItemCount: ${ENTITY_VALUE_MAX_ITEM_COUNT:50}
-      enabled: ${ENTITY_VALUE_COPY_ENABLED:true}
-    initialize-schema: never
   config:
     import: "optional:configtree:/mnt/secrets/em-anno/"
   jpa:
