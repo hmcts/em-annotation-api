@@ -65,7 +65,7 @@ def versions = [
         junit5             : '5.10.1',
         log4JVersion       : '2.20.0',
         mapstruct          : '1.5.5.Final',
-        springcloud        : '4.1.0-RC1',
+        springcloud        : '4.1.0',
         shedlock           : '5.10.0',
 ]
 
