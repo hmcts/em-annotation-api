@@ -126,7 +126,7 @@ variable "aks_subscription_id" {}
 
 variable "pgsql_sku" {
   description = "The PGSql flexible server instance sku"
-  default     = "GP_Standard_D4ds_v4" // This needs to be moved down to 2 core after migration.
+  default     = "GP_Standard_D2ds_v4" // This needs to be moved down to 2 core after migration.
 }
 
 variable "pgsql_storage_mb" {
