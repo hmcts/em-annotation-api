@@ -110,11 +110,11 @@ variable database_name_v11 {
 }
 
 variable sku_name {
-  default = "GP_Gen5_4"
+  default = "GP_Gen5_2"
 }
 
 variable sku_capacity {
-  default = "4"
+  default = "2"
 }
 
 variable database_storage_mb {
