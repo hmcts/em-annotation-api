@@ -18,8 +18,8 @@ java:
     SPRING_DATASOURCE_PORT: 5432
     SPRING_DATASOURCE_NAME: annotation
     SPRING_DATASOURCE_OPTIONS: "?sslmode=require"
-    SPRING_DATASOURCE_HOST: em-anno-postgres-db-v11-{{ .Values.global.environment }}.postgres.database.azure.com
-    SPRING_DATASOURCE_USERNAME: annotation@em-anno-postgres-db-v11-{{ .Values.global.environment }}
+    SPRING_DATASOURCE_HOST: em-anno-postgres-db-v15-{{ .Values.global.environment }}.postgres.database.azure.com
+    SPRING_DATASOURCE_USERNAME: pgadmin
     DB_CONNECTION_TIMEOUT: 5000
     RUN_DB_MIGRATION_ON_STARTUP: false
     IDAM_API_BASE_URI: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
