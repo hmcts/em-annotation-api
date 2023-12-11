@@ -110,11 +110,11 @@ variable database_name_v11 {
 }
 
 variable sku_name {
-  default = "GP_Gen5_4"
+  default = "GP_Gen5_2"
 }
 
 variable sku_capacity {
-  default = "4"
+  default = "2"
 }
 
 variable database_storage_mb {
@@ -126,7 +126,7 @@ variable "aks_subscription_id" {}
 
 variable "pgsql_sku" {
   description = "The PGSql flexible server instance sku"
-  default     = "GP_Standard_D4ds_v4" // This needs to be moved down to 2 core after migration.
+  default     = "GP_Standard_D2ds_v4" // This needs to be moved down to 2 core after migration.
 }
 
 variable "pgsql_storage_mb" {
