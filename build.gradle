@@ -220,47 +220,9 @@ dependencyManagement {
         dependencySet(group: 'xerces', version: '2.12.2') {
             entry 'xercesImpl'
         }
-        //CVE-2022-1471
-        dependencySet(group: 'org.yaml', version: '2.2') {
-            entry 'snakeyaml'
-        }
-
-        //CVE-2023-24998
-        dependencySet(group: 'commons-fileupload', version: '1.5') {
-            entry 'commons-fileupload'
-        }
         //CVE-2020-13956
         dependencySet(group: 'org.apache.httpcomponents', version: '4.5.14') {
             entry 'fluent-hc'
-        }
-
-        //CVE-2023-41080
-        dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.16') {
-            entry 'tomcat-embed-websocket'
-            entry 'tomcat-embed-core'
-        }
-
-        // CVE-2023-44487
-        dependencySet(group: 'io.netty', version: '4.1.101.Final') {
-              entry 'netty-buffer'
-              entry 'netty-codec'
-              entry 'netty-codec-dns'
-              entry 'netty-codec-http'
-              entry 'netty-codec-http2'
-              entry 'netty-codec-socks'
-              entry 'netty-common'
-              entry 'netty-handler'
-              entry 'netty-handler-proxy'
-              entry 'netty-resolver'
-              entry 'netty-resolver-dns'
-              entry 'netty-resolver-dns-classes-macos'
-              entry 'netty-resolver-dns-native-macos'
-              entry 'netty-transport'
-              entry 'netty-transport-classes-epoll'
-              entry 'netty-transport-classes-kqueue'
-              entry 'netty-transport-native-epoll'
-              entry 'netty-transport-native-kqueue'
-              entry 'netty-transport-native-unix-common'
         }
 
         //CVE-2023-6378
