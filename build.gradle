@@ -5,8 +5,8 @@ plugins {
     id 'application'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'org.springframework.boot' version '3.2.0'
-    id 'uk.gov.hmcts.java' version '0.12.50'
-    id 'org.owasp.dependencycheck' version '9.0.3'
+    id 'uk.gov.hmcts.java' version '0.12.52'
+    id 'org.owasp.dependencycheck' version '9.0.6'
     id 'com.github.ben-manes.versions' version '0.50.0'
     id 'org.sonarqube' version '4.4.1.3373'
     id 'jacoco'
@@ -14,7 +14,7 @@ plugins {
     id 'au.com.dius.pact' version '4.2.14'
     id "info.solidsoft.pitest" version '1.9.0'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '3.0.0'
-    id 'com.github.hmcts.rse-cft-lib' version '0.19.935'
+    id 'com.github.hmcts.rse-cft-lib' version '0.19.967'
     id 'org.flywaydb.flyway' version '9.22.3'
 }
 
@@ -50,7 +50,7 @@ repositories {
 }
 
 def versions = [
-        postgresql         : '42.7.0',
+        postgresql         : '42.7.1',
         springSecurity     : '6.2.0',
         fasterXmlJackson   : '2.16.0',
         pitest             : '1.5.1',
@@ -60,12 +60,12 @@ def versions = [
         serenityreporter   : '3.7.0',
         serenityRestAssured: '3.7.0',
         pact_version       : '4.0.10',
-        hibernate          : '6.4.0.Final',
+        hibernate          : '6.4.1.Final',
         logging            : '6.0.1',
         junit5             : '5.10.1',
         log4JVersion       : '2.20.0',
         mapstruct          : '1.5.5.Final',
-        springcloud        : '4.1.0-RC1',
+        springcloud        : '4.1.0',
 ]
 
 sourceSets {
@@ -134,7 +134,7 @@ dependencies {
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
     implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
-    implementation group: 'commons-validator', name: 'commons-validator', version: '1.7'
+    implementation group: 'commons-validator', name: 'commons-validator', version: '1.8.0'
     implementation group: 'org.ehcache', name: 'ehcache', version: '3.10.8'
 
     implementation group:'org.hibernate', name: 'hibernate-core', version: versions.hibernate
@@ -154,7 +154,7 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.1.1'
-    implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.2'
+    implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.3'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: versions.springcloud
 
     implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.30'
@@ -215,47 +215,9 @@ dependencyManagement {
         dependencySet(group: 'xerces', version: '2.12.2') {
             entry 'xercesImpl'
         }
-        //CVE-2022-1471
-        dependencySet(group: 'org.yaml', version: '2.2') {
-            entry 'snakeyaml'
-        }
-
-        //CVE-2023-24998
-        dependencySet(group: 'commons-fileupload', version: '1.5') {
-            entry 'commons-fileupload'
-        }
         //CVE-2020-13956
         dependencySet(group: 'org.apache.httpcomponents', version: '4.5.14') {
             entry 'fluent-hc'
-        }
-
-        //CVE-2023-41080
-        dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.16') {
-            entry 'tomcat-embed-websocket'
-            entry 'tomcat-embed-core'
-        }
-
-        // CVE-2023-44487
-        dependencySet(group: 'io.netty', version: '4.1.101.Final') {
-              entry 'netty-buffer'
-              entry 'netty-codec'
-              entry 'netty-codec-dns'
-              entry 'netty-codec-http'
-              entry 'netty-codec-http2'
-              entry 'netty-codec-socks'
-              entry 'netty-common'
-              entry 'netty-handler'
-              entry 'netty-handler-proxy'
-              entry 'netty-resolver'
-              entry 'netty-resolver-dns'
-              entry 'netty-resolver-dns-classes-macos'
-              entry 'netty-resolver-dns-native-macos'
-              entry 'netty-transport'
-              entry 'netty-transport-classes-epoll'
-              entry 'netty-transport-classes-kqueue'
-              entry 'netty-transport-native-epoll'
-              entry 'netty-transport-native-kqueue'
-              entry 'netty-transport-native-unix-common'
         }
 
         //CVE-2023-6378

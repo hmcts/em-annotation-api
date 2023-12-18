@@ -66,14 +66,6 @@ variable em_anno_app_url {
   default = "em-anno"
 }
 
-variable postgresql_user {
-  default = "annotation"
-}
-
-variable database_name {
-  default = "annotation"
-}
-
 variable managed_identity_object_id {
   default = ""
 }
@@ -96,29 +88,6 @@ variable enable_idam_healthcheck {
 
 variable enable_s2s_healthcheck {
     default = "false"
-}
-
-////////////////////////////////////////////////
-// db11
-////////////////////////////////////////////////
-variable postgresql_user_v11 {
-  default = "annotation"
-}
-
-variable database_name_v11 {
-  default = "annotation"
-}
-
-variable sku_name {
-  default = "GP_Gen5_4"
-}
-
-variable sku_capacity {
-  default = "4"
-}
-
-variable database_storage_mb {
-  default     = "51200"
 }
 
 /// v15 DB Details
