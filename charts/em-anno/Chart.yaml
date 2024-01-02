@@ -9,10 +9,6 @@ dependencies:
   - name: java
     version: 5.0.3
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
-  - name: xui-webapp
-    version: ~1.0.0
-    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
-    condition: xui-webapp.enabled
   - name: idam-pr
     version: ~2.3.0
     repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
