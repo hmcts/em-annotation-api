@@ -17,3 +17,7 @@ dependencies:
     version: ~2.3.0
     repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
     condition: idam-pr.enabled
+  - name: nodejs
+    version: 3.0.2
+    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
+    condition: xui-webapp.enabled
