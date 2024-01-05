@@ -1,5 +1,10 @@
 import uk.gov.hmcts.rse.AuthMode
 
+buildscript {
+    dependencies {
+        classpath("org.flywaydb:flyway-database-postgresql:10.4.1")
+    }
+}
 
 plugins {
     id 'application'
