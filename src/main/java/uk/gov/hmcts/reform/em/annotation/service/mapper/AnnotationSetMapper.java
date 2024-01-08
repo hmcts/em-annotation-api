@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.service.mapper;
 
+import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import uk.gov.hmcts.reform.em.annotation.domain.AnnotationSet;
@@ -10,10 +11,10 @@ import java.util.UUID;
 /**
  * Mapper for the entity AnnotationSet and its DTO AnnotationSetDTO.
  */
-@Mapper(componentModel = "spring", uses = {AnnotationMapper.class})
+@Mapper(collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED,
+    componentModel = "spring", uses = {AnnotationMapper.class})
 public interface AnnotationSetMapper extends EntityMapper<AnnotationSetDTO, AnnotationSet> {
 
-    @Mapping(target = "annotations", ignore = true)
     @Mapping(target = "createdByDetails", ignore = true)
     @Mapping(target = "lastModifiedByDetails", ignore = true)
     AnnotationSet toEntity(AnnotationSetDTO annotationSetDTO);

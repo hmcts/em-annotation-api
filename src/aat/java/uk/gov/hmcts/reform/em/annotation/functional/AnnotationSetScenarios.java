@@ -7,6 +7,7 @@ import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
 import org.hamcrest.Matchers;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,6 +24,7 @@ import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SpringBootTest(classes = {TestUtil.class})
@@ -182,6 +184,30 @@ public class AnnotationSetScenarios {
     }
 
     @Test
+    public void shouldReturn200WhenUpdateAnnotationSetWithNewAnnotation() {
+        final UUID annotationSetId = UUID.randomUUID();
+        final UUID documentId = UUID.randomUUID();
+        final ValidatableResponse response = createAnnotationSet(annotationSetId, documentId);
+        final JSONObject annotationSet = extractJsonObjectFromResponse(response);
+        final UUID newDocumentId = UUID.randomUUID();
+        annotationSet.put("documentId", newDocumentId);
+        JSONArray annotations = annotationSet.getJSONArray("annotations");
+        annotations.put(1, extractJsonObjectFromResponse(
+            createAnnotation(UUID.randomUUID().toString(), annotationSetId.toString())));
+        annotationSet.put("annotations", annotations);
+
+        request
+            .body(annotationSet.toString())
+            .put("/api/annotation-sets")
+            .then()
+            .statusCode(200)
+            .body("id", equalTo(annotationSetId.toString()))
+            .body("documentId", is(newDocumentId.toString()))
+            .body("annotations", hasSize(2))
+            .log().all();
+    }
+
+    @Test
     public void shouldReturn400WhenUpdateAnnotationSetWithoutId() {
         final UUID annotationSetId = UUID.randomUUID();
         final UUID documentId = UUID.randomUUID();
@@ -288,8 +314,56 @@ public class AnnotationSetScenarios {
         final JSONObject annotationSet = new JSONObject();
         annotationSet.put("documentId", documentId);
         annotationSet.put("id", annotationSetId.toString());
+        final JSONArray annotations = new JSONArray();
+        final JSONObject annotation = extractJsonObjectFromResponse(
+            createAnnotation(UUID.randomUUID().toString(), annotationSetId.toString()));
+        annotations.put(0, annotation);
+        annotationSet.put("annotations", annotations);
+
 
         return annotationSet;
+    }
+
+    @NotNull
+    private ValidatableResponse createAnnotation(String annotationId, String annotationSetId) {
+        final JSONObject annotation = createAnnotationPayload(annotationId, annotationSetId);
+        return request
+            .body(annotation)
+            .post("/api/annotations")
+            .then()
+            .statusCode(201)
+            .log().all();
+    }
+
+    @NotNull
+    private JSONObject createAnnotationPayload(String annotationId, String annotationSetId) {
+        final JSONObject createAnnotations = new JSONObject();
+        createAnnotations.put("annotationSetId", annotationSetId);
+        createAnnotations.put("id", annotationId);
+        createAnnotations.put("annotationType", "highlight");
+        createAnnotations.put("page", 1);
+        createAnnotations.put("color", "d1d1d1");
+
+        final JSONArray comments = new JSONArray();
+        final JSONObject comment = new JSONObject();
+        comment.put("content", "text");
+        comment.put("annotationId", annotationId);
+        comment.put("id", UUID.randomUUID().toString());
+        comments.put(0, comment);
+        createAnnotations.put("comments", comments);
+
+        final JSONArray rectangles = new JSONArray();
+        final JSONObject rectangle = new JSONObject();
+        rectangle.put("id", UUID.randomUUID().toString());
+        rectangle.put("annotationId", annotationId);
+        rectangle.put("x", 0f);
+        rectangle.put("y", 0f);
+        rectangle.put("width", 10f);
+        rectangle.put("height", 11f);
+        rectangles.put(0, rectangle);
+        createAnnotations.put("rectangles", rectangles);
+
+        return createAnnotations;
     }
 
 
