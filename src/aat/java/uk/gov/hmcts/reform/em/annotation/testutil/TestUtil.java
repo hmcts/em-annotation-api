@@ -19,8 +19,8 @@ import java.util.stream.Stream;
 
 @Service
 @ComponentScan({"uk.gov.hmcts.reform.em.test.idam",
-        "uk.gov.hmcts.reform.em.test.s2s",
-        "uk.gov.hmcts.reform.em.test.ccddata"})
+    "uk.gov.hmcts.reform.em.test.s2s",
+    "uk.gov.hmcts.reform.em.test.ccddata"})
 @EnableAutoConfiguration
 public class TestUtil {
 

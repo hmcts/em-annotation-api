@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.ccd.client.CoreCaseDataApi;
-import uk.gov.hmcts.reform.ccd.client.model.*;
+import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 import uk.gov.hmcts.reform.em.annotation.config.CommentHeaderConfig;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 
@@ -62,8 +62,9 @@ public class CcdService {
                 stringBuilder.append(JsonPath.read(jsonObject.toString(), path).toString());
                 stringBuilder.append(" ");
             } catch (PathNotFoundException ignored) {
+                //ignored
             }
-        };
+        }
         return stringBuilder.toString().trim();
     }
 

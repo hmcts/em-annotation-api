@@ -96,7 +96,7 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void ShouldReturn201WhenCreateNewAnnotationWithCaseId() throws Exception {
+    public void shouldReturn201WhenCreateNewAnnotationWithCaseId() throws Exception {
         CaseDetails caseDetails = testUtil.createCase("PUBLICLAW", "CCD_BUNDLE_MVP_TYPE_ASYNC",
                 objectMapper.readTree(caseData));
         String caseId = String.valueOf(caseDetails.getId());
