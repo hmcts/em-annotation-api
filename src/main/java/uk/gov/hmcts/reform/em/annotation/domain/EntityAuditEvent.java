@@ -1,19 +1,18 @@
 package uk.gov.hmcts.reform.em.annotation.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "jhi_entity_audit_event")
@@ -41,9 +40,8 @@ public class EntityAuditEvent implements Serializable {
     @Column(name = "action", length = 20, nullable = false)
     private String action;
 
-    @Lob
-    @Column(name = "entity_value")
-    private String entityValue;
+    @Column(name = "entity_value_v2", columnDefinition = "text")
+    private String entityValueV2;
 
     @Column(name = "commit_version")
     private Integer commitVersion;
@@ -89,12 +87,12 @@ public class EntityAuditEvent implements Serializable {
         this.action = action;
     }
 
-    public String getEntityValue() {
-        return entityValue;
+    public String getEntityValueV2() {
+        return entityValueV2;
     }
 
-    public void setEntityValue(String entityValue) {
-        this.entityValue = entityValue;
+    public void setEntityValueV2(String entityValueV2) {
+        this.entityValueV2 = entityValueV2;
     }
 
     public Integer getCommitVersion() {
@@ -145,7 +143,6 @@ public class EntityAuditEvent implements Serializable {
                 + ", entityId=" + entityId
                 + ", entityType='" + entityType + '\''
                 + ", action='" + action + '\''
-                + ", entityValue='" + entityValue + '\''
                 + ", commitVersion=" + commitVersion
                 + ", modifiedBy='" + modifiedBy + '\''
                 + ", modifiedDate=" + modifiedDate

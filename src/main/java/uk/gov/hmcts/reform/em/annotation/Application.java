@@ -7,10 +7,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @SuppressWarnings("HideUtilityClassConstructor")
 @SpringBootApplication(scanBasePackages = {
-        "uk.gov.hmcts.reform.em.annotation",
-        "uk.gov.hmcts.reform.authorisation",
-        "uk.gov.hmcts.reform.idam.client",
-        "uk.gov.hmcts.reform.ccd.client"}
+    "uk.gov.hmcts.reform.em.annotation",
+    "uk.gov.hmcts.reform.authorisation",
+    "uk.gov.hmcts.reform.idam.client",
+    "uk.gov.hmcts.reform.ccd.client"}
 )
 public class Application {
     public static void main(String[] args) {

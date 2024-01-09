@@ -1,10 +1,24 @@
 package uk.gov.hmcts.reform.em.annotation.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * A Annotation.
@@ -35,9 +49,9 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
             name = "annotation_tags",
             joinColumns = @JoinColumn(name = "annotation_id"),
             inverseJoinColumns = {
-                    @JoinColumn(name = "name", referencedColumnName = "name"),
-                    @JoinColumn(name = "createdBy", referencedColumnName = "created_by")
-    })
+                @JoinColumn(name = "name", referencedColumnName = "name"),
+                @JoinColumn(name = "createdBy", referencedColumnName = "created_by")
+                })
     private Set<Tag> tags = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "annotation", cascade = CascadeType.ALL, orphanRemoval = true)

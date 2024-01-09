@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.em.annotation.rest;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
@@ -22,6 +23,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class TestUtil {
 
+    private TestUtil() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instatiated");
+    }
+
     /** MediaType for JSON UTF8. */
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(
             MediaType.APPLICATION_JSON.getType(),
@@ -39,7 +44,7 @@ public class TestUtil {
             throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-
+        mapper.registerModule(new Jdk8Module());
         JavaTimeModule module = new JavaTimeModule();
         mapper.registerModule(module);
 

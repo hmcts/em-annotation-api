@@ -166,3 +166,9 @@ configuration:
       PUBLICLAW:
         - caseTitle
         - caseOwner
+
+task:
+  env: ${TASK_ENV:documentTaskLock-local}
+
+scheduling:
+  enabled: true
