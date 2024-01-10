@@ -19,7 +19,6 @@ public class JacksonConfiguration {
     }
 
     /*
-
      * Jackson BlackbirdModule module to speed up serialization/deserialization.
      */
     @Bean

@@ -12,8 +12,8 @@ import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 import uk.gov.hmcts.reform.em.annotation.config.CommentHeaderConfig;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -38,7 +38,7 @@ public class CcdService {
     }
 
     public String buildCommentHeader(AnnotationDTO annotationDTO, String authorisation) {
-        HashMap<String, ArrayList<String>> jurisdictionPaths = commentHeaderConfig.getJurisdictionPaths();
+        Map<String, List<String>> jurisdictionPaths = commentHeaderConfig.getJurisdictionPaths();
 
         if (useExistingCommentHeader(annotationDTO, jurisdictionPaths)) {
             return annotationDTO.getCommentHeader();
@@ -46,7 +46,7 @@ public class CcdService {
 
         CaseDetails caseDetails = getCaseDetails(authorisation, annotationDTO.getCaseId());
         JSONObject jsonObject = new JSONObject(caseDetails.getData());
-        ArrayList<String> paths = jurisdictionPaths.get(annotationDTO.getJurisdiction());
+        List<String> paths = jurisdictionPaths.get(annotationDTO.getJurisdiction());
 
         String commentHeader = buildCommentHeaderString(jsonObject, paths);
         if (commentHeader.isEmpty()) {
@@ -55,7 +55,7 @@ public class CcdService {
         return commentHeader;
     }
 
-    private String buildCommentHeaderString(JSONObject jsonObject, ArrayList<String> paths) {
+    private String buildCommentHeaderString(JSONObject jsonObject, List<String> paths) {
         StringBuilder stringBuilder = new StringBuilder();
         for (String path : paths) {
             try {
@@ -69,7 +69,7 @@ public class CcdService {
     }
 
     private boolean useExistingCommentHeader(AnnotationDTO annotationDTO,
-                                             HashMap<String, ArrayList<String>> jurisdictionPaths) {
+                                             Map<String, List<String>> jurisdictionPaths) {
         if (Objects.isNull(annotationDTO.getCaseId())) {
             return true;
         }

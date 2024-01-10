@@ -51,7 +51,7 @@ public class CcdServiceTest {
             .callbackResponseStatus("SUCCESS")
             .jurisdiction("TEST_jurisdiction")
             .build();
-    private final HashMap<String, ArrayList<String>> jurisdictionPaths = new HashMap<>();
+    private final Map<String, List<String>> jurisdictionPaths = new HashMap<>();
 
     private AnnotationDTO annotationDTO;
 

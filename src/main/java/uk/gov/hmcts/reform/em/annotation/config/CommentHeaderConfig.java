@@ -3,15 +3,16 @@ package uk.gov.hmcts.reform.em.annotation.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Configuration
 @ConfigurationProperties(prefix = "configuration.comment-header")
 public class CommentHeaderConfig {
-    private final HashMap<String, ArrayList<String>> jurisdictionPaths = new HashMap<>();
+    private final Map<String, List<String>> jurisdictionPaths = new HashMap<>();
 
-    public HashMap<String, ArrayList<String>> getJurisdictionPaths() {
+    public Map<String, List<String>> getJurisdictionPaths() {
         return jurisdictionPaths;
     }
 }
