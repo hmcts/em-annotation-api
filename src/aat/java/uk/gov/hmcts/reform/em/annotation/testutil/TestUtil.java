@@ -2,11 +2,14 @@ package uk.gov.hmcts.reform.em.annotation.testutil;
 
 import io.restassured.specification.RequestSpecification;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import net.serenitybdd.rest.SerenityRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
+import uk.gov.hmcts.reform.em.test.ccddata.CcdDataHelper;
 import uk.gov.hmcts.reform.em.test.idam.IdamHelper;
 import uk.gov.hmcts.reform.em.test.s2s.S2sHelper;
 
@@ -15,7 +18,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-@ComponentScan({"uk.gov.hmcts.reform.em.test.idam", "uk.gov.hmcts.reform.em.test.s2s"})
+@ComponentScan({"uk.gov.hmcts.reform.em.test.idam",
+    "uk.gov.hmcts.reform.em.test.s2s",
+    "uk.gov.hmcts.reform.em.test.ccddata"})
 @EnableAutoConfiguration
 public class TestUtil {
 
@@ -25,23 +30,33 @@ public class TestUtil {
     @Autowired
     private S2sHelper s2sHelper;
 
+    @Autowired
+    private CcdDataHelper ccdDataHelper;
+
     private String idamAuth;
     private String s2sAuth;
 
     private UUID documentId = UUID.randomUUID();
 
+    private final String username = "emAnnotationTestUser@test.local";
+
     @PostConstruct
     void postConstruct() {
         SerenityRest.useRelaxedHTTPSValidation();
-        idamHelper.createUser("a@b.com", Stream.of("caseworker").collect(Collectors.toList()));
-        idamAuth = idamHelper.authenticateUser("a@b.com");
+        idamHelper.createUser(username, Stream.of("caseworker", "caseworker-publiclaw").collect(Collectors.toList()));
+        idamAuth = idamHelper.authenticateUser(username);
         s2sAuth = s2sHelper.getS2sToken();
+    }
+
+    @PreDestroy
+    void preDestroy() {
+        idamHelper.deleteUser(username);
     }
 
     public RequestSpecification authRequest() {
         return SerenityRest
                 .given()
-                .header("Authorization", idamHelper.authenticateUser("a@b.com"))
+                .header("Authorization", idamHelper.authenticateUser(username))
                 .header("ServiceAuthorization", s2sHelper.getS2sToken());
     }
 
@@ -94,6 +109,10 @@ public class TestUtil {
         return SerenityRest
                 .given()
                 .header("ServiceAuthorization", s2sAuth);
+    }
+
+    public CaseDetails createCase(String jurisdiction, String caseType, Object data) {
+        return ccdDataHelper.createCase(username, jurisdiction, caseType, "createCase", data);
     }
 
 }

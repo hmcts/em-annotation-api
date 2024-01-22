@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
@@ -29,6 +30,7 @@ import uk.gov.hmcts.reform.em.annotation.rest.errors.BadRequestAlertException;
 import uk.gov.hmcts.reform.em.annotation.rest.util.HeaderUtil;
 import uk.gov.hmcts.reform.em.annotation.rest.util.PaginationUtil;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
+import uk.gov.hmcts.reform.em.annotation.service.CcdService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 
 import java.net.URI;
@@ -51,8 +53,11 @@ public class AnnotationResource {
 
     private final AnnotationService annotationService;
 
-    public AnnotationResource(AnnotationService annotationService) {
+    private final CcdService ccdService;
+
+    public AnnotationResource(AnnotationService annotationService, CcdService ccdService) {
         this.annotationService = annotationService;
+        this.ccdService = ccdService;
     }
 
     /**
@@ -78,12 +83,16 @@ public class AnnotationResource {
         @ApiResponse(responseCode = "403", description = "Forbidden"),
     })
     @PostMapping("/annotations")
-    public ResponseEntity<AnnotationDTO> createAnnotation(@RequestBody AnnotationDTO annotationDTO)
-            throws URISyntaxException {
+    public ResponseEntity<AnnotationDTO> createAnnotation(HttpServletRequest request,
+            @RequestBody AnnotationDTO annotationDTO) throws URISyntaxException {
         log.debug("REST request to save Annotation : {}", annotationDTO);
         if (annotationDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+
+        annotationDTO.setCommentHeader(
+                ccdService.buildCommentHeader(annotationDTO, request.getHeader("Authorization")));
+
         try {
             annotationService.save(annotationDTO);
         } catch (PSQLException | ConstraintViolationException | DataIntegrityViolationException exception) {

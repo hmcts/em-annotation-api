@@ -34,6 +34,12 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String documentId;
 
+    private String caseId;
+
+    private String jurisdiction;
+
+    private String commentHeader;
+
     public String getDocumentId() {
         return documentId;
     }
@@ -106,6 +112,30 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
         this.color = color;
     }
 
+    public String getCaseId() {
+        return caseId;
+    }
+
+    public void setCaseId(String caseId) {
+        this.caseId = caseId;
+    }
+
+    public String getJurisdiction() {
+        return jurisdiction;
+    }
+
+    public void setJurisdiction(String jurisdiction) {
+        this.jurisdiction = jurisdiction;
+    }
+
+    public String getCommentHeader() {
+        return commentHeader;
+    }
+
+    public void setCommentHeader(String commentHeader) {
+        this.commentHeader = commentHeader;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -134,6 +164,9 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
                 + ", tags=" + tags
                 + ", rectangles=" + rectangles
                 + ", documentId='" + documentId + '\''
+                + ", caseId='" + caseId + '\''
+                + ", jurisdiction='" + jurisdiction + '\''
+                + ", commentHeader='" + commentHeader + '\''
                 + '}';
     }
 

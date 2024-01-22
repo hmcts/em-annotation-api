@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.em.annotation.functional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
@@ -43,6 +46,16 @@ public class AnnotationScenarios {
 
     private RequestSpecification request;
     private RequestSpecification unAuthenticatedRequest;
+
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
+    public final String caseData = "{\n"
+            + "    \"caseTitle\": \"title\",\n"
+            + "    \"caseOwner\": \"owner\",\n"
+            + "    \"caseCreationDate\": null,\n"
+            + "    \"caseDescription\": null,\n"
+            + "    \"caseComments\": null\n"
+            + "  }";
 
     @Before
     public void setupRequestSpecification() {
@@ -79,6 +92,48 @@ public class AnnotationScenarios {
                 .body("rectangles[0].height", is(11f))
                 .header("Location", equalTo("/api/annotations/" + annotationId))
                 .log().all();
+
+    }
+
+    @Test
+    public void shouldReturn201WhenCreateNewAnnotationWithCaseId() throws Exception {
+        CaseDetails caseDetails = testUtil.createCase("PUBLICLAW", "CCD_BUNDLE_MVP_TYPE_ASYNC",
+                objectMapper.readTree(caseData));
+        String caseId = String.valueOf(caseDetails.getId());
+
+        final String annotationSetId = createAnnotationSet();
+        final String annotationId = UUID.randomUUID().toString();
+
+        JSONObject annotation = createAnnotationPayload(annotationId, annotationSetId);
+
+        annotation.put("jurisdiction", "PUBLICLAW");
+        annotation.put("caseId", caseId);
+
+        final ValidatableResponse response = request
+            .body(annotation)
+            .post("/api/annotations")
+            .then()
+            .statusCode(201)
+            .log().all();
+
+        response
+            .statusCode(201)
+            .body("id", equalTo(annotationId))
+            .body("page", is(1))
+            .body("color", is("d1d1d1"))
+            .body("comments", Matchers.hasSize(1))
+            .body("comments[0].content", is("text"))
+            .body("comments[0].annotationId", is(annotationId))
+            .body("rectangles", Matchers.hasSize(1))
+            .body("rectangles[0].annotationId", is(annotationId))
+            .body("rectangles[0].x", is(0f))
+            .body("rectangles[0].y", is(0f))
+            .body("rectangles[0].width", is(10f))
+            .body("rectangles[0].height", is(11f))
+            .body("caseId", is(caseId))
+            .body("jurisdiction", is("PUBLICLAW"))
+            .body("commentHeader", is("title owner"))
+            .header("Location", equalTo("/api/annotations/" + annotationId)).log().all();
 
     }
 

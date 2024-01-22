@@ -53,6 +53,7 @@ withNightlyPipeline(type, product, component) {
     env.S2S_BASE_URI = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
     env.IDAM_WEBSHOW_WHITELIST = 'https://em-show-aat.service.core-compute-aat.internal/oauth2/callback'
     env.DM_STORE_APP_URL = 'http://dm-store-aat.service.core-compute-aat.internal'
+    env.CCD_DATA_API_URL = 'http://ccd-data-store-api-aat.service.core-compute-aat.internal'
 
     env.TEST_URL = "http://em-anno-aat.service.core-compute-aat.internal"
 
