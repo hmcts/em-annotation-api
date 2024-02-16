@@ -2,7 +2,7 @@ import uk.gov.hmcts.rse.AuthMode
 
 buildscript {
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:10.7.1")
+        classpath("org.flywaydb:flyway-database-postgresql:10.8.1")
     }
 }
 
@@ -19,8 +19,8 @@ plugins {
     id 'au.com.dius.pact' version '4.2.14'
     id "info.solidsoft.pitest" version '1.15.0'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '3.0.0'
-    id 'com.github.hmcts.rse-cft-lib' version '0.19.1022'
-    id 'org.flywaydb.flyway' version '10.7.1'
+    id 'com.github.hmcts.rse-cft-lib' version '0.19.1055'
+    id 'org.flywaydb.flyway' version '10.8.1'
 }
 
 apply plugin: 'java'
@@ -65,7 +65,7 @@ def versions = [
         serenityreporter   : '3.7.0',
         serenityRestAssured: '3.7.0',
         pact_version       : '4.0.10',
-        hibernate          : '6.4.3.Final',
+        hibernate          : '6.4.4.Final',
         logging            : '6.1.4',
         junit5             : '5.10.2',
         log4JVersion       : '2.20.0',
@@ -135,8 +135,8 @@ dependencies {
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.3.0'
     implementation group: 'com.google.guava', name: 'guava', version: '33.0.0-jre'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '10.7.1'
-    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '10.7.1'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '10.8.1'
+    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '10.8.1'
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
     implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
@@ -160,7 +160,7 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
 
     implementation group: 'com.github.hmcts', name: 'core-case-data-store-client', version: '4.9.2'
-    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.1.1'
+    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.1.2'
     implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.3'
     
     implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.9.0'
@@ -194,7 +194,7 @@ dependencies {
         exclude group: 'org.apache.commons', module: 'commons-lang3'
     }
 
-    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.19.4'
+    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.19.5'
 
     testImplementation group: 'org.mockito', name: 'mockito-inline', version: '5.2.0'
 
@@ -206,7 +206,7 @@ dependencies {
     contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version:versions.junit5
     contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:versions.junit5
 
-    aatImplementation group: 'org.json', name: 'json', version: '20231013'
+    aatImplementation group: 'org.json', name: 'json', version: '20240205'
     aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version:'2.0.4'
 
     contractTestImplementation sourceSets.main.runtimeClasspath
