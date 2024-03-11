@@ -180,7 +180,7 @@ dependencies {
 
     testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version:versions.junit5
     aatRuntimeOnly group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.2'
-    aatRuntimeOnly group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.4'
+    aatRuntimeOnly group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.5'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version:versions.junit5
 
     //pact contract testing
