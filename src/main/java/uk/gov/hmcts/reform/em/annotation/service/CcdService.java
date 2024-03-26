@@ -3,8 +3,6 @@ package uk.gov.hmcts.reform.em.annotation.service;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.ccd.client.CoreCaseDataApi;
@@ -76,10 +74,10 @@ public class CcdService {
         }
         //TODO: THIS SUGGESTED LOGIC DOES NOT SEEM SOUND - VERIFY OR REVERT
         return !jurisdictionPaths.containsKey(annotationDTO.getJurisdiction());
-//        if (!jurisdictionPaths.containsKey(annotationDTO.getJurisdiction())) {
-//            return true;
-//        }
-//        return false;
+        //        if (!jurisdictionPaths.containsKey(annotationDTO.getJurisdiction())) {
+        //            return true;
+        //        }
+        //        return false;
     }
 
     protected CaseDetails getCaseDetails(String authorisation, String caseId) {

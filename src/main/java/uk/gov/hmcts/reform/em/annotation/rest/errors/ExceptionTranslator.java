@@ -29,7 +29,6 @@ import uk.gov.hmcts.reform.em.annotation.rest.util.HeaderUtil;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Controller advice to translate the server side exceptions to client-friendly json structures.
