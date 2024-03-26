@@ -35,7 +35,7 @@ public class SecurityConfiguration {
 
     private final ServiceAuthFilter serviceAuthFilter;
 
-    private JwtAuthenticationConverter jwtAuthenticationConverter;
+    private final JwtAuthenticationConverter jwtAuthenticationConverter;
 
 
     public SecurityConfiguration(final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter,
@@ -47,7 +47,7 @@ public class SecurityConfiguration {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/swagger-ui.html",
+        return web -> web.ignoring().requestMatchers("/swagger-ui.html",
                 "/swagger-ui/**",
                 "/swagger-resources/**",
                 "/v3/**",

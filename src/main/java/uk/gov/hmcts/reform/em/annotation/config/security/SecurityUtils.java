@@ -39,23 +39,20 @@ public class SecurityUtils {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
                 .map(authentication -> {
-                    if (authentication.getPrincipal() instanceof UserDetails) {
-                        UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
-                        return springSecurityUser.getUsername();
-                    } else if (authentication.getPrincipal() instanceof String) {
-                        return (String) authentication.getPrincipal();
-                    } else if (authentication instanceof JwtAuthenticationToken) {
-                        Jwt jwt = ((JwtAuthenticationToken) authentication).getToken();
+                    if (authentication.getPrincipal() instanceof UserDetails userDetails) {
+                        return userDetails.getUsername();
+                    } else if (authentication.getPrincipal() instanceof String getPrincipalString) {
+                        return getPrincipalString;
+                    } else if (authentication instanceof JwtAuthenticationToken jwtAuthenticationToken) {
+                        Jwt jwt = jwtAuthenticationToken.getToken();
                         if (Boolean.TRUE.equals(jwt.hasClaim(TOKEN_NAME))
                                 && jwt.getClaim(TOKEN_NAME).equals(ACCESS_TOKEN)) {
                             uk.gov.hmcts.reform.idam.client.models.UserInfo userInfo =
                                     idamRepository.getUserInfo(jwt.getTokenValue());
                             return userInfo.getUid();
                         }
-                    } else if (authentication.getPrincipal() instanceof DefaultOidcUser) {
-                        Map<String, Object> attributes = ((DefaultOidcUser) authentication
-                                .getPrincipal())
-                                .getAttributes();
+                    } else if (authentication.getPrincipal() instanceof DefaultOidcUser defaultOidcUser) {
+                        Map<String, Object> attributes = defaultOidcUser.getAttributes();
                         if (attributes.containsKey("preferred_username")) {
                             return (String) attributes.get("preferred_username");
                         }

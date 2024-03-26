@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 
 public class StringUtilities {
@@ -30,7 +29,7 @@ public class StringUtilities {
         if (CollectionUtils.isNotEmpty(logs)) {
             return logs.stream()
                     .map(StringUtilities:: convertValidLogString)
-                    .collect(Collectors.toList());
+                    .toList();
         } else {
             return new ArrayList<>();
         }
@@ -51,7 +50,7 @@ public class StringUtilities {
         if (CollectionUtils.isNotEmpty(logs)) {
             return logs.stream()
                 .map(StringUtilities:: convertValidLogUUID)
-                .collect(Collectors.toList());
+                .toList();
         } else {
             return new ArrayList<>();
         }

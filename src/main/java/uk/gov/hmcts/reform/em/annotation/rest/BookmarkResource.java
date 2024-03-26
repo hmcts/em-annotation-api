@@ -39,7 +39,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing Bookmarks.
@@ -173,13 +172,13 @@ public class BookmarkResource {
 
         List<UUID> sanitisedList = StringUtilities.convertValidLogUUID(bookmarkDTOList.stream()
             .map(BookmarkDTO::getId)
-            .collect(Collectors.toList()));
+            .toList());
 
         log.debug("REST request to update list of Bookmark objects : {}", sanitisedList);
 
         List<BookmarkDTO> result = bookmarkDTOList.stream()
             .map(bookmarkService::save)
-            .collect(Collectors.toList());
+            .toList();
 
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME,sanitisedList.toString()))

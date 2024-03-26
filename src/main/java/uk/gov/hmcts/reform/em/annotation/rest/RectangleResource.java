@@ -55,11 +55,15 @@ public class RectangleResource {
     private static final String INVALID_ID = "Invalid id";
     private static final String NULL_ENTITY = "idnull";
 
-    @Autowired
-    private RectangleService rectangleService;
+    private final RectangleService rectangleService;
+
+    private final AnnotationService annotationService;
 
     @Autowired
-    private AnnotationService annotationService;
+    public RectangleResource(AnnotationService annotationService, RectangleService rectangleService) {
+        this.annotationService = annotationService;
+        this.rectangleService = rectangleService;
+    }
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {

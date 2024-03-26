@@ -1,9 +1,9 @@
 package uk.gov.hmcts.reform.em.annotation.repository;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.idam.client.IdamClient;
@@ -30,8 +30,12 @@ public class IdamRepositoryTest {
     @Mock
     private IdamClient idamClient;
 
-    @InjectMocks
     private IdamRepository idamRepository;
+
+    @Before
+    public void setup() {
+        this.idamRepository = new IdamRepository(idamClient);
+    }
 
     @Test
     @DisplayName("UserInfo should be called by IdamClient ")
@@ -48,8 +52,5 @@ public class IdamRepositoryTest {
         idamRepository.getUserInfo(random(5, true, false));
 
         verify(idamClient, times(1)).getUserInfo(anyString());
-
     }
-
 }
-

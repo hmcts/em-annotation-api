@@ -9,7 +9,6 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.TagDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.TagMapper;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing Tag.
@@ -36,7 +35,7 @@ public class TagServiceImpl implements TagService {
         return tagRepository.findTagByCreatedBy(createdBy)
                 .stream()
                 .map(tagMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**

@@ -1,10 +1,9 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -18,6 +17,7 @@ import uk.gov.hmcts.reform.em.annotation.service.RectangleService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.RectangleDTO;
 
+import java.net.URISyntaxException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,16 +39,16 @@ class RectangleResourceTest {
     @Mock
     private WebDataBinder webDataBinder;
 
-    @InjectMocks
     private RectangleResource rectangleResource;
 
-    private UUID documentId = UUID.randomUUID();
+    private final UUID documentId = UUID.randomUUID();
 
     private static final String ENTITY_NAME = "rectangle";
 
-    @BeforeAll
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        rectangleResource = new RectangleResource(annotationService, rectangleService);
     }
 
     private static final Double DEFAULT_X = 1d;
@@ -142,6 +142,24 @@ class RectangleResourceTest {
     }
 
     @Test
+    void update_rectangle_with_new_coordinates_test() {
+        AnnotationDTO annotationDTO = new AnnotationDTO();
+        annotationDTO.setId(UUID.randomUUID());
+
+        RectangleDTO rectangleDTO = createUpdatedRectangleDTO();
+        rectangleDTO.setId(UUID.randomUUID());
+        rectangleDTO.setAnnotationId(annotationDTO.getId());
+
+        Mockito.when(rectangleService.save(any())).thenReturn(rectangleDTO);
+        try {
+            ResponseEntity<RectangleDTO> responseEntity = rectangleResource.updateRectangle(rectangleDTO);
+            assertEquals(200, responseEntity.getStatusCode().value());
+        }  catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
     void testInitBinder() {
         rectangleResource.initBinder(webDataBinder);
         Mockito.verify(webDataBinder, Mockito.atLeast(1)).setDisallowedFields(Mockito.anyString());
@@ -152,6 +170,17 @@ class RectangleResourceTest {
         RectangleDTO rectangleDTO = new RectangleDTO();
         rectangleDTO.setX(DEFAULT_X);
         rectangleDTO.setY(DEFAULT_Y);
+        rectangleDTO.setWidth(DEFAULT_WIDTH);
+        rectangleDTO.setHeight(DEFAULT_HEIGHT);
+        rectangleDTO.setId(UUID.randomUUID());
+        return rectangleDTO;
+    }
+
+    private RectangleDTO createUpdatedRectangleDTO() {
+
+        RectangleDTO rectangleDTO = new RectangleDTO();
+        rectangleDTO.setX(UPDATED_X);
+        rectangleDTO.setY(UPDATED_Y);
         rectangleDTO.setWidth(DEFAULT_WIDTH);
         rectangleDTO.setHeight(DEFAULT_HEIGHT);
         rectangleDTO.setId(UUID.randomUUID());
