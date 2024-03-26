@@ -173,13 +173,13 @@ public class BookmarkResource {
 
         List<UUID> sanitisedList = StringUtilities.convertValidLogUUID(bookmarkDTOList.stream()
             .map(BookmarkDTO::getId)
-            .collect(Collectors.toList()));
+            .toList());
 
         log.debug("REST request to update list of Bookmark objects : {}", sanitisedList);
 
         List<BookmarkDTO> result = bookmarkDTOList.stream()
             .map(bookmarkService::save)
-            .collect(Collectors.toList());
+            .toList();
 
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME,sanitisedList.toString()))

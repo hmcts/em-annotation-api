@@ -30,7 +30,7 @@ public class StringUtilities {
         if (CollectionUtils.isNotEmpty(logs)) {
             return logs.stream()
                     .map(StringUtilities:: convertValidLogString)
-                    .collect(Collectors.toList());
+                    .toList();
         } else {
             return new ArrayList<>();
         }
@@ -51,7 +51,7 @@ public class StringUtilities {
         if (CollectionUtils.isNotEmpty(logs)) {
             return logs.stream()
                 .map(StringUtilities:: convertValidLogUUID)
-                .collect(Collectors.toList());
+                .toList();
         } else {
             return new ArrayList<>();
         }

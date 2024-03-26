@@ -66,9 +66,9 @@ public class ExceptionTranslator implements ProblemHandling {
             }
         }
 
-        if (problem instanceof ConstraintViolationProblem) {
+        if (problem instanceof ConstraintViolationProblem constraintViolationProblem) {
             builder
-                .with("violations", ((ConstraintViolationProblem) problem).getViolations())
+                .with("violations", constraintViolationProblem.getViolations())
                 .with(MESSAGE, ErrorConstants.ERR_VALIDATION);
         } else {
             builder
@@ -89,7 +89,7 @@ public class ExceptionTranslator implements ProblemHandling {
         BindingResult result = ex.getBindingResult();
         List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
             .map(f -> new FieldErrorVM(f.getObjectName(), f.getField(), f.getCode()))
-            .collect(Collectors.toList());
+            .toList();
 
         Problem problem = Problem.builder()
             .withType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE)

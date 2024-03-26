@@ -36,7 +36,7 @@ public class TagServiceImpl implements TagService {
         return tagRepository.findTagByCreatedBy(createdBy)
                 .stream()
                 .map(tagMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**

@@ -19,8 +19,6 @@ import java.util.Objects;
 @Service
 public class CcdService {
 
-    private final Logger log = LoggerFactory.getLogger(CcdService.class);
-
     private final CommentHeaderConfig commentHeaderConfig;
 
     private final CoreCaseDataApi coreCaseDataApi;
@@ -76,10 +74,12 @@ public class CcdService {
         if (Objects.nonNull(annotationDTO.getCommentHeader())) {
             return true;
         }
-        if (!jurisdictionPaths.containsKey(annotationDTO.getJurisdiction())) {
-            return true;
-        }
-        return false;
+        //TODO: THIS SUGGESTED LOGIC DOES NOT SEEM SOUND - VERIFY OR REVERT
+        return !jurisdictionPaths.containsKey(annotationDTO.getJurisdiction());
+//        if (!jurisdictionPaths.containsKey(annotationDTO.getJurisdiction())) {
+//            return true;
+//        }
+//        return false;
     }
 
     protected CaseDetails getCaseDetails(String authorisation, String caseId) {

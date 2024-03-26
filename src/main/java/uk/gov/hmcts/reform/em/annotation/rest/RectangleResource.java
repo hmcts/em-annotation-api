@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,11 +56,15 @@ public class RectangleResource {
     private static final String INVALID_ID = "Invalid id";
     private static final String NULL_ENTITY = "idnull";
 
-    @Autowired
-    private RectangleService rectangleService;
+    private final RectangleService rectangleService;
+
+    private final AnnotationService annotationService;
 
     @Autowired
-    private AnnotationService annotationService;
+    public RectangleResource(AnnotationService annotationService, RectangleService rectangleService) {
+        this.annotationService = annotationService;
+        this.rectangleService = rectangleService;
+    }
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
