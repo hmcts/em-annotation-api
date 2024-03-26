@@ -17,6 +17,7 @@ import uk.gov.hmcts.reform.em.annotation.service.RectangleService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.RectangleDTO;
 
+import java.net.URISyntaxException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -141,25 +142,23 @@ class RectangleResourceTest {
     }
 
     //TODO: New test scenario for untested update method, failing for unnecessary stubbing. - fix or remove again
-    //    @Test
-    //    void update_rectangle_with_new_XY_test() {
-    //        AnnotationDTO annotationDTO = new AnnotationDTO();
-    //        annotationDTO.setId(UUID.randomUUID());
-    //
-    //        RectangleDTO rectangleDTO = createUpdatedRectangleDTO();
-    //        rectangleDTO.setId(UUID.randomUUID());
-    //        rectangleDTO.setAnnotationId(annotationDTO.getId());
-    //
-    //        Mockito.when(annotationService.findOne(rectangleDTO.getAnnotationId()))
-    //          .thenReturn(Optional.of(annotationDTO));
-    //        Mockito.when(rectangleService.save(any())).thenReturn(rectangleDTO);
-    //        try {
-    //            ResponseEntity<RectangleDTO> responseEntity = rectangleResource.updateRectangle(rectangleDTO);
-    //            assertEquals(200, responseEntity.getStatusCode().value());
-    //        }  catch (URISyntaxException e) {
-    //            throw new RuntimeException(e);
-    //        }
-    //    }
+        @Test
+        void update_rectangle_with_new_coordinates_test() {
+            AnnotationDTO annotationDTO = new AnnotationDTO();
+            annotationDTO.setId(UUID.randomUUID());
+
+            RectangleDTO rectangleDTO = createUpdatedRectangleDTO();
+            rectangleDTO.setId(UUID.randomUUID());
+            rectangleDTO.setAnnotationId(annotationDTO.getId());
+
+            Mockito.when(rectangleService.save(any())).thenReturn(rectangleDTO);
+            try {
+                ResponseEntity<RectangleDTO> responseEntity = rectangleResource.updateRectangle(rectangleDTO);
+                assertEquals(200, responseEntity.getStatusCode().value());
+            }  catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
     @Test
     void testInitBinder() {

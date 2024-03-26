@@ -72,20 +72,12 @@ public class CcdService {
         if (Objects.nonNull(annotationDTO.getCommentHeader())) {
             return true;
         }
-        //TODO: THIS SUGGESTED LOGIC DOES NOT SEEM SOUND - VERIFY OR REVERT
         return !jurisdictionPaths.containsKey(annotationDTO.getJurisdiction());
-        //        if (!jurisdictionPaths.containsKey(annotationDTO.getJurisdiction())) {
-        //            return true;
-        //        }
-        //        return false;
     }
 
     protected CaseDetails getCaseDetails(String authorisation, String caseId) {
         String serviceAuth = authTokenGenerator.generate();
         return coreCaseDataApi.getCase(authorisation,
                 serviceAuth, caseId);
-
     }
 }
-
-
