@@ -46,11 +46,6 @@ public class ExceptionHandlingAsyncTaskExecutor implements AsyncTaskExecutor,
         executor.execute(createWrappedRunnable(task));
     }
 
-    @Override
-    public void execute(Runnable task, long startTimeout) {
-        executor.execute(createWrappedRunnable(task), startTimeout);
-    }
-
     private <T> Callable<T> createCallable(final Callable<T> task) {
         return () -> {
             try {
@@ -88,17 +83,15 @@ public class ExceptionHandlingAsyncTaskExecutor implements AsyncTaskExecutor,
 
     @Override
     public void destroy() throws Exception {
-        if (executor instanceof DisposableBean) {
-            DisposableBean bean = (DisposableBean) executor;
-            bean.destroy();
+        if (executor instanceof DisposableBean disposableBean) {
+            disposableBean.destroy();
         }
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        if (executor instanceof InitializingBean) {
-            InitializingBean bean = (InitializingBean) executor;
-            bean.afterPropertiesSet();
+        if (executor instanceof InitializingBean initializingBean) {
+            initializingBean.afterPropertiesSet();
         }
     }
 }
