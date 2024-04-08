@@ -70,7 +70,6 @@ def versions = [
         junit5             : '5.10.2',
         log4JVersion       : '2.20.0',
         mapstruct          : '1.5.5.Final',
-        springcloud        : '4.1.2',
 ]
 
 sourceSets {
@@ -117,9 +116,9 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
 
 
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: versions.springcloud
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.1.2'
 
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-openfeign', version: versions.springcloud
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-openfeign', version: '4.1.1'
 
     implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: versions.fasterXmlJackson
     implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version: versions.fasterXmlJackson
@@ -165,7 +164,7 @@ dependencies {
     
     implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.9.0'
 
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: versions.springcloud
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.1.1'
 
     implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.32'
 
