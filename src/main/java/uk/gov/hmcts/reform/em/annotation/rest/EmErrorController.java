@@ -17,6 +17,7 @@ public class EmErrorController implements ErrorController {
 
     private final Logger log = LoggerFactory.getLogger(EmErrorController.class);
 
+    @SuppressWarnings("java:S112")
     @GetMapping("/error")
     public void handleError(HttpServletRequest request) throws Throwable {
         if (request.getAttribute(jakarta.servlet.RequestDispatcher.ERROR_EXCEPTION) != null) {
