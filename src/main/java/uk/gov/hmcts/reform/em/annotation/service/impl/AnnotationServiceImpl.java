@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.service.impl;
 
+import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
@@ -55,6 +56,9 @@ public class AnnotationServiceImpl implements AnnotationService {
         this.tagService = tagService;
         this.entityManager = entityManager;
     }
+
+    @Resource
+    private AnnotationServiceImpl annotationService;
 
     /**
      * Save a annotation.
@@ -129,7 +133,7 @@ public class AnnotationServiceImpl implements AnnotationService {
     @Transactional(readOnly = true)
     public Optional<AnnotationDTO> findOne(UUID id) {
         log.debug("Request to get Annotation : {}", id);
-        return findOne(id, false);
+        return annotationService.findOne(id, false);
     }
 
     @Override

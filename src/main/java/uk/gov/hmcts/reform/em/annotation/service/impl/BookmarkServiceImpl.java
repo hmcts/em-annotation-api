@@ -79,7 +79,8 @@ public class BookmarkServiceImpl implements BookmarkService {
             return bookmarkRepository.findByDocumentIdAndCreatedBy(documentId, user.get(), pageable)
                     .map(bookmarkMapper::toDto);
         } else {
-            log.error(String.format("User not found for Document with Id : %s ", documentId));
+            String errorMessage = String.format("User not found for Document with Id : %s ", documentId);
+            log.error(errorMessage);
             throw new BadCredentialsException("Bad credentials.");
         }
     }
