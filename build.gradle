@@ -65,7 +65,7 @@ def versions = [
         serenityreporter   : '3.7.0',
         serenityRestAssured: '3.7.0',
         pact_version       : '4.0.10',
-        hibernate          : '6.4.4.Final',
+        hibernate          : '6.4.5.Final',
         logging            : '6.1.4',
         junit5             : '5.10.2',
         log4JVersion       : '2.20.0',
