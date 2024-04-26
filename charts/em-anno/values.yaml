@@ -41,6 +41,8 @@ java:
     ENABLE_S2S_HEALTH_CHECK: false
     ENABLE_METADATA_ENDPOINT: false
     SERVER_PORT: 8080
+  spotInstances:
+    enabled: true
 xui-webapp:
   enabled: false
 idam-pr:
