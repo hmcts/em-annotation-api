@@ -154,7 +154,7 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-web', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: versions.springSecurity
-    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-core', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
 
