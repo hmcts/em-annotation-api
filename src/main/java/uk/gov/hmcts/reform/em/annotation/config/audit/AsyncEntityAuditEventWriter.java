@@ -65,6 +65,7 @@ public class AsyncEntityAuditEventWriter {
         log.trace("Getting Entity Id and Content");
         try {
             Field privateLongField = entityClass.getDeclaredField("id");
+            privateLongField.setAccessible(true);
             entityId = (UUID) privateLongField.get(entity);
             privateLongField.setAccessible(false);
             entityData = objectMapper.writeValueAsString(entity);
