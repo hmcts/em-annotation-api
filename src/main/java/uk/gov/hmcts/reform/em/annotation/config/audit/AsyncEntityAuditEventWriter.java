@@ -18,6 +18,7 @@ import java.util.UUID;
  * This is invoked by Hibernate entity listeners to write audit event for entitities
  */
 @Component
+@SuppressWarnings("squid:S3011")
 public class AsyncEntityAuditEventWriter {
 
     private final Logger log = LoggerFactory.getLogger(AsyncEntityAuditEventWriter.class);
