@@ -83,7 +83,9 @@ public class EntityAuditEventListenerTest {
     @Test
     @DisplayName("Create calls writeAuditEvent")
     public void testSuccessOnPostCreate() {
-        doNothing().when(asyncEntityAuditEventWriter).writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.CREATE));
+        doNothing()
+            .when(asyncEntityAuditEventWriter)
+            .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.CREATE));
         entityAuditEventListener.onPostCreate(mock(Rectangle.class));
         verify(asyncEntityAuditEventWriter, times(1))
                 .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.CREATE));
@@ -116,7 +118,9 @@ public class EntityAuditEventListenerTest {
     @Test
     @DisplayName("Update calls writeAuditEvent")
     public void testSuccessOnPostUpdate() {
-        doNothing().when(asyncEntityAuditEventWriter).writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.UPDATE));
+        doNothing()
+            .when(asyncEntityAuditEventWriter)
+            .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.UPDATE));
         entityAuditEventListener.onPostUpdate(mock(Rectangle.class));
         verify(asyncEntityAuditEventWriter, times(1))
                 .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.UPDATE));
@@ -149,7 +153,9 @@ public class EntityAuditEventListenerTest {
     @Test
     @DisplayName("Remove calls writeAuditEvent")
     public void testSuccessOnPostRemove() {
-        doNothing().when(asyncEntityAuditEventWriter).writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.DELETE));
+        doNothing()
+            .when(asyncEntityAuditEventWriter)
+            .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.DELETE));
         entityAuditEventListener.onPostRemove(mock(Rectangle.class));
         verify(asyncEntityAuditEventWriter, times(1))
                 .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.DELETE));
