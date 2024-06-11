@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import uk.gov.hmcts.reform.em.annotation.domain.AbstractAuditingEntity;
 
 public class EntityAuditEventListener extends AuditingEntityListener {
 
@@ -16,7 +17,7 @@ public class EntityAuditEventListener extends AuditingEntityListener {
     private static BeanFactory beanFactory;
 
     @PostPersist
-    public void onPostCreate(Object target) {
+    public void onPostCreate(AbstractAuditingEntity target) {
         try {
             AsyncEntityAuditEventWriter asyncEntityAuditEventWriter =
                     beanFactory.getBean(AsyncEntityAuditEventWriter.class);
@@ -29,7 +30,7 @@ public class EntityAuditEventListener extends AuditingEntityListener {
     }
 
     @PostUpdate
-    public void onPostUpdate(Object target) {
+    public void onPostUpdate(AbstractAuditingEntity target) {
         try {
             AsyncEntityAuditEventWriter asyncEntityAuditEventWriter =
                     beanFactory.getBean(AsyncEntityAuditEventWriter.class);
@@ -42,7 +43,7 @@ public class EntityAuditEventListener extends AuditingEntityListener {
     }
 
     @PostRemove
-    public void onPostRemove(Object target) {
+    public void onPostRemove(AbstractAuditingEntity target) {
         try {
             AsyncEntityAuditEventWriter asyncEntityAuditEventWriter =
                     beanFactory.getBean(AsyncEntityAuditEventWriter.class);

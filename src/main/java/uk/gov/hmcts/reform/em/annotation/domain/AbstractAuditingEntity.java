@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.em.annotation.config.audit.EntityAuditEventListener;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.UUID;
 
 /**
  * Base abstract class for entities which will hold definitions for created, last modified by and created,
@@ -99,4 +100,6 @@ public abstract class AbstractAuditingEntity implements Serializable {
     public void setLastModifiedByDetails(IdamDetails lastModifiedByDetails) {
         this.lastModifiedByDetails = lastModifiedByDetails;
     }
+
+    public abstract UUID getId();
 }
