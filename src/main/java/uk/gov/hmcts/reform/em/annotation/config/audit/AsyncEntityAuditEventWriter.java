@@ -10,15 +10,12 @@ import uk.gov.hmcts.reform.em.annotation.domain.EntityAuditEvent;
 import uk.gov.hmcts.reform.em.annotation.repository.EntityAuditEventRepository;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.UUID;
 
 /**
  * Async Entity Audit Event writer.
  * This is invoked by Hibernate entity listeners to write audit event for entitities
  */
 @Component
-@SuppressWarnings("squid:S3011")
 public class AsyncEntityAuditEventWriter {
 
     private final Logger log = LoggerFactory.getLogger(AsyncEntityAuditEventWriter.class);
@@ -36,7 +33,7 @@ public class AsyncEntityAuditEventWriter {
      * Writes audit events to DB asynchronously in a new thread.
      */
     @Async
-    public void writeAuditEvent(Object target, EntityAuditAction action) {
+    public void writeAuditEvent(AbstractAuditingEntity target, EntityAuditAction action) {
         var logAction = action != null ? action.value() : null;
         log.debug("-------------- Post {} audit  --------------", logAction);
         try {
@@ -56,39 +53,31 @@ public class AsyncEntityAuditEventWriter {
      * @param action takes action
      * @return will return audit event
      */
-    private EntityAuditEvent prepareAuditEntity(final Object entity, EntityAuditAction action) {
+    private EntityAuditEvent prepareAuditEntity(final AbstractAuditingEntity entity, EntityAuditAction action) {
         EntityAuditEvent auditedEntity = new EntityAuditEvent();
         Class<?> entityClass = entity.getClass(); // Retrieve entity class with reflection
         auditedEntity.setAction(action.value());
         auditedEntity.setEntityType(entityClass.getName());
-        UUID entityId;
         String entityData;
-        log.trace("Getting Entity Id and Content");
+        log.trace("Getting Entity Content");
         try {
-            Field privateLongField = entityClass.getDeclaredField("id");
-            privateLongField.setAccessible(true);
-            entityId = (UUID) privateLongField.get(entity);
-            privateLongField.setAccessible(false);
             entityData = objectMapper.writeValueAsString(entity);
         } catch (IllegalArgumentException
-                | IllegalAccessException
-                | NoSuchFieldException
-                | SecurityException
-                | IOException e) {
-            log.error("Exception while getting entity ID and content {}", e.getMessage(), e);
+                 | SecurityException
+                 | IOException e) {
+            log.error("Exception while getting entity content {}", e.getMessage(), e);
             // returning null as we dont want to raise an application exception here
             return null;
         }
-        auditedEntity.setEntityId(entityId);
+        auditedEntity.setEntityId(entity.getId());
         auditedEntity.setEntityValueV2(entityData);
-        final AbstractAuditingEntity abstractAuditEntity = (AbstractAuditingEntity) entity;
         if (EntityAuditAction.CREATE.equals(action)) {
-            auditedEntity.setModifiedBy(abstractAuditEntity.getCreatedBy());
-            auditedEntity.setModifiedDate(abstractAuditEntity.getCreatedDate());
+            auditedEntity.setModifiedBy(entity.getCreatedBy());
+            auditedEntity.setModifiedDate(entity.getCreatedDate());
             auditedEntity.setCommitVersion(1);
         } else {
-            auditedEntity.setModifiedBy(abstractAuditEntity.getLastModifiedBy());
-            auditedEntity.setModifiedDate(abstractAuditEntity.getLastModifiedDate());
+            auditedEntity.setModifiedBy(entity.getLastModifiedBy());
+            auditedEntity.setModifiedDate(entity.getLastModifiedDate());
             calculateVersion(auditedEntity);
         }
         log.trace("Audit Entity --> {} ", auditedEntity);
