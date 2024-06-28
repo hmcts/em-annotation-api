@@ -166,10 +166,10 @@ dependencies {
 
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.1.2'
 
-    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.32'
+    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.34'
 
 
-    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.32'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.34'
     annotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: versions.mapstruct
     annotationProcessor group:'org.hibernate', name: 'hibernate-jpamodelgen', version: versions.hibernate
     annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', withoutStuff
