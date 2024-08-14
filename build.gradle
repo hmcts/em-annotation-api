@@ -69,7 +69,7 @@ def versions = [
         logging            : '6.1.6',
         junit5             : '5.10.3',
         log4JVersion       : '2.20.0',
-        mapstruct          : '1.5.5.Final',
+        mapstruct          : '1.6.0',
 ]
 
 sourceSets {
