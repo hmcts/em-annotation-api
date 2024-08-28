@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * Tests based on parsing algorithm in app/components/util/pagination-util.service.js
+ * Tests based on parsing algorithm in app/components/util/pagination-util.service.js.
  *
  * @see PaginationUtil
  */
