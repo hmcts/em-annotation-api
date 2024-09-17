@@ -26,6 +26,7 @@ Requires docker desktop running
 ```
 
 #### To run the application:
+At the moment java version must be set to 17 as 21 is not supported for local setup by CFTLib
 
 ```
 ./gradlew bootWithCCD
