@@ -19,6 +19,7 @@ locals {
   shared_vault_name = "${var.shared_product_name}-${local.local_env}"
   tags              = var.common_tags
   vaultName         = "${local.app_full_name}-${var.env}"
+  db_name = "${var.product}-${var.component}-postgres-db-flex"
 }
 
 # Copy s2s key from shared to local vault
@@ -149,6 +150,9 @@ module "db-v15" {
   pgsql_version        = "15"
   admin_user_object_id = var.jenkins_AAD_objectId
   business_area        = "CFT"
+  action_group_name           = join("-", [local.db_name, var.action_group_name])
+  email_address_key           = var.email_address_key
+  email_address_key_vault_id  = data.azurerm_key_vault.em_key_vault.id
   # The original subnet is full, this is required to use the new subnet for new databases
   subnet_suffix = "expanded"
   pgsql_databases = [
