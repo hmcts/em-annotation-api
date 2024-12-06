@@ -19,7 +19,7 @@ locals {
   shared_vault_name = "${var.shared_product_name}-${local.local_env}"
   tags              = var.common_tags
   vaultName         = "${local.app_full_name}-${var.env}"
-  db_name = "${var.product}-${var.component}-postgres-db-flex"
+  db_name           = "${var.product}-${var.component}-postgres-db-flex"
 }
 
 # Copy s2s key from shared to local vault
