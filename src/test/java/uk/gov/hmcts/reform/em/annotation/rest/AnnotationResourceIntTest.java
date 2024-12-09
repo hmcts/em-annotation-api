@@ -110,7 +110,7 @@ public class AnnotationResourceIntTest extends BaseTest {
      * <p>This is a static method, as tests for other entities might also need it,
      *      if they test an entity which requires the current entity.
      */
-    public static Annotation createEntity(EntityManager em) {
+    public static Annotation createEntity() {
         Annotation annotation = new Annotation()
             .annotationType(DEFAULT_ANNOTATION_TYPE.toString())
             .page(DEFAULT_PAGE);
@@ -126,7 +126,7 @@ public class AnnotationResourceIntTest extends BaseTest {
 
     @Before
     public void initTest() {
-        annotation = createEntity(em);
+        annotation = createEntity();
     }
 
     @Test
@@ -172,6 +172,30 @@ public class AnnotationResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
+    public void createAnnotationFailsPageNumberValidation() throws Exception {
+        int databaseSizeBeforeCreate = annotationRepository.findAll().size();
+
+        // Create the Comment
+        AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
+        annotationDTO.setPage(-1);
+
+        // An entity with an existing ID cannot be created, so this API call must fail
+        restLogoutMockMvc.perform(post("/api/annotations")
+                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                        .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("{\"type\":\"/constraint-violation\","
+                        + "\"title\":\"Method argument not valid\",\"status\":400,\"path\":\"/api/annotations\","
+                        + "\"message\":\"error.validation\",\"fieldErrors\":[{\"field\":\"page\","
+                        + "\"message\":\"Min\",\"objectName\":\"annotationDTO\"}]}"));
+
+        // Validate the Comment in the database
+        List<Annotation> annotationList = annotationRepository.findAll();
+        assertThat(annotationList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
     public void createAnnotationWithExistingDocIdAndCreatedBy() throws Exception {
         int databaseSizeBeforeCreate = annotationRepository.findAll().size();
         assertThat(databaseSizeBeforeCreate).isZero();
@@ -193,7 +217,6 @@ public class AnnotationResourceIntTest extends BaseTest {
                         .contentType(TestUtil.APPLICATION_JSON_UTF8)
                         .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
                 .andExpect(status().isBadRequest());
-
     }
 
     @Test

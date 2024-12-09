@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.em.annotation.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Min;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
     @JsonProperty("type")
     private String annotationType;
 
+    @Min(value = 0, message = "Page number must not be negative")
     private Integer page;
 
     private String color;
