@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.service.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
 import java.util.UUID;
@@ -20,6 +21,7 @@ public class BookmarkDTO {
     @Size(max = 50)
     private String createdBy;
 
+    @Min(value = 0, message = "Page number must not be negative")
     private Integer pageNumber;
 
     private Double xCoordinate;
