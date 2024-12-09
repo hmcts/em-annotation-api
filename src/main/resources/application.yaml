@@ -6,6 +6,9 @@ spring:
     name: EM Annotation App
   config:
     import: "optional:configtree:/mnt/secrets/em-anno/"
+  cloud:
+    compatibility-verifier:
+      enabled: false
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     database: postgresql
