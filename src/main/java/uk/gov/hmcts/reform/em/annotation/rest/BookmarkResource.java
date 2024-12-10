@@ -88,15 +88,16 @@ public class BookmarkResource {
         @ApiResponse(responseCode = "403", description = "Forbidden"),
     })
     @PostMapping("/bookmarks")
-    public ResponseEntity<BookmarkDTO> createBookmark(@RequestBody BookmarkDTO bookmarkDTO) throws URISyntaxException {
+    public ResponseEntity<BookmarkDTO> createBookmark(@RequestBody @Valid BookmarkDTO bookmarkDTO)
+            throws URISyntaxException {
         log.debug("REST request to save Bookmark : {}", bookmarkDTO);
         if (bookmarkDTO.getId() == null) {
             throw new BadRequestAlertException(INVALID_ID, ENTITY_NAME, NULL_ENTITY);
         }
         BookmarkDTO result = bookmarkService.save(bookmarkDTO);
         return ResponseEntity.created(new URI("/api/bookmarks/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
     }
 
     /**
