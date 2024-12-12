@@ -131,10 +131,12 @@ public class BookmarkResourceIntTest extends BaseTest {
                         .contentType(TestUtil.APPLICATION_JSON_UTF8)
                         .content(TestUtil.convertObjectToJsonBytes(bookmarkDTO)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("{\"type\":\"/constraint-violation\","
-                        + "\"title\":\"Method argument not valid\",\"status\":400,\"path\":\"/api/bookmarks\","
-                        + "\"message\":\"error.validation\",\"fieldErrors\":[{\"field\":\"pageNumber\","
-                        + "\"message\":\"Min\",\"objectName\":\"bookmarkDTO\"}]}"));
+                .andExpect(content().string(
+                        "{\"entityName\":\"bookmark\",\"errorKey\":\"invalidPageNumber\","
+                                + "\"type\":\"/problem-with-message\","
+                                + "\"title\":\"Page number must not be negative or null\",\"status\":400,"
+                                + "\"message\":\"error.invalidPageNumber\",\"params\":\"bookmark\"}"
+                ));
 
         // Validate the Comment in the database
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
