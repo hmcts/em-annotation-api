@@ -95,7 +95,7 @@ public class BookmarkResource {
         if (bookmarkDTO.getId() == null) {
             throw new BadRequestAlertException(INVALID_ID, ENTITY_NAME, NULL_ENTITY);
         }
-        if(Objects.isNull(bookmarkDTO.getPageNumber()) || bookmarkDTO.getPageNumber()<0) {
+        if (Objects.isNull(bookmarkDTO.getPageNumber()) || bookmarkDTO.getPageNumber() < 0) {
             throw new BadRequestAlertException(
                     "Page number must not be negative or null",
                     ENTITY_NAME,
