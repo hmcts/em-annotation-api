@@ -41,6 +41,7 @@ class IdamRepositoryTest {
     @DisplayName("UserInfo should be called by IdamClient ")
     void testGetUserInfo() {
 
+        
         final UserInfo userInfo = UserInfo.builder()
                 .uid("100")
                 .givenName("John")

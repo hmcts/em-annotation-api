@@ -101,7 +101,7 @@ class SecurityUtilsTest {
 
     @Test
     @DisplayName("Invalid jwt authentication returns null")
-    public void testInvalidJwtAuthenticationTokenUserLogin() {
+    void testInvalidJwtAuthenticationTokenUserLogin() {
         Jwt jwt = mock(Jwt.class);
         JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(jwt);
         doReturn(authenticationToken).when(securityContext).getAuthentication();
@@ -120,7 +120,7 @@ class SecurityUtilsTest {
 
         Optional<String> login = securityUtils.getCurrentUserLogin();
         Assertions.assertTrue(login.isPresent());
-        Assertions.assertEquals(login.get(), "Username");
+        Assertions.assertEquals("Username", login.get());
     }
 
     @Test

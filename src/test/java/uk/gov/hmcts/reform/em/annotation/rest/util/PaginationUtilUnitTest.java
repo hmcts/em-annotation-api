@@ -37,7 +37,7 @@ class PaginationUtilUnitTest {
         Assertions.assertEquals(expectedData, headerData);
         final List<String> xTotalCount = headers.get("X-Total-Count");
         Assertions.assertNotNull(xTotalCount);
-        assertThat(xTotalCount.size()).isEqualTo(1);
+        assertThat(xTotalCount).hasSize(1);
         assertThat(Long.valueOf(xTotalCount.get(0))).isEqualTo(400L);
     }
 

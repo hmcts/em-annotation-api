@@ -43,7 +43,7 @@ class MetadataServiceImplTest {
     }
 
     @Test
-    public void testSaveSuccessCreate() {
+    void testSaveSuccessCreate() {
 
         MetadataDto metadataDto = createMetadataDto();
         Metadata metadata = createMetadata();
@@ -66,7 +66,7 @@ class MetadataServiceImplTest {
     }
 
     @Test
-    public void testSaveSuccessUpdate() {
+    void testSaveSuccessUpdate() {
 
         MetadataDto metadataDto = createMetadataDto();
         Metadata metadata = createMetadata();
@@ -89,13 +89,13 @@ class MetadataServiceImplTest {
     }
 
     @Test
-    public void testSaveFailure() {
+    void testSaveFailure() {
         MetadataDto metadataDto = createMetadataDto();
         Assertions.assertThrows(BadCredentialsException.class, () -> metadataService.save(metadataDto));
     }
 
     @Test
-    public void testFindByDocumentIdSuccess() {
+    void testFindByDocumentIdSuccess() {
 
         MetadataDto metadataDto = createMetadataDto();
         Metadata metadata = createMetadata();
