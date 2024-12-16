@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.em.annotation.service.impl;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class MetadataServiceImplTest {
+class MetadataServiceImplTest {
 
     @InjectMocks
     private MetadataServiceImpl metadataService;
@@ -37,7 +37,7 @@ public class MetadataServiceImplTest {
 
     private UUID documentId =  UUID.randomUUID();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
@@ -60,8 +60,8 @@ public class MetadataServiceImplTest {
         verify(metadataMapper, atLeast(1)).toDto(metadata);
 
 
-        Assert.assertEquals(metadataDto.getDocumentId(), updatedDto.getDocumentId());
-        Assert.assertEquals(metadataDto.getRotationAngle(), updatedDto.getRotationAngle());
+        Assertions.assertEquals(metadataDto.getDocumentId(), updatedDto.getDocumentId());
+        Assertions.assertEquals(metadataDto.getRotationAngle(), updatedDto.getRotationAngle());
 
     }
 
@@ -83,15 +83,15 @@ public class MetadataServiceImplTest {
         verify(metadataMapper, atLeast(1)).toDto(metadata);
 
 
-        Assert.assertEquals(metadataDto.getDocumentId(), updatedDto.getDocumentId());
-        Assert.assertEquals(metadataDto.getRotationAngle(), updatedDto.getRotationAngle());
+        Assertions.assertEquals(metadataDto.getDocumentId(), updatedDto.getDocumentId());
+        Assertions.assertEquals(metadataDto.getRotationAngle(), updatedDto.getRotationAngle());
 
     }
 
-    @Test(expected = BadCredentialsException.class)
+    @Test
     public void testSaveFailure() {
         MetadataDto metadataDto = createMetadataDto();
-        metadataService.save(metadataDto);
+        Assertions.assertThrows(BadCredentialsException.class, () -> metadataService.save(metadataDto));
     }
 
     @Test
@@ -110,8 +110,8 @@ public class MetadataServiceImplTest {
         verify(metadataRepository, atLeast(1))
             .findByDocumentId(metadataDto.getDocumentId());
 
-        Assert.assertEquals(metadataDto.getDocumentId(), updatedDto.getDocumentId());
-        Assert.assertEquals(metadataDto.getRotationAngle(), updatedDto.getRotationAngle());
+        Assertions.assertEquals(metadataDto.getDocumentId(), updatedDto.getDocumentId());
+        Assertions.assertEquals(metadataDto.getRotationAngle(), updatedDto.getRotationAngle());
     }
 
     private MetadataDto createMetadataDto() {

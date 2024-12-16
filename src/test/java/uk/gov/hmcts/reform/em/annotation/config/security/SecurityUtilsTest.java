@@ -1,12 +1,12 @@
 package uk.gov.hmcts.reform.em.annotation.config.security;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,8 +28,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.ACCESS_TOKEN;
 
-@RunWith(MockitoJUnitRunner.class)
-public class SecurityUtilsTest {
+@ExtendWith(MockitoExtension.class)
+class SecurityUtilsTest {
     @Mock
     private IdamRepository idamRepository;
 
@@ -44,7 +44,7 @@ public class SecurityUtilsTest {
     protected SecurityContext securityContext;
 
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         doReturn(authentication).when(securityContext).getAuthentication();
         SecurityContextHolder.setContext(securityContext);
@@ -61,14 +61,14 @@ public class SecurityUtilsTest {
 
     @Test
     @DisplayName("Null authentication returns null")
-    public void testNullUserLogin() {
+    void testNullUserLogin() {
         doReturn(null).when(securityContext).getAuthentication();
-        Assert.assertFalse(securityUtils.getCurrentUserLogin().isPresent());
+        Assertions.assertFalse(securityUtils.getCurrentUserLogin().isPresent());
     }
 
     @Test
     @DisplayName("User details authentication calls getUsername")
-    public void testUserDetailsUserLogin() {
+    void testUserDetailsUserLogin() {
         UserDetails userDetails = mock(UserDetails.class);
         when(authentication.getPrincipal()).thenReturn(userDetails);
         securityUtils.getCurrentUserLogin();
@@ -77,17 +77,17 @@ public class SecurityUtilsTest {
 
     @Test
     @DisplayName("String authentication gets current login")
-    public void testStringUserLogin() {
+    void testStringUserLogin() {
         String authenticationString = "Authentication";
         when(authentication.getPrincipal()).thenReturn(authenticationString);
         Optional<String> login = securityUtils.getCurrentUserLogin();
-        Assert.assertTrue(login.isPresent());
-        Assert.assertEquals(login.get(), authenticationString);
+        Assertions.assertTrue(login.isPresent());
+        Assertions.assertEquals(login.get(), authenticationString);
     }
 
     @Test
     @DisplayName("Jwt authentication calls getUid")
-    public void testValidJwtAuthenticationTokenUserLogin() {
+    void testValidJwtAuthenticationTokenUserLogin() {
         doReturn(jwtAuthenticationToken).when(securityContext).getAuthentication();
 
         UserInfo userInfo = mock(UserInfo.class);
@@ -104,12 +104,12 @@ public class SecurityUtilsTest {
         Jwt jwt = mock(Jwt.class);
         JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(jwt);
         doReturn(authenticationToken).when(securityContext).getAuthentication();
-        Assert.assertFalse(securityUtils.getCurrentUserLogin().isPresent());
+        Assertions.assertFalse(securityUtils.getCurrentUserLogin().isPresent());
     }
 
     @Test
     @DisplayName("Default Oidc authentication gets current login")
-    public void testValidDefaultOidcUserLogin() {
+    void testValidDefaultOidcUserLogin() {
         DefaultOidcUser defaultOidcUser = mock(DefaultOidcUser.class);
         when(authentication.getPrincipal()).thenReturn(defaultOidcUser);
 
@@ -117,17 +117,17 @@ public class SecurityUtilsTest {
         when(defaultOidcUser.getAttributes()).thenReturn(attributes);
 
         Optional<String> login = securityUtils.getCurrentUserLogin();
-        Assert.assertTrue(login.isPresent());
-        Assert.assertEquals(login.get(), "Username");
+        Assertions.assertTrue(login.isPresent());
+        Assertions.assertEquals(login.get(), "Username");
     }
 
     @Test
     @DisplayName("Invalid default Oidc authentication returns null")
-    public void testInvalidDefaultOidcUserLogin() {
+    void testInvalidDefaultOidcUserLogin() {
         DefaultOidcUser defaultOidcUser = mock(DefaultOidcUser.class);
         when(authentication.getPrincipal()).thenReturn(defaultOidcUser);
 
-        Assert.assertFalse(securityUtils.getCurrentUserLogin().isPresent());
+        Assertions.assertFalse(securityUtils.getCurrentUserLogin().isPresent());
     }
 
 

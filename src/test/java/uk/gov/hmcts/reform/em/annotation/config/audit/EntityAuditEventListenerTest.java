@@ -4,8 +4,8 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
@@ -58,7 +58,7 @@ public class EntityAuditEventListenerTest {
 
 
 
-    @Before
+    @BeforeEach
     public void setUp() {
         entityAuditEventListener = new EntityAuditEventListener();
         EntityAuditEventListener.setBeanFactory(beanFactory);
@@ -66,7 +66,7 @@ public class EntityAuditEventListenerTest {
     }
 
     @AfterAll
-    static void tearDownAll() {
+    public static void tearDownAll() {
         EntityAuditEventListener.setBeanFactory(originalBeanFactory);
     }
 

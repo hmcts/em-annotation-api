@@ -1,29 +1,27 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-public class WelcomeResourceTest {
+class WelcomeResourceTest {
 
     private final WelcomeResource welcomeResource = new WelcomeResource();
 
     @Test
-    public void testEndPointResponseCode() {
+    void testEndPointResponseCode() {
         ResponseEntity<Map<String,String>> responseEntity = welcomeResource.welcome();
 
-        assertNotNull(responseEntity);
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertNotNull(responseEntity);
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
     @Test
-    public void testEndpointResponseMessage() {
+    void testEndpointResponseMessage() {
         ResponseEntity<Map<String,String>> responseEntity = welcomeResource.welcome();
 
         Map<String,String> expectedResponse = new HashMap<>();
@@ -31,8 +29,8 @@ public class WelcomeResourceTest {
 
         String cacheHeader = responseEntity.getHeaders().getCacheControl();
 
-        assertNotNull(responseEntity);
-        assertEquals("no-cache",cacheHeader);
-        assertEquals(expectedResponse, responseEntity.getBody());
+        Assertions.assertNotNull(responseEntity);
+        Assertions.assertEquals("no-cache", cacheHeader);
+        Assertions.assertEquals(expectedResponse, responseEntity.getBody());
     }
 }
