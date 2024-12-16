@@ -46,7 +46,6 @@ class SecurityUtilsTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        doReturn(authentication).when(securityContext).getAuthentication();
         SecurityContextHolder.setContext(securityContext);
 
         Jwt jwt = Jwt.withTokenValue("token")
@@ -69,6 +68,7 @@ class SecurityUtilsTest {
     @Test
     @DisplayName("User details authentication calls getUsername")
     void testUserDetailsUserLogin() {
+        doReturn(authentication).when(securityContext).getAuthentication();
         UserDetails userDetails = mock(UserDetails.class);
         when(authentication.getPrincipal()).thenReturn(userDetails);
         securityUtils.getCurrentUserLogin();
@@ -78,6 +78,7 @@ class SecurityUtilsTest {
     @Test
     @DisplayName("String authentication gets current login")
     void testStringUserLogin() {
+        doReturn(authentication).when(securityContext).getAuthentication();
         String authenticationString = "Authentication";
         when(authentication.getPrincipal()).thenReturn(authenticationString);
         Optional<String> login = securityUtils.getCurrentUserLogin();
@@ -110,6 +111,7 @@ class SecurityUtilsTest {
     @Test
     @DisplayName("Default Oidc authentication gets current login")
     void testValidDefaultOidcUserLogin() {
+        doReturn(authentication).when(securityContext).getAuthentication();
         DefaultOidcUser defaultOidcUser = mock(DefaultOidcUser.class);
         when(authentication.getPrincipal()).thenReturn(defaultOidcUser);
 
@@ -124,6 +126,7 @@ class SecurityUtilsTest {
     @Test
     @DisplayName("Invalid default Oidc authentication returns null")
     void testInvalidDefaultOidcUserLogin() {
+        doReturn(authentication).when(securityContext).getAuthentication();
         DefaultOidcUser defaultOidcUser = mock(DefaultOidcUser.class);
         when(authentication.getPrincipal()).thenReturn(defaultOidcUser);
 
