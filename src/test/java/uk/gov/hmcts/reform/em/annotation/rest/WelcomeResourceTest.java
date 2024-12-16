@@ -1,12 +1,14 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class WelcomeResourceTest {
 
@@ -16,8 +18,8 @@ class WelcomeResourceTest {
     void testEndPointResponseCode() {
         ResponseEntity<Map<String,String>> responseEntity = welcomeResource.welcome();
 
-        Assertions.assertNotNull(responseEntity);
-        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
     @Test
@@ -29,8 +31,8 @@ class WelcomeResourceTest {
 
         String cacheHeader = responseEntity.getHeaders().getCacheControl();
 
-        Assertions.assertNotNull(responseEntity);
-        Assertions.assertEquals("no-cache", cacheHeader);
-        Assertions.assertEquals(expectedResponse, responseEntity.getBody());
+        assertNotNull(responseEntity);
+        assertEquals("no-cache", cacheHeader);
+        assertEquals(expectedResponse, responseEntity.getBody());
     }
 }

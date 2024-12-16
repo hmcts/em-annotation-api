@@ -4,7 +4,6 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +18,7 @@ import uk.gov.hmcts.reform.em.annotation.domain.Rectangle;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
@@ -27,7 +27,6 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class EntityAuditEventListenerTest {
@@ -78,7 +77,7 @@ class EntityAuditEventListenerTest {
 
         var beanFactory1 = (BeanFactory)beanFactoryField.get(Class.forName(EntityAuditEventListener.class.getName()));
 
-        Assertions.assertEquals(beanFactory1, beanFactory);
+        assertEquals(beanFactory1, beanFactory);
     }
 
     @Test
@@ -100,8 +99,8 @@ class EntityAuditEventListenerTest {
                 .when(asyncEntityAuditEventWriter)
                 .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.CREATE));
         entityAuditEventListener.onPostCreate(mock(Rectangle.class));
-        Assertions.assertEquals(1, logsList.size());
-        Assertions.assertEquals(noBeanFound, logsList.get(0).getMessage());
+        assertEquals(1, logsList.size());
+        assertEquals(noBeanFound, logsList.get(0).getMessage());
     }
 
     @Test
@@ -112,8 +111,8 @@ class EntityAuditEventListenerTest {
                 .when(asyncEntityAuditEventWriter)
                 .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.CREATE));
         entityAuditEventListener.onPostCreate(mock(Rectangle.class));
-        Assertions.assertEquals(1, logsList.size());
-        Assertions.assertEquals("Exception while persisting create audit entity {}", logsList.get(0).getMessage());
+        assertEquals(1, logsList.size());
+        assertEquals("Exception while persisting create audit entity {}", logsList.get(0).getMessage());
     }
 
     @Test
@@ -135,8 +134,8 @@ class EntityAuditEventListenerTest {
                 .when(asyncEntityAuditEventWriter)
                 .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.UPDATE));
         entityAuditEventListener.onPostUpdate(mock(Rectangle.class));
-        Assertions.assertEquals(1, logsList.size());
-        Assertions.assertEquals(noBeanFound, logsList.get(0).getMessage());
+        assertEquals(1, logsList.size());
+        assertEquals(noBeanFound, logsList.get(0).getMessage());
     }
 
     @Test
@@ -147,8 +146,8 @@ class EntityAuditEventListenerTest {
                 .when(asyncEntityAuditEventWriter)
                 .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.UPDATE));
         entityAuditEventListener.onPostUpdate(mock(Rectangle.class));
-        Assertions.assertEquals(1, logsList.size());
-        Assertions.assertEquals("Exception while persisting update audit entity {}", logsList.get(0).getMessage());
+        assertEquals(1, logsList.size());
+        assertEquals("Exception while persisting update audit entity {}", logsList.get(0).getMessage());
     }
 
     @Test
@@ -170,8 +169,8 @@ class EntityAuditEventListenerTest {
                 .when(asyncEntityAuditEventWriter)
                 .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.DELETE));
         entityAuditEventListener.onPostRemove(mock(Rectangle.class));
-        Assertions.assertEquals(1, logsList.size());
-        Assertions.assertEquals(noBeanFound, logsList.get(0).getMessage());
+        assertEquals(1, logsList.size());
+        assertEquals(noBeanFound, logsList.get(0).getMessage());
     }
 
     @Test
@@ -182,8 +181,8 @@ class EntityAuditEventListenerTest {
                 .when(asyncEntityAuditEventWriter)
                 .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.DELETE));
         entityAuditEventListener.onPostRemove(mock(Rectangle.class));
-        Assertions.assertEquals(1, logsList.size());
-        Assertions.assertEquals("Exception while persisting delete audit entity {}", logsList.get(0).getMessage());
+        assertEquals(1, logsList.size());
+        assertEquals("Exception while persisting delete audit entity {}", logsList.get(0).getMessage());
     }
 
     private List<ILoggingEvent> getiLoggingEvents() {

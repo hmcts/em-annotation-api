@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,6 +14,10 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.MetadataDto;
 
 import java.net.URISyntaxException;
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class MetaDataResourceTest {
 
@@ -43,8 +46,8 @@ class MetaDataResourceTest {
         ResponseEntity<MetadataDto> responseEntity = metaDataResource.createMetaData(metadataDto);
 
         MetadataDto response = responseEntity.getBody();
-        Assertions.assertEquals(metadataDto.getDocumentId(), response.getDocumentId());
-        Assertions.assertEquals(metadataDto.getRotationAngle(), response.getRotationAngle());
+        assertEquals(metadataDto.getDocumentId(), response.getDocumentId());
+        assertEquals(metadataDto.getRotationAngle(), response.getRotationAngle());
 
         Mockito.verify(metadataService, Mockito.atLeast(1)).save(metadataDto);
     }
@@ -67,9 +70,9 @@ class MetaDataResourceTest {
 
         ResponseEntity<MetadataDto> responseEntity = metaDataResource.getMetadata(metadataDto.getDocumentId());
 
-        Assertions.assertNotNull(responseEntity);
-        Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
-        Assertions.assertNull(responseEntity.getBody());
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        assertNull(responseEntity.getBody());
 
         Mockito.verify(metadataService, Mockito.atLeast(1)).findByDocumentId(metadataDto.getDocumentId());
     }
@@ -82,9 +85,9 @@ class MetaDataResourceTest {
 
         ResponseEntity<MetadataDto> responseEntity = metaDataResource.getMetadata(metadataDto.getDocumentId());
 
-        Assertions.assertNotNull(responseEntity);
-        Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
-        Assertions.assertNull(responseEntity.getBody());
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        assertNull(responseEntity.getBody());
 
         Mockito.verify(metadataService, Mockito.atLeast(1)).findByDocumentId(metadataDto.getDocumentId());
     }
