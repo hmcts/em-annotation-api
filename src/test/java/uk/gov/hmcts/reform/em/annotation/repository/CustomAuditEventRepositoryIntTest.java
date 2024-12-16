@@ -2,8 +2,8 @@ package uk.gov.hmcts.reform.em.annotation.repository;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.audit.AuditEvent;
@@ -57,7 +57,7 @@ public class CustomAuditEventRepositoryIntTest {
 
     private PersistentAuditEvent testOldUserEvent;
 
-    @Before
+    @BeforeEach
     public void setup() {
         customAuditEventRepository =
                 new CustomAuditEventRepository(persistenceAuditEventRepository, auditEventConverter);

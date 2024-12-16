@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
 import jakarta.persistence.EntityManager;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +69,7 @@ public class AnnotationSetResourceIntTest extends BaseTest {
 
     private AnnotationSet annotationSet;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
         final AnnotationSetResource annotationSetResource = new AnnotationSetResource(annotationSetService);
@@ -91,7 +91,7 @@ public class AnnotationSetResourceIntTest extends BaseTest {
         return annotationSet;
     }
 
-    @Before
+    @BeforeEach
     public void initTest() {
         annotationSet = createEntity(em);
     }

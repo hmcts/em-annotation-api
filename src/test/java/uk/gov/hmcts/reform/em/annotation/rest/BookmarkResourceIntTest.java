@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
 import jakarta.persistence.EntityManager;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +76,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     private Bookmark bookmark;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
         final BookmarkResource bookmarkResource = new BookmarkResource(bookmarkService);
@@ -96,7 +96,7 @@ public class BookmarkResourceIntTest extends BaseTest {
         return bookmark;
     }
 
-    @Before
+    @BeforeEach
     public void initTest() {
         bookmark = createEntity(em);
     }

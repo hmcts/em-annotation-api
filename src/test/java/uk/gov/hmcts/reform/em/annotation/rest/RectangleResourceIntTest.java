@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
 import jakarta.persistence.EntityManager;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +82,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
     private Rectangle rectangle;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
         em.persist(new IdamDetails("system"));
@@ -105,7 +105,7 @@ public class RectangleResourceIntTest extends BaseTest {
         return rectangle;
     }
 
-    @Before
+    @BeforeEach
     public void initTest() {
         rectangle = createEntity(em);
     }

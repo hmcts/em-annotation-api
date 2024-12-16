@@ -2,8 +2,8 @@ package uk.gov.hmcts.reform.em.annotation.rest;
 
 import jakarta.persistence.EntityManager;
 import org.json.JSONObject;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +78,7 @@ public class CommentResourceIntTest extends BaseTest {
     @Autowired
     private AnnotationMapper annotationMapper;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
         final CommentResource commentResource = new CommentResource(commentService);
@@ -99,7 +99,7 @@ public class CommentResourceIntTest extends BaseTest {
         return comment;
     }
 
-    @Before
+    @BeforeEach
     public void initTest() {
         comment = createEntity(em);
 

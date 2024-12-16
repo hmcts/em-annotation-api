@@ -2,8 +2,8 @@ package uk.gov.hmcts.reform.em.annotation.rest;
 
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -55,7 +55,7 @@ public class FilterAnnotationSetTest  extends BaseTest {
 
     private AnnotationSet annotationSet;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
         em.persist(new IdamDetails("system"));
@@ -80,7 +80,7 @@ public class FilterAnnotationSetTest  extends BaseTest {
         return annotationSet;
     }
 
-    @Before
+    @BeforeEach
     public void initTest() {
         annotationSet = createEntity(em);
     }

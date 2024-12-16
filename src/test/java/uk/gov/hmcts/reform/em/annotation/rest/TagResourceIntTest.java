@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
 import jakarta.persistence.EntityManager;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ public class TagResourceIntTest extends BaseTest {
 
     private Tag tag;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         final TagResource tagResource = new TagResource(tagService);
@@ -77,7 +77,7 @@ public class TagResourceIntTest extends BaseTest {
         return tag;
     }
 
-    @Before
+    @BeforeEach
     public void initTest() {
         tag = createEntity(em);
     }
