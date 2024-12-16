@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.config.Constants;
@@ -38,10 +38,10 @@ import static uk.gov.hmcts.reform.em.annotation.repository.CustomAuditEventRepos
  *
  * @see CustomAuditEventRepository
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
 @Transactional
-public class CustomAuditEventRepositoryIntTest {
+class CustomAuditEventRepositoryIntTest {
 
     @Autowired
     private PersistenceAuditEventRepository persistenceAuditEventRepository;
@@ -84,7 +84,7 @@ public class CustomAuditEventRepositoryIntTest {
     }
 
     @Test
-    public void addAuditEvent() {
+    void addAuditEvent() {
         Map<String, Object> data = new HashMap<>();
         data.put("test-key", "test-value");
         AuditEvent event = new AuditEvent("test-user", "test-type", data);
@@ -100,7 +100,7 @@ public class CustomAuditEventRepositoryIntTest {
     }
 
     @Test
-    public void findAuditEvent() {
+    void findAuditEvent() {
         Instant oneHourAgo = Instant.now().minusSeconds(3600);
         Map<String, Object> data = new HashMap<>();
         data.put("test-key", "test-value");
@@ -117,7 +117,7 @@ public class CustomAuditEventRepositoryIntTest {
     }
 
     @Test
-    public void addAuditEventTruncateLargeData() {
+    void addAuditEventTruncateLargeData() {
         Map<String, Object> data = new HashMap<>();
         StringBuilder largeData = new StringBuilder();
         largeData.append("a".repeat(EVENT_DATA_COLUMN_MAX_LENGTH + 10));
@@ -136,7 +136,7 @@ public class CustomAuditEventRepositoryIntTest {
     }
 
     @Test
-    public void testAddEventWithWebAuthenticationDetails() {
+    void testAddEventWithWebAuthenticationDetails() {
         HttpSession session = new MockHttpSession(null, "test-session-id");
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setSession(session);
@@ -154,7 +154,7 @@ public class CustomAuditEventRepositoryIntTest {
     }
 
     @Test
-    public void testAddEventWithNullData() {
+    void testAddEventWithNullData() {
         Map<String, Object> data = new HashMap<>();
         data.put("test-key", null);
         AuditEvent event = new AuditEvent("test-user", "test-type", data);
@@ -166,7 +166,7 @@ public class CustomAuditEventRepositoryIntTest {
     }
 
     @Test
-    public void addAuditEventWithAnonymousUser() {
+    void addAuditEventWithAnonymousUser() {
         Map<String, Object> data = new HashMap<>();
         data.put("test-key", "test-value");
         AuditEvent event = new AuditEvent(Constants.ANONYMOUS_USER, "test-type", data);
@@ -176,7 +176,7 @@ public class CustomAuditEventRepositoryIntTest {
     }
 
     @Test
-    public void addAuditEventWithAuthorizationFailureType() {
+    void addAuditEventWithAuthorizationFailureType() {
         Map<String, Object> data = new HashMap<>();
         data.put("test-key", "test-value");
         AuditEvent event = new AuditEvent("test-user", "AUTHORIZATION_FAILURE", data);
@@ -186,7 +186,7 @@ public class CustomAuditEventRepositoryIntTest {
     }
 
     @Test
-    public void convertToAuditEventFail() {
+    void convertToAuditEventFail() {
         AuditEventConverter auditEventConverter = new AuditEventConverter();
         PersistentAuditEvent persistentAuditEvent = null;
         AuditEvent auditEvents = auditEventConverter.convertToAuditEvent(persistentAuditEvent);
@@ -199,7 +199,7 @@ public class CustomAuditEventRepositoryIntTest {
 
 
     @Test
-    public void auditEventServiceFindAllTest() {
+    void auditEventServiceFindAllTest() {
         AuditEventService auditEventService =
                 new AuditEventService(persistenceAuditEventRepository, auditEventConverter);
         Map<String, Object> data = new HashMap<>();
@@ -217,7 +217,7 @@ public class CustomAuditEventRepositoryIntTest {
     }
 
     @Test
-    public void auditEventServiceFindByDatesTest() {
+    void auditEventServiceFindByDatesTest() {
         Instant oneHourAgo = Instant.now().minusSeconds(3600);
         Instant oneHourAhead = Instant.now().plusSeconds(3600);
         AuditEventService auditEventService =
@@ -237,7 +237,7 @@ public class CustomAuditEventRepositoryIntTest {
     }
 
     @Test
-    public void auditEventServiceFindTest() {
+    void auditEventServiceFindTest() {
         AuditEventService auditEventService =
                 new AuditEventService(persistenceAuditEventRepository, auditEventConverter);
         Map<String, Object> data = new HashMap<>();

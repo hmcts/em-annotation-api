@@ -1,12 +1,12 @@
 package uk.gov.hmcts.reform.em.annotation.rest.errors;
 
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.BaseTest;
 import uk.gov.hmcts.reform.em.annotation.rest.TestSecurityConfiguration;
@@ -22,9 +22,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see ExceptionTranslator
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
-public class ExceptionTranslatorIntTest extends BaseTest {
+class ExceptionTranslatorIntTest extends BaseTest {
 
     @Autowired
     private ExceptionTranslatorTestController controller;
@@ -36,7 +36,7 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Test
-    public void testConcurrencyFailure() throws Exception {
+    void testConcurrencyFailure() throws Exception {
         restLogoutMockMvc.perform(get("/test/concurrency-failure"))
             .andExpect(status().isConflict())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -44,7 +44,7 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
-    public void testNoSuchElementException() throws Exception {
+    void testNoSuchElementException() throws Exception {
         restLogoutMockMvc.perform(get("/test/no-such-element-exception"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -52,7 +52,7 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
-    public void testMethodArgumentNotValid() throws Exception {
+    void testMethodArgumentNotValid() throws Exception {
         restLogoutMockMvc.perform(post("/test/method-argument").content("{}").contentType(MediaType.APPLICATION_JSON))
              .andExpect(status().isBadRequest())
              .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -63,7 +63,7 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
-    public void testParameterizedError() throws Exception {
+    void testParameterizedError() throws Exception {
         restLogoutMockMvc.perform(get("/test/parameterized-error"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -73,7 +73,7 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
-    public void testParameterizedError2() throws Exception {
+    void testParameterizedError2() throws Exception {
         restLogoutMockMvc.perform(get("/test/parameterized-error2"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -83,7 +83,7 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
-    public void testMissingServletRequestPartException() throws Exception {
+    void testMissingServletRequestPartException() throws Exception {
         restLogoutMockMvc.perform(get("/test/missing-servlet-request-part"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -91,7 +91,7 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
-    public void testMissingServletRequestParameterException() throws Exception {
+    void testMissingServletRequestParameterException() throws Exception {
         restLogoutMockMvc.perform(get("/test/missing-servlet-request-parameter"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -99,7 +99,7 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
-    public void testAccessDenied() throws Exception {
+    void testAccessDenied() throws Exception {
         restLogoutMockMvc.perform(get("/test/access-denied"))
             .andExpect(status().isForbidden())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -107,7 +107,7 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
-    public void testUnauthorized() throws Exception {
+    void testUnauthorized() throws Exception {
         restLogoutMockMvc.perform(get("/test/unauthorized"))
             .andExpect(status().isUnauthorized())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -116,7 +116,7 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
-    public void testMethodNotSupported() throws Exception {
+    void testMethodNotSupported() throws Exception {
         restLogoutMockMvc.perform(post("/test/access-denied"))
             .andExpect(status().isMethodNotAllowed())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -124,7 +124,7 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
-    public void testExceptionWithResponseStatus() throws Exception {
+    void testExceptionWithResponseStatus() throws Exception {
         restLogoutMockMvc.perform(get("/test/response-status"))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -133,7 +133,7 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
-    public void testInternalServerError() throws Exception {
+    void testInternalServerError() throws Exception {
         restLogoutMockMvc.perform(get("/test/internal-server-error"))
             .andExpect(status().isInternalServerError())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -142,7 +142,7 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
-    public void testDataIntegrityViolation() throws Exception {
+    void testDataIntegrityViolation() throws Exception {
         restLogoutMockMvc.perform(get("/test/data-integrity-violation"))
                 .andExpect(status().isConflict())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -150,7 +150,7 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
-    public void testConstraintViolation() throws Exception {
+    void testConstraintViolation() throws Exception {
         restLogoutMockMvc.perform(get("/test/constraint-violation"))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -158,7 +158,7 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
-    public void testPsqlException() throws Exception {
+    void testPsqlException() throws Exception {
         restLogoutMockMvc.perform(get("/test/psql-key-violation"))
                 .andExpect(status().isConflict())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
@@ -169,21 +169,21 @@ public class ExceptionTranslatorIntTest extends BaseTest {
     }
 
     @Test
-    public void testRetryableException() throws Exception {
+    void testRetryableException() throws Exception {
         restLogoutMockMvc.perform(get("/test/retryable-exception"))
                 .andExpect(status().isServiceUnavailable())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
     }
 
     @Test
-    public void testFeignGatewayTimeout() throws Exception {
+    void testFeignGatewayTimeout() throws Exception {
         restLogoutMockMvc.perform(get("/test/feign-gateway-timeout"))
                 .andExpect(status().isGatewayTimeout())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
     }
 
     @Test
-    public void testFeignBadGateway() throws Exception {
+    void testFeignBadGateway() throws Exception {
         restLogoutMockMvc.perform(get("/test/feign-bad-gateway"))
                 .andExpect(status().isBadGateway())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));

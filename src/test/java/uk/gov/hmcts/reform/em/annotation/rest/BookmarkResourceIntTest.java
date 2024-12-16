@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.em.annotation.rest;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.BaseTest;
@@ -46,9 +46,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see BookmarkResource
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
-public class BookmarkResourceIntTest extends BaseTest {
+class BookmarkResourceIntTest extends BaseTest {
 
     @Autowired
     private BookmarkRepository bookmarkRepository;
@@ -103,7 +103,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void createBookmarkUuidNull() throws Exception {
+    void createBookmarkUuidNull() throws Exception {
         int databaseSizeBeforeCreate = bookmarkRepository.findAll().size();
 
         // Create the Comment
@@ -121,7 +121,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void createBookmarkCreatedByNull() throws Exception {
+    void createBookmarkCreatedByNull() throws Exception {
         int databaseSizeBeforeCreate = bookmarkRepository.findAll().size();
         assertThat(databaseSizeBeforeCreate).isZero();
         bookmark.setCreatedBy(null);
@@ -142,7 +142,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void createBookmarkWithExistingId() throws Exception {
+    void createBookmarkWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = bookmarkRepository.findAll().size();
 
         bookmark.setId(UUID.randomUUID());
@@ -159,7 +159,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void updateBookmark() throws Exception {
+    void updateBookmark() throws Exception {
         bookmarkRepository.saveAndFlush(bookmark);
 
         int databaseSizeBeforeUpdate = bookmarkRepository.findAll().size();
@@ -185,7 +185,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void updateNonExistentBookmark() throws Exception {
+    void updateNonExistentBookmark() throws Exception {
         int databaseSizeBeforeUpdate = bookmarkRepository.findAll().size();
         bookmark.setId(null);
 
@@ -202,7 +202,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void updateMultipleBookmark() throws Exception {
+    void updateMultipleBookmark() throws Exception {
         bookmarkRepository.saveAndFlush(bookmark);
 
         int databaseSizeBeforeUpdate = bookmarkRepository.findAll().size();
@@ -237,7 +237,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void updateMultipleNonExistentBookmark() throws Exception {
+    void updateMultipleNonExistentBookmark() throws Exception {
         int databaseSizeBeforeUpdate = bookmarkRepository.findAll().size();
         bookmark.setId(null);
 
@@ -254,7 +254,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void getBookmarksByDocumentId() throws Exception {
+    void getBookmarksByDocumentId() throws Exception {
         bookmark = bookmarkRepository.saveAndFlush(bookmark);
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("bob"));
 
@@ -267,7 +267,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void getBookmarksByDocumentIdNoUser() throws Exception {
+    void getBookmarksByDocumentIdNoUser() throws Exception {
         bookmark = bookmarkRepository.saveAndFlush(bookmark);
 
         restLogoutMockMvc.perform(get("/api/" + bookmark.getDocumentId() + "/bookmarks")
@@ -278,7 +278,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void getBookmarksByDocumentIdNotFound() throws Exception {
+    void getBookmarksByDocumentIdNotFound() throws Exception {
         bookmark = bookmarkRepository.saveAndFlush(bookmark);
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("fabio"));
 
@@ -288,7 +288,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void deleteBookmark() throws Exception {
+    void deleteBookmark() throws Exception {
         bookmarkRepository.saveAndFlush(bookmark);
 
         int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
@@ -302,7 +302,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void deleteNonExistingBookmark() throws Exception {
+    void deleteNonExistingBookmark() throws Exception {
 
         int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
         restLogoutMockMvc.perform(delete("/api/bookmarks/{id}", UUID.randomUUID())
@@ -315,7 +315,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void deleteMultipleBookmarks() throws Exception {
+    void deleteMultipleBookmarks() throws Exception {
         bookmarkRepository.saveAndFlush(bookmark);
         Bookmark updatedBookmark = bookmarkRepository.findById(bookmark.getId()).get();
 
@@ -354,7 +354,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void deleteMultipleNullBookmarkId() throws Exception {
+    void deleteMultipleNullBookmarkId() throws Exception {
         int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
         assertThat(databaseSizeBeforeDelete).isZero();
         bookmark.setId(null);
@@ -373,7 +373,7 @@ public class BookmarkResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void deleteMultipleNonExistantBookmarkId() throws Exception {
+    void deleteMultipleNonExistantBookmarkId() throws Exception {
         int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
         assertThat(databaseSizeBeforeDelete).isZero();
         bookmark.setId(UUID.randomUUID());

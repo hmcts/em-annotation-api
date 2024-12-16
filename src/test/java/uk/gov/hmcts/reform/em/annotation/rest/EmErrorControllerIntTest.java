@@ -2,29 +2,29 @@ package uk.gov.hmcts.reform.em.annotation.rest;
 
 import jakarta.servlet.RequestDispatcher;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.ConcurrencyFailureException;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.BaseTest;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
-public class EmErrorControllerIntTest extends BaseTest {
+class EmErrorControllerIntTest extends BaseTest {
 
     @Test
-    public void testPath() throws Exception {
+    void testPath() throws Exception {
         restLogoutMockMvc.perform(get("/error")
                 )
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void testException() throws Exception {
+    void testException() throws Exception {
         restLogoutMockMvc.perform(get("/error")
                         .requestAttr(RequestDispatcher.ERROR_EXCEPTION,
                                 new IllegalStateException("Test Exception"))
@@ -33,7 +33,7 @@ public class EmErrorControllerIntTest extends BaseTest {
     }
 
     @Test
-    public void testHandledException() throws Exception {
+    void testHandledException() throws Exception {
         restLogoutMockMvc.perform(get("/error")
                         .requestAttr(RequestDispatcher.ERROR_EXCEPTION,
                                 new ConcurrencyFailureException("Test concurrency failure"))

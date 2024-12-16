@@ -3,14 +3,14 @@ package uk.gov.hmcts.reform.em.annotation.rest;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.BaseTest;
@@ -43,9 +43,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see RectangleResource
  */
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
-public class RectangleResourceIntTest extends BaseTest {
+class RectangleResourceIntTest extends BaseTest {
 
     private static final Double DEFAULT_X = 1d;
     private static final Double UPDATED_X = 2d;
@@ -112,7 +112,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void createRectangleUuidNull() throws Exception {
+    void createRectangleUuidNull() throws Exception {
         int databaseSizeBeforeCreate = rectangleRepository.findAll().size();
 
         // Create the Rectangle
@@ -130,7 +130,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void test_negative_annotation_id_format() throws Exception {
+    void test_negative_annotation_id_format() throws Exception {
 
         int databaseSizeBeforeCreate = rectangleRepository.findAll().size();
 
@@ -147,7 +147,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void test_negative_non_existant_annotation_id() throws Exception {
+    void test_negative_non_existant_annotation_id() throws Exception {
 
         int databaseSizeBeforeCreate = rectangleRepository.findAll().size();
         Annotation annotation = new Annotation();
@@ -167,7 +167,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void getAllRectangles() throws Exception {
+    void getAllRectangles() throws Exception {
         // Initialize the database
         rectangleRepository.saveAndFlush(rectangle);
 
@@ -184,7 +184,7 @@ public class RectangleResourceIntTest extends BaseTest {
     
     @Test
     @Transactional
-    public void getRectangle() throws Exception {
+    void getRectangle() throws Exception {
         // Initialize the database
         rectangleRepository.saveAndFlush(rectangle);
 
@@ -201,7 +201,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void getNonExistingRectangle() throws Exception {
+    void getNonExistingRectangle() throws Exception {
         // Get the rectangle
         restLogoutMockMvc.perform(get("/api/rectangles/{id}", UUID.randomUUID()))
             .andExpect(status().isNotFound());
@@ -209,7 +209,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void updateRectangle() throws Exception {
+    void updateRectangle() throws Exception {
         // Initialize the database
         rectangleRepository.saveAndFlush(rectangle);
 
@@ -243,7 +243,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void updateNonExistingRectangle() throws Exception {
+    void updateNonExistingRectangle() throws Exception {
         int databaseSizeBeforeUpdate = rectangleRepository.findAll().size();
 
         // Create the Rectangle
@@ -263,7 +263,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void deleteRectangle() throws Exception {
+    void deleteRectangle() throws Exception {
         // Initialize the database
         rectangleRepository.saveAndFlush(rectangle);
 
@@ -281,7 +281,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void deleteNonExistingRectangle() throws Exception {
+    void deleteNonExistingRectangle() throws Exception {
         int databaseSizeBeforeDelete = rectangleRepository.findAll().size();
 
         // Delete the rectangle
@@ -296,7 +296,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void equalsVerifier() throws Exception {
+    void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Rectangle.class);
         Rectangle rectangle1 = new Rectangle();
         rectangle1.setId(UUID.randomUUID());
@@ -311,7 +311,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void dtoEqualsVerifier() throws Exception {
+    void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(RectangleDTO.class);
         RectangleDTO rectangleDTO1 = new RectangleDTO();
         rectangleDTO1.setId(UUID.randomUUID());
@@ -327,7 +327,7 @@ public class RectangleResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void testEntityFromId() {
+    void testEntityFromId() {
         UUID uuid = UUID.randomUUID();
         assertThat(rectangleMapper.fromId(uuid).getId()).isEqualTo(uuid);
         assertThat(rectangleMapper.fromId(null)).isNull();
