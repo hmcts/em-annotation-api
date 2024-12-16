@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @see PaginationUtil
  */
+
 class PaginationUtilUnitTest {
 
     @Test
