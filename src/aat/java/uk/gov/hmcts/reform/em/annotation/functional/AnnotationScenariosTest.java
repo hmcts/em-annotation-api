@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import java.util.UUID;
 
@@ -41,9 +39,6 @@ class AnnotationScenariosTest {
 
     @Value("${test.url}")
     private String testUrl;
-
-    @Rule
-    public RetryRule retryRule = new RetryRule(3);
 
     private RequestSpecification request;
     private RequestSpecification unAuthenticatedRequest;
