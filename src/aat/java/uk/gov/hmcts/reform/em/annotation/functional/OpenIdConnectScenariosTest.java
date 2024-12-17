@@ -26,7 +26,7 @@ class OpenIdConnectScenariosTest {
     private String testUrl;
 
     @Test
-        // Invalid IdamAuth
+    // Invalid IdamAuth
     void testWithInvalidIdamAuth() {
         testUtil
             .invalidIdamAuthrequest()
@@ -38,7 +38,7 @@ class OpenIdConnectScenariosTest {
     }
 
     @Test
-        // Empty S2SAuth
+    // Empty S2SAuth
     void testWithEmptyS2SAuth() {
 
         testUtil
@@ -51,7 +51,7 @@ class OpenIdConnectScenariosTest {
     }
 
     @Test
-        // Empty IdamAuth and Valid S2S Auth
+    // Empty IdamAuth and Valid S2S Auth
     void testWithEmptyIdamAuthAndValidS2SAuth() {
 
         testUtil
@@ -65,7 +65,7 @@ class OpenIdConnectScenariosTest {
     }
 
     @Test
-        // Empty IdamAuth and Empty S2SAuth
+    // Empty IdamAuth and Empty S2SAuth
     void testIdamAuthAndS2SAuthAreEmpty() {
 
         testUtil
