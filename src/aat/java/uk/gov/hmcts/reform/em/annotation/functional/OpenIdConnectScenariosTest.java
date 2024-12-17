@@ -26,32 +26,32 @@ class OpenIdConnectScenariosTest {
     private String testUrl;
 
     @Test
-    // Invalid IdamAuth
+        // Invalid IdamAuth
     void testWithInvalidIdamAuth() {
         testUtil
-                .invalidIdamAuthrequest()
-                .baseUri(testUrl)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .get("/api/annotation-sets")
-                .then()
-                .statusCode(401);
+            .invalidIdamAuthrequest()
+            .baseUri(testUrl)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .get("/api/annotation-sets")
+            .then()
+            .statusCode(401);
     }
 
     @Test
-    // Empty S2SAuth
+        // Empty S2SAuth
     void testWithEmptyS2SAuth() {
 
         testUtil
-                .validAuthRequestWithEmptyS2SAuth()
-                .baseUri(testUrl)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .get("/api/annotation-sets")
-                .then()
-                .statusCode(401);
+            .validAuthRequestWithEmptyS2SAuth()
+            .baseUri(testUrl)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .get("/api/annotation-sets")
+            .then()
+            .statusCode(401);
     }
 
     @Test
-    // Empty IdamAuth and Valid S2S Auth
+        // Empty IdamAuth and Valid S2S Auth
     void testWithEmptyIdamAuthAndValidS2SAuth() {
 
         testUtil
@@ -65,7 +65,7 @@ class OpenIdConnectScenariosTest {
     }
 
     @Test
-    // Empty IdamAuth and Empty S2SAuth
+        // Empty IdamAuth and Empty S2SAuth
     void testIdamAuthAndS2SAuthAreEmpty() {
 
         testUtil

@@ -19,7 +19,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -142,8 +141,8 @@ class BookmarkScenariosTest {
                 .get(String.format("/api/%s/bookmarks", id))
                 .then()
                 .statusCode(200)
-                .body("id", equalTo(Collections.singletonList(bookmarkId.toString())))
-                .body("documentId", equalTo(Collections.singletonList(id)))
+                .body("id", equalTo(List.of(bookmarkId.toString())))
+                .body("documentId", equalTo(List.of(id)))
                 .body("name", equalTo(List.of("Bookmark for test")))
                 .body("pageNumber", equalTo(List.of(1)))
                 .body("xCoordinate", equalTo(List.of(100.00f)))
