@@ -4,20 +4,20 @@ import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.hamcrest.Matchers;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
-import org.junit.Assume;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.annotation.testutil.ToggleProperties;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
@@ -25,14 +25,15 @@ import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SpringBootTest(classes = {TestUtil.class})
 @TestPropertySource(value = "classpath:application.yml")
 @EnableConfigurationProperties(ToggleProperties.class)
-@RunWith(SpringIntegrationSerenityRunner.class)
+@ExtendWith({SerenityJUnit5Extension.class, SpringExtension.class})
 @WithTags({@WithTag("testType:Functional")})
-public class MetadataScenarios {
+class MetadataScenariosTest {
 
     @Autowired
     private TestUtil testUtil;
@@ -49,7 +50,7 @@ public class MetadataScenarios {
     private RequestSpecification request;
     private RequestSpecification unAuthenticatedRequest;
 
-    @Before
+    @BeforeEach
     public void setupRequestSpecification() {
         request = testUtil
                 .authRequest()
@@ -63,9 +64,9 @@ public class MetadataScenarios {
     }
 
     @Test
-    public void shouldReturn201WhenCreateNewMetadata() {
+    void shouldReturn201WhenCreateNewMetadata() {
         // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableMetadataEndpoint());
+        assumeTrue(toggleProperties.isEnableMetadataEndpoint());
 
         final String documentId = UUID.randomUUID().toString();
         final ValidatableResponse response = createMetadata(documentId);
@@ -79,9 +80,9 @@ public class MetadataScenarios {
     }
 
     @Test
-    public void shouldReturn400WhenCreateNewMetadataWithoutDocumentId() {
+    void shouldReturn400WhenCreateNewMetadataWithoutDocumentId() {
         // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableMetadataEndpoint());
+        assumeTrue(toggleProperties.isEnableMetadataEndpoint());
 
         final String documentId = UUID.randomUUID().toString();
         final JSONObject metadataPayload = createMetadataPayload(documentId);
@@ -100,9 +101,9 @@ public class MetadataScenarios {
     }
 
     @Test
-    public void shouldReturn400WhenCreateNewMetadataWithoutRotationAngle() {
+    void shouldReturn400WhenCreateNewMetadataWithoutRotationAngle() {
         // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableMetadataEndpoint());
+        assumeTrue(toggleProperties.isEnableMetadataEndpoint());
 
         final String documentId = UUID.randomUUID().toString();
         final JSONObject metadataPayload = createMetadataPayload(documentId);
@@ -121,9 +122,9 @@ public class MetadataScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserCreateNewMetadata() {
+    void shouldReturn401WhenUnAuthenticatedUserCreateNewMetadata() {
         // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableMetadataEndpoint());
+        assumeTrue(toggleProperties.isEnableMetadataEndpoint());
 
         final String documentId = UUID.randomUUID().toString();
         final JSONObject metadataPayload = createMetadataPayload(documentId);
@@ -137,9 +138,9 @@ public class MetadataScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenGetMetadataByDocumentId() {
+    void shouldReturn200WhenGetMetadataByDocumentId() {
         // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableMetadataEndpoint());
+        assumeTrue(toggleProperties.isEnableMetadataEndpoint());
 
         final String documentId = UUID.randomUUID().toString();
         createMetadata(documentId);
@@ -154,9 +155,9 @@ public class MetadataScenarios {
     }
 
     @Test
-    public void shouldReturn204WhenGetMetadataByNonExistentDocumentId() {
+    void shouldReturn204WhenGetMetadataByNonExistentDocumentId() {
         // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableMetadataEndpoint());
+        assumeTrue(toggleProperties.isEnableMetadataEndpoint());
 
         final String documentId = UUID.randomUUID().toString();
 
@@ -168,9 +169,9 @@ public class MetadataScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserGetMetadataByDocumentId() {
+    void shouldReturn401WhenUnAuthenticatedUserGetMetadataByDocumentId() {
         // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableMetadataEndpoint());
+        assumeTrue(toggleProperties.isEnableMetadataEndpoint());
 
         final String documentId = UUID.randomUUID().toString();
         createMetadata(documentId);

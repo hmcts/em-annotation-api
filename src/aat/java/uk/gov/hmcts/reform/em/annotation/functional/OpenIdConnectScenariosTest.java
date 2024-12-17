@@ -2,26 +2,24 @@ package uk.gov.hmcts.reform.em.annotation.functional;
 
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 @SpringBootTest(classes = {TestUtil.class})
 @TestPropertySource(value = "classpath:application.yml")
-@RunWith(SpringIntegrationSerenityRunner.class)
+@ExtendWith({SerenityJUnit5Extension.class, SpringExtension.class})
 @WithTags({@WithTag("testType:Functional")})
-public class OpenIdConnectScenarios {
+class OpenIdConnectScenariosTest {
 
     @Autowired
     private TestUtil testUtil;
@@ -34,7 +32,7 @@ public class OpenIdConnectScenarios {
 
     @Test
     // Invalid IdamAuth
-    public void testWithInvalidIdamAuth() {
+    void testWithInvalidIdamAuth() {
         testUtil
                 .invalidIdamAuthrequest()
                 .baseUri(testUrl)
@@ -46,39 +44,42 @@ public class OpenIdConnectScenarios {
 
     @Test
     // Empty S2SAuth
-    public void testWithEmptyS2SAuth() {
+    void testWithEmptyS2SAuth() {
 
-        assertThrows(NullPointerException.class, () -> testUtil
+        testUtil
                 .validAuthRequestWithEmptyS2SAuth()
                 .baseUri(testUrl)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .get("/api/annotation-sets")
                 .then()
-                .statusCode(401));
+                .statusCode(401);
     }
 
     @Test
     // Empty IdamAuth and Valid S2S Auth
-    public void testWithEmptyIdamAuthAndValidS2SAuth() {
+    void testWithEmptyIdamAuthAndValidS2SAuth() {
 
-        Throwable exceptionThrown =
-                assertThrows(NullPointerException.class, () -> testUtil
-                        .validS2SAuthWithEmptyIdamAuth()
-                        .baseUri(testUrl)
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .get("/api/annotation-sets"));
+        testUtil
+            .validS2SAuthWithEmptyIdamAuth()
+            .baseUri(testUrl)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .get("/api/annotation-sets")
+            .then()
+            .statusCode(401);
 
-        assertEquals("Header value", exceptionThrown.getMessage());
     }
 
     @Test
     // Empty IdamAuth and Empty S2SAuth
-    public void testIdamAuthAndS2SAuthAreEmpty() {
-        assertThrows(NullPointerException.class, () -> testUtil
-                .emptyIdamAuthAndEmptyS2SAuth()
-                .baseUri(testUrl)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .get("/api/annotation-sets"));
+    void testIdamAuthAndS2SAuthAreEmpty() {
+
+        testUtil
+            .emptyIdamAuthAndEmptyS2SAuth()
+            .baseUri(testUrl)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .get("/api/annotation-sets")
+            .then()
+            .statusCode(401);
     }
 
 }

@@ -4,17 +4,18 @@ import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.hamcrest.Matchers;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 
 import java.util.UUID;
@@ -24,9 +25,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SpringBootTest(classes = {TestUtil.class})
 @TestPropertySource(value = "classpath:application.yml")
-@RunWith(SpringIntegrationSerenityRunner.class)
+@ExtendWith({SerenityJUnit5Extension.class, SpringExtension.class})
 @WithTags({@WithTag("testType:Functional")})
-public class RectangleScenarios {
+class RectangleScenariosTest {
 
     @Autowired
     private TestUtil testUtil;
@@ -37,7 +38,7 @@ public class RectangleScenarios {
     private RequestSpecification request;
     private RequestSpecification unAuthenticatedRequest;
 
-    @Before
+    @BeforeEach
     public void setupRequestSpecification() {
         request = testUtil
                 .authRequest()
@@ -51,7 +52,7 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn201WhenCreateNewRectangle() {
+    void shouldReturn201WhenCreateNewRectangle() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
         final String rectangleId = UUID.randomUUID().toString();
@@ -70,7 +71,7 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn400WhenCreateNewRectangleWithoutId() {
+    void shouldReturn400WhenCreateNewRectangleWithoutId() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
         final String rectangleId = UUID.randomUUID().toString();
@@ -87,7 +88,7 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserCreateNewRectangle() {
+    void shouldReturn401WhenUnAuthenticatedUserCreateNewRectangle() {
         final String annotationId = UUID.randomUUID().toString();
         final String rectangleId = UUID.randomUUID().toString();
         final JSONObject rectanglePayload = createRectanglePayload(annotationId, rectangleId);
@@ -101,7 +102,7 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn404WhenCreateNewRectangleWithNonExistentAnnotationId() {
+    void shouldReturn404WhenCreateNewRectangleWithNonExistentAnnotationId() {
 
         final String nonExistentAnnotationId = UUID.randomUUID().toString();
         final String rectangleId = UUID.randomUUID().toString();
@@ -115,7 +116,7 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenGetRectangleById() {
+    void shouldReturn200WhenGetRectangleById() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
         final String rectangleId = UUID.randomUUID().toString();
@@ -135,7 +136,7 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn404WhenGetRectangleNotFoundById() {
+    void shouldReturn404WhenGetRectangleNotFoundById() {
         final String rectangleId = UUID.randomUUID().toString();
         request
                 .get("/api/rectangles/" + rectangleId)
@@ -145,7 +146,7 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserGetRectangleById() {
+    void shouldReturn401WhenUnAuthenticatedUserGetRectangleById() {
         final String rectangleId = UUID.randomUUID().toString();
         unAuthenticatedRequest
                 .get("/api/rectangles/" + rectangleId)
@@ -155,7 +156,7 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenGetAllRectangles() {
+    void shouldReturn200WhenGetAllRectangles() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
         final String rectangleId = UUID.randomUUID().toString();
@@ -170,7 +171,7 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserGetAllRectangles() {
+    void shouldReturn401WhenUnAuthenticatedUserGetAllRectangles() {
         unAuthenticatedRequest
                 .get("/api/rectangles")
                 .then()
@@ -179,7 +180,7 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenUpdateRectangle() {
+    void shouldReturn200WhenUpdateRectangle() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
         final String rectangleId = UUID.randomUUID().toString();
@@ -203,7 +204,7 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenUpdateRectangleWithNonExistentAnnotationId() {
+    void shouldReturn500WhenUpdateRectangleWithNonExistentAnnotationId() {
         final String rectangleId = UUID.randomUUID().toString();
         final String nonExistentAnnotationId = UUID.randomUUID().toString();
         final JSONObject rectangle = createRectanglePayload(nonExistentAnnotationId, rectangleId);
@@ -216,7 +217,7 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn400WhenUpdateRectangleWithoutId() {
+    void shouldReturn400WhenUpdateRectangleWithoutId() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
         final String rectangleId = UUID.randomUUID().toString();
@@ -233,7 +234,7 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserUpdateRectangle() {
+    void shouldReturn401WhenUnAuthenticatedUserUpdateRectangle() {
         final String annotationId = UUID.randomUUID().toString();
         final String rectangleId = UUID.randomUUID().toString();
         final JSONObject rectangle = createRectanglePayload(annotationId, rectangleId);
@@ -247,7 +248,7 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenDeleteRectangleById() {
+    void shouldReturn200WhenDeleteRectangleById() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
         final String rectangleId = UUID.randomUUID().toString();
@@ -260,7 +261,7 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenDeleteRectangleByNonExistentId() {
+    void shouldReturn200WhenDeleteRectangleByNonExistentId() {
         final String nonExistentRectangleId = UUID.randomUUID().toString();
         final ValidatableResponse deletedResponse = deleteRectangleById(nonExistentRectangleId);
 
@@ -268,7 +269,7 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserDeleteRectangle() {
+    void shouldReturn401WhenUnAuthenticatedUserDeleteRectangle() {
         unAuthenticatedRequest
                 .delete("/api/rectangles/" + UUID.randomUUID())
                 .then()
@@ -277,7 +278,7 @@ public class RectangleScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenUpdateRectangleAfterItHasBeenDeleted() {
+    void shouldReturn200WhenUpdateRectangleAfterItHasBeenDeleted() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
         final String rectangleId = UUID.randomUUID().toString();

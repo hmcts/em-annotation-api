@@ -6,19 +6,20 @@ import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.hamcrest.Matchers;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
@@ -31,9 +32,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SpringBootTest(classes = {TestUtil.class})
 @TestPropertySource(value = "classpath:application.yml")
-@RunWith(SpringIntegrationSerenityRunner.class)
+@ExtendWith({SerenityJUnit5Extension.class, SpringExtension.class})
 @WithTags({@WithTag("testType:Functional")})
-public class AnnotationScenarios {
+class AnnotationScenariosTest {
 
     @Autowired
     private TestUtil testUtil;
@@ -49,15 +50,16 @@ public class AnnotationScenarios {
 
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
-    public final String caseData = "{\n"
-            + "    \"caseTitle\": \"title\",\n"
-            + "    \"caseOwner\": \"owner\",\n"
-            + "    \"caseCreationDate\": null,\n"
-            + "    \"caseDescription\": null,\n"
-            + "    \"caseComments\": null\n"
-            + "  }";
+    public final String caseData = """
+        {
+            "caseTitle": "title",
+            "caseOwner": "owner",
+            "caseCreationDate": null,
+            "caseDescription": null,
+            "caseComments": null
+          }""";
 
-    @Before
+    @BeforeEach
     public void setupRequestSpecification() {
         request = testUtil
                 .authRequest()
@@ -71,7 +73,7 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void shouldReturn201WhenCreateNewAnnotation() {
+    void shouldReturn201WhenCreateNewAnnotation() {
         final String annotationSetId = createAnnotationSet();
         final String annotationId = UUID.randomUUID().toString();
         final ValidatableResponse response = createAnnotation(annotationId, annotationSetId);
@@ -96,7 +98,7 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void shouldReturn201WhenCreateNewAnnotationWithCaseId() throws Exception {
+    void shouldReturn201WhenCreateNewAnnotationWithCaseId() throws Exception {
         CaseDetails caseDetails = testUtil.createCase("PUBLICLAW", "CCD_BUNDLE_MVP_TYPE_ASYNC",
                 objectMapper.readTree(caseData));
         String caseId = String.valueOf(caseDetails.getId());
@@ -138,7 +140,7 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void shouldReturn400WhenCreateNewAnnotationWithBadPayload() {
+    void shouldReturn400WhenCreateNewAnnotationWithBadPayload() {
         final String newAnnotationSetId = createAnnotationSet();
         final JSONObject annotation = new JSONObject();
         annotation.put("annotationSetId", newAnnotationSetId);
@@ -155,7 +157,7 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserCreateNewAnnotation() {
+    void shouldReturn401WhenUnAuthenticatedUserCreateNewAnnotation() {
         final String newAnnotationSetId = UUID.randomUUID().toString();
         final String annotationId = UUID.randomUUID().toString();
 
@@ -175,7 +177,7 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenGetAnnotationById() {
+    void shouldReturn200WhenGetAnnotationById() {
         final String annotationSetId = createAnnotationSet();
         final String annotationId = UUID.randomUUID().toString();
         final ValidatableResponse response = createAnnotation(annotationId, annotationSetId);
@@ -201,7 +203,7 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void shouldReturn404WhenGetAnnotationNotFoundById() {
+    void shouldReturn404WhenGetAnnotationNotFoundById() {
         final String annotationId = UUID.randomUUID().toString();
         request
                 .get("/api/annotations/" + annotationId)
@@ -211,7 +213,7 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserGetAnnotationById() {
+    void shouldReturn401WhenUnAuthenticatedUserGetAnnotationById() {
         final String annotationId = UUID.randomUUID().toString();
         unAuthenticatedRequest
                 .get("/api/annotations/" + annotationId)
@@ -221,7 +223,7 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenGetAllAnnotations() {
+    void shouldReturn200WhenGetAllAnnotations() {
         final String annotationSetId = createAnnotationSet();
         final String annotationId = UUID.randomUUID().toString();
         createAnnotation(annotationId, annotationSetId);
@@ -235,7 +237,7 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserGetAllAnnotations() {
+    void shouldReturn401WhenUnAuthenticatedUserGetAllAnnotations() {
         unAuthenticatedRequest
                 .get("/api/annotations")
                 .then()
@@ -244,7 +246,7 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenUpdateAnnotation() {
+    void shouldReturn200WhenUpdateAnnotation() {
         final String annotationSetId = createAnnotationSet();
         final String annotationId = UUID.randomUUID().toString();
         final ValidatableResponse response = createAnnotation(annotationId, annotationSetId);
@@ -273,7 +275,7 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void shouldReturn400WhenUpdateAnnotationWithoutId() {
+    void shouldReturn400WhenUpdateAnnotationWithoutId() {
         final String annotationSetId = createAnnotationSet();
         final String annotationId = UUID.randomUUID().toString();
         final ValidatableResponse response = createAnnotation(annotationId, annotationSetId);
@@ -291,7 +293,7 @@ public class AnnotationScenarios {
 
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserUpdateAnnotation() {
+    void shouldReturn401WhenUnAuthenticatedUserUpdateAnnotation() {
         final String annotationSetId = createAnnotationSet();
         final String annotationId = UUID.randomUUID().toString();
         final ValidatableResponse response = createAnnotation(annotationId, annotationSetId);
@@ -306,7 +308,7 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenDeleteAnnotationById() {
+    void shouldReturn200WhenDeleteAnnotationById() {
         final String annotationSetId = createAnnotationSet();
         final String annotationId = UUID.randomUUID().toString();
         final ValidatableResponse response = createAnnotation(annotationId, annotationSetId);
@@ -318,7 +320,7 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenDeleteAnnotationByNonExistentId() {
+    void shouldReturn200WhenDeleteAnnotationByNonExistentId() {
         final String nonExistentAnnotationId = UUID.randomUUID().toString();
         final ValidatableResponse deletedResponse = deleteAnnotationById(nonExistentAnnotationId);
 
@@ -326,7 +328,7 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserDeleteAnnotation() {
+    void shouldReturn401WhenUnAuthenticatedUserDeleteAnnotation() {
         unAuthenticatedRequest
                 .delete("/api/annotations/" + UUID.randomUUID())
                 .then()
@@ -335,7 +337,7 @@ public class AnnotationScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenUpdateAnnotationAfterItHasBeenDeleted() {
+    void shouldReturn200WhenUpdateAnnotationAfterItHasBeenDeleted() {
         final String annotationSetId = createAnnotationSet();
         final String annotationId = UUID.randomUUID().toString();
         final ValidatableResponse response = createAnnotation(annotationId, annotationSetId);

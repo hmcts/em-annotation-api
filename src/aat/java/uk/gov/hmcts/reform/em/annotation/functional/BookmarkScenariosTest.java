@@ -4,23 +4,24 @@ import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,9 +33,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SpringBootTest(classes = {TestUtil.class})
 @TestPropertySource(value = "classpath:application.yml")
-@RunWith(SpringIntegrationSerenityRunner.class)
+@ExtendWith({SerenityJUnit5Extension.class, SpringExtension.class})
 @WithTags({@WithTag("testType:Functional")})
-public class BookmarkScenarios {
+class BookmarkScenariosTest {
 
     @Autowired
     private TestUtil testUtil;
@@ -50,7 +51,7 @@ public class BookmarkScenarios {
     private RequestSpecification request;
     private RequestSpecification unAuthenticatedRequest;
 
-    @Before
+    @BeforeEach
     public void setupRequestSpecification() {
         documentId = UUID.randomUUID();
 
@@ -66,7 +67,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn201WhenCreateNewBookmark() {
+    void shouldReturn201WhenCreateNewBookmark() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         response
@@ -85,7 +86,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn400WhenCreateNewBookmarkWithoutId() {
+    void shouldReturn400WhenCreateNewBookmarkWithoutId() {
         final UUID bookmarkId = UUID.randomUUID();
         final JSONObject bookmarkRequestPayload = createBookmarkRequestPayload(bookmarkId);
 
@@ -100,7 +101,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserCreateNewBookmark() {
+    void shouldReturn401WhenUnAuthenticatedUserCreateNewBookmark() {
         final UUID bookmarkId = UUID.randomUUID();
         final JSONObject bookmarkRequestPayload = createBookmarkRequestPayload(bookmarkId);
 
@@ -113,7 +114,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn409WhenCreateNewBookmarkWithoutMandatoryField() {
+    void shouldReturn409WhenCreateNewBookmarkWithoutMandatoryField() {
         final UUID bookmarkId = UUID.randomUUID();
         final JSONObject bookmarkRequestPayload = createBookmarkRequestPayload(bookmarkId);
         bookmarkRequestPayload.remove("name");
@@ -127,7 +128,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenGetAllBookmarksByDocumentId() {
+    void shouldReturn200WhenGetAllBookmarksByDocumentId() {
         final UUID bookmarkId = UUID.randomUUID();
         final JSONObject jsonObject = createBookmarkRequestPayload(bookmarkId);
         jsonObject.remove("createdBy");
@@ -140,23 +141,23 @@ public class BookmarkScenarios {
                         .statusCode(201);
 
         final JSONObject newJsonObject = extractJsonObjectFromResponse(response);
-        final String documentId = newJsonObject.getString("documentId");
+        final String id = newJsonObject.getString("documentId");
 
         request
-                .get(String.format("/api/%s/bookmarks", documentId))
+                .get(String.format("/api/%s/bookmarks", id))
                 .then()
                 .statusCode(200)
-                .body("id", equalTo(Arrays.asList(bookmarkId.toString())))
-                .body("documentId", equalTo(Arrays.asList(documentId)))
-                .body("name", equalTo(Arrays.asList("Bookmark for test")))
-                .body("pageNumber", equalTo(Arrays.asList(1)))
-                .body("xCoordinate", equalTo(Arrays.asList(100.00f)))
-                .body("yCoordinate", equalTo(Arrays.asList(100.00f)))
+                .body("id", equalTo(Collections.singletonList(bookmarkId.toString())))
+                .body("documentId", equalTo(Collections.singletonList(id)))
+                .body("name", equalTo(List.of("Bookmark for test")))
+                .body("pageNumber", equalTo(List.of(1)))
+                .body("xCoordinate", equalTo(List.of(100.00f)))
+                .body("yCoordinate", equalTo(List.of(100.00f)))
                 .log().all();
     }
 
     @Test
-    public void shouldReturn200WhenGetAllBookmarksMoreThan20ByDocumentId() {
+    void shouldReturn200WhenGetAllBookmarksMoreThan20ByDocumentId() {
         List<String> bookMarks = new ArrayList<>();
 
         for (int i = 0; i < 30; i++) {
@@ -164,12 +165,11 @@ public class BookmarkScenarios {
             final JSONObject jsonObject = createBookmarkRequestPayload(bookmarkId);
             jsonObject.remove("createdBy");
 
-            final ValidatableResponse response =
-                    request.log().all()
-                            .body(jsonObject.toString())
-                            .post("/api/bookmarks")
-                            .then()
-                            .statusCode(201);
+            request.log().all()
+                .body(jsonObject.toString())
+                .post("/api/bookmarks")
+                .then()
+                .statusCode(201);
             bookMarks.add(bookmarkId.toString());
         }
 
@@ -182,7 +182,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn204WhenResponseBodyIsEmptyForGivenDocId() {
+    void shouldReturn204WhenResponseBodyIsEmptyForGivenDocId() {
         request
                 .get(String.format("/api/%s/bookmarks", UUID.randomUUID()))
                 .then()
@@ -191,7 +191,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserGetBookmarksById() {
+    void shouldReturn401WhenUnAuthenticatedUserGetBookmarksById() {
         unAuthenticatedRequest
                 .get(String.format("/api/%s/bookmarks", UUID.randomUUID()))
                 .then()
@@ -200,7 +200,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenUpdateBookmark() {
+    void shouldReturn200WhenUpdateBookmark() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
@@ -224,7 +224,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn400WhenUpdateBookmarkWithBadRequestPayload() {
+    void shouldReturn400WhenUpdateBookmarkWithBadRequestPayload() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
@@ -239,7 +239,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserUpdateBookmark() {
+    void shouldReturn401WhenUnAuthenticatedUserUpdateBookmark() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
@@ -253,7 +253,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn409WhenUpdateBookmarkWithoutMandatoryField() {
+    void shouldReturn409WhenUpdateBookmarkWithoutMandatoryField() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
@@ -267,7 +267,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenUpdateMultipleBookmarks() {
+    void shouldReturn200WhenUpdateMultipleBookmarks() {
         final UUID bookmarkId1 = UUID.randomUUID();
         final ValidatableResponse response1 = createBookmark(bookmarkId1);
         final JSONObject jsonObject1 = extractJsonObjectFromResponse(response1);
@@ -296,7 +296,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn400WhenUpdateMultipleBookmarksWithBadRequestPayload() {
+    void shouldReturn400WhenUpdateMultipleBookmarksWithBadRequestPayload() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
@@ -313,7 +313,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserUpdateMultipleBookmarks() {
+    void shouldReturn401WhenUnAuthenticatedUserUpdateMultipleBookmarks() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
@@ -329,7 +329,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn409WhenUpdateMultipleBookmarksWithoutMandatoryField() {
+    void shouldReturn409WhenUpdateMultipleBookmarksWithoutMandatoryField() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
@@ -346,7 +346,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenDeleteBookmarkById() {
+    void shouldReturn200WhenDeleteBookmarkById() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
@@ -359,7 +359,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserDeleteBookmarkById() {
+    void shouldReturn401WhenUnAuthenticatedUserDeleteBookmarkById() {
         unAuthenticatedRequest
                 .delete(String.format("/api/bookmarks/%s", UUID.randomUUID()))
                 .then()
@@ -368,7 +368,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenDeleteBookmarkByNonExistentId() {
+    void shouldReturn200WhenDeleteBookmarkByNonExistentId() {
         request
                 .delete(String.format("/api/bookmarks/%s", UUID.randomUUID()))
                 .then()
@@ -377,7 +377,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenDeleteMultipleBookmarks() {
+    void shouldReturn200WhenDeleteMultipleBookmarks() {
         final UUID bookmarkId1 = UUID.randomUUID();
         final ValidatableResponse response1 = createBookmark(bookmarkId1);
         final JSONObject jsonObject1 = extractJsonObjectFromResponse(response1);
@@ -404,7 +404,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserDeleteMultipleBookmarks() {
+    void shouldReturn401WhenUnAuthenticatedUserDeleteMultipleBookmarks() {
         final UUID bookmarkId = UUID.randomUUID();
         final JSONObject deleteBookmarkRequest = new JSONObject();
         final JSONArray jsonArray = new JSONArray();
@@ -420,7 +420,7 @@ public class BookmarkScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenDeleteMultipleBookmarksWithNonExistentId() {
+    void shouldReturn200WhenDeleteMultipleBookmarksWithNonExistentId() {
         final UUID bookmarkId = UUID.randomUUID();
         final JSONObject deleteBookmarkRequest = new JSONObject();
         final JSONArray jsonArray = new JSONArray();

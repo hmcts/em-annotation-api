@@ -4,31 +4,33 @@ import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.hamcrest.Matchers;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SpringBootTest(classes = {TestUtil.class})
 @TestPropertySource(value = "classpath:application.yml")
-@RunWith(SpringIntegrationSerenityRunner.class)
+@ExtendWith({SerenityJUnit5Extension.class, SpringExtension.class})
 @WithTags({@WithTag("testType:Functional")})
-public class CommentScenarios {
+class CommentScenariosTest {
 
     @Autowired
     private TestUtil testUtil;
@@ -42,7 +44,7 @@ public class CommentScenarios {
     private RequestSpecification request;
     private RequestSpecification unAuthenticatedRequest;
 
-    @Before
+    @BeforeEach
     public void setupRequestSpecification() {
         request = testUtil
                 .authRequest()
@@ -56,7 +58,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn201WhenCreateNewComment() {
+    void shouldReturn201WhenCreateNewComment() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
         final String commentId = UUID.randomUUID().toString();
@@ -72,7 +74,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn400WhenCreateNewCommentWithoutId() {
+    void shouldReturn400WhenCreateNewCommentWithoutId() {
         final String annotationId = UUID.randomUUID().toString();
         final JSONObject comment = new JSONObject();
         comment.put("content", "text");
@@ -87,7 +89,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn400WhenCreateNewCommentWithoutAnnotationId() {
+    void shouldReturn400WhenCreateNewCommentWithoutAnnotationId() {
         final String commentId = UUID.randomUUID().toString();
         final JSONObject comment = new JSONObject();
         comment.put("content", "text");
@@ -102,7 +104,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserCreateNewComment() {
+    void shouldReturn401WhenUnAuthenticatedUserCreateNewComment() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
         final String commentId = UUID.randomUUID().toString();
@@ -117,7 +119,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenCreateNewCommentWithNonExistentAnnotationId() {
+    void shouldReturn500WhenCreateNewCommentWithNonExistentAnnotationId() {
         final String nonExistentAnnotationId = UUID.randomUUID().toString();
         final String commentId = UUID.randomUUID().toString();
         final JSONObject comment = createCommentPayload(nonExistentAnnotationId, commentId);
@@ -130,7 +132,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenGetCommentById() {
+    void shouldReturn200WhenGetCommentById() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
         final String commentId = UUID.randomUUID().toString();
@@ -148,7 +150,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn404WhenGetCommentNotFoundById() {
+    void shouldReturn404WhenGetCommentNotFoundById() {
         final String commentId = UUID.randomUUID().toString();
         request
                 .get("/api/comments/" + commentId)
@@ -158,7 +160,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserGetCommentById() {
+    void shouldReturn401WhenUnAuthenticatedUserGetCommentById() {
         final String commentId = UUID.randomUUID().toString();
         unAuthenticatedRequest
                 .get("/api/comments/" + commentId)
@@ -168,12 +170,13 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenGetAllComments() {
+    void shouldReturn200WhenGetAllComments() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
         final String commentId = UUID.randomUUID().toString();
         final ValidatableResponse response = createComment(annotationId, commentId);
         final String id = extractJsonObjectFromResponse(response).getString("id");
+        assertNotNull(id);
 
         request
                 .get("/api/comments")
@@ -185,7 +188,7 @@ public class CommentScenarios {
 
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserGetAllComments() {
+    void shouldReturn401WhenUnAuthenticatedUserGetAllComments() {
         unAuthenticatedRequest
                 .get("/api/comments")
                 .then()
@@ -194,7 +197,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenUpdateComment() {
+    void shouldReturn200WhenUpdateComment() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
         final String commentId = UUID.randomUUID().toString();
@@ -214,7 +217,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn500WhenUpdateCommentWithNonExistentAnnotationId() {
+    void shouldReturn500WhenUpdateCommentWithNonExistentAnnotationId() {
         final String commentId = UUID.randomUUID().toString();
         final String nonExistentAnnotationId = UUID.randomUUID().toString();
         final JSONObject comment = createCommentPayload(nonExistentAnnotationId, commentId);
@@ -227,7 +230,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn400WhenUpdateCommentWithoutId() {
+    void shouldReturn400WhenUpdateCommentWithoutId() {
         final JSONObject comment = new JSONObject();
         comment.put("content", "text");
         comment.put("annotationId", UUID.randomUUID());
@@ -241,7 +244,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn400WhenUpdateCommentWithoutAnnotationId() {
+    void shouldReturn400WhenUpdateCommentWithoutAnnotationId() {
         final JSONObject comment = new JSONObject();
         comment.put("content", "text");
         comment.put("id", UUID.randomUUID());
@@ -255,7 +258,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserUpdateComment() {
+    void shouldReturn401WhenUnAuthenticatedUserUpdateComment() {
         final JSONObject comment = new JSONObject();
         comment.put("content", "text");
         comment.put("annotationId", UUID.randomUUID());
@@ -269,7 +272,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenDeleteCommentById() {
+    void shouldReturn200WhenDeleteCommentById() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
         final String commentId = UUID.randomUUID().toString();
@@ -281,7 +284,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenDeleteCommentByNonExistentId() {
+    void shouldReturn200WhenDeleteCommentByNonExistentId() {
         final String nonExistentId = UUID.randomUUID().toString();
         final ValidatableResponse deletedResponse = deleteCommentById(nonExistentId);
 
@@ -289,7 +292,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticatedUserDeleteComment() {
+    void shouldReturn401WhenUnAuthenticatedUserDeleteComment() {
         unAuthenticatedRequest
                 .delete("/api/comments/" + UUID.randomUUID())
                 .then()
@@ -298,7 +301,7 @@ public class CommentScenarios {
     }
 
     @Test
-    public void shouldReturn200WhenTryToUpdateCommentAfterItHasBeenDeleted() {
+    void shouldReturn200WhenTryToUpdateCommentAfterItHasBeenDeleted() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
         final String commentId = UUID.randomUUID().toString();
