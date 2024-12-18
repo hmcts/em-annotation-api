@@ -301,7 +301,7 @@ public class CommentResourceIntTest extends BaseTest {
     }
 
     private UUID createAnnotation() throws Exception {
-        Annotation annotation = AnnotationResourceIntTest.createEntity(em);
+        Annotation annotation = AnnotationResourceIntTest.createEntity();
         AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
         annotationDTO.setAnnotationSetId(UUID.randomUUID());
         annotationDTO.setDocumentId("DocId");
