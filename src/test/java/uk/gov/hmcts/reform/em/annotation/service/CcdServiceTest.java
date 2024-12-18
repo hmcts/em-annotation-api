@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
-public class CcdServiceTest {
+class CcdServiceTest {
 
     @Mock
     private CoreCaseDataApi coreCaseDataApi;
