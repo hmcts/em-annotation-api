@@ -1,16 +1,16 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
 import jakarta.persistence.EntityManager;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.BaseTest;
@@ -47,9 +47,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see AnnotationResource
  */
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
-public class AnnotationResourceIntTest extends BaseTest {
+class AnnotationResourceIntTest extends BaseTest {
 
     private static final AnnotationType DEFAULT_ANNOTATION_TYPE = AnnotationType.AREA;
     private static final AnnotationType UPDATED_ANNOTATION_TYPE = AnnotationType.HIGHLIGHT;
@@ -97,7 +97,7 @@ public class AnnotationResourceIntTest extends BaseTest {
 
     private UUID uuid;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
         em.persist(new IdamDetails("system"));
@@ -124,14 +124,14 @@ public class AnnotationResourceIntTest extends BaseTest {
         return annotation;
     }
 
-    @Before
+    @BeforeEach
     public void initTest() {
         annotation = createEntity(em);
     }
 
     @Test
     @Transactional
-    public void createAnnotation() throws Exception {
+    void createAnnotation() throws Exception {
         int databaseSizeBeforeCreate = annotationRepository.findAll().size();
 
         // Create the Annotation
@@ -149,7 +149,7 @@ public class AnnotationResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void createAnnotationWithExistingId() throws Exception {
+    void createAnnotationWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = annotationRepository.findAll().size();
         assertThat(databaseSizeBeforeCreate).isZero();
         // Create the Annotation with an existing ID
@@ -172,7 +172,7 @@ public class AnnotationResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void createAnnotationWithExistingDocIdAndCreatedBy() throws Exception {
+    void createAnnotationWithExistingDocIdAndCreatedBy() throws Exception {
         int databaseSizeBeforeCreate = annotationRepository.findAll().size();
         assertThat(databaseSizeBeforeCreate).isZero();
         // Create the Annotation with an existing ID
@@ -198,7 +198,7 @@ public class AnnotationResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void getAllAnnotations() throws Exception {
+    void getAllAnnotations() throws Exception {
         // Initialize the database
         Tag tag = new Tag();
         tag.setName("new_tag");
@@ -218,7 +218,7 @@ public class AnnotationResourceIntTest extends BaseTest {
     
     @Test
     @Transactional
-    public void getAnnotation() throws Exception {
+    void getAnnotation() throws Exception {
         // Initialize the database
         Tag tag = new Tag();
         tag.setName("new_tag");
@@ -238,7 +238,7 @@ public class AnnotationResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void getNonExistingAnnotation() throws Exception {
+    void getNonExistingAnnotation() throws Exception {
         // Get the annotation
         restLogoutMockMvc.perform(get("/api/annotations/{id}", UUID.randomUUID()))
             .andExpect(status().isNotFound());
@@ -246,7 +246,7 @@ public class AnnotationResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void updateAnnotation() throws Exception {
+    void updateAnnotation() throws Exception {
         // Initialize the database
         Tag tag = new Tag();
         tag.setName("new_tag");
@@ -307,7 +307,7 @@ public class AnnotationResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void updateAnnotationWithExistingDocIdAndCreatedBy() throws Exception {
+    void updateAnnotationWithExistingDocIdAndCreatedBy() throws Exception {
         int databaseSizeBeforeCreate = annotationRepository.findAll().size();
         assertThat(databaseSizeBeforeCreate).isZero();
         // Create the Annotation with an existing ID
@@ -332,7 +332,7 @@ public class AnnotationResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void updateNonExistingAnnotation() throws Exception {
+    void updateNonExistingAnnotation() throws Exception {
         int databaseSizeBeforeUpdate = annotationRepository.findAll().size();
         assertThat(databaseSizeBeforeUpdate).isZero();
         // Create the Annotation
@@ -354,7 +354,7 @@ public class AnnotationResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void deleteAnnotation() throws Exception {
+    void deleteAnnotation() throws Exception {
         // Initialize the database
         Tag tag = new Tag();
         tag.setName("new_tag");
@@ -377,7 +377,7 @@ public class AnnotationResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void deleteNonExistingAnnotation() throws Exception {
+    void deleteNonExistingAnnotation() throws Exception {
         int databaseSizeBeforeDelete = annotationRepository.findAll().size();
 
         // Delete the annotation
@@ -392,7 +392,7 @@ public class AnnotationResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void equalsVerifier() throws Exception {
+    void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Annotation.class);
         Annotation annotation1 = new Annotation();
         annotation1.setId(UUID.randomUUID());
@@ -407,7 +407,7 @@ public class AnnotationResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void dtoEqualsVerifier() throws Exception {
+    void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(AnnotationDTO.class);
         AnnotationDTO annotationDTO1 = new AnnotationDTO();
         annotationDTO1.setId(UUID.randomUUID());
@@ -423,7 +423,7 @@ public class AnnotationResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void testEntityFromId() {
+    void testEntityFromId() {
         UUID uuid = UUID.randomUUID();
         assertThat(annotationMapper.fromId(uuid).getId()).isEqualTo(uuid);
         assertThat(annotationMapper.fromId(null)).isNull();

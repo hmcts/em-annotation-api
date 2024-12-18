@@ -2,15 +2,15 @@ package uk.gov.hmcts.reform.em.annotation.rest;
 
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.BaseTest;
@@ -34,9 +34,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see FilterAnnotationSet
  */
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
-public class FilterAnnotationSetTest  extends BaseTest {
+class FilterAnnotationSetTest  extends BaseTest {
 
     @Autowired
     private AnnotationSetMapper annotationSetMapper;
@@ -55,7 +55,7 @@ public class FilterAnnotationSetTest  extends BaseTest {
 
     private AnnotationSet annotationSet;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
         em.persist(new IdamDetails("system"));
@@ -80,14 +80,14 @@ public class FilterAnnotationSetTest  extends BaseTest {
         return annotationSet;
     }
 
-    @Before
+    @BeforeEach
     public void initTest() {
         annotationSet = createEntity(em);
     }
 
     @Test
     @Transactional
-    public void testGetAllAnnotationSets() throws Exception {
+    void testGetAllAnnotationSets() throws Exception {
         annotationSetRepository.saveAndFlush(annotationSet);
         AnnotationSetDTO annotationSetDTO = annotationSetMapper.toDto(annotationSet);
         Optional<AnnotationSetDTO> annotationSetDTOs = Optional.of(annotationSetDTO);
@@ -102,7 +102,7 @@ public class FilterAnnotationSetTest  extends BaseTest {
 
     @Test
     @Transactional
-    public void testGetNonExistingAnnotationSet() throws Exception {
+    void testGetNonExistingAnnotationSet() throws Exception {
         Optional<AnnotationSetDTO> annotationSetDTOs = Optional.empty();
 
         Mockito.when(annotationSetService.findOneByDocumentId("Test")).thenReturn(annotationSetDTOs);
@@ -115,7 +115,7 @@ public class FilterAnnotationSetTest  extends BaseTest {
 
     @Test
     @Transactional
-    public void testGetAnnotationSetConstraintViolation() throws Exception {
+    void testGetAnnotationSetConstraintViolation() throws Exception {
         Optional<AnnotationSetDTO> annotationSetDTOs = Optional.empty();
 
         Mockito.when(annotationSetService.findOneByDocumentId("Test")).thenThrow(ConstraintViolationException.class);
