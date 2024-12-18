@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.testutil;
 
+import io.restassured.http.Header;
 import io.restassured.specification.RequestSpecification;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -13,8 +14,6 @@ import uk.gov.hmcts.reform.em.test.ccddata.CcdDataHelper;
 import uk.gov.hmcts.reform.em.test.idam.IdamHelper;
 import uk.gov.hmcts.reform.em.test.s2s.S2sHelper;
 
-import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -36,14 +35,12 @@ public class TestUtil {
     private String idamAuth;
     private String s2sAuth;
 
-    private UUID documentId = UUID.randomUUID();
-
     private final String username = "emAnnotationTestUser@test.local";
 
     @PostConstruct
     void postConstruct() {
         SerenityRest.useRelaxedHTTPSValidation();
-        idamHelper.createUser(username, Stream.of("caseworker", "caseworker-publiclaw").collect(Collectors.toList()));
+        idamHelper.createUser(username, Stream.of("caseworker", "caseworker-publiclaw").toList());
         idamAuth = idamHelper.authenticateUser(username);
         s2sAuth = s2sHelper.getS2sToken();
     }
@@ -66,14 +63,14 @@ public class TestUtil {
 
     public RequestSpecification emptyIdamAuthRequest() {
         return s2sAuthRequest()
-                .header("Authorization", null);
+                .header(new Header("Authorization", null));
     }
 
     public RequestSpecification emptyIdamAuthAndEmptyS2SAuth() {
         return SerenityRest
                 .given()
-                .header("ServiceAuthorization", null)
-                .header("Authorization", null);
+                .header(new Header("ServiceAuthorization", null))
+                .header(new Header("Authorization", null));
     }
 
     public RequestSpecification validAuthRequestWithEmptyS2SAuth() {
@@ -82,12 +79,12 @@ public class TestUtil {
 
     public RequestSpecification validS2SAuthWithEmptyIdamAuth() {
 
-        return s2sAuthRequest().header("Authorization", null);
+        return s2sAuthRequest().header(new Header("Authorization", null));
     }
 
     private RequestSpecification emptyS2sAuthRequest() {
 
-        return SerenityRest.given().header("ServiceAuthorization", null);
+        return SerenityRest.given().header(new Header("ServiceAuthorization", null));
     }
 
     public RequestSpecification invalidIdamAuthrequest() {
