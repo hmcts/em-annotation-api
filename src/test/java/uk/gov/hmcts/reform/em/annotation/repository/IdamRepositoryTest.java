@@ -1,11 +1,11 @@
 package uk.gov.hmcts.reform.em.annotation.repository;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.idam.client.IdamClient;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
@@ -24,23 +24,24 @@ import static org.mockito.Mockito.when;
  * scenarios which involves passing in valid auth tokens to verify the complete flow. ie (
  * Microservice --> OAuthFilter --> Endpoint )
  */
-@RunWith(SpringRunner.class)
-public class IdamRepositoryTest {
+@ExtendWith(SpringExtension.class)
+class IdamRepositoryTest {
 
     @Mock
     private IdamClient idamClient;
 
     private IdamRepository idamRepository;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         this.idamRepository = new IdamRepository(idamClient);
     }
 
     @Test
     @DisplayName("UserInfo should be called by IdamClient ")
-    public void testGetUserInfo() {
+    void testGetUserInfo() {
 
+        
         final UserInfo userInfo = UserInfo.builder()
                 .uid("100")
                 .givenName("John")
