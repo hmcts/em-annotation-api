@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public abstract class BaseTest {
     @Mock
     protected SecurityContext securityContext;
 
-    @Before
+    @BeforeEach
     public void setupMocks() {
 
         MockitoAnnotations.openMocks(this);

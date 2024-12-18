@@ -1,16 +1,16 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
 import jakarta.persistence.EntityManager;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.BaseTest;
@@ -31,9 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see TagResource
  */
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
-public class TagResourceIntTest extends BaseTest {
+class TagResourceIntTest extends BaseTest {
 
     private static final String INVALID_USER = "invalid_user";
 
@@ -61,7 +61,7 @@ public class TagResourceIntTest extends BaseTest {
 
     private Tag tag;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         final TagResource tagResource = new TagResource(tagService);
@@ -77,14 +77,14 @@ public class TagResourceIntTest extends BaseTest {
         return tag;
     }
 
-    @Before
+    @BeforeEach
     public void initTest() {
         tag = createEntity(em);
     }
 
     @Test
     @Transactional
-    public void getAllTagsByUser() throws Exception {
+    void getAllTagsByUser() throws Exception {
         tagRepository.saveAndFlush(tag);
 
         restLogoutMockMvc.perform(get("/api/tags/{createdBy}", tag.getCreatedBy()))
@@ -97,7 +97,7 @@ public class TagResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void getTagsNonExistentUser() throws Exception {
+    void getTagsNonExistentUser() throws Exception {
         restLogoutMockMvc.perform(get("/api/comments/{createdBy}", INVALID_USER))
                 .andExpect(status().isBadRequest());
     }
