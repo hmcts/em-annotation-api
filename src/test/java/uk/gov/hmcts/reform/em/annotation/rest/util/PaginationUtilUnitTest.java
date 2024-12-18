@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.rest.util;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -10,18 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Tests based on parsing algorithm in app/components/util/pagination-util.service.js.
  *
  * @see PaginationUtil
  */
-public class PaginationUtilUnitTest {
+
+class PaginationUtilUnitTest {
 
     @Test
-    public void generatePaginationHttpHeadersTest() {
+    void generatePaginationHttpHeadersTest() {
         String baseUrl = "/api/_search/example";
         List<String> content = new ArrayList<>();
         Page<String> page = new PageImpl<>(content, PageRequest.of(6, 50), 400L);
@@ -38,7 +39,7 @@ public class PaginationUtilUnitTest {
         assertEquals(expectedData, headerData);
         final List<String> xTotalCount = headers.get("X-Total-Count");
         assertNotNull(xTotalCount);
-        assertThat(xTotalCount.size()).isEqualTo(1);
+        assertThat(xTotalCount).hasSize(1);
         assertThat(Long.valueOf(xTotalCount.get(0))).isEqualTo(400L);
     }
 
