@@ -292,7 +292,7 @@ pitest {
     timestampedReports = false
     failWhenNoMutations = false
     detectInlinedCode = true
-
+    junit5PluginVersion = '1.2.1'
 }
 
 sonarqube {
