@@ -63,7 +63,7 @@ def versions = [
         sonarPitest        : '0.5',
         serenity           : '4.2.9',
         pact_version       : '4.6.16',
-        hibernate          : '6.6.3.Final',
+        hibernate          : '6.6.4.Final',
         logging            : '6.1.7',
         junit5             : '5.11.4',
         log4JVersion       : '2.20.0',
@@ -175,10 +175,10 @@ dependencies {
     testImplementation group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
     testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
 
-    testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version:versions.junit5
     aatRuntimeOnly group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.2'
     aatRuntimeOnly group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.5'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version:versions.junit5
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit5
 
     //pact contract testing
 
