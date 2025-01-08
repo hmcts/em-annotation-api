@@ -3,14 +3,13 @@ package uk.gov.hmcts.reform.em.annotation.config.audit;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -19,17 +18,18 @@ import uk.gov.hmcts.reform.em.annotation.domain.Rectangle;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class EntityAuditEventListenerTest {
+@ExtendWith(MockitoExtension.class)
+class EntityAuditEventListenerTest {
     private EntityAuditEventListener entityAuditEventListener;
 
     @Mock
@@ -58,31 +58,31 @@ public class EntityAuditEventListenerTest {
 
 
 
-    @Before
+    @BeforeEach
     public void setUp() {
         entityAuditEventListener = new EntityAuditEventListener();
         EntityAuditEventListener.setBeanFactory(beanFactory);
-        when(beanFactory.getBean(AsyncEntityAuditEventWriter.class)).thenReturn(asyncEntityAuditEventWriter);
+        lenient().when(beanFactory.getBean(AsyncEntityAuditEventWriter.class)).thenReturn(asyncEntityAuditEventWriter);
     }
 
     @AfterAll
-    static void tearDownAll() {
+    public static void tearDownAll() {
         EntityAuditEventListener.setBeanFactory(originalBeanFactory);
     }
 
 
     @Test
-    public void testSetBeanFactory() throws Exception {
+    void testSetBeanFactory() throws Exception {
         EntityAuditEventListener.setBeanFactory(beanFactory);
 
         var beanFactory1 = (BeanFactory)beanFactoryField.get(Class.forName(EntityAuditEventListener.class.getName()));
 
-        Assert.assertEquals(beanFactory1, beanFactory);
+        assertEquals(beanFactory1, beanFactory);
     }
 
     @Test
     @DisplayName("Create calls writeAuditEvent")
-    public void testSuccessOnPostCreate() {
+    void testSuccessOnPostCreate() {
         doNothing()
             .when(asyncEntityAuditEventWriter)
             .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.CREATE));
@@ -93,31 +93,31 @@ public class EntityAuditEventListenerTest {
 
     @Test
     @DisplayName("No bean logs exception for create")
-    public void testNoBeanOnPostCreate() {
+    void testNoBeanOnPostCreate() {
         List<ILoggingEvent> logsList = getiLoggingEvents();
         doThrow(new NoSuchBeanDefinitionException("AsyncEntityAuditEventWriter"))
                 .when(asyncEntityAuditEventWriter)
                 .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.CREATE));
         entityAuditEventListener.onPostCreate(mock(Rectangle.class));
-        Assert.assertEquals(logsList.size(), 1);
-        Assert.assertEquals(logsList.get(0).getMessage(), noBeanFound);
+        assertEquals(1, logsList.size());
+        assertEquals(noBeanFound, logsList.get(0).getMessage());
     }
 
     @Test
     @DisplayName("Other exceptions are logged for create")
-    public void testExceptionOnPostCreate() {
+    void testExceptionOnPostCreate() {
         List<ILoggingEvent> logsList = getiLoggingEvents();
         doThrow(new IllegalArgumentException())
                 .when(asyncEntityAuditEventWriter)
                 .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.CREATE));
         entityAuditEventListener.onPostCreate(mock(Rectangle.class));
-        Assert.assertEquals(logsList.size(), 1);
-        Assert.assertEquals(logsList.get(0).getMessage(), "Exception while persisting create audit entity {}");
+        assertEquals(1, logsList.size());
+        assertEquals("Exception while persisting create audit entity {}", logsList.get(0).getMessage());
     }
 
     @Test
     @DisplayName("Update calls writeAuditEvent")
-    public void testSuccessOnPostUpdate() {
+    void testSuccessOnPostUpdate() {
         doNothing()
             .when(asyncEntityAuditEventWriter)
             .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.UPDATE));
@@ -128,31 +128,31 @@ public class EntityAuditEventListenerTest {
 
     @Test
     @DisplayName("No bean logs exception for update")
-    public void testNoBeanOnPostUpdate() {
+    void testNoBeanOnPostUpdate() {
         List<ILoggingEvent> logsList = getiLoggingEvents();
         doThrow(new NoSuchBeanDefinitionException("AsyncEntityAuditEventWriter"))
                 .when(asyncEntityAuditEventWriter)
                 .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.UPDATE));
         entityAuditEventListener.onPostUpdate(mock(Rectangle.class));
-        Assert.assertEquals(logsList.size(), 1);
-        Assert.assertEquals(logsList.get(0).getMessage(), noBeanFound);
+        assertEquals(1, logsList.size());
+        assertEquals(noBeanFound, logsList.get(0).getMessage());
     }
 
     @Test
     @DisplayName("Other exceptions are logged for update")
-    public void testExceptionOnPostUpdate() {
+    void testExceptionOnPostUpdate() {
         List<ILoggingEvent> logsList = getiLoggingEvents();
         doThrow(new IllegalArgumentException())
                 .when(asyncEntityAuditEventWriter)
                 .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.UPDATE));
         entityAuditEventListener.onPostUpdate(mock(Rectangle.class));
-        Assert.assertEquals(logsList.size(), 1);
-        Assert.assertEquals(logsList.get(0).getMessage(), "Exception while persisting update audit entity {}");
+        assertEquals(1, logsList.size());
+        assertEquals("Exception while persisting update audit entity {}", logsList.get(0).getMessage());
     }
 
     @Test
     @DisplayName("Remove calls writeAuditEvent")
-    public void testSuccessOnPostRemove() {
+    void testSuccessOnPostRemove() {
         doNothing()
             .when(asyncEntityAuditEventWriter)
             .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.DELETE));
@@ -163,26 +163,26 @@ public class EntityAuditEventListenerTest {
 
     @Test
     @DisplayName("No bean logs exception for remove")
-    public void testNoBeanOnPostRemove() {
+    void testNoBeanOnPostRemove() {
         List<ILoggingEvent> logsList = getiLoggingEvents();
         doThrow(new NoSuchBeanDefinitionException("AsyncEntityAuditEventWriter"))
                 .when(asyncEntityAuditEventWriter)
                 .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.DELETE));
         entityAuditEventListener.onPostRemove(mock(Rectangle.class));
-        Assert.assertEquals(logsList.size(), 1);
-        Assert.assertEquals(logsList.get(0).getMessage(), noBeanFound);
+        assertEquals(1, logsList.size());
+        assertEquals(noBeanFound, logsList.get(0).getMessage());
     }
 
     @Test
     @DisplayName("Other exceptions are logged for remove")
-    public void testExceptionOnPostRemove() {
+    void testExceptionOnPostRemove() {
         List<ILoggingEvent> logsList = getiLoggingEvents();
         doThrow(new IllegalArgumentException())
                 .when(asyncEntityAuditEventWriter)
                 .writeAuditEvent(any(Rectangle.class), eq(EntityAuditAction.DELETE));
         entityAuditEventListener.onPostRemove(mock(Rectangle.class));
-        Assert.assertEquals(logsList.size(), 1);
-        Assert.assertEquals(logsList.get(0).getMessage(), "Exception while persisting delete audit entity {}");
+        assertEquals(1, logsList.size());
+        assertEquals("Exception while persisting delete audit entity {}", logsList.get(0).getMessage());
     }
 
     private List<ILoggingEvent> getiLoggingEvents() {

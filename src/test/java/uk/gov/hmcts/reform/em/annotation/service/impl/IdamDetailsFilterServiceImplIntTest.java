@@ -1,12 +1,11 @@
 package uk.gov.hmcts.reform.em.annotation.service.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.BaseTest;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
@@ -18,16 +17,17 @@ import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
-import static junit.framework.TestCase.assertTrue;
 import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
-public class IdamDetailsFilterServiceImplIntTest extends BaseTest {
+class IdamDetailsFilterServiceImplIntTest extends BaseTest {
 
     @Autowired
     IdamDetailsFilterService idamDetailsFilterService;
@@ -35,7 +35,7 @@ public class IdamDetailsFilterServiceImplIntTest extends BaseTest {
     IdamDetailsRepository idamDetailsRepository;
 
     @Test
-    public void testSaveIdamDetails() {
+    void testSaveIdamDetails() {
 
         assertFalse(idamDetailsRepository.existsById("1"));
 
@@ -45,13 +45,13 @@ public class IdamDetailsFilterServiceImplIntTest extends BaseTest {
             .roles(asList("Admin", "CaseWorker")).build();
         idamDetailsFilterService.saveIdamDetails(userInfo);
 
-        Assert.assertTrue(idamDetailsRepository.existsById("1"));
+        assertTrue(idamDetailsRepository.existsById("1"));
 
     }
 
     @Test
     @DisplayName("Save IdamDetails with empty User.id")
-    public void testSaveIdamDetailsWithEmptyUserDetailsId() {
+    void testSaveIdamDetailsWithEmptyUserDetailsId() {
 
         final int countBeforeSave = idamDetailsRepository.findAll().size();
 
@@ -63,14 +63,14 @@ public class IdamDetailsFilterServiceImplIntTest extends BaseTest {
 
         final int countPostSave = idamDetailsRepository.findAll().size();
 
-        Assert.assertEquals(countBeforeSave, countPostSave);
+        assertEquals(countBeforeSave, countPostSave);
 
 
     }
 
     @Test
     @DisplayName("Save IdamDetails with UserDetails.surname and Retrieve it to ensure surname has been persisted.")
-    public void testSaveIdamDetailSurname() {
+    void testSaveIdamDetailSurname() {
 
         final String randomId = random(3, false, true);
         final String surname = random(8, true, false);

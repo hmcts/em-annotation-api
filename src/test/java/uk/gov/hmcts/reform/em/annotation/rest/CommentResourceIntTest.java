@@ -2,16 +2,16 @@ package uk.gov.hmcts.reform.em.annotation.rest;
 
 import jakarta.persistence.EntityManager;
 import org.json.JSONObject;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
@@ -45,9 +45,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see CommentResource
  */
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
-public class CommentResourceIntTest extends BaseTest {
+class CommentResourceIntTest extends BaseTest {
 
     private static final String DEFAULT_CONTENT = "AAAAAAAAAA";
     private static final String UPDATED_CONTENT = "BBBBBBBBBB";
@@ -78,7 +78,7 @@ public class CommentResourceIntTest extends BaseTest {
     @Autowired
     private AnnotationMapper annotationMapper;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
         final CommentResource commentResource = new CommentResource(commentService);
@@ -99,7 +99,7 @@ public class CommentResourceIntTest extends BaseTest {
         return comment;
     }
 
-    @Before
+    @BeforeEach
     public void initTest() {
         comment = createEntity(em);
 
@@ -107,7 +107,7 @@ public class CommentResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void createComment() throws Exception {
+    void createComment() throws Exception {
         int databaseSizeBeforeCreate = commentRepository.findAll().size();
 
         CommentDTO commentDTO = commentMapper.toDto(comment);
@@ -125,7 +125,7 @@ public class CommentResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void createCommentUuidNull() throws Exception {
+    void createCommentUuidNull() throws Exception {
         final int databaseSizeBeforeCreate = commentRepository.findAll().size();
 
         // Create the Comment
@@ -144,7 +144,7 @@ public class CommentResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void getAllComments() throws Exception {
+    void getAllComments() throws Exception {
         // Initialize the database
         comment = commentRepository.saveAndFlush(comment);
 
@@ -158,7 +158,7 @@ public class CommentResourceIntTest extends BaseTest {
     
     @Test
     @Transactional
-    public void getComment() throws Exception {
+    void getComment() throws Exception {
         // Initialize the database
         commentRepository.saveAndFlush(comment);
 
@@ -172,7 +172,7 @@ public class CommentResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void getNonExistingComment() throws Exception {
+    void getNonExistingComment() throws Exception {
         // Get the comment
         restLogoutMockMvc.perform(get("/api/comments/{id}", UUID.randomUUID()))
             .andExpect(status().isNotFound());
@@ -180,7 +180,7 @@ public class CommentResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void updateComment() throws Exception {
+    void updateComment() throws Exception {
         // Initialize the database
         commentRepository.saveAndFlush(comment);
 
@@ -209,7 +209,7 @@ public class CommentResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void updateNonExistingComment() throws Exception {
+    void updateNonExistingComment() throws Exception {
         int databaseSizeBeforeUpdate = commentRepository.findAll().size();
 
         // Create the Comment
@@ -229,7 +229,7 @@ public class CommentResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void deleteComment() throws Exception {
+    void deleteComment() throws Exception {
         // Initialize the database
         commentRepository.saveAndFlush(comment);
 
@@ -247,7 +247,7 @@ public class CommentResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void deleteNonExistingComment() throws Exception {
+    void deleteNonExistingComment() throws Exception {
 
         int databaseSizeBeforeDelete = commentRepository.findAll().size();
 
@@ -263,7 +263,7 @@ public class CommentResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void equalsVerifier() throws Exception {
+    void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Comment.class);
         Comment comment1 = new Comment();
         comment1.setId(UUID.randomUUID());
@@ -278,7 +278,7 @@ public class CommentResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void dtoEqualsVerifier() throws Exception {
+    void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(CommentDTO.class);
         CommentDTO commentDTO1 = new CommentDTO();
         commentDTO1.setId(UUID.randomUUID());
@@ -294,7 +294,7 @@ public class CommentResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
-    public void testEntityFromId() {
+    void testEntityFromId() {
         UUID uuid = UUID.randomUUID();
         assertThat(commentMapper.fromId(uuid).getId()).isEqualTo(uuid);
         assertThat(commentMapper.fromId(null)).isNull();
