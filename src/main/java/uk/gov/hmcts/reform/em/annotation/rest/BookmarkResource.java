@@ -53,6 +53,7 @@ public class BookmarkResource {
     private static final String ENTITY_NAME = "bookmark";
     private static final String INVALID_ID = "Invalid id";
     private static final String NULL_ENTITY = "idnull";
+    private static final String INVALID_PAGE_NUMBER = "invalidPageNumber";
 
     private final BookmarkService bookmarkService;
 
@@ -88,15 +89,23 @@ public class BookmarkResource {
         @ApiResponse(responseCode = "403", description = "Forbidden"),
     })
     @PostMapping("/bookmarks")
-    public ResponseEntity<BookmarkDTO> createBookmark(@RequestBody BookmarkDTO bookmarkDTO) throws URISyntaxException {
+    public ResponseEntity<BookmarkDTO> createBookmark(@RequestBody BookmarkDTO bookmarkDTO)
+            throws URISyntaxException {
         log.debug("REST request to save Bookmark : {}", bookmarkDTO);
         if (bookmarkDTO.getId() == null) {
             throw new BadRequestAlertException(INVALID_ID, ENTITY_NAME, NULL_ENTITY);
         }
+        if (Objects.isNull(bookmarkDTO.getPageNumber()) || bookmarkDTO.getPageNumber() < 0) {
+            throw new BadRequestAlertException(
+                    "Page number must not be negative or null",
+                    ENTITY_NAME,
+                    INVALID_PAGE_NUMBER
+            );
+        }
         BookmarkDTO result = bookmarkService.save(bookmarkDTO);
         return ResponseEntity.created(new URI("/api/bookmarks/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
     }
 
     /**

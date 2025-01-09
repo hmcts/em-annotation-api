@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
 import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +85,7 @@ public class AnnotationResource {
     })
     @PostMapping("/annotations")
     public ResponseEntity<AnnotationDTO> createAnnotation(HttpServletRequest request,
-            @RequestBody AnnotationDTO annotationDTO) throws URISyntaxException {
+            @RequestBody @Valid AnnotationDTO annotationDTO) throws URISyntaxException {
         log.debug("REST request to save Annotation : {}", annotationDTO);
         if (annotationDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -136,8 +137,7 @@ public class AnnotationResource {
         @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @PutMapping("/annotations")
-    public ResponseEntity<AnnotationDTO> updateAnnotation(@RequestBody AnnotationDTO annotationDTO)
-            throws URISyntaxException {
+    public ResponseEntity<AnnotationDTO> updateAnnotation(@RequestBody @Valid AnnotationDTO annotationDTO) {
         log.debug("REST request to update Annotation : {}", annotationDTO);
         if (annotationDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
