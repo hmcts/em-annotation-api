@@ -84,7 +84,7 @@ class BookmarkResourceIntTest extends BaseTest {
         em.persist(new IdamDetails("anonymous"));
     }
 
-    public static Bookmark createEntity(EntityManager em) {
+    public static Bookmark createEntity() {
         Bookmark bookmark = new Bookmark();
         bookmark.setId(UUID.randomUUID());
         bookmark.setDocumentId(UUID.randomUUID());
@@ -98,7 +98,7 @@ class BookmarkResourceIntTest extends BaseTest {
 
     @BeforeEach
     public void initTest() {
-        bookmark = createEntity(em);
+        bookmark = createEntity();
     }
 
     @Test
@@ -113,6 +113,30 @@ class BookmarkResourceIntTest extends BaseTest {
                         .contentType(TestUtil.APPLICATION_JSON_UTF8)
                         .content(TestUtil.convertObjectToJsonBytes(bookmarkDTO)))
                 .andExpect(status().isBadRequest());
+
+        // Validate the Comment in the database
+        List<Bookmark> bookmarkList = bookmarkRepository.findAll();
+        assertThat(bookmarkList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
+    void createBookmarkFailsPageNumberValidation() throws Exception {
+        int databaseSizeBeforeCreate = bookmarkRepository.findAll().size();
+
+        // Create the Comment
+        BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
+        bookmarkDTO.setPageNumber(-1);
+        restLogoutMockMvc.perform(post("/api/bookmarks")
+                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                        .content(TestUtil.convertObjectToJsonBytes(bookmarkDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(
+                        "{\"entityName\":\"bookmark\",\"errorKey\":\"invalidPageNumber\","
+                                + "\"type\":\"/problem-with-message\","
+                                + "\"title\":\"Page number must not be negative or null\",\"status\":400,"
+                                + "\"message\":\"error.invalidPageNumber\",\"params\":\"bookmark\"}"
+                ));
 
         // Validate the Comment in the database
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
