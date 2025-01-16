@@ -5,6 +5,7 @@ import net.serenitybdd.annotations.WithTags;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
+import uk.gov.hmcts.reform.em.test.retry.RetryExtension;
 
 @SpringBootTest(classes = {TestUtil.class})
 @TestPropertySource(value = "classpath:application.yml")
@@ -24,6 +26,9 @@ class OpenIdConnectScenariosTest {
 
     @Value("${test.url}")
     private String testUrl;
+
+    @RegisterExtension
+    RetryExtension retryExtension = new RetryExtension(3);
 
     @Test
     // Invalid IdamAuth

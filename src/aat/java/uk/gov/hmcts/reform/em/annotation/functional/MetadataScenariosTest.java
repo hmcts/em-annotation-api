@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -19,6 +20,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.annotation.testutil.ToggleProperties;
+import uk.gov.hmcts.reform.em.test.retry.RetryExtension;
 
 import java.util.UUID;
 
@@ -41,6 +43,9 @@ class MetadataScenariosTest {
 
     @Autowired
     ToggleProperties toggleProperties;
+
+    @RegisterExtension
+    RetryExtension retryExtension = new RetryExtension(3);
 
     private RequestSpecification request;
     private RequestSpecification unAuthenticatedRequest;
