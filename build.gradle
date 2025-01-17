@@ -10,7 +10,7 @@ plugins {
     id 'application'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.springframework.boot' version '3.4.1'
-    id 'uk.gov.hmcts.java' version '0.12.63'
+    id 'uk.gov.hmcts.java' version '0.12.64'
     id 'org.owasp.dependencycheck' version '12.0.0'
     id 'com.github.ben-manes.versions' version '0.51.0'
     id 'org.sonarqube' version '6.0.1.5171'
@@ -208,7 +208,7 @@ dependencies {
     contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:versions.junit5
 
     aatImplementation group: 'org.json', name: 'json', version: '20250107'
-    aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version:'2.0.9'
+    aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version:'2.1.1'
 
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
