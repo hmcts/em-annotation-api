@@ -72,130 +72,33 @@ withPipeline(type , product, component) {
         enablePactAs([AppPipelineDsl.PactRoles.CONSUMER])
     }
 
-  afterAlways('test') {
-
-           publishHTML target: [
-              allowMissing         : true,
-              alwaysLinkToLastBuild: true,
-              keepAll              : true,
-              reportDir            : "build/reports/checkstyle",
-              reportFiles          : "main.html",
-              reportName           : "Annotation API Checkstyle Main Report"
-          ]
-
-          publishHTML target: [
-              allowMissing         : true,
-              alwaysLinkToLastBuild: true,
-              keepAll              : true,
-              reportDir            : "build/reports/checkstyle",
-              reportFiles          : "test.html",
-              reportName           : "Annotation API Checkstyle Test Report"
-          ]
-
-         publishHTML target: [
-                allowMissing         : true,
-                alwaysLinkToLastBuild: true,
-                keepAll              : true,
-                reportDir            : "build/reports/checkstyle",
-                reportFiles          : "aat.html",
-                reportName           : "Annotation API Checkstyle AAT Report"
-         ]
-
-         publishHTML target: [
-              allowMissing         : true,
-              alwaysLinkToLastBuild: true,
-              keepAll              : true,
-              reportDir            : "build/reports/pmd",
-              reportFiles          : "main.html",
-              reportName           : "Annotation API PMD Main Report"
-         ]
-
-         publishHTML target: [
-              allowMissing         : true,
-              alwaysLinkToLastBuild: true,
-              keepAll              : true,
-              reportDir            : "build/reports/pmd",
-              reportFiles          : "test.html",
-              reportName           : "Annotation API PMD Test Report"
-         ]
-
-         publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/tests/test",
-            reportFiles          : "index.html",
-            reportName           : "Annotation API Unit Tests Report"
-         ]
+    afterAlways('test') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/checkstyle/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/integration/**/*'
     }
 
-  afterAlways('smoketest:preview') {
-        publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/tests/smoke",
-            reportFiles          : "index.html",
-            reportName           : "Annotation API Smoke Test Report"
-        ]
+    afterAlways('pact-consumer-tests') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
     }
 
-  afterAlways('smoketest:aat') {
-        publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/tests/smoke",
-            reportFiles          : "index.html",
-            reportName           : "Annotation API Smoke Test Report"
-        ]
+    afterAlways('smoketest:preview') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
     }
 
-  afterAlways('functionalTest:preview') {
-        publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/tests/functional",
-            reportFiles          : "index.html",
-            reportName           : "Annotation API Functional Test Report"
-        ]
+    afterAlways('smoketest:aat') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+    }
+
+    afterAlways('functionalTest:preview') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }
 
-  afterAlways('functionalTest:aat') {
-        publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/tests/functional",
-            reportFiles          : "index.html",
-            reportName           : "Annotation API Functional Test Report"
-        ]
-
-       steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+    afterAlways('functionalTest:aat') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }
-
-  afterAlways('pactconsumerVerification:preview') {
-        publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/tests/contract",
-            reportFiles          : "index.html",
-            reportName           : "Annotation API Contract Test Report"
-        ]
-    }
-
-  afterAlways('pactconsumerVerification:aat') {
-        publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/tests/contract",
-            reportFiles          : "index.html",
-            reportName           : "Annotation API Contract Test Report"
-        ]
-    }
+    
     syncBranchesWithMaster(['demo', 'perftest', 'ithc'])
 }
