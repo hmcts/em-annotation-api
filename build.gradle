@@ -19,7 +19,7 @@ plugins {
     id 'au.com.dius.pact' version '4.6.16'
     id "info.solidsoft.pitest" version '1.15.0'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.16'
-    id 'com.github.hmcts.rse-cft-lib' version '0.19.1561'
+    id 'com.github.hmcts.rse-cft-lib' version '0.19.1567'
     id 'org.flywaydb.flyway' version '11.2.0'
 }
 
@@ -64,7 +64,7 @@ def versions = [
         serenity           : '4.2.16',
         pact_version       : '4.6.16',
         hibernate          : '6.6.5.Final',
-        logging            : '6.1.7',
+        logging            : '6.1.8',
         junit5             : '5.11.4',
         log4JVersion       : '2.20.0',
         mapstruct          : '1.6.3',
