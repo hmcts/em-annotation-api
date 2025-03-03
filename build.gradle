@@ -236,6 +236,12 @@ dependencyManagement {
             entry 'logback-classic'
             entry 'logback-core'
         }
+
+        dependencySet(group: 'org.junit.platform', version: '1.12.0') {
+            entry 'junit-platform-commons'
+            entry 'junit-platform-engine'
+            entry 'junit-platform-launcher'
+        }
     }
 }
 
