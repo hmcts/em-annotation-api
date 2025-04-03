@@ -204,6 +204,15 @@ dependencies {
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit', version: versions.pact_version, withoutPactExtras
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version, withoutPactExtras
 
+    contractTestImplementation group: 'au.com.dius.pact', name: 'provider', version: versions.pact_version
+    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
+    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring6', version: versions.pact_version
+    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
+
+
+
+
+
     contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version:versions.junit5
     contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:versions.junit5
 
@@ -427,6 +436,30 @@ pact {
 pactPublish {
     pactPublish = project.pact.publish
 }
+
+task runProviderPactVerification(type: Test) {
+    logger.lifecycle("Runs provider pact Tests")
+    testClassesDirs = sourceSets.contractTest.output.classesDirs
+    classpath = sourceSets.contractTest.runtimeClasspath
+    jvmArgs = ['--add-opens=java.base/java.lang=ALL-UNNAMED']
+    if (project.hasProperty('pact.verifier.publishResults')) {
+        systemProperty 'pact.verifier.publishResults', project.property('pact.verifier.publishResults')
+    }
+    systemProperty 'pact.provider.version', project.pactVersion
+}
+
+
+//tasks.register('runProviderPactVerification', Test) {
+//    logger.lifecycle("Running contract Tests")
+//    useJUnitPlatform()
+//    testClassesDirs = sourceSets.contractTest.output.classesDirs
+//    classpath = sourceSets.contractTest.runtimeClasspath
+//    systemProperty 'pact.verifier.pactSource', file('pacts').absolutePath
+//}
+
+runProviderPactVerification.dependsOn contract
+runProviderPactVerification.finalizedBy pactVerify
+
 
 bootWithCCD {
     authMode = AuthMode.Local
