@@ -47,7 +47,7 @@ import static org.mockito.Mockito.when;
 @PactBroker(
     url = "${PACT_BROKER_FULL_URL:http://localhost:9292}"
 )
-@Import(PactTestConfiguration.class)
+@Import(ContractTestConfiguration.class)
 @IgnoreNoPactsToVerify
 class PostAnnotationsProviderTest {
 
