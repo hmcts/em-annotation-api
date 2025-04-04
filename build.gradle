@@ -40,6 +40,16 @@ java {
     }
 }
 
+task runDslGenerator(type: JavaExec) {
+    group = "Execution"
+    description = "Runs the DslGenerator main method"
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'uk.gov.hmcts.reform.em.annotation.service.DslGenerator' // Adjust package name
+
+    // Explicitly use the toolchain's launcher
+    javaLauncher = javaToolchains.launcherFor(project.java.toolchain)
+}
+
 mainClassName = 'uk.gov.hmcts.reform.em.annotation.Application'
 
 configurations {
@@ -437,7 +447,7 @@ pactPublish {
     pactPublish = project.pact.publish
 }
 
-task runProviderPactVerification(type: Test) {
+tasks.register('runProviderPactVerification', Test) {
     logger.lifecycle("Runs provider pact Tests")
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
@@ -448,14 +458,6 @@ task runProviderPactVerification(type: Test) {
     systemProperty 'pact.provider.version', project.pactVersion
 }
 
-
-//tasks.register('runProviderPactVerification', Test) {
-//    logger.lifecycle("Running contract Tests")
-//    useJUnitPlatform()
-//    testClassesDirs = sourceSets.contractTest.output.classesDirs
-//    classpath = sourceSets.contractTest.runtimeClasspath
-//    systemProperty 'pact.verifier.pactSource', file('pacts').absolutePath
-//}
 
 runProviderPactVerification.dependsOn contract
 runProviderPactVerification.finalizedBy pactVerify
