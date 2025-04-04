@@ -40,16 +40,6 @@ java {
     }
 }
 
-task runDslGenerator(type: JavaExec) {
-    group = "Execution"
-    description = "Runs the DslGenerator main method"
-    classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'uk.gov.hmcts.reform.em.annotation.service.DslGenerator' // Adjust package name
-
-    // Explicitly use the toolchain's launcher
-    javaLauncher = javaToolchains.launcherFor(project.java.toolchain)
-}
-
 mainClassName = 'uk.gov.hmcts.reform.em.annotation.Application'
 
 configurations {
