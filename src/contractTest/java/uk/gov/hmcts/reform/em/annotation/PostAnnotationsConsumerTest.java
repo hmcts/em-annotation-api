@@ -37,7 +37,6 @@ class PostAnnotationsConsumerTest {
 
     private final UUID exampleUserId = UUID.fromString("c38fd29e-fa2e-43d4-a599-2d3f2908565b");
 
-
     @Pact(provider = "annotation_api_provider", consumer = "annotation_api")
     public V4Pact createAnnotation201(PactDslWithProvider builder) {
         return builder
