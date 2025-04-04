@@ -33,7 +33,6 @@ class PostAnnotationsConsumerTest {
     public static final String AUTH_TOKEN = "Bearer someAuthorizationToken";
     public static final String SERVICE_AUTH_TOKEN = "Bearer someServiceAuthorizationToken";
 
-    private static final String EMAIL_REGEX = "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b";
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     private final UUID exampleUserId = UUID.fromString("c38fd29e-fa2e-43d4-a599-2d3f2908565b");
@@ -82,7 +81,7 @@ class PostAnnotationsConsumerTest {
                 .object("createdByDetails", details -> details
                     .stringType("forename", "Test")
                     .stringType("surname", "User")
-                    .stringMatcher("email", EMAIL_REGEX, "test.user.annotations@example.com")
+                    .stringType("email", "test.user.annotations@example.com")
                 )
                 .datetime("createdDate", DATE_TIME_FORMAT)
                 .uuid("createdBy", exampleUserId)
@@ -93,7 +92,7 @@ class PostAnnotationsConsumerTest {
                 .object("lastModifiedByDetails", details -> details
                     .stringType("forename", "Test")
                     .stringType("surname", "User")
-                    .stringMatcher("email", EMAIL_REGEX, "test.user.annotations@example.com")
+                    .stringType("email", "test.user.annotations@example.com")
                 )
                 .stringType("content", "This is a sample annotation comment text which can vary.")
             )
@@ -101,7 +100,7 @@ class PostAnnotationsConsumerTest {
                 .object("createdByDetails", details -> details
                     .stringType("forename", "Test")
                     .stringType("surname", "User")
-                    .stringMatcher("email", EMAIL_REGEX, "test.user.annotations@example.com")
+                    .stringType("email", "test.user.annotations@example.com")
                 )
                 .datetime("createdDate", DATE_TIME_FORMAT)
                 .uuid("createdBy", exampleUserId)
@@ -115,7 +114,7 @@ class PostAnnotationsConsumerTest {
                 .object("lastModifiedByDetails", details -> details
                     .stringType("forename", "Test")
                     .stringType("surname", "User")
-                    .stringMatcher("email", EMAIL_REGEX, "test.user.annotations@example.com")
+                    .stringType("email", "test.user.annotations@example.com")
                 )
                 .numberType("height", 80.7)
             )
@@ -128,7 +127,7 @@ class PostAnnotationsConsumerTest {
             .object("lastModifiedByDetails", details -> details
                 .stringType("forename", "Test")
                 .stringType("surname", "User")
-                .stringMatcher("email", EMAIL_REGEX, "test.user.annotations@example.com")
+                .stringType("email", "test.user.annotations@example.com")
             )
             .eachLike("tags", tags -> tags
                 .stringType("label", "Sample label")
@@ -139,7 +138,7 @@ class PostAnnotationsConsumerTest {
             .object("createdByDetails", details -> {
                 details.stringType("forename", "Test");
                 details.stringType("surname", "User");
-                details.stringMatcher("email", EMAIL_REGEX, "test.user.annotations@example.com");
+                details.stringType("email", "test.user.annotations@example.com");
             })
             .uuid("annotationSetId", UUID.fromString("c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f"))
             .datetime("createdDate", DATE_TIME_FORMAT)
