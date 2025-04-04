@@ -66,11 +66,8 @@ withPipeline(type , product, component) {
         sh ./publish-swagger-docs.sh
          '''
     }
-
-    onMaster()
-    {
-        enablePactAs([AppPipelineDsl.PactRoles.CONSUMER])
-    }
+    
+    enablePactAs([AppPipelineDsl.PactRoles.CONSUMER])
 
     afterAlways('test') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
