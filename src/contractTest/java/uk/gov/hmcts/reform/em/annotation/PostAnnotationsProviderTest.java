@@ -39,7 +39,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@Provider("annotation_api_provider")
+@Provider("annotation_api_annotation_provider")
 @ExtendWith(SpringExtension.class)
 //Uncomment @PactFolder and comment the @PactBroker line to test local consumer.
 //using this, import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
