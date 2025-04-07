@@ -84,10 +84,10 @@ class PostAnnotationsProviderTest {
         }
     }
 
-    @PactBrokerConsumerVersionSelectors
-    public static SelectorBuilder consumerVersionSelectors() {
-        return new SelectorBuilder().branch("master");
-    }
+    //    @PactBrokerConsumerVersionSelectors
+    //    public static SelectorBuilder consumerVersionSelectors() {
+    //        return new SelectorBuilder().branch("master");
+    //    }
 
     @State({"annotation is created successfully"})
     public void createAnnotation() throws PSQLException {
