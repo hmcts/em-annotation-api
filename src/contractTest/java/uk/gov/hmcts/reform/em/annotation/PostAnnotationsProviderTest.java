@@ -6,6 +6,7 @@ import au.com.dius.pact.provider.junitsupport.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
+import au.com.dius.pact.provider.junitsupport.loader.VersionSelector;
 import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +44,10 @@ import static org.mockito.Mockito.when;
 //using this, import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 //@PactFolder("target/pacts")
 @PactBroker(
-    url = "${PACT_BROKER_FULL_URL:http://localhost:9292}"
+    url = "${PACT_BROKER_FULL_URL:http://localhost:9292}",
+    consumerVersionSelectors = {
+        @VersionSelector(tag = "master")
+    }
 )
 @Import(ContractTestConfiguration.class)
 @IgnoreNoPactsToVerify
