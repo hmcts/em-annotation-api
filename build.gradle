@@ -419,18 +419,33 @@ task fortifyScan(type: JavaExec)  {
 
 project.ext {
     pactVersion = getCheckedOutGitCommitHash()
+    pacticipantVersion = getCheckedOutGitCommitHash()
 }
 
 static def getCheckedOutGitCommitHash() {
     'git rev-parse --verify --short HEAD'.execute().text.trim()
 }
 
+//pact {
+//    publish {
+//        pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
+//        pactDirectory = 'pacts'
+//        tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
+//        version = project.pactVersion
+//    }
+//}
 pact {
+    broker {
+        pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
+        //pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'https://pact-broker.platform.hmcts.net:443'
+    }
     publish {
         pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
+        //pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'https://pact-broker.platform.hmcts.net:443'
         pactDirectory = 'pacts'
         tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
-        version = project.pactVersion
+        version = project.pacticipantVersion
+        //consumerVersion = '4d50a5775c8fd8dc569b8ed6dc6d86dab3ce9cf1'
     }
 }
 
@@ -438,7 +453,7 @@ pactPublish {
     pactPublish = project.pact.publish
 }
 
-tasks.register('runProviderPactVerification', Test) {
+task runProviderPactVerification(type: Test) {
     logger.lifecycle("Runs provider pact Tests")
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
@@ -446,7 +461,9 @@ tasks.register('runProviderPactVerification', Test) {
     if (project.hasProperty('pact.verifier.publishResults')) {
         systemProperty 'pact.verifier.publishResults', project.property('pact.verifier.publishResults')
     }
-    systemProperty 'pact.provider.version', project.pactVersion
+    //systemProperty 'pact.provider.version', project.pactVersion
+    systemProperty 'pact.provider.version', project.pacticipantVersion
+
 }
 
 
