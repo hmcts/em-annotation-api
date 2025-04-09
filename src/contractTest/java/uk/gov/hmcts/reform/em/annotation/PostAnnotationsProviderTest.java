@@ -45,7 +45,7 @@ import static org.mockito.Mockito.when;
 @PactBroker(
     url = "${PACT_BROKER_FULL_URL:http://localhost:80}",
     consumerVersionSelectors = {
-        @VersionSelector(tag = "$PACT_BRANCH_NAME:Dev")
+        @VersionSelector(tag = "EM-6449-add-pact-test")
     }
 )
 @Import(ContractTestConfiguration.class)
