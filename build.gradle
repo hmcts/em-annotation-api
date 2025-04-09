@@ -459,7 +459,8 @@ task runProviderPactVerification(type: Test) {
     classpath = sourceSets.contractTest.runtimeClasspath
     jvmArgs = ['--add-opens=java.base/java.lang=ALL-UNNAMED']
     if (project.hasProperty('pact.verifier.publishResults')) {
-        systemProperty 'pact.verifier.publishResults', project.property('pact.verifier.publishResults')
+//        systemProperty 'pact.verifier.publishResults', project.property('pact.verifier.publishResults')
+        systemProperty 'pact.verifier.publishResults', 'true'
     }
     //systemProperty 'pact.provider.version', project.pactVersion
     systemProperty 'pact.provider.version', project.pacticipantVersion
