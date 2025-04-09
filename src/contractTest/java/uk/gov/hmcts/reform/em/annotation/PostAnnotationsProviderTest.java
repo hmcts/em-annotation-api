@@ -5,6 +5,8 @@ import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvide
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
+import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors;
+import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
 import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -80,10 +82,10 @@ class PostAnnotationsProviderTest {
         }
     }
 
-    //    @PactBrokerConsumerVersionSelectors
-    //    public static SelectorBuilder consumerVersionSelectors() {
-    //        return new SelectorBuilder().branch("master");
-    //    }
+    @PactBrokerConsumerVersionSelectors
+    public static SelectorBuilder consumerVersionSelectors() {
+        return new SelectorBuilder().tag("master");
+    }
 
     @State({"annotation is created successfully"})
     public void createAnnotation() throws PSQLException {
