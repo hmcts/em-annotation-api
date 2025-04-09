@@ -407,7 +407,7 @@ task runAndPublishConsumerPactTests(type: Test) {
     jvmArgs = ['--add-opens=java.base/java.lang=ALL-UNNAMED']
 }
 
-//runAndPublishConsumerPactTests.dependsOn contract
+runAndPublishConsumerPactTests.dependsOn contract
 runAndPublishConsumerPactTests.finalizedBy pactPublish
 
 
