@@ -44,7 +44,7 @@ import static org.mockito.Mockito.when;
 //using this, import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 //@PactFolder("target/pacts")
 @PactBroker(
-    url = "${PACT_BROKER_FULL_URL:http://localhost:9292}",
+    url = "${PACT_BROKER_FULL_URL:http://localhost:80}",
     consumerVersionSelectors = {
         @VersionSelector(tag = "master")
     }
@@ -61,6 +61,7 @@ class PostAnnotationsProviderTest {
 
     @BeforeEach
     void before(PactVerificationContext context) {
+        System.getProperties().setProperty("pact.verifier.publishResults", "true");
         annotationService = mock(AnnotationService.class);
         ccdService = mock(CcdService.class);
 
