@@ -418,7 +418,6 @@ task fortifyScan(type: JavaExec)  {
 }
 
 project.ext {
-    pactVersion = getCheckedOutGitCommitHash()
     pacticipantVersion = getCheckedOutGitCommitHash()
 }
 
