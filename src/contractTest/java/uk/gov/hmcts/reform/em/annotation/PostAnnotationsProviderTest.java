@@ -43,10 +43,7 @@ import static org.mockito.Mockito.when;
 //using this, import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 //@PactFolder("target/pacts")
 @PactBroker(
-    url = "${PACT_BROKER_FULL_URL:http://localhost:80}",
-    consumerVersionSelectors = {
-        @VersionSelector(tag = "EM-6449-add-pact-test")
-    }
+    url = "${PACT_BROKER_FULL_URL:http://localhost:80}"
 )
 @Import(ContractTestConfiguration.class)
 class PostAnnotationsProviderTest {
