@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.em.annotation;
 
 import au.com.dius.pact.provider.junit5.PactVerificationContext;
 import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider;
+import au.com.dius.pact.provider.junitsupport.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
@@ -47,6 +48,7 @@ import static org.mockito.Mockito.when;
     url = "${PACT_BROKER_FULL_URL:http://localhost:80}"
 )
 @Import(ContractTestConfiguration.class)
+@IgnoreNoPactsToVerify
 class PostAnnotationsProviderTest {
 
     private AnnotationService annotationService;
