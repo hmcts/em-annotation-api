@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.em.annotation;
+package uk.gov.hmcts.reform.em.annotation.provider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
 @TestConfiguration
-public class ContractTestConfiguration {
+public class ContractTestProviderConfiguration {
     @Bean
     @Primary
     public ObjectMapper testObjectMapper() {

@@ -1,12 +1,12 @@
-package uk.gov.hmcts.reform.em.annotation;
+package uk.gov.hmcts.reform.em.annotation.provider;
 
 import au.com.dius.pact.provider.junit5.PactVerificationContext;
 import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider;
 import au.com.dius.pact.provider.junitsupport.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
-import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
 import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors;
+import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
 import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,13 +43,13 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 //Uncomment @PactFolder and comment the @PactBroker line to test local consumer.
 //using this, import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
-//@PactFolder("target/pacts")
-@PactBroker(
-    url = "${PACT_BROKER_FULL_URL:http://localhost:80}"
-)
-@Import(ContractTestConfiguration.class)
+@PactFolder("pacts")
+//@PactBroker(
+//    url = "${PACT_BROKER_FULL_URL:http://localhost:80}"
+//)
+@Import(ContractTestProviderConfiguration.class)
 @IgnoreNoPactsToVerify
-class PostAnnotationsProviderTest {
+class AnnotationsProviderTest {
 
     private AnnotationService annotationService;
     private CcdService ccdService;
@@ -92,6 +92,22 @@ class PostAnnotationsProviderTest {
     @State({"annotation is created successfully"})
     public void createAnnotation() throws PSQLException {
 
+        AnnotationDTO annotationDto = getAnnotationDTO();
+
+        when(annotationService.save(any(AnnotationDTO.class))).thenReturn(annotationDto);
+        when(ccdService.buildCommentHeader(any(AnnotationDTO.class), anyString())).thenReturn("Test Comment Header");
+        when(annotationService.findOne(any(UUID.class), anyBoolean())).thenReturn(Optional.of(annotationDto));
+    }
+
+    @State({"annotation is updated successfully"})
+    public void updateAnnotation() throws PSQLException {
+
+        AnnotationDTO annotationDto = getAnnotationDTO();
+
+        when(annotationService.save(any(AnnotationDTO.class))).thenReturn(annotationDto);
+    }
+
+    private static AnnotationDTO getAnnotationDTO() {
         IdamDetails details = new IdamDetails();
         details.setForename("Test");
         details.setSurname("User");
@@ -146,9 +162,6 @@ class PostAnnotationsProviderTest {
         annotationDto.setCreatedBy("c38fd29e-fa2e-43d4-a599-2d3f2908565b");
         annotationDto.setLastModifiedDate(Instant.parse("2024-01-15T12:00:00.999Z"));
         annotationDto.setLastModifiedBy("c38fd29e-fa2e-43d4-a599-2d3f2908565b");
-
-        when(annotationService.save(any(AnnotationDTO.class))).thenReturn(annotationDto);
-        when(ccdService.buildCommentHeader(any(AnnotationDTO.class), anyString())).thenReturn("Test Comment Header");
-        when(annotationService.findOne(any(UUID.class), anyBoolean())).thenReturn(Optional.of(annotationDto));
+        return annotationDto;
     }
 }
