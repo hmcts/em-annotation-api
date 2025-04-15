@@ -43,7 +43,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 //Uncomment @PactFolder and comment the @PactBroker line to test local consumer.
 //using this, import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
-//@PactFolder("pacts")
+//@PactFolder("target/pacts")
 @PactBroker(
     url = "${PACT_BROKER_FULL_URL:http://localhost:80}"
 )
