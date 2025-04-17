@@ -60,7 +60,7 @@ import static org.mockito.Mockito.when;
     SecurityAutoConfiguration.class,
     OAuth2ClientAutoConfiguration.class
 })
-@AutoConfigureMockMvc(addFilters=false)
+@AutoConfigureMockMvc(addFilters = false)
 class AnnotationsProviderTest {
 
     @MockitoBean
