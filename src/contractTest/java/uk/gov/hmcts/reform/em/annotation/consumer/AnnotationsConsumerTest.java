@@ -2,6 +2,8 @@ package uk.gov.hmcts.reform.em.annotation.consumer;
 
 import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.dsl.DslPart;
+import au.com.dius.pact.consumer.dsl.LambdaDsl;
+import au.com.dius.pact.consumer.dsl.LambdaDslObject;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
@@ -93,6 +95,32 @@ class AnnotationsConsumerTest {
             .statusCode(HttpStatus.OK.value());
     }
 
+    @Pact(provider = "annotation_api_annotation_provider", consumer = "annotation_api")
+    public V4Pact getAnnotations200(PactDslWithProvider builder) {
+        return builder
+            .given("gets all annotations")
+            .uponReceiving("A request to get all annotations")
+            .path("/api/annotations")
+            .method(HttpMethod.GET.toString())
+            .headers(getHeaders())
+            .willRespondWith()
+            .status(HttpStatus.OK.value())
+            .body(createAnnotationDslList())
+            .toPact(V4Pact.class);
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "getAnnotations200")
+    void testGetAnnotations200(MockServer mockServer) {
+        SerenityRest
+            .given()
+            .headers(getHeaders())
+            .contentType(ContentType.JSON)
+            .get(mockServer.getUrl() + "/api/annotations")
+            .then()
+            .statusCode(HttpStatus.OK.value());
+    }
+
     public Map<String, String> getHeaders() {
         return Map.of(
             SERVICE_AUTHORIZATION, SERVICE_AUTH_TOKEN,
@@ -101,8 +129,18 @@ class AnnotationsConsumerTest {
         );
     }
 
+    private DslPart createAnnotationDslList() {
+        return LambdaDsl.newJsonArrayMinLike(1, array ->
+            array.object(this::getLambdaDslObject)).build();
+    }
+
+
     private DslPart createAnnotationDsl() {
-        return newJsonBody(body -> body
+        return newJsonBody(this::getLambdaDslObject).build();
+    }
+
+    private void getLambdaDslObject(LambdaDslObject body) {
+        body
             .stringType("color", "FFFF00")
             .eachLike("comments", comment -> comment
                 .object("createdByDetails", details -> details
@@ -171,8 +209,6 @@ class AnnotationsConsumerTest {
             .datetime("createdDate", DATE_TIME_FORMAT)
             .uuid("createdBy", exampleUserId)
             .uuid("id", UUID.fromString("d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a"))
-            .integerType("page", 1)
-
-        ).build();
+            .integerType("page", 1);
     }
 }
