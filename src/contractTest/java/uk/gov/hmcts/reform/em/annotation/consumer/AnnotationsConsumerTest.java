@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.em.annotation;
+package uk.gov.hmcts.reform.em.annotation.consumer;
 
 import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.dsl.DslPart;
@@ -27,7 +27,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class PostAnnotationsConsumerTest {
+class AnnotationsConsumerTest {
 
     public static final String SERVICE_AUTHORIZATION = "ServiceAuthorization";
     public static final String AUTH_TOKEN = "Bearer someAuthorizationToken";
@@ -63,6 +63,34 @@ class PostAnnotationsConsumerTest {
             .post(mockServer.getUrl() + "/api/annotations")
             .then()
             .statusCode(HttpStatus.CREATED.value());
+    }
+
+    @Pact(provider = "annotation_api_annotation_provider", consumer = "annotation_api")
+    public V4Pact updateAnnotation200(PactDslWithProvider builder) {
+        return builder
+            .given("annotation is updated successfully")
+            .uponReceiving("A request to update an annotation")
+            .path("/api/annotations")
+            .method(HttpMethod.PUT.toString())
+            .headers(getHeaders())
+            .body(createAnnotationDsl())
+            .willRespondWith()
+            .status(HttpStatus.OK.value())
+            .body(createAnnotationDsl())
+            .toPact(V4Pact.class);
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "updateAnnotation200")
+    void testUpdateAnnotation200(MockServer mockServer) {
+        SerenityRest
+            .given()
+            .headers(getHeaders())
+            .contentType(ContentType.JSON)
+            .body(createAnnotationDsl().getBody().toString())
+            .put(mockServer.getUrl() + "/api/annotations")
+            .then()
+            .statusCode(HttpStatus.OK.value());
     }
 
     public Map<String, String> getHeaders() {
