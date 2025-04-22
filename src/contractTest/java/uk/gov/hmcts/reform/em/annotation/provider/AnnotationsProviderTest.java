@@ -52,7 +52,7 @@ import static org.mockito.Mockito.when;
 //using this, import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 // @PactFolder("target/pacts")
 @PactBroker(
-   url = "${PACT_BROKER_FULL_URL:http://localhost:80}"
+    url = "${PACT_BROKER_FULL_URL:http://localhost:80}"
 )
 @Import(ContractTestProviderConfiguration.class)
 @IgnoreNoPactsToVerify
