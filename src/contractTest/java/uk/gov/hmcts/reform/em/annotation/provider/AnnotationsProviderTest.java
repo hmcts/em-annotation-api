@@ -6,7 +6,8 @@ import au.com.dius.pact.provider.junitsupport.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors;
-import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
+import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
+import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors;
 import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
 import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,10 +51,10 @@ import static org.mockito.Mockito.when;
 @Provider("annotation_api_annotation_provider")
 //Uncomment @PactFolder and comment the @PactBroker line to test local consumer.
 //using this, import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
-@PactFolder("pacts")
-//@PactBroker(
-//    url = "${PACT_BROKER_FULL_URL:http://localhost:80}"
-//)
+// @PactFolder("target/pacts")
+@PactBroker(
+   url = "${PACT_BROKER_FULL_URL:http://localhost:80}"
+)
 @Import(ContractTestProviderConfiguration.class)
 @IgnoreNoPactsToVerify
 @WebMvcTest(value = AnnotationResource.class, excludeAutoConfiguration = {

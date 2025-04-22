@@ -36,4 +36,5 @@ public class ContractTestProviderConfiguration implements WebMvcConfigurer {
     public JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter() {
         return mock(JwtGrantedAuthoritiesConverter.class);
     }
+
 }
