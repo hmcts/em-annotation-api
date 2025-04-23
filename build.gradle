@@ -405,6 +405,8 @@ task runAndPublishConsumerPactTests(type: Test) {
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
     jvmArgs = ['--add-opens=java.base/java.lang=ALL-UNNAMED']
+    systemProperty 'pact.consumer.version', project.pacticipantVersion
+
 }
 
 runAndPublishConsumerPactTests.dependsOn contract
