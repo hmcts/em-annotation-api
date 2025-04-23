@@ -429,11 +429,6 @@ pact {
 }
 
 pactPublish {
-    doFirst {
-        // Check the project property directly
-        def propVersion = project.properties.get('pact.consumer.version')
-        logger.lifecycle(">>> Pact Publish: Version from project property (-P flag): ${propVersion}")
-    }
     pactPublish = project.pact.publish
 }
 
