@@ -412,8 +412,7 @@ task runAndPublishConsumerPactTests(type: Test) {
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
     jvmArgs = ['--add-opens=java.base/java.lang=ALL-UNNAMED']
-    systemProperty 'pact.consumer.version', project.pacticipantVersion
-
+    systemProperty 'pact.publish.consumer.version', project.pacticipantVersion
 }
 
 runAndPublishConsumerPactTests.dependsOn contract
@@ -434,6 +433,7 @@ pact {
         pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
         pactDirectory = 'pacts'
         tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
+        consumerBranch = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
         version = project.pacticipantVersion
     }
 }
@@ -452,7 +452,6 @@ tasks.register('runProviderPactVerification', Test) {
     }
 
     systemProperty 'pact.provider.version', project.pacticipantVersion
-
 }
 
 
