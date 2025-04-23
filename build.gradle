@@ -32,7 +32,6 @@ if (!project.hasProperty('runList')) {
 
 
 group 'uk.gov.hmcts.reform.em.annotation'
-version '1.0.0'
 
 java {
     toolchain {
@@ -433,7 +432,7 @@ pact {
         pactDirectory = 'pacts'
         tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
         consumerBranch = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
-        version = System.getProperty('pact.consumer.version') ?: getCheckedOutGitCommitHash()
+        version = project.pacticipantVersion
     }
 }
 
