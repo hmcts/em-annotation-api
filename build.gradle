@@ -32,6 +32,7 @@ if (!project.hasProperty('runList')) {
 
 
 group 'uk.gov.hmcts.reform.em.annotation'
+version '1.0.0'
 
 java {
     toolchain {
@@ -406,16 +407,6 @@ task contract(type: Test) {
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
 
-task runAndPublishConsumerPactTests(type: Test) {
-    logger.lifecycle("Runs pact Tests")
-    testClassesDirs = sourceSets.contractTest.output.classesDirs
-    classpath = sourceSets.contractTest.runtimeClasspath
-    jvmArgs = ['--add-opens=java.base/java.lang=ALL-UNNAMED']
-}
-
-runAndPublishConsumerPactTests.dependsOn contract
-runAndPublishConsumerPactTests.finalizedBy pactPublish
-
 
 task fortifyScan(type: JavaExec)  {
     main = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
@@ -433,6 +424,7 @@ pact {
         tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
         consumerBranch = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
         version = project.pacticipantVersion
+        logger.lifecycle("{ ${project.pacticipantVersion} }")
     }
 }
 
@@ -444,6 +436,16 @@ pactPublish {
     }
     pactPublish = project.pact.publish
 }
+
+task runAndPublishConsumerPactTests(type: Test) {
+    logger.lifecycle("Runs pact Tests")
+    testClassesDirs = sourceSets.contractTest.output.classesDirs
+    classpath = sourceSets.contractTest.runtimeClasspath
+    jvmArgs = ['--add-opens=java.base/java.lang=ALL-UNNAMED']
+}
+
+runAndPublishConsumerPactTests.dependsOn contract
+runAndPublishConsumerPactTests.finalizedBy pactPublish
 
 tasks.register('runProviderPactVerification', Test) {
     logger.lifecycle("Runs provider pact Tests")
