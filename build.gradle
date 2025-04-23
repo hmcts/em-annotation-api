@@ -430,12 +430,11 @@ pact {
         pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
     }
     publish {
-        println "PACT version being used: ${project.ext.pacticipantVersion}"
         pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
         pactDirectory = 'pacts'
         tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
         consumerBranch = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
-        version = project.findProperty('pact.consumer.version') ?: getCheckedOutGitCommitHash()
+        version = System.getProperty('pact.consumer.version') ?: getCheckedOutGitCommitHash()
     }
 }
 
