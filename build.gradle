@@ -387,6 +387,13 @@ task smoke(type: Test) {
 
 }
 
+project.ext {
+    pacticipantVersion = getCheckedOutGitCommitHash()
+}
+
+static def getCheckedOutGitCommitHash() {
+    'git rev-parse --verify --short HEAD'.execute().text.trim()
+}
 
 
 task contract(type: Test) {
@@ -417,14 +424,6 @@ task fortifyScan(type: JavaExec)  {
     main = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
     classpath += sourceSets.test.runtimeClasspath
     jvmArgs = ['--add-opens=java.base/java.lang.reflect=ALL-UNNAMED']
-}
-
-project.ext {
-    pacticipantVersion = getCheckedOutGitCommitHash()
-}
-
-static def getCheckedOutGitCommitHash() {
-    'git rev-parse --verify --short HEAD'.execute().text.trim()
 }
 
 pact {
