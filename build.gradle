@@ -389,7 +389,6 @@ task smoke(type: Test) {
 
 project.ext {
     pacticipantVersion = getCheckedOutGitCommitHash()
-    consumerVersion = project.pacticipantVersion
 }
 
 static def getCheckedOutGitCommitHash() {
