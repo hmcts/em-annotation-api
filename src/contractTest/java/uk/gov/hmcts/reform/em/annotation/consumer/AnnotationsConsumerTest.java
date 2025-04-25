@@ -2,6 +2,8 @@ package uk.gov.hmcts.reform.em.annotation.consumer;
 
 import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.dsl.DslPart;
+import au.com.dius.pact.consumer.dsl.LambdaDsl;
+import au.com.dius.pact.consumer.dsl.LambdaDslObject;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
@@ -36,6 +38,7 @@ class AnnotationsConsumerTest {
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     private final UUID exampleUserId = UUID.fromString("c38fd29e-fa2e-43d4-a599-2d3f2908565b");
+    private final String exampleAnnotationId = "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a";
 
     @Pact(provider = "annotation_api_annotation_provider", consumer = "annotation_api")
     public V4Pact createAnnotation201(PactDslWithProvider builder) {
@@ -93,6 +96,58 @@ class AnnotationsConsumerTest {
             .statusCode(HttpStatus.OK.value());
     }
 
+    @Pact(provider = "annotation_api_annotation_provider", consumer = "annotation_api")
+    public V4Pact getAnnotations200(PactDslWithProvider builder) {
+        return builder
+            .given("gets all annotations")
+            .uponReceiving("A request to get all annotations")
+            .path("/api/annotations")
+            .method(HttpMethod.GET.toString())
+            .headers(getHeaders())
+            .willRespondWith()
+            .status(HttpStatus.OK.value())
+            .body(createAnnotationDslList())
+            .toPact(V4Pact.class);
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "getAnnotations200")
+    void testGetAnnotations200(MockServer mockServer) {
+        SerenityRest
+            .given()
+            .headers(getHeaders())
+            .contentType(ContentType.JSON)
+            .get(mockServer.getUrl() + "/api/annotations")
+            .then()
+            .statusCode(HttpStatus.OK.value());
+    }
+
+    @Pact(provider = "annotation_api_annotation_provider", consumer = "annotation_api")
+    public V4Pact getAnnotation200(PactDslWithProvider builder) {
+        return builder
+            .given("gets the annotation by given id")
+            .uponReceiving("A request to get a single annotation")
+            .path("/api/annotations/" + exampleAnnotationId)
+            .method(HttpMethod.GET.toString())
+            .headers(getHeaders())
+            .willRespondWith()
+            .status(HttpStatus.OK.value())
+            .body(createAnnotationDsl())
+            .toPact(V4Pact.class);
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "getAnnotation200")
+    void testGetAnnotation200(MockServer mockServer) {
+        SerenityRest
+            .given()
+            .headers(getHeaders())
+            .contentType(ContentType.JSON)
+            .get(mockServer.getUrl() + "/api/annotations/" + exampleAnnotationId)
+            .then()
+            .statusCode(HttpStatus.OK.value());
+    }
+
     public Map<String, String> getHeaders() {
         return Map.of(
             SERVICE_AUTHORIZATION, SERVICE_AUTH_TOKEN,
@@ -101,8 +156,18 @@ class AnnotationsConsumerTest {
         );
     }
 
+    private DslPart createAnnotationDslList() {
+        return LambdaDsl.newJsonArrayMinLike(1, array ->
+            array.object(this::getLambdaDslObject)).build();
+    }
+
+
     private DslPart createAnnotationDsl() {
-        return newJsonBody(body -> body
+        return newJsonBody(this::getLambdaDslObject).build();
+    }
+
+    private void getLambdaDslObject(LambdaDslObject body) {
+        body
             .stringType("color", "FFFF00")
             .eachLike("comments", comment -> comment
                 .object("createdByDetails", details -> details
@@ -170,9 +235,7 @@ class AnnotationsConsumerTest {
             .uuid("annotationSetId", UUID.fromString("c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f"))
             .datetime("createdDate", DATE_TIME_FORMAT)
             .uuid("createdBy", exampleUserId)
-            .uuid("id", UUID.fromString("d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a"))
-            .integerType("page", 1)
-
-        ).build();
+            .uuid("id", UUID.fromString(exampleAnnotationId))
+            .integerType("page", 1);
     }
 }

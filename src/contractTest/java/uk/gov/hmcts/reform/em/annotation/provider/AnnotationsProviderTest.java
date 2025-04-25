@@ -15,9 +15,17 @@ import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 import uk.gov.hmcts.reform.em.annotation.domain.enumeration.AnnotationType;
 import uk.gov.hmcts.reform.em.annotation.rest.AnnotationResource;
@@ -29,6 +37,7 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.RectangleDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.TagDTO;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -36,33 +45,39 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Provider("annotation_api_annotation_provider")
-@ExtendWith(SpringExtension.class)
 //Uncomment @PactFolder and comment the @PactBroker line to test local consumer.
 //using this, import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
-//@PactFolder("target/pacts")
+// @PactFolder("target/pacts")
 @PactBroker(
     url = "${PACT_BROKER_FULL_URL:http://localhost:80}"
 )
 @Import(ContractTestProviderConfiguration.class)
 @IgnoreNoPactsToVerify
+@WebMvcTest(value = AnnotationResource.class, excludeAutoConfiguration = {
+    SecurityAutoConfiguration.class,
+    OAuth2ClientAutoConfiguration.class
+})
+@AutoConfigureMockMvc(addFilters = false)
 class AnnotationsProviderTest {
 
+    @MockitoBean
     private AnnotationService annotationService;
+    @MockitoBean
     private CcdService ccdService;
 
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private MockMvc mockMvc;
+
     @BeforeEach
     void before(PactVerificationContext context) {
-        annotationService = mock(AnnotationService.class);
-        ccdService = mock(CcdService.class);
 
-        MockMvcTestTarget testTarget = new MockMvcTestTarget();
+        MockMvcTestTarget testTarget = new MockMvcTestTarget(mockMvc);
         testTarget.setControllers(new AnnotationResource(annotationService, ccdService));
 
         if (context != null) {
@@ -105,6 +120,27 @@ class AnnotationsProviderTest {
         AnnotationDTO annotationDto = getAnnotationDTO();
 
         when(annotationService.save(any(AnnotationDTO.class))).thenReturn(annotationDto);
+    }
+
+    @State({"gets all annotations"})
+    public void getAllAnnotations() {
+
+        AnnotationDTO annotationDto = getAnnotationDTO();
+        AnnotationDTO annotationDto2 = getAnnotationDTO();
+
+        Page<AnnotationDTO> page = new PageImpl<>(List.of(annotationDto, annotationDto2));
+
+        when(annotationService.findAll(any(Pageable.class))).thenReturn(page);
+
+    }
+
+    @State({"gets the annotation by given id"})
+    public void getAnnotation() {
+
+        AnnotationDTO annotationDto = getAnnotationDTO();
+
+        when(annotationService.findOne(any(UUID.class))).thenReturn(Optional.of(annotationDto));
+
     }
 
     private static AnnotationDTO getAnnotationDTO() {
