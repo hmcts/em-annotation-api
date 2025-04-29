@@ -45,6 +45,7 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @Provider("annotation_api_annotation_provider")
@@ -141,6 +142,11 @@ class AnnotationsProviderTest {
 
         when(annotationService.findOne(any(UUID.class))).thenReturn(Optional.of(annotationDto));
 
+    }
+
+    @State({"annotation exists for deletion"})
+    public void deleteAnnotation() {
+        doNothing().when(annotationService).delete(any(UUID.class));
     }
 
     private static AnnotationDTO getAnnotationDTO() {
