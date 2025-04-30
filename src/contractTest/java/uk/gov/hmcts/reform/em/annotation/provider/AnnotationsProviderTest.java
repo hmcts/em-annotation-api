@@ -1,31 +1,16 @@
 package uk.gov.hmcts.reform.em.annotation.provider;
 
-import au.com.dius.pact.provider.junit5.PactVerificationContext;
-import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider;
-import au.com.dius.pact.provider.junitsupport.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
-import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
-import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors;
-import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
-import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.TestTemplate;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 import uk.gov.hmcts.reform.em.annotation.domain.enumeration.AnnotationType;
 import uk.gov.hmcts.reform.em.annotation.rest.AnnotationResource;
@@ -49,61 +34,25 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @Provider("annotation_api_annotation_provider")
-//Uncomment @PactFolder and comment the @PactBroker line to test local consumer.
-//using this, import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
-// @PactFolder("target/pacts")
-@PactBroker(
-    url = "${PACT_BROKER_FULL_URL:http://localhost:80}"
-)
-@Import(ContractTestProviderConfiguration.class)
-@IgnoreNoPactsToVerify
 @WebMvcTest(value = AnnotationResource.class, excludeAutoConfiguration = {
     SecurityAutoConfiguration.class,
     OAuth2ClientAutoConfiguration.class
 })
-@AutoConfigureMockMvc(addFilters = false)
-class AnnotationsProviderTest {
+public class AnnotationsProviderTest extends BaseProviderTest {
+
+    @Autowired
+    private AnnotationResource annotationResource;
 
     @MockitoBean
     private AnnotationService annotationService;
     @MockitoBean
     private CcdService ccdService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @BeforeEach
-    void before(PactVerificationContext context) {
-
-        MockMvcTestTarget testTarget = new MockMvcTestTarget(mockMvc);
-        testTarget.setControllers(new AnnotationResource(annotationService, ccdService));
-
-        if (context != null) {
-            context.setTarget(testTarget);
-        }
-
-        testTarget.setMessageConverters(
-            (
-                new MappingJackson2HttpMessageConverter(objectMapper)
-            )
-        );
+    @Override
+    protected Object[] getControllersUnderTest() {
+        return new Object[]{annotationResource};
     }
 
-    @TestTemplate
-    @ExtendWith(PactVerificationInvocationContextProvider.class)
-    void pactVerificationTestTemplate(PactVerificationContext context) {
-        if (context != null) {
-            context.verifyInteraction();
-        }
-    }
-
-    @PactBrokerConsumerVersionSelectors
-    public static SelectorBuilder consumerVersionSelectors() {
-        return new SelectorBuilder().tag("master");
-    }
 
     @State({"annotation is created successfully"})
     public void createAnnotation() throws PSQLException {
@@ -125,23 +74,19 @@ class AnnotationsProviderTest {
 
     @State({"gets all annotations"})
     public void getAllAnnotations() {
-
         AnnotationDTO annotationDto = getAnnotationDTO();
         AnnotationDTO annotationDto2 = getAnnotationDTO();
+        annotationDto2.setId(UUID.randomUUID());
 
         Page<AnnotationDTO> page = new PageImpl<>(List.of(annotationDto, annotationDto2));
-
         when(annotationService.findAll(any(Pageable.class))).thenReturn(page);
-
     }
 
     @State({"gets the annotation by given id"})
     public void getAnnotation() {
-
         AnnotationDTO annotationDto = getAnnotationDTO();
-
-        when(annotationService.findOne(any(UUID.class))).thenReturn(Optional.of(annotationDto));
-
+        UUID id = annotationDto.getId();
+        when(annotationService.findOne(id)).thenReturn(Optional.of(annotationDto));
     }
 
     @State({"annotation exists for deletion"})
@@ -149,22 +94,27 @@ class AnnotationsProviderTest {
         doNothing().when(annotationService).delete(any(UUID.class));
     }
 
-    private static AnnotationDTO getAnnotationDTO() {
+    public static AnnotationDTO getAnnotationDTO() {
         IdamDetails details = new IdamDetails();
         details.setForename("Test");
         details.setSurname("User");
         details.setEmail("test.user.annotations@example.com");
 
+        String exampleUserIdStr = EXAMPLE_USER_ID.toString(); // Use inherited constant
+        Instant exampleCreatedDate = EXAMPLE_DATE; // Use inherited constant
+        Instant exampleModifiedDate = EXAMPLE_DATE.plusSeconds(120); // Use inherited constant
+
+
         CommentDTO exampleComment = new CommentDTO();
         exampleComment.setId(UUID.fromString("dfc7e6a2-1a7c-4b81-a8a1-7da0a1f7c0f1"));
-        exampleComment.setAnnotationId(UUID.fromString("e4f8e7b3-2b8d-4c92-b9b2-8eb1b2f8d1f2"));
+        exampleComment.setAnnotationId(UUID.fromString("e4f8e7b3-2b8d-4c92-b9b2-8eb1b2f8d1f2")); // Consider linking dynamically
         exampleComment.setContent("This is a sample annotation comment text which can vary.");
         exampleComment.setCreatedByDetails(details);
         exampleComment.setLastModifiedByDetails(details);
-        exampleComment.setCreatedDate(Instant.parse("2024-01-15T10:00:00.123Z"));
-        exampleComment.setCreatedBy("c38fd29e-fa2e-43d4-a599-2d3f2908565b");
-        exampleComment.setLastModifiedDate(Instant.parse("2024-01-15T11:30:45.678Z"));
-        exampleComment.setLastModifiedBy("c38fd29e-fa2e-43d4-a599-2d3f2908565b");
+        exampleComment.setCreatedDate(exampleCreatedDate);
+        exampleComment.setCreatedBy(exampleUserIdStr);
+        exampleComment.setLastModifiedDate(exampleModifiedDate);
+        exampleComment.setLastModifiedBy(exampleUserIdStr);
 
         RectangleDTO exampleRectangle = new RectangleDTO();
         exampleRectangle.setX(100.5);
@@ -175,18 +125,20 @@ class AnnotationsProviderTest {
         exampleRectangle.setHeight(80.7);
         exampleRectangle.setCreatedByDetails(details);
         exampleRectangle.setLastModifiedByDetails(details);
-        exampleRectangle.setCreatedDate(Instant.parse("2024-01-15T09:45:10.101Z"));
-        exampleRectangle.setCreatedBy("c38fd29e-fa2e-43d4-a599-2d3f2908565b");
-        exampleRectangle.setLastModifiedDate(Instant.parse("2024-01-15T09:55:20.500Z"));
-        exampleRectangle.setLastModifiedBy("c38fd29e-fa2e-43d4-a599-2d3f2908565b");
+        exampleRectangle.setCreatedDate(exampleCreatedDate.minusSeconds(30));
+        exampleRectangle.setCreatedBy(exampleUserIdStr);
+        exampleRectangle.setLastModifiedDate(exampleModifiedDate.minusSeconds(15));
+        exampleRectangle.setLastModifiedBy(exampleUserIdStr);
 
         TagDTO tagDTO = new TagDTO();
-        tagDTO.setCreatedBy("c38fd29e-fa2e-43d4-a599-2d3f2908565b");
+        tagDTO.setCreatedBy(exampleUserIdStr);
         tagDTO.setColor("FFFF00");
         tagDTO.setName("Sample name");
         tagDTO.setLabel("Sample label");
 
         AnnotationDTO annotationDto = new AnnotationDTO();
+        annotationDto.setId(UUID.fromString("d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a"));
+        annotationDto.setAnnotationSetId(UUID.fromString("c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f"));
         annotationDto.setColor("FFFF00");
         annotationDto.setComments(Set.of(exampleComment));
         annotationDto.setRectangles(Set.of(exampleRectangle));
@@ -194,16 +146,20 @@ class AnnotationsProviderTest {
         annotationDto.setCommentHeader("Comment Header");
         annotationDto.setAnnotationType(String.valueOf(AnnotationType.HIGHLIGHT));
         annotationDto.setTags(Set.of(tagDTO));
-        annotationDto.setAnnotationSetId(UUID.fromString("c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f"));
         annotationDto.setCaseId("123456789012345");
-        annotationDto.setId(UUID.fromString("d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a"));
         annotationDto.setPage(1);
+
         annotationDto.setCreatedByDetails(details);
         annotationDto.setLastModifiedByDetails(details);
-        annotationDto.setCreatedDate(Instant.parse("2024-01-15T09:00:00.001Z"));
-        annotationDto.setCreatedBy("c38fd29e-fa2e-43d4-a599-2d3f2908565b");
-        annotationDto.setLastModifiedDate(Instant.parse("2024-01-15T12:00:00.999Z"));
-        annotationDto.setLastModifiedBy("c38fd29e-fa2e-43d4-a599-2d3f2908565b");
+        annotationDto.setCreatedDate(exampleCreatedDate);
+        annotationDto.setCreatedBy(exampleUserIdStr);
+        annotationDto.setLastModifiedDate(exampleModifiedDate);
+        annotationDto.setLastModifiedBy(exampleUserIdStr);
+
+        exampleComment.setAnnotationId(annotationDto.getId());
+        exampleRectangle.setAnnotationId(annotationDto.getId());
+
+
         return annotationDto;
     }
 }
