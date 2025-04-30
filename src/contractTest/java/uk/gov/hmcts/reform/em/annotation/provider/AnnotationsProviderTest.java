@@ -100,14 +100,14 @@ public class AnnotationsProviderTest extends BaseProviderTest {
         details.setSurname("User");
         details.setEmail("test.user.annotations@example.com");
 
-        String exampleUserIdStr = EXAMPLE_USER_ID.toString(); // Use inherited constant
-        Instant exampleCreatedDate = EXAMPLE_DATE; // Use inherited constant
-        Instant exampleModifiedDate = EXAMPLE_DATE.plusSeconds(120); // Use inherited constant
+        String exampleUserIdStr = EXAMPLE_USER_ID.toString();
+        Instant exampleCreatedDate = EXAMPLE_DATE;
+        Instant exampleModifiedDate = EXAMPLE_DATE.plusSeconds(120);
 
 
         CommentDTO exampleComment = new CommentDTO();
         exampleComment.setId(UUID.fromString("dfc7e6a2-1a7c-4b81-a8a1-7da0a1f7c0f1"));
-        exampleComment.setAnnotationId(UUID.fromString("e4f8e7b3-2b8d-4c92-b9b2-8eb1b2f8d1f2")); // Consider linking dynamically
+        exampleComment.setAnnotationId(UUID.fromString("e4f8e7b3-2b8d-4c92-b9b2-8eb1b2f8d1f2"));
         exampleComment.setContent("This is a sample annotation comment text which can vary.");
         exampleComment.setCreatedByDetails(details);
         exampleComment.setLastModifiedByDetails(details);
