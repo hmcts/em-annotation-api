@@ -148,6 +148,31 @@ class AnnotationsConsumerTest {
             .statusCode(HttpStatus.OK.value());
     }
 
+    @Pact(provider = "annotation_api_annotation_provider", consumer = "annotation_api")
+    public V4Pact deleteAnnotation200(PactDslWithProvider builder) {
+        return builder
+            .given("annotation exists for deletion")
+            .uponReceiving("A request to delete an annotation")
+            .path("/api/annotations/" + exampleAnnotationId)
+            .method(HttpMethod.DELETE.toString())
+            .headers(getHeaders())
+            .willRespondWith()
+            .status(HttpStatus.OK.value())
+            .toPact(V4Pact.class);
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "deleteAnnotation200")
+    void testDeleteAnnotation200(MockServer mockServer) {
+        SerenityRest
+            .given()
+            .headers(getHeaders())
+            .contentType(ContentType.JSON)
+            .delete(mockServer.getUrl() + "/api/annotations/" + exampleAnnotationId)
+            .then()
+            .statusCode(HttpStatus.OK.value());
+    }
+
     public Map<String, String> getHeaders() {
         return Map.of(
             SERVICE_AUTHORIZATION, SERVICE_AUTH_TOKEN,
