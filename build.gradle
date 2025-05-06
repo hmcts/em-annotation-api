@@ -19,7 +19,7 @@ plugins {
     id 'au.com.dius.pact' version '4.6.17'
     id "info.solidsoft.pitest" version '1.15.0'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.22'
-    id 'com.github.hmcts.rse-cft-lib' version '0.19.1666'
+    id 'com.github.hmcts.rse-cft-lib' version '0.19.1687'
     id 'org.flywaydb.flyway' version '11.8.0'
 }
 
@@ -64,7 +64,7 @@ def versions = [
         serenity           : '4.2.22',
         pact_version       : '4.6.17',
         hibernate          : '6.6.5.Final',
-        logging            : '6.1.8',
+        logging            : '6.1.9',
         junit5             : '5.12.2',
         log4JVersion       : '2.20.0',
         mapstruct          : '1.6.3',
@@ -129,7 +129,7 @@ dependencies {
 
     implementation group: 'org.zalando', name: 'problem-spring-web', version: '0.29.1'
     implementation group: 'org.zalando', name: 'jackson-datatype-problem', version: '0.27.1'
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.6'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.8'
     implementation group: 'com.google.guava', name: 'guava', version: '33.4.8-jre'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.8.0'
