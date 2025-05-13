@@ -12,12 +12,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
+import uk.gov.hmcts.reform.em.annotation.rest.errors.ExceptionTranslator;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -32,7 +35,6 @@ import java.util.UUID;
 @PactBroker(
     url = "${PACT_BROKER_FULL_URL:http://localhost:80}"
 )
-@Slf4j
 public abstract class BaseProviderTest {
 
     @Autowired
@@ -43,6 +45,8 @@ public abstract class BaseProviderTest {
 
     protected static final UUID EXAMPLE_USER_ID = UUID.fromString("c38fd29e-fa2e-43d4-a599-2d3f2908565b");
     protected static final Instant EXAMPLE_DATE = Instant.parse("2024-01-15T10:00:00.123Z");
+
+    private static final Logger log = LoggerFactory.getLogger(BaseProviderTest.class);
 
     @BeforeEach
     void setupPactVerification(PactVerificationContext context) {
