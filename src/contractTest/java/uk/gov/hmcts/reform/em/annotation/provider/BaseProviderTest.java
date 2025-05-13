@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
 
 @Import(ContractTestProviderConfiguration.class)
@@ -66,8 +67,11 @@ public abstract class BaseProviderTest {
 
     @PactBrokerConsumerVersionSelectors
     public static SelectorBuilder consumerVersionSelectors() {
-        return new SelectorBuilder()
-            .tag("${PACT_BRANCH_NAME:master}");
+        String pactBranchName = System.getenv("PACT_BRANCH_NAME");
+        if (Objects.nonNull(pactBranchName) && !pactBranchName.isBlank()) {
+            return new SelectorBuilder().tag(pactBranchName);
+        }
+        return new SelectorBuilder().tag("Dev");
     }
 
     protected IdamDetails createIdamDetails() {
