@@ -68,10 +68,17 @@ public abstract class BaseProviderTest {
     @PactBrokerConsumerVersionSelectors
     public static SelectorBuilder consumerVersionSelectors() {
         String pactBranchName = System.getenv("PACT_BRANCH_NAME");
-        if (Objects.nonNull(pactBranchName) && !pactBranchName.isBlank()) {
-            return new SelectorBuilder().tag(pactBranchName);
+        String tagToSelect;
+
+        if (pactBranchName != null && !pactBranchName.trim().isEmpty()) {
+            tagToSelect = pactBranchName;
+        } else {
+            tagToSelect = "Dev";
         }
-        return new SelectorBuilder().tag("Dev");
+
+        System.out.println("Pact Provider: Selecting consumer pacts with tag: " + tagToSelect); // For debugging
+
+        return new SelectorBuilder().tag(tagToSelect);
     }
 
     protected IdamDetails createIdamDetails() {
