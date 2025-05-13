@@ -8,6 +8,7 @@ import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSe
 import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
 import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +32,7 @@ import java.util.UUID;
 @PactBroker(
     url = "${PACT_BROKER_FULL_URL:http://localhost:80}"
 )
+@Slf4j
 public abstract class BaseProviderTest {
 
     @Autowired
@@ -76,7 +78,7 @@ public abstract class BaseProviderTest {
             tagToSelect = "Dev";
         }
 
-        System.out.println("Pact Provider: Selecting consumer pacts with tag: " + tagToSelect); // For debugging
+        log.info("Pact Provider: Selecting consumer pacts with tag: {}", tagToSelect); // For debugging
 
         return new SelectorBuilder().tag(tagToSelect);
     }
