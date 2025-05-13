@@ -70,7 +70,7 @@ public abstract class BaseProviderTest {
         String pactBranchName = System.getenv("PACT_BRANCH_NAME");
         String tagToSelect;
 
-        if (pactBranchName != null && !pactBranchName.trim().isEmpty()) {
+        if (Objects.nonNull(pactBranchName) && !pactBranchName.isBlank()) {
             tagToSelect = pactBranchName;
         } else {
             tagToSelect = "Dev";
