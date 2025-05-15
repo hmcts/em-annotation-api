@@ -55,6 +55,34 @@ class AnnotationSetConsumerTest extends BaseConsumerTest {
             .statusCode(HttpStatus.CREATED.value());
     }
 
+    @Pact(provider = ANNOTATION_SET_PROVIDER_NAME, consumer = "annotation_api")
+    public V4Pact updateAnnotationSet200(PactDslWithProvider builder) {
+        return builder
+            .given("annotation set is updated successfully")
+            .uponReceiving("A request to update an annotation set")
+            .path(ANNOTATION_SET_API_BASE_PATH)
+            .method(HttpMethod.PUT.toString())
+            .headers(getHeaders())
+            .body(createAnnotationSetDsl())
+            .willRespondWith()
+            .status(HttpStatus.OK.value())
+            .body(createAnnotationSetDsl())
+            .toPact(V4Pact.class);
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "updateAnnotationSet200")
+    void testUpdateAnnotationSet200(MockServer mockServer) {
+        SerenityRest
+            .given()
+            .headers(getHeaders())
+            .contentType(ContentType.JSON)
+            .body(createAnnotationSetDsl().getBody().toString())
+            .put(mockServer.getUrl() + ANNOTATION_SET_API_BASE_PATH)
+            .then()
+            .statusCode(HttpStatus.OK.value());
+    }
+
 
     private DslPart createAnnotationSetDsl() {
         return newJsonBody(this::buildAnnotationSetBody).build();

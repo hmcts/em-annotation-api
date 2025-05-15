@@ -46,6 +46,12 @@ public class AnnotationSetProviderTest extends BaseProviderTest {
         when(annotationSetService.findOne(annotationSetDto.getId())).thenReturn(Optional.of(annotationSetDto));
     }
 
+    @State({"annotation set is updated successfully"})
+    public void updateAnnotationSet() {
+        AnnotationSetDTO annotationSetDto = createAnnotationSetDTO();
+        when(annotationSetService.save(any(AnnotationSetDTO.class))).thenReturn(annotationSetDto);
+    }
+
 
     private AnnotationSetDTO createAnnotationSetDTO() {
         AnnotationSetDTO dto = new AnnotationSetDTO();
