@@ -16,6 +16,7 @@ cd em-annotation-app/
 brew install jq
 ```
 
+
 #### Clean and build the application:
 
 Requires docker desktop running
