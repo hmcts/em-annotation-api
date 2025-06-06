@@ -61,7 +61,7 @@ def versions = [
         pitest             : '1.5.1',
         gradlePitest       : '1.3.0',
         sonarPitest        : '0.5',
-        serenity           : '4.2.30',
+        serenity           : '4.2.33',
         pact_version       : '4.6.17',
         hibernate          : '6.6.17.Final',
         logging            : '6.1.9',
