@@ -112,7 +112,7 @@ dependencies {
     implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: versions.fasterXmlJackson
     implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version: versions.fasterXmlJackson
     implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.fasterXmlJackson
-    implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate5-jakarta', version: versions.fasterXmlJackson
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate6', version: versions.fasterXmlJackson
     implementation group:'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.fasterXmlJackson
     implementation group:'com.fasterxml.jackson.core', name: 'jackson-databind',version: versions.fasterXmlJackson
     implementation group:'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
@@ -131,9 +131,9 @@ dependencies {
     implementation group: 'commons-validator', name: 'commons-validator', version: '1.9.0'
     implementation group: 'org.ehcache', name: 'ehcache', version: '3.10.8'
 
-    implementation group:'org.hibernate', name: 'hibernate-core', version: versions.hibernate
-    implementation group:'org.hibernate', name: 'hibernate-jcache', version: versions.hibernate
-    implementation group:'org.hibernate', name: 'hibernate-envers', version: versions.hibernate
+    implementation group:'org.hibernate.orm', name: 'hibernate-core', version: versions.hibernate
+    implementation group:'org.hibernate.orm', name: 'hibernate-jcache', version: versions.hibernate
+    implementation group:'org.hibernate.orm', name: 'hibernate-envers', version: versions.hibernate
 
     implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.logging
 
@@ -160,7 +160,7 @@ dependencies {
 
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.38'
     annotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: versions.mapstruct
-    annotationProcessor group:'org.hibernate', name: 'hibernate-jpamodelgen', version: versions.hibernate
+    annotationProcessor group:'org.hibernate.orm', name: 'hibernate-jpamodelgen', version: versions.hibernate
     annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', withoutStuff
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testImplementation group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
