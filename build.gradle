@@ -48,7 +48,7 @@ configurations {
 }
 
 def versions = [
-        postgresql         : '42.7.6',
+        postgresql         : '42.7.7',
         springSecurity     : '6.5.0',
         fasterXmlJackson   : '2.19.0',
         pitest             : '1.5.1',
