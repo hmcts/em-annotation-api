@@ -76,7 +76,6 @@ public class CommentProviderTest extends BaseProviderTest {
         dto.setAnnotationId(EXAMPLE_ANNOTATION_ID);
         dto.setContent("This is a sample comment.");
 
-        // Set auditing fields to match consumer expectations
         dto.setCreatedBy(EXAMPLE_USER_ID.toString());
         dto.setCreatedDate(EXAMPLE_DATE);
         dto.setCreatedByDetails(createIdamDetails());
