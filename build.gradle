@@ -79,6 +79,12 @@ sourceSets {
             runtimeClasspath += main.output
         }
     }
+    providerContractTest {
+        java.srcDir file('src/providerContractTest/java')
+        resources.srcDir file('src/providerContractTest/resources')
+        compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
+        runtimeClasspath += output + compileClasspath
+    }
 }
 
 configurations.all {
@@ -432,49 +438,37 @@ task runAndPublishConsumerPactTests(type: Test) {
 runAndPublishConsumerPactTests.dependsOn contract
 runAndPublishConsumerPactTests.finalizedBy pactPublish
 
-tasks.register('runProviderPactVerification', Test) {
-    logger.lifecycle("Configuring 'runProviderPactVerification' task...")
+tasks.register('providerContractTests', Test) {
+    description = 'Runs the PROVIDER Pact verification tests'
+    group = 'Verification'
 
-    testClassesDirs = sourceSets.contractTest.output.classesDirs
-    classpath = sourceSets.contractTest.runtimeClasspath
-    jvmArgs = ['--add-opens=java.base/java.lang=ALL-UNNAMED']
-    systemProperty 'pact.provider.version', project.pacticipantVersion
+    testClassesDirs = sourceSets.providerContractTest.output.classesDirs
+    classpath = sourceSets.providerContractTest.runtimeClasspath
+
+    useJUnitPlatform()
+
+    if (project.hasProperty('pact.verifier.publishResults')) {
+        systemProperty 'pact.verifier.publishResults', project.property('pact.verifier.publishResults')
+    }
+    if (project.hasProperty('pact.provider.version')) {
+        systemProperty 'pact.provider.version', project.property('pact.provider.version')
+    } else {
+        systemProperty 'pact.provider.version', project.pacticipantVersion
+    }
 
     doFirst {
-        println "---------------------------------------------------------"
-        println "[PACT DEBUG] Final check inside doFirst() for master branch verification."
-
-        boolean shouldPublish = false
-
-        if (project.hasProperty('pact.verifier.publishResults')) {
-            def propValue = project.property('pact.verifier.publishResults')
-            println "[PACT DEBUG] Project property 'pact.verifier.publishResults' was found."
-            println "[PACT DEBUG] Its final value is: '${propValue}'"
-
-            if (propValue.toString().toBoolean() == true) {
-                println "[PACT DEBUG] Verdict: Property is true. Forcing system property for test JVM."
-                shouldPublish = true
-            } else {
-                println "[PACT DEBUG] Verdict: Property is not 'true'. Publishing will be disabled."
-            }
-        } else {
-            println "[PACT DEBUG] Project property 'pact.verifier.publishResults' was NOT found. Publishing disabled."
-        }
-
-        if (shouldPublish) {
-            systemProperties.put('pact.verifier.publishResults', 'true')
-        } else {
-            systemProperties.remove('pact.verifier.publishResults')
-        }
-
-        println "[PACT DEBUG] Final system properties for test: ${systemProperties}"
-        println "---------------------------------------------------------"
+        println "--- Running 'providerContractTests' task ---"
+        println "System properties: ${systemProperties}"
+        println "------------------------------------------"
     }
 }
 
+tasks.register('runProviderPactVerification') {
+    description = 'Entry point for Jenkins to run provider contract tests.'
+    group = 'Verification'
 
-//runProviderPactVerification.dependsOn contract
-//runProviderPactVerification.finalizedBy pactVerify
+    dependsOn tasks.named('providerContractTests')
+}
 
 
 bootWithCCD {
