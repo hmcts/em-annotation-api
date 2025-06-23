@@ -79,12 +79,6 @@ sourceSets {
             runtimeClasspath += main.output
         }
     }
-    providerContractTest {
-        java.srcDir file('src/providerContractTest/java')
-        resources.srcDir file('src/providerContractTest/resources')
-        compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
-        runtimeClasspath += output + compileClasspath
-    }
 }
 
 configurations.all {
@@ -439,13 +433,14 @@ runAndPublishConsumerPactTests.dependsOn contract
 runAndPublishConsumerPactTests.finalizedBy pactPublish
 
 tasks.register('providerContractTests', Test) {
-    description = 'Runs the PROVIDER Pact verification tests'
+    description = 'Runs ONLY the provider Pact verification tests.'
     group = 'Verification'
 
-    testClassesDirs = sourceSets.providerContractTest.output.classesDirs
-    classpath = sourceSets.providerContractTest.runtimeClasspath
-
     useJUnitPlatform()
+    testClassesDirs = sourceSets.contractTest.output.classesDirs
+    classpath = sourceSets.contractTest.runtimeClasspath
+
+    include '**/provider/**'
 
     if (project.hasProperty('pact.verifier.publishResults')) {
         systemProperty 'pact.verifier.publishResults', project.property('pact.verifier.publishResults')
@@ -457,9 +452,8 @@ tasks.register('providerContractTests', Test) {
     }
 
     doFirst {
-        println "--- Running 'providerContractTests' task ---"
-        println "System properties: ${systemProperties}"
-        println "------------------------------------------"
+        println "--- Running 'providerContractTests' (including only **/provider/**) ---"
+        println "System properties for this run: ${systemProperties}"
     }
 }
 
