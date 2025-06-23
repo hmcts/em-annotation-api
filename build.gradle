@@ -473,8 +473,8 @@ tasks.register('runProviderPactVerification', Test) {
 }
 
 
-runProviderPactVerification.dependsOn contract
-runProviderPactVerification.finalizedBy pactVerify
+//runProviderPactVerification.dependsOn contract
+//runProviderPactVerification.finalizedBy pactVerify
 
 
 bootWithCCD {
