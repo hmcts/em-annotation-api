@@ -67,8 +67,11 @@ public abstract class BaseProviderTest {
 
     @PactBrokerConsumerVersionSelectors
     public static SelectorBuilder consumerVersionSelectors() {
-        return new SelectorBuilder()
-            .mainBranch();
+        return new SelectorBuilder().tag(
+            Optional.ofNullable(System.getenv("PACT_BRANCH_NAME"))
+                .filter(branchName -> !branchName.isBlank())
+                .orElse("Dev")
+        );
 
     }
 
