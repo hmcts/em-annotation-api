@@ -442,8 +442,10 @@ tasks.register('providerContractTests', Test) {
 
     include '**/provider/**'
 
-    systemProperty("logging.level.au.com.dius.pact", "INFO")
-    systemProperty("logging.level.io.pact", "INFO")
+    testLogging {
+        exceptionFormat = 'full'
+        showStandardStreams = true
+    }
 
     if (project.hasProperty('pact.verifier.publishResults')) {
         systemProperty 'pact.verifier.publishResults', project.property('pact.verifier.publishResults')
