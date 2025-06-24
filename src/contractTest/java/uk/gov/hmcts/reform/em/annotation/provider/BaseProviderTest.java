@@ -68,9 +68,10 @@ public abstract class BaseProviderTest {
     @PactBrokerConsumerVersionSelectors
     public static SelectorBuilder consumerVersionSelectors() {
         return new SelectorBuilder()
+            .branch("master")
             .matchingBranch()
-            .mainBranch()
             .deployedOrReleased();
+
     }
 
     protected IdamDetails createIdamDetails() {
