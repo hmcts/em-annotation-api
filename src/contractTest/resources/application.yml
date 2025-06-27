@@ -1,2 +1,0 @@
-endpoint-toggles:
-  metadata: ${ENABLE_METADATA_ENDPOINT:true}
