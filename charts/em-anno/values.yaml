@@ -39,7 +39,7 @@ java:
     ENDPOINTS_INFO_SENSITIVE: false
     ENABLE_IDAM_HEALTH_CHECK: false
     ENABLE_S2S_HEALTH_CHECK: false
-    ENABLE_METADATA_ENDPOINT: false
+    ENABLE_METADATA_ENDPOINT: true
     SERVER_PORT: 8080
 xui-webapp:
   enabled: false
