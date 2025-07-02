@@ -21,10 +21,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.zalando.problem.Status;
+import org.zalando.problem.violations.ConstraintViolationProblem;
+import org.zalando.problem.violations.Violation;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -95,6 +99,14 @@ public class ExceptionTranslatorTestController {
     public void constraintViolation() {
         throw new ConstraintViolationException("Constraint Violation",
                 new PSQLException("", PSQLState.UNKNOWN_STATE), "key");
+    }
+
+    @GetMapping("/test/constraint-violation-problem")
+    public void throwConstraintViolationProblem() {
+        List<Violation> violations = List.of(
+                new Violation("fieldName", ErrorConstants.ERR_VALIDATION)
+        );
+        throw new ConstraintViolationProblem(Status.UNPROCESSABLE_ENTITY, violations);
     }
 
     @GetMapping("/test/psql-key-violation")
