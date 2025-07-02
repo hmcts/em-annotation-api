@@ -134,7 +134,7 @@ app-insights:
   telemetry-component: on
 
 endpoint-toggles:
-  metadata: ${ENABLE_METADATA_ENDPOINT:false}
+  metadata: ${ENABLE_METADATA_ENDPOINT:true}
 
 # OpenId Connect
 oidc:
