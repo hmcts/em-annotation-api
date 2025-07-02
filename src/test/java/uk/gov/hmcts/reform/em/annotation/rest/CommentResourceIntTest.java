@@ -144,6 +144,25 @@ class CommentResourceIntTest extends BaseTest {
 
     @Test
     @Transactional
+    void createCommentWithAnnottaionIdNull() throws Exception {
+        final int databaseSizeBeforeCreate = commentRepository.findAll().size();
+
+        // Create the Comment
+        CommentDTO commentDTO = commentMapper.toDto(comment);
+        // If the entity doesn't have an Annotation ID, it will throw BadRequestAlertException
+
+        restLogoutMockMvc.perform(post("/api/comments")
+                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                        .content(TestUtil.convertObjectToJsonBytes(commentDTO)))
+                .andExpect(status().isBadRequest());
+
+        // Validate the Comment in the database
+        List<Comment> commentList = commentRepository.findAll();
+        assertThat(commentList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
     void getAllComments() throws Exception {
         // Initialize the database
         comment = commentRepository.saveAndFlush(comment);
@@ -221,6 +240,25 @@ class CommentResourceIntTest extends BaseTest {
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(commentDTO)))
             .andExpect(status().isBadRequest());
+
+        // Validate the Comment in the database
+        List<Comment> commentList = commentRepository.findAll();
+        assertThat(commentList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void updateExistingCommentWithNullAnnotationId() throws Exception {
+        int databaseSizeBeforeUpdate = commentRepository.findAll().size();
+
+        // Create the Comment
+        CommentDTO commentDTO = commentMapper.toDto(comment);
+
+        // If the entity doesn't have an Annotation ID, it will throw BadRequestAlertException
+        restLogoutMockMvc.perform(put("/api/comments")
+                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                        .content(TestUtil.convertObjectToJsonBytes(commentDTO)))
+                .andExpect(status().isBadRequest());
 
         // Validate the Comment in the database
         List<Comment> commentList = commentRepository.findAll();
