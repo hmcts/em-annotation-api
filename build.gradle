@@ -19,7 +19,7 @@ plugins {
     id 'au.com.dius.pact' version '4.6.17'
     id "info.solidsoft.pitest" version '1.15.0'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.33'
-    id 'com.github.hmcts.rse-cft-lib' version '0.19.1774'
+    id 'com.github.hmcts.rse-cft-lib' version '0.19.1781'
     id 'org.flywaydb.flyway' version '11.10.0'
 }
 
@@ -56,7 +56,7 @@ def versions = [
         sonarPitest        : '0.5',
         serenity           : '4.2.34',
         pact_version       : '4.6.17',
-        hibernate          : '6.6.18.Final',
+        hibernate          : '6.6.19.Final',
         logging            : '6.1.9',
         junit5             : '5.13.2',
         log4JVersion       : '2.20.0',
@@ -188,7 +188,7 @@ dependencies {
         exclude group: 'ch.qos.logback', module: 'logback-core'
     }
 
-    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.21.2'
+    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.21.3'
 
     testImplementation group: 'org.mockito', name: 'mockito-inline', version: '5.2.0'
 
@@ -324,7 +324,7 @@ configurations {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '10.26.0'
+    toolVersion = '10.26.1'
     reportsDir = file("$project.buildDir/reports/checkstyle")
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
