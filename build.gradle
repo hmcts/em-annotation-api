@@ -1,3 +1,4 @@
+import org.flywaydb.gradle.task.FlywayMigrateTask
 import uk.gov.hmcts.rse.AuthMode
 
 buildscript {
@@ -493,7 +494,7 @@ flyway {
     baselineVersion = '1'
 }
 
-tasks.register('migratePostgresDatabase', org.flywaydb.gradle.task.FlywayMigrateTask) {
+tasks.register('migratePostgresDatabase', FlywayMigrateTask) {
     baselineOnMigrate = true
     if (project.hasProperty("dburl")) {
         url = "jdbc:postgresql://${dburl}"
