@@ -418,6 +418,7 @@ tasks.register('runAndPublishConsumerPactTests', Test) {
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
     jvmArgs = ['--add-opens=java.base/java.lang=ALL-UNNAMED']
+    useJUnitPlatform()
 }
 
 runAndPublishConsumerPactTests.dependsOn contract
@@ -432,10 +433,18 @@ tasks.register('providerContractTests', Test) {
     classpath = sourceSets.contractTest.runtimeClasspath
 
     include '**/provider/**'
+}
 
+// Centralized Pact system property setup for all Test tasks
+tasks.withType(Test).configureEach { t ->
+    // Logging setup
     testLogging {
         exceptionFormat = 'full'
+        showCauses = true
+        showExceptions = true
+        showStackTraces = true
         showStandardStreams = true
+        events "passed", "skipped", "failed", "standard_out", "standard_error"
     }
 
     if (project.hasProperty('pact.verifier.publishResults')) {
@@ -446,7 +455,6 @@ tasks.register('providerContractTests', Test) {
     } else {
         systemProperty 'pact.provider.version', project.pacticipantVersion
     }
-
     if (project.hasProperty('pact.provider.branch')) {
         systemProperty 'pact.provider.branch', project.property('pact.provider.branch')
     } else {
@@ -454,7 +462,7 @@ tasks.register('providerContractTests', Test) {
     }
 
     doFirst {
-        println "--- Running 'providerContractTests' (including only **/provider/**) ---"
+        println "--- Running '${t.name}' ---"
         println "System properties for this run: ${systemProperties}"
     }
 }
