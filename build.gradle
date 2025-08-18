@@ -1,8 +1,9 @@
+import org.flywaydb.gradle.task.FlywayMigrateTask
 import uk.gov.hmcts.rse.AuthMode
 
 buildscript {
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:11.10.5")
+        classpath("org.flywaydb:flyway-database-postgresql:11.11.1")
     }
 }
 
@@ -19,20 +20,17 @@ plugins {
     id 'au.com.dius.pact' version '4.6.17'
     id "info.solidsoft.pitest" version '1.15.0'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.34'
-    id 'com.github.hmcts.rse-cft-lib' version '0.19.1826'
-    id 'org.flywaydb.flyway' version '11.10.5'
+    id 'com.github.hmcts.rse-cft-lib' version '0.19.1837'
+    id 'org.flywaydb.flyway' version '11.11.1'
 }
-
-apply plugin: 'java'
-apply plugin: 'idea'
 
 if (!project.hasProperty('runList')) {
     project.ext.runList = 'main'
 }
 
 
-group 'uk.gov.hmcts.reform.em.annotation'
-version '1.0.0'
+group = 'uk.gov.hmcts.reform.em.annotation'
+version ='1.0.0'
 
 java {
     toolchain {
@@ -40,11 +38,8 @@ java {
     }
 }
 
-mainClassName = 'uk.gov.hmcts.reform.em.annotation.Application'
-
-configurations {
-    aatImplementation.extendsFrom(testImplementation)
-    aatRuntimeOnly.extendsFrom(testRuntimeOnly)
+application {
+    mainClass = 'uk.gov.hmcts.reform.em.annotation.Application'
 }
 
 def versions = [
@@ -56,7 +51,7 @@ def versions = [
         sonarPitest        : '0.5',
         serenity           : '4.2.34',
         pact_version       : '4.6.17',
-        hibernate          : '6.6.24.Final',
+        hibernate          : '6.6.26.Final',
         logging            : '6.1.9',
         junit5             : '5.13.4',
         log4JVersion       : '2.20.0',
@@ -81,7 +76,12 @@ sourceSets {
     }
 }
 
-configurations.all {
+configurations {
+    aatImplementation.extendsFrom(testImplementation)
+    aatRuntimeOnly.extendsFrom(testRuntimeOnly)
+}
+
+configurations.configureEach {
     exclude group: 'com.vaadin.external.google',   module: 'android-json'
     exclude group: 'org.springframework.security', module: 'spring-security-rsa'
 }
@@ -123,8 +123,8 @@ dependencies {
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.9'
     implementation group: 'com.google.guava', name: 'guava', version: '33.4.8-jre'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.10.5'
-    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.10.5'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.11.1'
+    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.11.1'
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.18.0'
     implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.11.0'
@@ -208,7 +208,7 @@ dependencies {
     contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:versions.junit5
 
     aatImplementation group: 'org.json', name: 'json', version: '20250517'
-    aatImplementation group: 'uk.gov.hmcts.reform', name: 'em-test-helper', version:'2.2.0'
+    aatImplementation group: 'uk.gov.hmcts.reform', name: 'em-test-helper', version:'2.2.1'
 
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
@@ -270,7 +270,7 @@ jacocoTestReport {
         xml.required = true
         csv.required = false
 
-        xml.outputLocation = file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        xml.outputLocation = layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml")
     }
 
 }
@@ -324,23 +324,14 @@ configurations {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '10.26.1'
-    reportsDir = file("$project.buildDir/reports/checkstyle")
+    toolVersion = '11.0.0'
+    reportsDir = layout.buildDirectory.file('reports/checkstyle').get().asFile
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
 
 checkstyleMain.shouldRunAfter(compileJava)
 test.shouldRunAfter(checkstyleTest)
-
-idea {
-    module {
-        testSourceDirs += project.sourceSets.aat.java.srcDirs
-        testResourceDirs += project.sourceSets.aat.resources.srcDirs
-        testSourceDirs += project.sourceSets.contractTest.java.srcDirs
-        testResourceDirs += project.sourceSets.contractTest.resources.srcDirs
-    }
-}
 
 tasks.withType(JavaExec).configureEach {
     javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
@@ -350,7 +341,7 @@ test {
     useJUnitPlatform()
 }
 
-task functional(type: Test) {
+tasks.register('functional', Test) {
     group = 'Delivery pipeline'
     description = 'Executes functional tests'
     setTestClassesDirs(sourceSets.aat.output.classesDirs)
@@ -365,7 +356,7 @@ task functional(type: Test) {
 // Serenity Reporting
 // functional.finalizedBy(aggregate)
 
-task smoke(type: Test) {
+tasks.register('smoke', Test) {
     group = 'Delivery pipeline'
     description = 'Executes non-destructive smoke tests'
     setTestClassesDirs(sourceSets.aat.output.classesDirs)
@@ -387,7 +378,7 @@ static def getCheckedOutGitCommitHash() {
 }
 
 
-task contract(type: Test) {
+tasks.register('contract', Test) {
     group = 'Delivery pipeline'
     description = 'Runs the consumer Pact tests'
     useJUnitPlatform()
@@ -399,8 +390,8 @@ task contract(type: Test) {
 }
 
 
-task fortifyScan(type: JavaExec)  {
-    main = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
+tasks.register('fortifyScan', JavaExec) {
+    mainClass = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
     classpath += sourceSets.test.runtimeClasspath
     jvmArgs = ['--add-opens=java.base/java.lang.reflect=ALL-UNNAMED']
 }
@@ -422,7 +413,7 @@ pactPublish {
     pactPublish = project.pact.publish
 }
 
-task runAndPublishConsumerPactTests(type: Test) {
+tasks.register('runAndPublishConsumerPactTests', Test) {
     logger.lifecycle("Runs pact Tests")
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
@@ -503,7 +494,7 @@ flyway {
     baselineVersion = '1'
 }
 
-task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+tasks.register('migratePostgresDatabase', FlywayMigrateTask) {
     baselineOnMigrate = true
     if (project.hasProperty("dburl")) {
         url = "jdbc:postgresql://${dburl}"
