@@ -18,7 +18,7 @@ plugins {
     id 'jacoco'
     id 'checkstyle'
     id 'au.com.dius.pact' version '4.6.17'
-    id "info.solidsoft.pitest" version '1.15.0'
+    id 'info.solidsoft.pitest' version '1.19.0-rc.1'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.34'
     id 'com.github.hmcts.rse-cft-lib' version '0.19.1842'
     id 'org.flywaydb.flyway' version '11.11.1'
@@ -199,10 +199,6 @@ dependencies {
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring6', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
-
-
-
-
 
     contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version:versions.junit5
     contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:versions.junit5
@@ -418,6 +414,7 @@ tasks.register('runAndPublishConsumerPactTests', Test) {
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
     jvmArgs = ['--add-opens=java.base/java.lang=ALL-UNNAMED']
+    useJUnitPlatform()
 }
 
 runAndPublishConsumerPactTests.dependsOn contract
@@ -432,10 +429,18 @@ tasks.register('providerContractTests', Test) {
     classpath = sourceSets.contractTest.runtimeClasspath
 
     include '**/provider/**'
+}
 
+// Centralized Pact system property setup for all Test tasks
+tasks.withType(Test).configureEach { t ->
+    // Logging setup
     testLogging {
         exceptionFormat = 'full'
+        showCauses = true
+        showExceptions = true
+        showStackTraces = true
         showStandardStreams = true
+        events "passed", "skipped", "failed", "standard_out", "standard_error"
     }
 
     if (project.hasProperty('pact.verifier.publishResults')) {
@@ -446,7 +451,6 @@ tasks.register('providerContractTests', Test) {
     } else {
         systemProperty 'pact.provider.version', project.pacticipantVersion
     }
-
     if (project.hasProperty('pact.provider.branch')) {
         systemProperty 'pact.provider.branch', project.property('pact.provider.branch')
     } else {
@@ -454,7 +458,7 @@ tasks.register('providerContractTests', Test) {
     }
 
     doFirst {
-        println "--- Running 'providerContractTests' (including only **/provider/**) ---"
+        println "--- Running '${t.name}' ---"
         println "System properties for this run: ${systemProperties}"
     }
 }
