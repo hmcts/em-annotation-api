@@ -320,7 +320,7 @@ configurations {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '11.0.0'
+    toolVersion = '11.0.1'
     reportsDir = layout.buildDirectory.file('reports/checkstyle').get().asFile
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
