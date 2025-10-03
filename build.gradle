@@ -53,7 +53,7 @@ def versions = [
         pact_version       : '4.6.17',
         hibernate          : '6.6.30.Final',
         logging            : '6.1.9',
-        junit5             : '5.14.0',
+        junit5             : '6.0.0',
         log4JVersion       : '2.20.0',
         mapstruct          : '1.6.3',
 ]
@@ -233,7 +233,7 @@ dependencyManagement {
             entry 'logback-core'
         }
 
-        dependencySet(group: 'org.junit.platform', version: '1.14.0') {
+        dependencySet(group: 'org.junit.platform', version: '6.0.0') {
             entry 'junit-platform-commons'
             entry 'junit-platform-engine'
             entry 'junit-platform-launcher'
