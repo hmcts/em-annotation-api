@@ -62,24 +62,19 @@ class TagResourceIntTest extends BaseTest {
     private Tag tag;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
-        final TagResource tagResource = new TagResource(tagService);
         em.persist(new IdamDetails("system"));
         em.persist(new IdamDetails("anonymous"));
+        tag = createEntity();
     }
 
-    public static Tag createEntity(EntityManager em) {
+    public static Tag createEntity() {
         Tag tag = new Tag();
         tag.setName("new_tag");
         tag.setLabel("new tag");
         tag.setCreatedBy("system");
         return tag;
-    }
-
-    @BeforeEach
-    public void initTest() {
-        tag = createEntity(em);
     }
 
     @Test

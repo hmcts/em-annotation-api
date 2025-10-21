@@ -15,9 +15,9 @@ import uk.gov.hmcts.reform.em.annotation.service.IdamDetailsFilterService;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -71,9 +71,9 @@ class IdamDetailsFilterServiceImplIntTest extends BaseTest {
     @Test
     @DisplayName("Save IdamDetails with UserDetails.surname and Retrieve it to ensure surname has been persisted.")
     void testSaveIdamDetailSurname() {
-
-        final String randomId = random(3, false, true);
-        final String surname = random(8, true, false);
+        String randomString = UUID.randomUUID().toString();
+        final String randomId = randomString.substring(0, 5);
+        final String surname =  randomString.substring(5,13);
 
         final UserInfo userInfo = UserInfo.builder()
             .uid(randomId)

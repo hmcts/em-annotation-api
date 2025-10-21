@@ -33,7 +33,7 @@ class MetaDataResourceTest {
     private UUID documentId =  UUID.randomUUID();
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
@@ -57,7 +57,7 @@ class MetaDataResourceTest {
         MetadataDto metadataDto = createMetadataDto();
         Mockito.when(metadataService.findByDocumentId(metadataDto.getDocumentId())).thenReturn(metadataDto);
 
-        ResponseEntity<MetadataDto> responseEntity = metaDataResource.getMetadata(metadataDto.getDocumentId());
+        metaDataResource.getMetadata(metadataDto.getDocumentId());
 
         Mockito.verify(metadataService, Mockito.atLeast(1)).findByDocumentId(metadataDto.getDocumentId());
     }

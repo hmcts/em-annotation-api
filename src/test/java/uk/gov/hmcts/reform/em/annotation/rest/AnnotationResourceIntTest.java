@@ -57,18 +57,6 @@ class AnnotationResourceIntTest extends BaseTest {
     private static final Integer DEFAULT_PAGE = 1;
     private static final Integer UPDATED_PAGE = 2;
 
-    private static final Double DEFAULT_X = 1d;
-    private static final Double UPDATED_X = 2d;
-
-    private static final Double DEFAULT_Y = 1d;
-    private static final Double UPDATED_Y = 2d;
-
-    private static final Double DEFAULT_WIDTH = 1d;
-    private static final Double UPDATED_WIDTH = 2d;
-
-    private static final Double DEFAULT_HEIGHT = 1d;
-    private static final Double UPDATED_HEIGHT = 2d;
-
     @Autowired
     private AnnotationRepository annotationRepository;
 
@@ -95,10 +83,9 @@ class AnnotationResourceIntTest extends BaseTest {
 
     private Annotation annotation;
 
-    private UUID uuid;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.openMocks(this);
         em.persist(new IdamDetails("system"));
         em.persist(new IdamDetails("anonymous"));
@@ -125,7 +112,7 @@ class AnnotationResourceIntTest extends BaseTest {
     }
 
     @BeforeEach
-    public void initTest() {
+    void initTest() {
         annotation = createEntity();
     }
 
@@ -153,8 +140,7 @@ class AnnotationResourceIntTest extends BaseTest {
         int databaseSizeBeforeCreate = annotationRepository.findAll().size();
         assertThat(databaseSizeBeforeCreate).isZero();
         // Create the Annotation with an existing ID
-        uuid = UUID.randomUUID();
-        annotation.setId(uuid);
+        annotation.setId(UUID.randomUUID());
         AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
         annotationDTO.setAnnotationSetId(UUID.randomUUID());
         annotationDTO.setDocumentId("DocId");
@@ -200,8 +186,7 @@ class AnnotationResourceIntTest extends BaseTest {
         int databaseSizeBeforeCreate = annotationRepository.findAll().size();
         assertThat(databaseSizeBeforeCreate).isZero();
         // Create the Annotation with an existing ID
-        uuid = UUID.randomUUID();
-        annotation.setId(uuid);
+        annotation.setId(UUID.randomUUID());
         AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
         annotationDTO.setAnnotationSetId(UUID.randomUUID());
         annotationDTO.setDocumentId("DocId");
@@ -334,8 +319,7 @@ class AnnotationResourceIntTest extends BaseTest {
         int databaseSizeBeforeCreate = annotationRepository.findAll().size();
         assertThat(databaseSizeBeforeCreate).isZero();
         // Create the Annotation with an existing ID
-        uuid = UUID.randomUUID();
-        annotation.setId(uuid);
+        annotation.setId(UUID.randomUUID());
         AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
         annotationDTO.setAnnotationSetId(UUID.randomUUID());
         annotationDTO.setDocumentId("DocId");
@@ -422,7 +406,7 @@ class AnnotationResourceIntTest extends BaseTest {
         Annotation annotation2 = new Annotation();
         annotation2.setId(annotation1.getId());
         assertThat(annotation1).isEqualTo(annotation2);
-        annotation2.setId(uuid);
+        annotation2.setId(UUID.randomUUID());
         assertThat(annotation1).isNotEqualTo(annotation2);
         annotation1.setId(null);
         assertThat(annotation1).isNotEqualTo(annotation2);
@@ -438,7 +422,7 @@ class AnnotationResourceIntTest extends BaseTest {
         assertThat(annotationDTO1).isNotEqualTo(annotationDTO2);
         annotationDTO2.setId(annotationDTO1.getId());
         assertThat(annotationDTO1).isEqualTo(annotationDTO2);
-        annotationDTO2.setId(uuid);
+        annotationDTO2.setId(UUID.randomUUID());
         assertThat(annotationDTO1).isNotEqualTo(annotationDTO2);
         annotationDTO1.setId(null);
         assertThat(annotationDTO1).isNotEqualTo(annotationDTO2);
@@ -447,8 +431,8 @@ class AnnotationResourceIntTest extends BaseTest {
     @Test
     @Transactional
     void testEntityFromId() {
-        UUID uuid = UUID.randomUUID();
-        assertThat(annotationMapper.fromId(uuid).getId()).isEqualTo(uuid);
+        UUID uuidTest = UUID.randomUUID();
+        assertThat(annotationMapper.fromId(uuidTest).getId()).isEqualTo(uuidTest);
         assertThat(annotationMapper.fromId(null)).isNull();
     }
 }
