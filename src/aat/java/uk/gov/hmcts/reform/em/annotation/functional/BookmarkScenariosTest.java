@@ -145,7 +145,8 @@ class BookmarkScenariosTest extends BaseTest {
             final JSONObject jsonObject = createBookmarkRequestPayload(bookmarkId);
             jsonObject.remove(FIELD_CREATED_BY);
 
-            request.body(jsonObject.toString())
+            request.log().all()
+                    .body(jsonObject.toString())
                     .post(API_BOOKMARKS)
                     .then()
                     .statusCode(201);
@@ -396,7 +397,8 @@ class BookmarkScenariosTest extends BaseTest {
     @NotNull
     private ValidatableResponse createBookmark(final UUID bookmarkId) {
         final JSONObject bookmark = createBookmarkRequestPayload(bookmarkId);
-        return request.body(bookmark.toString())
+        return request.log().all()
+                .body(bookmark.toString())
                 .post(API_BOOKMARKS)
                 .then()
                 .statusCode(201);
