@@ -5,6 +5,7 @@ import org.hamcrest.Matchers;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 
 import java.util.UUID;
@@ -37,6 +38,7 @@ class CommentScenariosTest extends BaseTest {
     private static final String HIGHLIGHT = "highlight";
     private static final String COLOR_CODE = "d1d1d1";
 
+    @Autowired
     public CommentScenariosTest(TestUtil testUtil) {
         super(testUtil);
     }

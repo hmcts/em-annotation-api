@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ class BookmarkScenariosTest extends BaseTest {
     private static final float DEFAULT_COORD = 100f;
     private static final int DEFAULT_PAGE = 1;
 
+    @Autowired
     public BookmarkScenariosTest(TestUtil testUtil) {
         super(testUtil);
     }

@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.em.annotation.functional;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 
@@ -12,6 +13,7 @@ class OpenIdConnectScenariosTest extends BaseTest {
 
     private static final int STATUS_UNAUTHORIZED = 401;
 
+    @Autowired
     public OpenIdConnectScenariosTest(TestUtil testUtil) {
         super(testUtil);
     }

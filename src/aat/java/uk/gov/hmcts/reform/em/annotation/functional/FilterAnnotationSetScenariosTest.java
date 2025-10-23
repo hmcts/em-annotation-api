@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.em.annotation.functional;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 
 import java.util.UUID;
@@ -16,6 +17,7 @@ class FilterAnnotationSetScenariosTest extends BaseTest {
     private static final String FIELD_DOCUMENT_ID = "documentId";
     private static final String FIELD_ID = "id";
 
+    @Autowired
     public FilterAnnotationSetScenariosTest(TestUtil testUtil) {
         super(testUtil);
     }

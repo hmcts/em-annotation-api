@@ -5,6 +5,7 @@ import org.hamcrest.Matchers;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 
 import java.util.UUID;
@@ -48,6 +49,7 @@ class RectangleScenariosTest extends BaseTest {
     private static final String LOCATION_HEADER = "Location";
     private static final String HEADER_LOCATION_TEMPLATE = API_RECTANGLES_ID;
 
+    @Autowired
     public RectangleScenariosTest(TestUtil testUtil) {
         super(testUtil);
     }

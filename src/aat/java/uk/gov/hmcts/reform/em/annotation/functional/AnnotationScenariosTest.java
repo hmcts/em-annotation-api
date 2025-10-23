@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 
@@ -63,6 +64,7 @@ class AnnotationScenariosTest extends BaseTest {
             "caseComments": null
         }""";
 
+    @Autowired
     public AnnotationScenariosTest(TestUtil testUtil) {
         super(testUtil);
     }
@@ -202,7 +204,9 @@ class AnnotationScenariosTest extends BaseTest {
     void shouldReturn404WhenGetAnnotationNotFoundById() {
         final String annotationId = UUID.randomUUID().toString();
         request.get(API_ANNOTATIONS + "/" + annotationId)
-                .then().statusCode(404).log().all();
+                .then().statusCode(404)
+                .log()
+                .all();
     }
 
     @Test
@@ -220,7 +224,8 @@ class AnnotationScenariosTest extends BaseTest {
         createAnnotation(annotationId, annotationSetId);
 
         request.get(API_ANNOTATIONS)
-                .then().statusCode(200)
+                .then()
+                .statusCode(200)
                 .body("size()", Matchers.greaterThanOrEqualTo(1))
                 .log().all();
     }
@@ -228,7 +233,9 @@ class AnnotationScenariosTest extends BaseTest {
     @Test
     void shouldReturn401WhenUnAuthenticatedUserGetAllAnnotations() {
         unAuthenticatedRequest.get(API_ANNOTATIONS)
-                .then().statusCode(401).log().all();
+                .then()
+                .statusCode(401)
+                .log().all();
     }
 
     @Test
@@ -247,6 +254,15 @@ class AnnotationScenariosTest extends BaseTest {
                 .body(FIELD_ID, equalTo(annotationId))
                 .body(FIELD_PAGE, is(2))
                 .body(FIELD_COLOR, is(COLOR_UPDATED))
+                .body(FIELD_COMMENTS, Matchers.hasSize(1))
+                .body("comments[0].content", is("text"))
+                .body("comments[0].annotationId", is(annotationId))
+                .body(FIELD_RECTANGLES, Matchers.hasSize(1))
+                .body("rectangles[0].annotationId", is(annotationId))
+                .body("rectangles[0].x", is(0f))
+                .body("rectangles[0].y", is(0f))
+                .body("rectangles[0].width", is(10f))
+                .body("rectangles[0].height", is(11f))
                 .log().all();
     }
 
@@ -260,7 +276,8 @@ class AnnotationScenariosTest extends BaseTest {
 
         request.body(annotation.toString())
                 .put(API_ANNOTATIONS)
-                .then().statusCode(400).log().all();
+                .then().statusCode(400)
+                .log().all();
     }
 
     @Test
@@ -272,7 +289,9 @@ class AnnotationScenariosTest extends BaseTest {
 
         unAuthenticatedRequest.body(annotation.toString())
                 .put(API_ANNOTATIONS)
-                .then().statusCode(401).log().all();
+                .then()
+                .statusCode(401)
+                .log().all();
     }
 
     @Test
@@ -293,7 +312,9 @@ class AnnotationScenariosTest extends BaseTest {
     @Test
     void shouldReturn401WhenUnAuthenticatedUserDeleteAnnotation() {
         unAuthenticatedRequest.delete(API_ANNOTATIONS + "/" + UUID.randomUUID())
-                .then().statusCode(401).log().all();
+                .then()
+                .statusCode(401)
+                .log().all();
     }
 
     @Test
@@ -315,6 +336,15 @@ class AnnotationScenariosTest extends BaseTest {
                 .body(FIELD_ID, equalTo(annotationId))
                 .body(FIELD_PAGE, is(3))
                 .body(FIELD_COLOR, is(COLOR_SECOND_UPDATE))
+                .body("comments", Matchers.hasSize(1))
+                .body("comments[0].content", is("text"))
+                .body("comments[0].annotationId", is(annotationId))
+                .body("rectangles", Matchers.hasSize(1))
+                .body("rectangles[0].annotationId", is(annotationId))
+                .body("rectangles[0].x", is(0f))
+                .body("rectangles[0].y", is(0f))
+                .body("rectangles[0].width", is(10f))
+                .body("rectangles[0].height", is(11f))
                 .log().all();
     }
 
@@ -335,23 +365,30 @@ class AnnotationScenariosTest extends BaseTest {
                 .then()
                 .statusCode(201)
                 .body(FIELD_ID, equalTo(newAnnotationSetId.toString()))
-                .extract().response().getBody().jsonPath().get(FIELD_ID);
+                .extract()
+                .response()
+                .getBody()
+                .jsonPath()
+                .get(FIELD_ID);
     }
 
     @NotNull
     private ValidatableResponse createAnnotation(String annotationId, String annotationSetId) {
         final JSONObject annotation = createAnnotationPayload(annotationId, annotationSetId);
-        return request.body(annotation).post(API_ANNOTATIONS).then().statusCode(201).log().all();
+        return request.body(annotation).post(API_ANNOTATIONS)
+                .then()
+                .statusCode(201)
+                .log().all();
     }
 
     @NotNull
     private JSONObject createAnnotationPayload(String annotationId, String annotationSetId) {
-        final JSONObject annotation = new JSONObject();
-        annotation.put(FIELD_ANNOTATION_SET_ID, annotationSetId);
-        annotation.put(FIELD_ID, annotationId);
-        annotation.put(FIELD_ANNOTATION_TYPE, ANNOTATION_TYPE_HIGHLIGHT);
-        annotation.put(FIELD_PAGE, 1);
-        annotation.put(FIELD_COLOR, COLOR_DEFAULT);
+        final JSONObject createAnnotations = new JSONObject();
+        createAnnotations.put(FIELD_ANNOTATION_SET_ID, annotationSetId);
+        createAnnotations.put(FIELD_ID, annotationId);
+        createAnnotations.put(FIELD_ANNOTATION_TYPE, ANNOTATION_TYPE_HIGHLIGHT);
+        createAnnotations.put(FIELD_PAGE, 1);
+        createAnnotations.put(FIELD_COLOR, COLOR_DEFAULT);
 
         final JSONArray comments = new JSONArray();
         final JSONObject comment = new JSONObject();
@@ -359,7 +396,7 @@ class AnnotationScenariosTest extends BaseTest {
         comment.put(FIELD_ANNOTATION_ID, annotationId);
         comment.put(FIELD_ID, UUID.randomUUID().toString());
         comments.put(comment);
-        annotation.put(FIELD_COMMENTS, comments);
+        createAnnotations.put(FIELD_COMMENTS, comments);
 
         final JSONArray rectangles = new JSONArray();
         final JSONObject rectangle = new JSONObject();
@@ -370,9 +407,9 @@ class AnnotationScenariosTest extends BaseTest {
         rectangle.put(FIELD_WIDTH, 10f);
         rectangle.put(FIELD_HEIGHT, 11f);
         rectangles.put(rectangle);
-        annotation.put(FIELD_RECTANGLES, rectangles);
+        createAnnotations.put(FIELD_RECTANGLES, rectangles);
 
-        return annotation;
+        return createAnnotations;
     }
 
     @NotNull

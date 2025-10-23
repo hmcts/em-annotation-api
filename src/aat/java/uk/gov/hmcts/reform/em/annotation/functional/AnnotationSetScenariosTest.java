@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 
 import java.util.UUID;
@@ -37,6 +38,7 @@ class AnnotationSetScenariosTest extends BaseTest {
     private static final String VALUE_COLOR = "d1d1d1";
     private static final String VALUE_TEXT = "text";
 
+    @Autowired
     public AnnotationSetScenariosTest(TestUtil testUtil) {
         super(testUtil);
     }
