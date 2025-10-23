@@ -38,7 +38,7 @@ class MetadataServiceImplTest {
     private UUID documentId =  UUID.randomUUID();
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 

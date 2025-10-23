@@ -25,7 +25,6 @@ import org.zalando.problem.Status;
 import org.zalando.problem.violations.ConstraintViolationProblem;
 import org.zalando.problem.violations.Violation;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +41,7 @@ public class ExceptionTranslatorTestController {
 
     @PostMapping("/test/method-argument")
     public void methodArgument(@Valid @RequestBody TestDTO testDTO) {
+        // for tests
     }
 
     @GetMapping("/test/no-such-element-exception")
@@ -64,10 +64,12 @@ public class ExceptionTranslatorTestController {
 
     @GetMapping("/test/missing-servlet-request-part")
     public void missingServletRequestPartException(@RequestPart String part) {
+        // for tests
     }
 
     @GetMapping("/test/missing-servlet-request-parameter")
     public void missingServletRequestParameterException(@RequestParam String param) {
+        // for tests
     }
 
     @GetMapping("/test/access-denied")
@@ -121,7 +123,7 @@ public class ExceptionTranslatorTestController {
 
     @GetMapping("/test/retryable-exception")
     public void retryableException() {
-        throw new RetryableException(503, "Retryable Exception", Request.HttpMethod.GET, Date.valueOf(LocalDate.now()),
+        throw new RetryableException(503, "Retryable Exception", Request.HttpMethod.GET, LocalDate.now().toEpochDay(),
                 createFeignRequest());
     }
 

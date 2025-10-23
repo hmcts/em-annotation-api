@@ -83,10 +83,11 @@ class RectangleResourceIntTest extends BaseTest {
     private Rectangle rectangle;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.openMocks(this);
         em.persist(new IdamDetails("system"));
         em.persist(new IdamDetails("anonymous"));
+        rectangle = createEntity();
     }
 
     /**
@@ -95,7 +96,7 @@ class RectangleResourceIntTest extends BaseTest {
      * <p>This is a static method, as tests for other entities might also need it,</p>
      * if they test an entity which requires the current entity.
      */
-    public static Rectangle createEntity(EntityManager em) {
+    public static Rectangle createEntity() {
         Rectangle rectangle = new Rectangle()
             .x(DEFAULT_X)
             .y(DEFAULT_Y)
@@ -103,11 +104,6 @@ class RectangleResourceIntTest extends BaseTest {
             .height(DEFAULT_HEIGHT);
         rectangle.setId(UUID.randomUUID());
         return rectangle;
-    }
-
-    @BeforeEach
-    public void initTest() {
-        rectangle = createEntity(em);
     }
 
     @Test
@@ -132,8 +128,6 @@ class RectangleResourceIntTest extends BaseTest {
     @Transactional
     void test_negative_annotation_id_format() throws Exception {
 
-        int databaseSizeBeforeCreate = rectangleRepository.findAll().size();
-
         // Create the Rectangle without an annotation Id
         rectangle.setId(UUID.randomUUID());
         RectangleDTO rectangleDTO = rectangleMapper.toDto(rectangle);
@@ -148,8 +142,6 @@ class RectangleResourceIntTest extends BaseTest {
     @Test
     @Transactional
     void test_negative_non_existant_annotation_id() throws Exception {
-
-        int databaseSizeBeforeCreate = rectangleRepository.findAll().size();
         Annotation annotation = new Annotation();
         annotation.setId(UUID.randomUUID());
 

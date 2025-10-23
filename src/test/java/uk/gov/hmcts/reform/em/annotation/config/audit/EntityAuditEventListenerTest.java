@@ -57,16 +57,15 @@ class EntityAuditEventListenerTest {
     }
 
 
-
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         entityAuditEventListener = new EntityAuditEventListener();
         EntityAuditEventListener.setBeanFactory(beanFactory);
         lenient().when(beanFactory.getBean(AsyncEntityAuditEventWriter.class)).thenReturn(asyncEntityAuditEventWriter);
     }
 
     @AfterAll
-    public static void tearDownAll() {
+    static void tearDownAll() {
         EntityAuditEventListener.setBeanFactory(originalBeanFactory);
     }
 

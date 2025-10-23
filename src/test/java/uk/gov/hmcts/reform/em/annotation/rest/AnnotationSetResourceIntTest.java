@@ -70,9 +70,8 @@ class AnnotationSetResourceIntTest extends BaseTest {
     private AnnotationSet annotationSet;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.openMocks(this);
-        final AnnotationSetResource annotationSetResource = new AnnotationSetResource(annotationSetService);
         em.persist(new IdamDetails("system"));
         em.persist(new IdamDetails("anonymous"));
     }
@@ -83,7 +82,7 @@ class AnnotationSetResourceIntTest extends BaseTest {
      * <p>This is a static method, as tests for other entities might also need it,</p>
      * if they test an entity which requires the current entity.
      */
-    public static AnnotationSet createEntity(EntityManager em) {
+    public static AnnotationSet createEntity() {
         AnnotationSet annotationSet = new AnnotationSet()
             .documentId(DEFAULT_DOCUMENT_ID);
 
@@ -92,8 +91,8 @@ class AnnotationSetResourceIntTest extends BaseTest {
     }
 
     @BeforeEach
-    public void initTest() {
-        annotationSet = createEntity(em);
+    void initTest() {
+        annotationSet = createEntity();
     }
 
     @Test
@@ -145,7 +144,7 @@ class AnnotationSetResourceIntTest extends BaseTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[*].id").value(hasItem(annotationSet.getId().toString())))
-            .andExpect(jsonPath("$.[*].documentId").value(hasItem(DEFAULT_DOCUMENT_ID.toString())));
+            .andExpect(jsonPath("$.[*].documentId").value(hasItem(DEFAULT_DOCUMENT_ID)));
     }
 
     @Test
@@ -159,7 +158,7 @@ class AnnotationSetResourceIntTest extends BaseTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(annotationSet.getId().toString()))
-            .andExpect(jsonPath("$.documentId").value(DEFAULT_DOCUMENT_ID.toString()));
+            .andExpect(jsonPath("$.documentId").value(DEFAULT_DOCUMENT_ID));
     }
 
     @Test

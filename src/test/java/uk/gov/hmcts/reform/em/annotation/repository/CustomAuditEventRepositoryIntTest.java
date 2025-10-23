@@ -58,7 +58,7 @@ class CustomAuditEventRepositoryIntTest {
     private PersistentAuditEvent testOldUserEvent;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         customAuditEventRepository =
                 new CustomAuditEventRepository(persistenceAuditEventRepository, auditEventConverter);
         persistenceAuditEventRepository.deleteAll();
@@ -110,7 +110,7 @@ class CustomAuditEventRepositoryIntTest {
                 oneHourAgo, event.getType());
 
         AuditEvent auditEvent = auditEvents.get(0);
-        assertThat(auditEvents.size()).isEqualTo(1);
+        assertThat(auditEvents).hasSize(1);
         assertThat(auditEvent.getPrincipal()).isEqualTo(event.getPrincipal());
         assertThat(auditEvent.getType()).isEqualTo(event.getType());
         assertThat(auditEvent.getData()).isEqualTo(event.getData());
@@ -187,13 +187,13 @@ class CustomAuditEventRepositoryIntTest {
 
     @Test
     void convertToAuditEventFail() {
-        AuditEventConverter auditEventConverter = new AuditEventConverter();
+        AuditEventConverter failedAuditEventConverter = new AuditEventConverter();
         PersistentAuditEvent persistentAuditEvent = null;
-        AuditEvent auditEvents = auditEventConverter.convertToAuditEvent(persistentAuditEvent);
+        AuditEvent auditEvents = failedAuditEventConverter.convertToAuditEvent(persistentAuditEvent);
         assertThat(auditEvents).isNull();
 
         List<PersistentAuditEvent> persistentAuditEvents = null;
-        List<AuditEvent> auditEvents2 = auditEventConverter.convertToAuditEvent(persistentAuditEvents);
+        List<AuditEvent> auditEvents2 = failedAuditEventConverter.convertToAuditEvent(persistentAuditEvents);
         assertThat(auditEvents2).isEqualTo(Collections.emptyList());
     }
 

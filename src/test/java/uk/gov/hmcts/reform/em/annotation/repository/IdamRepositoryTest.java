@@ -9,8 +9,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.idam.client.IdamClient;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
+import java.util.UUID;
+
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
@@ -50,7 +51,7 @@ class IdamRepositoryTest {
                 .build();
         when(idamClient.getUserInfo(any(String.class))).thenReturn(userInfo);
 
-        idamRepository.getUserInfo(random(5, true, false));
+        idamRepository.getUserInfo(UUID.randomUUID().toString().substring(0, 5));
 
         verify(idamClient, times(1)).getUserInfo(anyString());
     }

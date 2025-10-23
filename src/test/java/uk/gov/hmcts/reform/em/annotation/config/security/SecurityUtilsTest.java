@@ -47,7 +47,7 @@ class SecurityUtilsTest {
 
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         SecurityContextHolder.setContext(securityContext);
 
         Jwt jwt = Jwt.withTokenValue("token")
