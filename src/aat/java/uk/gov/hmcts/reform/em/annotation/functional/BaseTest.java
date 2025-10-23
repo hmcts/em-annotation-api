@@ -23,8 +23,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @WithTags({@WithTag("testType:Functional")})
 public abstract class BaseTest {
 
-    @Autowired
-    protected TestUtil testUtil;
+    protected final TestUtil testUtil;
 
     @Value("${test.url}")
     protected String testUrl;
@@ -34,6 +33,11 @@ public abstract class BaseTest {
 
     protected RequestSpecification request;
     protected RequestSpecification unAuthenticatedRequest;
+
+    @Autowired
+    protected BaseTest(TestUtil testUtil) {
+        this.testUtil = testUtil;
+    }
 
     @BeforeEach
     public void setupRequestSpecification() {

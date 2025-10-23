@@ -23,38 +23,46 @@ import java.util.stream.Stream;
 @EnableAutoConfiguration
 public class TestUtil {
 
-    @Autowired
-    private IdamHelper idamHelper;
+    public static final String AUTHORIZATION = "Authorization";
+    public static final String SERVICE_AUTHORIZATION = "ServiceAuthorization";
+    private final IdamHelper idamHelper;
 
-    @Autowired
-    private S2sHelper s2sHelper;
+    private final S2sHelper s2sHelper;
 
-    @Autowired
-    private CcdDataHelper ccdDataHelper;
+    private final CcdDataHelper ccdDataHelper;
 
     private String idamAuth;
     private String s2sAuth;
 
-    private final String username = "emAnnotationTestUser@test.local";
+    private static final String ANNOTATION_TEST_USER_TEST_LOCAL = "emAnnotationTestUser@test.local";
+
+    @Autowired
+    public TestUtil(IdamHelper idamHelper, S2sHelper s2sHelper, CcdDataHelper ccdDataHelper) {
+        this.idamHelper = idamHelper;
+        this.s2sHelper = s2sHelper;
+        this.ccdDataHelper = ccdDataHelper;
+    }
 
     @PostConstruct
     void postConstruct() {
         SerenityRest.useRelaxedHTTPSValidation();
-        idamHelper.createUser(username, Stream.of("caseworker", "caseworker-publiclaw").toList());
-        idamAuth = idamHelper.authenticateUser(username);
+        idamHelper
+                .createUser(ANNOTATION_TEST_USER_TEST_LOCAL,
+                        Stream.of("caseworker", "caseworker-publiclaw").toList());
+        idamAuth = idamHelper.authenticateUser(ANNOTATION_TEST_USER_TEST_LOCAL);
         s2sAuth = s2sHelper.getS2sToken();
     }
 
     @PreDestroy
     void preDestroy() {
-        idamHelper.deleteUser(username);
+        idamHelper.deleteUser(ANNOTATION_TEST_USER_TEST_LOCAL);
     }
 
     public RequestSpecification authRequest() {
         return SerenityRest
                 .given()
-                .header("Authorization", idamHelper.authenticateUser(username))
-                .header("ServiceAuthorization", s2sHelper.getS2sToken());
+                .header(AUTHORIZATION, idamHelper.authenticateUser(ANNOTATION_TEST_USER_TEST_LOCAL))
+                .header(SERVICE_AUTHORIZATION, s2sHelper.getS2sToken());
     }
 
     public RequestSpecification unauthenticatedRequest() {
@@ -63,53 +71,53 @@ public class TestUtil {
 
     public RequestSpecification emptyIdamAuthRequest() {
         return s2sAuthRequest()
-                .header(new Header("Authorization", null));
+                .header(new Header(AUTHORIZATION, null));
     }
 
     public RequestSpecification emptyIdamAuthAndEmptyS2SAuth() {
         return SerenityRest
                 .given()
-                .header(new Header("ServiceAuthorization", null))
-                .header(new Header("Authorization", null));
+                .header(new Header(SERVICE_AUTHORIZATION, null))
+                .header(new Header(AUTHORIZATION, null));
     }
 
     public RequestSpecification validAuthRequestWithEmptyS2SAuth() {
-        return emptyS2sAuthRequest().header("Authorization", idamAuth);
+        return emptyS2sAuthRequest().header(AUTHORIZATION, idamAuth);
     }
 
     public RequestSpecification validS2SAuthWithEmptyIdamAuth() {
 
-        return s2sAuthRequest().header(new Header("Authorization", null));
+        return s2sAuthRequest().header(new Header(AUTHORIZATION, null));
     }
 
     private RequestSpecification emptyS2sAuthRequest() {
 
-        return SerenityRest.given().header(new Header("ServiceAuthorization", null));
+        return SerenityRest.given().header(new Header(SERVICE_AUTHORIZATION, null));
     }
 
     public RequestSpecification invalidIdamAuthrequest() {
 
-        return s2sAuthRequest().header("Authorization", "invalidIDAMAuthRequest");
+        return s2sAuthRequest().header(AUTHORIZATION, "invalidIDAMAuthRequest");
     }
 
     public RequestSpecification invalidS2SAuth() {
 
-        return invalidS2sAuthRequest().header("Authorization", idamAuth);
+        return invalidS2sAuthRequest().header(AUTHORIZATION, idamAuth);
     }
 
     private RequestSpecification invalidS2sAuthRequest() {
 
-        return SerenityRest.given().header("ServiceAuthorization", "invalidS2SAuthorization");
+        return SerenityRest.given().header(SERVICE_AUTHORIZATION, "invalidS2SAuthorization");
     }
 
     private RequestSpecification s2sAuthRequest() {
         return SerenityRest
                 .given()
-                .header("ServiceAuthorization", s2sAuth);
+                .header(SERVICE_AUTHORIZATION, s2sAuth);
     }
 
     public CaseDetails createCase(String jurisdiction, String caseType, Object data) {
-        return ccdDataHelper.createCase(username, jurisdiction, caseType, "createCase", data);
+        return ccdDataHelper.createCase(ANNOTATION_TEST_USER_TEST_LOCAL, jurisdiction, caseType, "createCase", data);
     }
 
 }

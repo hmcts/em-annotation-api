@@ -6,19 +6,43 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.notNullValue;
 
 class BookmarkScenariosTest extends BaseTest {
 
     private UUID documentId;
+
+    public static final String BOOKMARKS = "/%s/bookmarks";
+    private static final String API_BASE = "/api";
+    private static final String API_BOOKMARKS = API_BASE + "/bookmarks";
+    private static final String API_BOOKMARKS_MULTIPLE = API_BASE + "/bookmarks_multiple";
+    private static final String FIELD_ID = "id";
+    private static final String FIELD_DOCUMENT_ID = "documentId";
+    private static final String FIELD_NAME = "name";
+    private static final String FIELD_CREATED_BY = "createdBy";
+    private static final String FIELD_PAGE_NUMBER = "pageNumber";
+    private static final String FIELD_X_COORD = "xCoordinate";
+    private static final String FIELD_Y_COORD = "yCoordinate";
+    private static final String FIELD_PARENT = "parent";
+    private static final String FIELD_PREVIOUS = "previous";
+    private static final String FIELD_DELETED = "deleted";
+    private static final String CREATED_BY_USER = "user";
+    private static final String BOOKMARK_NAME = "Bookmark for test";
+    private static final float DEFAULT_COORD = 100f;
+    private static final int DEFAULT_PAGE = 1;
+
+    public BookmarkScenariosTest(TestUtil testUtil) {
+        super(testUtil);
+    }
 
     @BeforeEach
     public void setup() {
@@ -29,18 +53,19 @@ class BookmarkScenariosTest extends BaseTest {
     void shouldReturn201WhenCreateNewBookmark() {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
+
         response
                 .statusCode(201)
-                .body("id", equalTo(bookmarkId.toString()))
-                .body("documentId", equalTo(documentId.toString()))
-                .body("name", equalTo("Bookmark for test"))
-                .body("createdBy", equalTo("user"))
-                .body("pageNumber", equalTo(1))
-                .body("xCoordinate", equalTo(100f))
-                .body("yCoordinate", equalTo(100f))
-                .body("parent", notNullValue())
-                .body("previous", notNullValue())
-                .header("Location", equalTo("/api/bookmarks/" + bookmarkId))
+                .body(FIELD_ID, equalTo(bookmarkId.toString()))
+                .body(FIELD_DOCUMENT_ID, equalTo(documentId.toString()))
+                .body(FIELD_NAME, equalTo(BOOKMARK_NAME))
+                .body(FIELD_CREATED_BY, equalTo(CREATED_BY_USER))
+                .body(FIELD_PAGE_NUMBER, equalTo(DEFAULT_PAGE))
+                .body(FIELD_X_COORD, equalTo(DEFAULT_COORD))
+                .body(FIELD_Y_COORD, equalTo(DEFAULT_COORD))
+                .body(FIELD_PARENT, notNullValue())
+                .body(FIELD_PREVIOUS, notNullValue())
+                .header("Location", equalTo(API_BOOKMARKS + "/" + bookmarkId))
                 .log().all();
     }
 
@@ -48,12 +73,10 @@ class BookmarkScenariosTest extends BaseTest {
     void shouldReturn400WhenCreateNewBookmarkWithoutId() {
         final UUID bookmarkId = UUID.randomUUID();
         final JSONObject bookmarkRequestPayload = createBookmarkRequestPayload(bookmarkId);
+        bookmarkRequestPayload.remove(FIELD_ID);
 
-        bookmarkRequestPayload.remove("id");
-
-        request
-                .body(bookmarkRequestPayload.toString())
-                .post("/api/bookmarks")
+        request.body(bookmarkRequestPayload.toString())
+                .post(API_BOOKMARKS)
                 .then()
                 .statusCode(400)
                 .log().all();
@@ -64,9 +87,8 @@ class BookmarkScenariosTest extends BaseTest {
         final UUID bookmarkId = UUID.randomUUID();
         final JSONObject bookmarkRequestPayload = createBookmarkRequestPayload(bookmarkId);
 
-        unAuthenticatedRequest
-                .body(bookmarkRequestPayload.toString())
-                .post("/api/bookmarks")
+        unAuthenticatedRequest.body(bookmarkRequestPayload.toString())
+                .post(API_BOOKMARKS)
                 .then()
                 .statusCode(401)
                 .log().all();
@@ -76,11 +98,10 @@ class BookmarkScenariosTest extends BaseTest {
     void shouldReturn409WhenCreateNewBookmarkWithoutMandatoryField() {
         final UUID bookmarkId = UUID.randomUUID();
         final JSONObject bookmarkRequestPayload = createBookmarkRequestPayload(bookmarkId);
-        bookmarkRequestPayload.remove("name");
+        bookmarkRequestPayload.remove(FIELD_NAME);
 
-        request
-                .body(bookmarkRequestPayload.toString())
-                .post("/api/bookmarks")
+        request.body(bookmarkRequestPayload.toString())
+                .post(API_BOOKMARKS)
                 .then()
                 .statusCode(409)
                 .log().all();
@@ -90,28 +111,26 @@ class BookmarkScenariosTest extends BaseTest {
     void shouldReturn200WhenGetAllBookmarksByDocumentId() {
         final UUID bookmarkId = UUID.randomUUID();
         final JSONObject jsonObject = createBookmarkRequestPayload(bookmarkId);
-        jsonObject.remove("createdBy");
+        jsonObject.remove(FIELD_CREATED_BY);
 
-        final ValidatableResponse response =
-                request.log().all()
-                        .body(jsonObject.toString())
-                        .post("/api/bookmarks")
-                        .then()
-                        .statusCode(201);
+        final ValidatableResponse response = request.log().all()
+                .body(jsonObject.toString())
+                .post(API_BOOKMARKS)
+                .then()
+                .statusCode(201);
 
         final JSONObject newJsonObject = extractJsonObjectFromResponse(response);
-        final String id = newJsonObject.getString("documentId");
+        final String id = newJsonObject.getString(FIELD_DOCUMENT_ID);
 
-        request
-                .get(String.format("/api/%s/bookmarks", id))
+        request.get(String.format(API_BASE + BOOKMARKS, id))
                 .then()
                 .statusCode(200)
-                .body("id", equalTo(List.of(bookmarkId.toString())))
-                .body("documentId", equalTo(List.of(id)))
-                .body("name", equalTo(List.of("Bookmark for test")))
-                .body("pageNumber", equalTo(List.of(1)))
-                .body("xCoordinate", equalTo(List.of(100.00f)))
-                .body("yCoordinate", equalTo(List.of(100.00f)))
+                .body(FIELD_ID, equalTo(List.of(bookmarkId.toString())))
+                .body(FIELD_DOCUMENT_ID, equalTo(List.of(id)))
+                .body(FIELD_NAME, equalTo(List.of(BOOKMARK_NAME)))
+                .body(FIELD_PAGE_NUMBER, equalTo(List.of(DEFAULT_PAGE)))
+                .body(FIELD_X_COORD, equalTo(List.of(DEFAULT_COORD)))
+                .body(FIELD_Y_COORD, equalTo(List.of(DEFAULT_COORD)))
                 .log().all();
     }
 
@@ -122,28 +141,25 @@ class BookmarkScenariosTest extends BaseTest {
         for (int i = 0; i < 30; i++) {
             final UUID bookmarkId = UUID.randomUUID();
             final JSONObject jsonObject = createBookmarkRequestPayload(bookmarkId);
-            jsonObject.remove("createdBy");
+            jsonObject.remove(FIELD_CREATED_BY);
 
-            request.log().all()
-                .body(jsonObject.toString())
-                .post("/api/bookmarks")
-                .then()
-                .statusCode(201);
+            request.body(jsonObject.toString())
+                    .post(API_BOOKMARKS)
+                    .then()
+                    .statusCode(201);
             bookMarks.add(bookmarkId.toString());
         }
 
-        request
-                .get(String.format("/api/%s/bookmarks", documentId))
+        request.get(String.format(API_BASE + BOOKMARKS, documentId))
                 .then()
                 .statusCode(200)
-                .body("id", containsInAnyOrder(bookMarks.toArray()))
+                .body(FIELD_ID, containsInAnyOrder(bookMarks.toArray()))
                 .log().all();
     }
 
     @Test
     void shouldReturn204WhenResponseBodyIsEmptyForGivenDocId() {
-        request
-                .get(String.format("/api/%s/bookmarks", UUID.randomUUID()))
+        request.get(String.format(API_BASE + BOOKMARKS, UUID.randomUUID()))
                 .then()
                 .statusCode(204)
                 .log().all();
@@ -151,8 +167,7 @@ class BookmarkScenariosTest extends BaseTest {
 
     @Test
     void shouldReturn401WhenUnAuthenticatedUserGetBookmarksById() {
-        unAuthenticatedRequest
-                .get(String.format("/api/%s/bookmarks", UUID.randomUUID()))
+        unAuthenticatedRequest.get(String.format(API_BASE + BOOKMARKS, UUID.randomUUID()))
                 .then()
                 .statusCode(401)
                 .log().all();
@@ -163,22 +178,21 @@ class BookmarkScenariosTest extends BaseTest {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
-        jsonObject.put("name", "new name");
+        jsonObject.put(FIELD_NAME, "new name");
 
-        request
-                .body(jsonObject.toString())
-                .put("/api/bookmarks")
+        request.body(jsonObject.toString())
+                .put(API_BOOKMARKS)
                 .then()
                 .statusCode(200)
-                .body("id", equalTo(bookmarkId.toString()))
-                .body("documentId", equalTo(documentId.toString()))
-                .body("name", equalTo("new name"))
-                .body("createdBy", equalTo("user"))
-                .body("pageNumber", equalTo(1))
-                .body("xCoordinate", equalTo(100f))
-                .body("yCoordinate", equalTo(100f))
-                .body("parent", notNullValue())
-                .body("previous", notNullValue())
+                .body(FIELD_ID, equalTo(bookmarkId.toString()))
+                .body(FIELD_DOCUMENT_ID, equalTo(documentId.toString()))
+                .body(FIELD_NAME, equalTo("new name"))
+                .body(FIELD_CREATED_BY, equalTo(CREATED_BY_USER))
+                .body(FIELD_PAGE_NUMBER, equalTo(DEFAULT_PAGE))
+                .body(FIELD_X_COORD, equalTo(DEFAULT_COORD))
+                .body(FIELD_Y_COORD, equalTo(DEFAULT_COORD))
+                .body(FIELD_PARENT, notNullValue())
+                .body(FIELD_PREVIOUS, notNullValue())
                 .log().all();
     }
 
@@ -187,11 +201,10 @@ class BookmarkScenariosTest extends BaseTest {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
-        jsonObject.remove("id");
+        jsonObject.remove(FIELD_ID);
 
-        request
-                .body(jsonObject.toString())
-                .put("/api/bookmarks")
+        request.body(jsonObject.toString())
+                .put(API_BOOKMARKS)
                 .then()
                 .statusCode(400)
                 .log().all();
@@ -203,9 +216,8 @@ class BookmarkScenariosTest extends BaseTest {
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
 
-        unAuthenticatedRequest
-                .body(jsonObject.toString())
-                .put("/api/bookmarks")
+        unAuthenticatedRequest.body(jsonObject.toString())
+                .put(API_BOOKMARKS)
                 .then()
                 .statusCode(401)
                 .log().all();
@@ -216,10 +228,10 @@ class BookmarkScenariosTest extends BaseTest {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
-        jsonObject.remove("name");
-        request
-                .body(jsonObject.toString())
-                .put("/api/bookmarks")
+        jsonObject.remove(FIELD_NAME);
+
+        request.body(jsonObject.toString())
+                .put(API_BOOKMARKS)
                 .then()
                 .statusCode(409)
                 .log().all();
@@ -236,21 +248,18 @@ class BookmarkScenariosTest extends BaseTest {
         final JSONObject jsonObject2 = extractJsonObjectFromResponse(response2);
 
         final JSONArray jsonArray = new JSONArray();
-
-        jsonObject1.put("name", "new name-1");
+        jsonObject1.put(FIELD_NAME, "new name-1");
+        jsonObject2.put(FIELD_NAME, "new name-2");
         jsonArray.put(jsonObject1);
-
-        jsonObject2.put("name", "new name-2");
         jsonArray.put(jsonObject2);
 
-        request
-                .body(jsonArray.toString())
-                .put("/api/bookmarks_multiple")
+        request.body(jsonArray.toString())
+                .put(API_BOOKMARKS_MULTIPLE)
                 .then()
                 .statusCode(200)
-                .body("documentId", hasItems(documentId.toString()))
-                .body("id", hasItems(bookmarkId1.toString(), bookmarkId2.toString()))
-                .body("name", hasItems("new name-1", "new name-2"))
+                .body(FIELD_DOCUMENT_ID, hasItems(documentId.toString()))
+                .body(FIELD_ID, hasItems(bookmarkId1.toString(), bookmarkId2.toString()))
+                .body(FIELD_NAME, hasItems("new name-1", "new name-2"))
                 .log().all();
     }
 
@@ -259,13 +268,12 @@ class BookmarkScenariosTest extends BaseTest {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
-        final JSONArray jsonArray = new JSONArray();
-        jsonObject.remove("id");
-        jsonArray.put(jsonObject);
+        jsonObject.remove(FIELD_ID);
 
-        request
-                .body(jsonArray.toString())
-                .put("/api/bookmarks_multiple")
+        final JSONArray jsonArray = new JSONArray().put(jsonObject);
+
+        request.body(jsonArray.toString())
+                .put(API_BOOKMARKS_MULTIPLE)
                 .then()
                 .statusCode(400)
                 .log().all();
@@ -276,12 +284,11 @@ class BookmarkScenariosTest extends BaseTest {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
-        final JSONArray jsonArray = new JSONArray();
-        jsonArray.put(jsonObject);
 
-        unAuthenticatedRequest
-                .body(jsonArray.toString())
-                .put("/api/bookmarks_multiple")
+        final JSONArray jsonArray = new JSONArray().put(jsonObject);
+
+        unAuthenticatedRequest.body(jsonArray.toString())
+                .put(API_BOOKMARKS_MULTIPLE)
                 .then()
                 .statusCode(401)
                 .log().all();
@@ -292,13 +299,12 @@ class BookmarkScenariosTest extends BaseTest {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
-        jsonObject.remove("name");
-        final JSONArray jsonArray = new JSONArray();
-        jsonArray.put(jsonObject);
+        jsonObject.remove(FIELD_NAME);
 
-        request
-                .body(jsonArray.toString())
-                .put("/api/bookmarks_multiple")
+        final JSONArray jsonArray = new JSONArray().put(jsonObject);
+
+        request.body(jsonArray.toString())
+                .put(API_BOOKMARKS_MULTIPLE)
                 .then()
                 .statusCode(409)
                 .log().all();
@@ -309,9 +315,9 @@ class BookmarkScenariosTest extends BaseTest {
         final UUID bookmarkId = UUID.randomUUID();
         final ValidatableResponse response = createBookmark(bookmarkId);
         final JSONObject jsonObject = extractJsonObjectFromResponse(response);
-        final String id = jsonObject.getString("id");
-        request
-                .delete(String.format("/api/bookmarks/%s", id))
+        final String id = jsonObject.getString(FIELD_ID);
+
+        request.delete(String.format(API_BOOKMARKS + "/%s", id))
                 .then()
                 .statusCode(200)
                 .log().all();
@@ -319,8 +325,7 @@ class BookmarkScenariosTest extends BaseTest {
 
     @Test
     void shouldReturn401WhenUnAuthenticatedUserDeleteBookmarkById() {
-        unAuthenticatedRequest
-                .delete(String.format("/api/bookmarks/%s", UUID.randomUUID()))
+        unAuthenticatedRequest.delete(String.format(API_BOOKMARKS + "/%s", UUID.randomUUID()))
                 .then()
                 .statusCode(401)
                 .log().all();
@@ -328,8 +333,7 @@ class BookmarkScenariosTest extends BaseTest {
 
     @Test
     void shouldReturn200WhenDeleteBookmarkByNonExistentId() {
-        request
-                .delete(String.format("/api/bookmarks/%s", UUID.randomUUID()))
+        request.delete(String.format(API_BOOKMARKS + "/%s", UUID.randomUUID()))
                 .then()
                 .statusCode(200)
                 .log().all();
@@ -338,25 +342,20 @@ class BookmarkScenariosTest extends BaseTest {
     @Test
     void shouldReturn200WhenDeleteMultipleBookmarks() {
         final UUID bookmarkId1 = UUID.randomUUID();
-        final ValidatableResponse response1 = createBookmark(bookmarkId1);
-        final JSONObject jsonObject1 = extractJsonObjectFromResponse(response1);
+        final JSONObject jsonObject1 = extractJsonObjectFromResponse(createBookmark(bookmarkId1));
 
         final UUID bookmarkId2 = UUID.randomUUID();
-        final ValidatableResponse response2 = createBookmark(bookmarkId2);
-        final JSONObject jsonObject2 = extractJsonObjectFromResponse(response2);
+        final JSONObject jsonObject2 = extractJsonObjectFromResponse(createBookmark(bookmarkId2));
 
-        final JSONObject deleteBookmarkRequest = new JSONObject();
-        final JSONArray jsonArray = new JSONArray();
-        final Object id1 = jsonObject1.get("id");
-        final Object id2 = jsonObject2.get("id");
-        jsonArray.put(id1);
-        jsonArray.put(id2);
+        final JSONArray jsonArray = new JSONArray()
+                .put(jsonObject1.get(FIELD_ID))
+                .put(jsonObject2.get(FIELD_ID));
 
-        deleteBookmarkRequest.put("deleted", jsonArray);
+        final JSONObject deleteBookmarkRequest = new JSONObject()
+                .put(FIELD_DELETED, jsonArray);
 
-        request
-                .body(deleteBookmarkRequest.toString())
-                .delete("/api/bookmarks_multiple")
+        request.body(deleteBookmarkRequest.toString())
+                .delete(API_BOOKMARKS_MULTIPLE)
                 .then()
                 .statusCode(200)
                 .log().all();
@@ -365,14 +364,13 @@ class BookmarkScenariosTest extends BaseTest {
     @Test
     void shouldReturn401WhenUnAuthenticatedUserDeleteMultipleBookmarks() {
         final UUID bookmarkId = UUID.randomUUID();
-        final JSONObject deleteBookmarkRequest = new JSONObject();
-        final JSONArray jsonArray = new JSONArray();
-        jsonArray.put(bookmarkId);
-        deleteBookmarkRequest.put("deleted", jsonArray);
+        final JSONArray jsonArray = new JSONArray().put(bookmarkId);
 
-        unAuthenticatedRequest
-                .body(deleteBookmarkRequest.toString())
-                .delete("/api/bookmarks_multiple")
+        final JSONObject deleteBookmarkRequest = new JSONObject()
+                .put(FIELD_DELETED, jsonArray);
+
+        unAuthenticatedRequest.body(deleteBookmarkRequest.toString())
+                .delete(API_BOOKMARKS_MULTIPLE)
                 .then()
                 .statusCode(401)
                 .log().all();
@@ -381,14 +379,13 @@ class BookmarkScenariosTest extends BaseTest {
     @Test
     void shouldReturn200WhenDeleteMultipleBookmarksWithNonExistentId() {
         final UUID bookmarkId = UUID.randomUUID();
-        final JSONObject deleteBookmarkRequest = new JSONObject();
-        final JSONArray jsonArray = new JSONArray();
-        jsonArray.put(bookmarkId);
-        deleteBookmarkRequest.put("deleted", jsonArray);
+        final JSONArray jsonArray = new JSONArray().put(bookmarkId);
 
-        request
-                .body(deleteBookmarkRequest.toString())
-                .delete("/api/bookmarks_multiple")
+        final JSONObject deleteBookmarkRequest = new JSONObject()
+                .put(FIELD_DELETED, jsonArray);
+
+        request.body(deleteBookmarkRequest.toString())
+                .delete(API_BOOKMARKS_MULTIPLE)
                 .then()
                 .statusCode(200)
                 .log().all();
@@ -397,26 +394,23 @@ class BookmarkScenariosTest extends BaseTest {
     @NotNull
     private ValidatableResponse createBookmark(final UUID bookmarkId) {
         final JSONObject bookmark = createBookmarkRequestPayload(bookmarkId);
-        return request.log().all()
-                .body(bookmark.toString())
-                .post("/api/bookmarks")
+        return request.body(bookmark.toString())
+                .post(API_BOOKMARKS)
                 .then()
                 .statusCode(201);
     }
 
     private JSONObject createBookmarkRequestPayload(final UUID bookmarkId) {
         final JSONObject jsonObject = new JSONObject();
-
-        jsonObject.put("id", bookmarkId);
-        jsonObject.put("documentId", documentId);
-        jsonObject.put("name", "Bookmark for test");
-        jsonObject.put("createdBy", "user");
-        jsonObject.put("pageNumber", 1);
-        jsonObject.put("xCoordinate", 100.00);
-        jsonObject.put("yCoordinate", 100.00);
-        jsonObject.put("parent", UUID.randomUUID().toString());
-        jsonObject.put("previous", UUID.randomUUID().toString());
-
+        jsonObject.put(FIELD_ID, bookmarkId);
+        jsonObject.put(FIELD_DOCUMENT_ID, documentId);
+        jsonObject.put(FIELD_NAME, BOOKMARK_NAME);
+        jsonObject.put(FIELD_CREATED_BY, CREATED_BY_USER);
+        jsonObject.put(FIELD_PAGE_NUMBER, DEFAULT_PAGE);
+        jsonObject.put(FIELD_X_COORD, DEFAULT_COORD);
+        jsonObject.put(FIELD_Y_COORD, DEFAULT_COORD);
+        jsonObject.put(FIELD_PARENT, UUID.randomUUID().toString());
+        jsonObject.put(FIELD_PREVIOUS, UUID.randomUUID().toString());
         return jsonObject;
     }
 
