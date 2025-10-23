@@ -9,7 +9,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
@@ -41,7 +41,7 @@ class FilterAnnotationSetTest  extends BaseTest {
     @Autowired
     private AnnotationSetMapper annotationSetMapper;
 
-    @MockBean
+    @MockitoBean
     private AnnotationSetService annotationSetService;
 
     @Autowired
@@ -56,7 +56,7 @@ class FilterAnnotationSetTest  extends BaseTest {
     private AnnotationSet annotationSet;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.openMocks(this);
         em.persist(new IdamDetails("system"));
         em.persist(new IdamDetails("anonymous"));
@@ -69,8 +69,7 @@ class FilterAnnotationSetTest  extends BaseTest {
      * if they test an entity which requires the current entity.
      */
 
-    public static AnnotationSet createEntity(EntityManager em) {
-
+    public static AnnotationSet createEntity() {
         AnnotationSet annotationSet = new AnnotationSet();
         annotationSet.setId(UUID.randomUUID());
         annotationSet.setDocumentId("Test");
@@ -81,8 +80,8 @@ class FilterAnnotationSetTest  extends BaseTest {
     }
 
     @BeforeEach
-    public void initTest() {
-        annotationSet = createEntity(em);
+    void initTest() {
+        annotationSet = createEntity();
     }
 
     @Test

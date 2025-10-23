@@ -79,9 +79,8 @@ class CommentResourceIntTest extends BaseTest {
     private AnnotationMapper annotationMapper;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.openMocks(this);
-        final CommentResource commentResource = new CommentResource(commentService);
         em.persist(new IdamDetails("system"));
         em.persist(new IdamDetails("anonymous"));
     }
@@ -92,7 +91,7 @@ class CommentResourceIntTest extends BaseTest {
      * <p>This is a static method, as tests for other entities might also need it,</p>
      * if they test an entity which requires the current entity.
      */
-    public static Comment createEntity(EntityManager em) {
+    public static Comment createEntity() {
         Comment comment = new Comment()
             .content(DEFAULT_CONTENT);
         comment.setId(UUID.randomUUID());
@@ -100,9 +99,8 @@ class CommentResourceIntTest extends BaseTest {
     }
 
     @BeforeEach
-    public void initTest() {
-        comment = createEntity(em);
-
+    void initTest() {
+        comment = createEntity();
     }
 
     @Test
@@ -172,7 +170,7 @@ class CommentResourceIntTest extends BaseTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[*].id").value(hasItem(comment.getId().toString())))
-            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())));
+            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT)));
     }
     
     @Test
@@ -186,7 +184,7 @@ class CommentResourceIntTest extends BaseTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(comment.getId().toString()))
-            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT.toString()));
+            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT));
     }
 
     @Test

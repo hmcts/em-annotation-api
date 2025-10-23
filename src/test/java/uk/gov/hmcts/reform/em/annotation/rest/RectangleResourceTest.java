@@ -41,12 +41,10 @@ class RectangleResourceTest {
 
     private RectangleResource rectangleResource;
 
-    private final UUID documentId = UUID.randomUUID();
-
     private static final String ENTITY_NAME = "rectangle";
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
         rectangleResource = new RectangleResource(annotationService, rectangleService);
     }
