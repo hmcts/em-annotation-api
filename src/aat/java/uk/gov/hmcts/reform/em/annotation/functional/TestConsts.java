@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.em.annotation.functional;
 
 import org.springframework.http.MediaType;
 
-public class TestConsts {
+public final class TestConsts {
     // 🔹 API Endpoints
     public static final String API_ANNOTATIONS = "/api/annotations";
     public static final String API_ANNOTATION_SETS = "/api/annotation-sets";
