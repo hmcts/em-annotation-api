@@ -283,7 +283,8 @@ class AnnotationScenariosTest extends BaseTest {
         request
                 .body(annotation.toString())
                 .put(API_ANNOTATIONS)
-                .then().statusCode(400)
+                .then()
+                .statusCode(400)
                 .log().all();
     }
 
@@ -362,7 +363,8 @@ class AnnotationScenariosTest extends BaseTest {
     private ValidatableResponse deleteAnnotationById(String annotationId) {
         return request
                 .delete(API_ANNOTATIONS + "/" + annotationId)
-                .then().log().all();
+                .then()
+                .log().all();
     }
 
     @NotNull
