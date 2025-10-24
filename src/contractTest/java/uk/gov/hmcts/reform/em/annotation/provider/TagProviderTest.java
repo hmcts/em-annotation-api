@@ -30,6 +30,7 @@ public class TagProviderTest extends BaseProviderTest {
     @MockitoBean
     private TagService tagService;
 
+    @Autowired
     public TagProviderTest(MockMvc mockMvc, ObjectMapper objectMapper, TagResource tagResource) {
         super(mockMvc, objectMapper);
         this.tagResource = tagResource;
