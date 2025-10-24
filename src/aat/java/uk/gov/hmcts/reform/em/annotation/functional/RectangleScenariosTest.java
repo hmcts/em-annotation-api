@@ -5,12 +5,44 @@ import org.hamcrest.Matchers;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATIONS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATION_SETS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_RECTANGLES;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_RECTANGLES_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_ANNOTATION_TYPE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_COLOR;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_HEIGHT;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_PAGE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_WIDTH;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_X;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_Y;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_HEIGHT;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_WIDTH;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_X;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_Y;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.HEADER_LOCATION_TEMPLATE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.LOCATION_HEADER;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_BAD_REQUEST;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_CREATED;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_INTERNAL_SERVER_ERROR;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_NOT_FOUND;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_OK;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_UNAUTHORIZED;
 
 class RectangleScenariosTest extends BaseTest {
+
+    @Autowired
+    public RectangleScenariosTest(TestUtil testUtil) {
+        super(testUtil);
+    }
 
     @Test
     void shouldReturn201WhenCreateNewRectangle() {
@@ -21,13 +53,13 @@ class RectangleScenariosTest extends BaseTest {
         final ValidatableResponse response = createRectangle(annotationId, rectangleId);
 
         response
-                .statusCode(201)
-                .body("x", equalTo(1f))
-                .body("y", equalTo(2f))
-                .body("width", equalTo(10f))
-                .body("height", equalTo(11f))
-                .body("annotationId", equalTo(annotationId))
-                .header("Location", equalTo("/api/rectangles/" + rectangleId))
+                .statusCode(STATUS_CREATED)
+                .body(FIELD_X, equalTo(DEFAULT_X))
+                .body(FIELD_Y, equalTo(DEFAULT_Y))
+                .body(FIELD_WIDTH, equalTo(DEFAULT_WIDTH))
+                .body(FIELD_HEIGHT, equalTo(DEFAULT_HEIGHT))
+                .body(FIELD_ANNOTATION_ID, equalTo(annotationId))
+                .header(LOCATION_HEADER, equalTo(HEADER_LOCATION_TEMPLATE + rectangleId))
                 .log().all();
     }
 
@@ -35,84 +67,78 @@ class RectangleScenariosTest extends BaseTest {
     void shouldReturn400WhenCreateNewRectangleWithoutId() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
-        final String rectangleId = UUID.randomUUID().toString();
-        final JSONObject rectanglePayload = createRectanglePayload(annotationId, rectangleId);
+        final JSONObject rectanglePayload = createRectanglePayload(annotationId, UUID.randomUUID().toString());
 
-        rectanglePayload.remove("id");
+        rectanglePayload.remove(FIELD_ID);
 
         request
                 .body(rectanglePayload.toString())
-                .post("/api/rectangles")
+                .post(API_RECTANGLES)
                 .then()
-                .statusCode(400)
+                .statusCode(STATUS_BAD_REQUEST)
                 .log().all();
     }
 
     @Test
     void shouldReturn401WhenUnAuthenticatedUserCreateNewRectangle() {
         final String annotationId = UUID.randomUUID().toString();
-        final String rectangleId = UUID.randomUUID().toString();
-        final JSONObject rectanglePayload = createRectanglePayload(annotationId, rectangleId);
+        final JSONObject rectanglePayload = createRectanglePayload(annotationId, UUID.randomUUID().toString());
 
         unAuthenticatedRequest
                 .body(rectanglePayload.toString())
-                .post("/api/rectangles")
+                .post(API_RECTANGLES)
                 .then()
-                .statusCode(401)
+                .statusCode(STATUS_UNAUTHORIZED)
                 .log().all();
     }
 
     @Test
     void shouldReturn404WhenCreateNewRectangleWithNonExistentAnnotationId() {
+        final JSONObject rectanglePayload =
+                createRectanglePayload(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        final String nonExistentAnnotationId = UUID.randomUUID().toString();
-        final String rectangleId = UUID.randomUUID().toString();
-        final JSONObject rectanglePayload = createRectanglePayload(nonExistentAnnotationId, rectangleId);
         request
-            .body(rectanglePayload.toString())
-            .post("/api/rectangles")
-            .then()
-            .statusCode(404)
-            .log().all();
+                .body(rectanglePayload.toString())
+                .post(API_RECTANGLES)
+                .then()
+                .statusCode(STATUS_NOT_FOUND)
+                .log().all();
     }
 
     @Test
     void shouldReturn200WhenGetRectangleById() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
-        final String rectangleId = UUID.randomUUID().toString();
-        final ValidatableResponse response = createRectangle(annotationId, rectangleId);
-        final String id = extractJsonObjectFromResponse(response).getString("id");
+        final ValidatableResponse response = createRectangle(annotationId, UUID.randomUUID().toString());
+        final String id = extractJsonObjectFromResponse(response).getString(FIELD_ID);
 
         request
-                .get("/api/rectangles/" + id)
+                .get(API_RECTANGLES_ID + id)
                 .then()
-                .statusCode(200)
-                .body("x", equalTo(1f))
-                .body("y", equalTo(2f))
-                .body("width", equalTo(10f))
-                .body("height", equalTo(11f))
-                .body("annotationId", equalTo(annotationId))
+                .statusCode(STATUS_OK)
+                .body(FIELD_X, equalTo(DEFAULT_X))
+                .body(FIELD_Y, equalTo(DEFAULT_Y))
+                .body(FIELD_WIDTH, equalTo(DEFAULT_WIDTH))
+                .body(FIELD_HEIGHT, equalTo(DEFAULT_HEIGHT))
+                .body(FIELD_ANNOTATION_ID, equalTo(annotationId))
                 .log().all();
     }
 
     @Test
     void shouldReturn404WhenGetRectangleNotFoundById() {
-        final String rectangleId = UUID.randomUUID().toString();
         request
-                .get("/api/rectangles/" + rectangleId)
+                .get(API_RECTANGLES_ID + UUID.randomUUID())
                 .then()
-                .statusCode(404)
+                .statusCode(STATUS_NOT_FOUND)
                 .log().all();
     }
 
     @Test
     void shouldReturn401WhenUnAuthenticatedUserGetRectangleById() {
-        final String rectangleId = UUID.randomUUID().toString();
         unAuthenticatedRequest
-                .get("/api/rectangles/" + rectangleId)
+                .get(API_RECTANGLES_ID + UUID.randomUUID())
                 .then()
-                .statusCode(401)
+                .statusCode(STATUS_UNAUTHORIZED)
                 .log().all();
     }
 
@@ -120,13 +146,12 @@ class RectangleScenariosTest extends BaseTest {
     void shouldReturn200WhenGetAllRectangles() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
-        final String rectangleId = UUID.randomUUID().toString();
-        createRectangle(annotationId, rectangleId);
+        createRectangle(annotationId, UUID.randomUUID().toString());
 
         request
-                .get("/api/rectangles")
+                .get(API_RECTANGLES)
                 .then()
-                .statusCode(200)
+                .statusCode(STATUS_OK)
                 .body("size()", Matchers.greaterThanOrEqualTo(1))
                 .log().all();
     }
@@ -134,9 +159,9 @@ class RectangleScenariosTest extends BaseTest {
     @Test
     void shouldReturn401WhenUnAuthenticatedUserGetAllRectangles() {
         unAuthenticatedRequest
-                .get("/api/rectangles")
+                .get(API_RECTANGLES)
                 .then()
-                .statusCode(401)
+                .statusCode(STATUS_UNAUTHORIZED)
                 .log().all();
     }
 
@@ -147,64 +172,60 @@ class RectangleScenariosTest extends BaseTest {
         final String rectangleId = UUID.randomUUID().toString();
         final ValidatableResponse response = createRectangle(annotationId, rectangleId);
         final JSONObject rectangle = extractJsonObjectFromResponse(response);
-        rectangle.put("x", 3f);
-        rectangle.put("y", 4f);
+        rectangle.put(FIELD_X, 3f);
+        rectangle.put(FIELD_Y, 4f);
 
         request
                 .body(rectangle.toString())
-                .put("/api/rectangles")
+                .put(API_RECTANGLES)
                 .then()
-                .statusCode(200)
-                .body("id", equalTo(rectangleId))
-                .body("x", equalTo(3f))
-                .body("y", equalTo(4f))
-                .body("width", equalTo(10f))
-                .body("height", equalTo(11f))
-                .body("annotationId", equalTo(annotationId))
+                .statusCode(STATUS_OK)
+                .body(FIELD_ID, equalTo(rectangleId))
+                .body(FIELD_X, equalTo(3f))
+                .body(FIELD_Y, equalTo(4f))
+                .body(FIELD_WIDTH, equalTo(DEFAULT_WIDTH))
+                .body(FIELD_HEIGHT, equalTo(DEFAULT_HEIGHT))
+                .body(FIELD_ANNOTATION_ID, equalTo(annotationId))
                 .log().all();
     }
 
     @Test
     void shouldReturn500WhenUpdateRectangleWithNonExistentAnnotationId() {
-        final String rectangleId = UUID.randomUUID().toString();
-        final String nonExistentAnnotationId = UUID.randomUUID().toString();
-        final JSONObject rectangle = createRectanglePayload(nonExistentAnnotationId, rectangleId);
+        final JSONObject rectangle =
+                createRectanglePayload(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+
         request
                 .body(rectangle.toString())
-                .put("/api/rectangles")
+                .put(API_RECTANGLES)
                 .then()
-                .statusCode(500)
+                .statusCode(STATUS_INTERNAL_SERVER_ERROR)
                 .log().all();
     }
 
     @Test
     void shouldReturn400WhenUpdateRectangleWithoutId() {
-        final String newAnnotationSetId = createAnnotationSet();
-        final String annotationId = createAnnotation(newAnnotationSetId);
-        final String rectangleId = UUID.randomUUID().toString();
-        final JSONObject rectangle = createRectanglePayload(annotationId, rectangleId);
-
-        rectangle.remove("id");
+        final JSONObject rectangle =
+                createRectanglePayload(createAnnotation(createAnnotationSet()), UUID.randomUUID().toString());
+        rectangle.remove(FIELD_ID);
 
         request
                 .body(rectangle.toString())
-                .put("/api/rectangles")
+                .put(API_RECTANGLES)
                 .then()
-                .statusCode(400)
+                .statusCode(STATUS_BAD_REQUEST)
                 .log().all();
     }
 
     @Test
     void shouldReturn401WhenUnAuthenticatedUserUpdateRectangle() {
-        final String annotationId = UUID.randomUUID().toString();
-        final String rectangleId = UUID.randomUUID().toString();
-        final JSONObject rectangle = createRectanglePayload(annotationId, rectangleId);
+        final JSONObject rectangle =
+                createRectanglePayload(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
         unAuthenticatedRequest
                 .body(rectangle.toString())
-                .put("/api/rectangles")
+                .put(API_RECTANGLES)
                 .then()
-                .statusCode(401)
+                .statusCode(STATUS_UNAUTHORIZED)
                 .log().all();
     }
 
@@ -212,29 +233,23 @@ class RectangleScenariosTest extends BaseTest {
     void shouldReturn200WhenDeleteRectangleById() {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
-        final String rectangleId = UUID.randomUUID().toString();
-        final ValidatableResponse createdResponse = createRectangle(annotationId, rectangleId);
-        final String id = extractJsonObjectFromResponse(createdResponse).getString("id");
+        final ValidatableResponse createdResponse = createRectangle(annotationId, UUID.randomUUID().toString());
+        final String id = extractJsonObjectFromResponse(createdResponse).getString(FIELD_ID);
 
-        final ValidatableResponse deletedResponse = deleteRectangleById(id);
-
-        deletedResponse.statusCode(200);
+        deleteRectangleById(id).statusCode(STATUS_OK);
     }
 
     @Test
     void shouldReturn200WhenDeleteRectangleByNonExistentId() {
-        final String nonExistentRectangleId = UUID.randomUUID().toString();
-        final ValidatableResponse deletedResponse = deleteRectangleById(nonExistentRectangleId);
-
-        deletedResponse.statusCode(200);
+        deleteRectangleById(UUID.randomUUID().toString()).statusCode(STATUS_OK);
     }
 
     @Test
     void shouldReturn401WhenUnAuthenticatedUserDeleteRectangle() {
         unAuthenticatedRequest
-                .delete("/api/rectangles/" + UUID.randomUUID())
+                .delete(API_RECTANGLES_ID + UUID.randomUUID())
                 .then()
-                .statusCode(401)
+                .statusCode(STATUS_UNAUTHORIZED)
                 .log().all();
     }
 
@@ -245,29 +260,30 @@ class RectangleScenariosTest extends BaseTest {
         final String rectangleId = UUID.randomUUID().toString();
         final ValidatableResponse response = createRectangle(annotationId, rectangleId);
         final JSONObject rectangle = extractJsonObjectFromResponse(response);
-        final String id = rectangle.getString("id");
-        deleteRectangleById(id).statusCode(200);
-        rectangle.put("x", 3f);
-        rectangle.put("y", 4f);
+        final String id = rectangle.getString(FIELD_ID);
+
+        deleteRectangleById(id).statusCode(STATUS_OK);
+        rectangle.put(FIELD_X, 3f);
+        rectangle.put(FIELD_Y, 4f);
 
         request
                 .body(rectangle.toString())
-                .put("/api/rectangles")
+                .put(API_RECTANGLES)
                 .then()
-                .statusCode(200)
-                .body("id", equalTo(rectangleId))
-                .body("x", equalTo(3f))
-                .body("y", equalTo(4f))
-                .body("width", equalTo(10f))
-                .body("height", equalTo(11f))
-                .body("annotationId", equalTo(annotationId))
+                .statusCode(STATUS_OK)
+                .body(FIELD_ID, equalTo(rectangleId))
+                .body(FIELD_X, equalTo(3f))
+                .body(FIELD_Y, equalTo(4f))
+                .body(FIELD_WIDTH, equalTo(DEFAULT_WIDTH))
+                .body(FIELD_HEIGHT, equalTo(DEFAULT_HEIGHT))
+                .body(FIELD_ANNOTATION_ID, equalTo(annotationId))
                 .log().all();
     }
 
     @NotNull
     private ValidatableResponse deleteRectangleById(String rectangleId) {
         return request
-                .delete("/api/rectangles/" + rectangleId)
+                .delete(API_RECTANGLES_ID + rectangleId)
                 .then()
                 .log().all();
     }
@@ -277,32 +293,32 @@ class RectangleScenariosTest extends BaseTest {
         final JSONObject rectangle = createRectanglePayload(annotationId, rectangleId);
         return request.log().all()
                 .body(rectangle.toString())
-                .post("/api/rectangles")
+                .post(API_RECTANGLES)
                 .then()
-                .statusCode(201);
+                .statusCode(STATUS_CREATED);
     }
 
     @NotNull
     private String createAnnotation(final String newAnnotationSetId) {
         final UUID annotationId = UUID.randomUUID();
-        final JSONObject createAnnotations = new JSONObject();
-        createAnnotations.put("annotationSetId", newAnnotationSetId);
-        createAnnotations.put("id", annotationId);
-        createAnnotations.put("annotationType", "highlight");
-        createAnnotations.put("page", 1);
-        createAnnotations.put("color", "d1d1d1");
+        final JSONObject annotation = new JSONObject();
+        annotation.put("annotationSetId", newAnnotationSetId);
+        annotation.put(FIELD_ID, annotationId);
+        annotation.put("annotationType", DEFAULT_ANNOTATION_TYPE);
+        annotation.put("page", DEFAULT_PAGE);
+        annotation.put("color", DEFAULT_COLOR);
 
         return request
-                .body(createAnnotations)
-                .post("/api/annotations")
+                .body(annotation)
+                .post(API_ANNOTATIONS)
                 .then()
-                .statusCode(201)
-                .body("id", equalTo(annotationId.toString()))
+                .statusCode(STATUS_CREATED)
+                .body(FIELD_ID, equalTo(annotationId.toString()))
                 .extract()
                 .response()
                 .getBody()
                 .jsonPath()
-                .get("id");
+                .get(FIELD_ID);
     }
 
     @NotNull
@@ -310,30 +326,30 @@ class RectangleScenariosTest extends BaseTest {
         final JSONObject jsonObject = new JSONObject();
         final UUID newAnnotationSetId = UUID.randomUUID();
         jsonObject.put("documentId", UUID.randomUUID().toString());
-        jsonObject.put("id", newAnnotationSetId.toString());
+        jsonObject.put(FIELD_ID, newAnnotationSetId.toString());
 
         return request
                 .body(jsonObject.toString())
-                .post("/api/annotation-sets")
+                .post(API_ANNOTATION_SETS)
                 .then()
-                .statusCode(201)
-                .body("id", equalTo(newAnnotationSetId.toString()))
+                .statusCode(STATUS_CREATED)
+                .body(FIELD_ID, equalTo(newAnnotationSetId.toString()))
                 .extract()
                 .response()
                 .getBody()
                 .jsonPath()
-                .get("id");
+                .get(FIELD_ID);
     }
 
     @NotNull
     private JSONObject createRectanglePayload(String annotationId, String rectangleId) {
         final JSONObject rectangle = new JSONObject();
-        rectangle.put("id", rectangleId);
-        rectangle.put("annotationId", annotationId);
-        rectangle.put("x", 1f);
-        rectangle.put("y", 2f);
-        rectangle.put("width", 10f);
-        rectangle.put("height", 11f);
+        rectangle.put(FIELD_ID, rectangleId);
+        rectangle.put(FIELD_ANNOTATION_ID, annotationId);
+        rectangle.put(FIELD_X, DEFAULT_X);
+        rectangle.put(FIELD_Y, DEFAULT_Y);
+        rectangle.put(FIELD_WIDTH, DEFAULT_WIDTH);
+        rectangle.put(FIELD_HEIGHT, DEFAULT_HEIGHT);
         return rectangle;
     }
 
