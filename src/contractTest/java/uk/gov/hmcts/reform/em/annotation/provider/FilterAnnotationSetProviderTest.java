@@ -36,6 +36,7 @@ public class FilterAnnotationSetProviderTest extends BaseProviderTest {
     private static final String EXAMPLE_DOCUMENT_ID = "f401727b-5a50-40bb-ac4d-87dc34910b6e";
     private static final UUID EXAMPLE_ANNOTATION_SET_ID = UUID.fromString("4f6fe7a2-b8a6-4f0a-9f7c-8d9e1b0c9b3a");
 
+    @Autowired
     public FilterAnnotationSetProviderTest(
             MockMvc mockMvc,
             ObjectMapper objectMapper,
