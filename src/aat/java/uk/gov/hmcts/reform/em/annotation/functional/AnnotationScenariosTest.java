@@ -203,10 +203,11 @@ class AnnotationScenariosTest extends BaseTest {
     @Test
     void shouldReturn404WhenGetAnnotationNotFoundById() {
         final String annotationId = UUID.randomUUID().toString();
-        request.get(API_ANNOTATIONS + "/" + annotationId)
-                .then().statusCode(404)
-                .log()
-                .all();
+        request
+                .get(API_ANNOTATIONS + "/" + annotationId)
+                .then()
+                .statusCode(404)
+                .log().all();
     }
 
     @Test
@@ -214,7 +215,9 @@ class AnnotationScenariosTest extends BaseTest {
         final String annotationId = UUID.randomUUID().toString();
         unAuthenticatedRequest
                 .get(API_ANNOTATIONS + "/" + annotationId)
-                .then().statusCode(401).log().all();
+                .then()
+                .statusCode(401)
+                .log().all();
     }
 
     @Test
@@ -223,7 +226,8 @@ class AnnotationScenariosTest extends BaseTest {
         final String annotationId = UUID.randomUUID().toString();
         createAnnotation(annotationId, annotationSetId);
 
-        request.get(API_ANNOTATIONS)
+        request
+                .get(API_ANNOTATIONS)
                 .then()
                 .statusCode(200)
                 .body("size()", Matchers.greaterThanOrEqualTo(1))
@@ -232,7 +236,8 @@ class AnnotationScenariosTest extends BaseTest {
 
     @Test
     void shouldReturn401WhenUnAuthenticatedUserGetAllAnnotations() {
-        unAuthenticatedRequest.get(API_ANNOTATIONS)
+        unAuthenticatedRequest
+                .get(API_ANNOTATIONS)
                 .then()
                 .statusCode(401)
                 .log().all();
@@ -247,7 +252,8 @@ class AnnotationScenariosTest extends BaseTest {
         annotation.put(FIELD_PAGE, 2);
         annotation.put(FIELD_COLOR, COLOR_UPDATED);
 
-        request.body(annotation.toString())
+        request
+                .body(annotation.toString())
                 .put(API_ANNOTATIONS)
                 .then()
                 .statusCode(200)
@@ -274,7 +280,8 @@ class AnnotationScenariosTest extends BaseTest {
         final JSONObject annotation = extractJsonObjectFromResponse(response);
         annotation.remove(FIELD_ID);
 
-        request.body(annotation.toString())
+        request
+                .body(annotation.toString())
                 .put(API_ANNOTATIONS)
                 .then().statusCode(400)
                 .log().all();
@@ -287,7 +294,8 @@ class AnnotationScenariosTest extends BaseTest {
         final ValidatableResponse response = createAnnotation(annotationId, annotationSetId);
         final JSONObject annotation = extractJsonObjectFromResponse(response);
 
-        unAuthenticatedRequest.body(annotation.toString())
+        unAuthenticatedRequest
+                .body(annotation.toString())
                 .put(API_ANNOTATIONS)
                 .then()
                 .statusCode(401)
@@ -311,7 +319,8 @@ class AnnotationScenariosTest extends BaseTest {
 
     @Test
     void shouldReturn401WhenUnAuthenticatedUserDeleteAnnotation() {
-        unAuthenticatedRequest.delete(API_ANNOTATIONS + "/" + UUID.randomUUID())
+        unAuthenticatedRequest
+                .delete(API_ANNOTATIONS + "/" + UUID.randomUUID())
                 .then()
                 .statusCode(401)
                 .log().all();
@@ -329,7 +338,8 @@ class AnnotationScenariosTest extends BaseTest {
         annotation.put(FIELD_PAGE, 3);
         annotation.put(FIELD_COLOR, COLOR_SECOND_UPDATE);
 
-        request.body(annotation.toString())
+        request
+                .body(annotation.toString())
                 .put(API_ANNOTATIONS)
                 .then()
                 .statusCode(200)
@@ -350,7 +360,9 @@ class AnnotationScenariosTest extends BaseTest {
 
     @NotNull
     private ValidatableResponse deleteAnnotationById(String annotationId) {
-        return request.delete(API_ANNOTATIONS + "/" + annotationId).then().log().all();
+        return request
+                .delete(API_ANNOTATIONS + "/" + annotationId)
+                .then().log().all();
     }
 
     @NotNull
@@ -360,7 +372,8 @@ class AnnotationScenariosTest extends BaseTest {
         jsonObject.put(FIELD_DOCUMENT_ID, UUID.randomUUID().toString());
         jsonObject.put(FIELD_ID, newAnnotationSetId.toString());
 
-        return request.body(jsonObject.toString())
+        return request
+                .body(jsonObject.toString())
                 .post(API_ANNOTATION_SETS)
                 .then()
                 .statusCode(201)
@@ -375,7 +388,9 @@ class AnnotationScenariosTest extends BaseTest {
     @NotNull
     private ValidatableResponse createAnnotation(String annotationId, String annotationSetId) {
         final JSONObject annotation = createAnnotationPayload(annotationId, annotationSetId);
-        return request.body(annotation).post(API_ANNOTATIONS)
+        return request
+                .body(annotation)
+                .post(API_ANNOTATIONS)
                 .then()
                 .statusCode(201)
                 .log().all();
