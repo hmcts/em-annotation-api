@@ -14,36 +14,30 @@ import java.util.UUID;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATIONS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATION_SETS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATIONS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_SET_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_TYPE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_COLOR;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_COMMENTS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_CONTENT;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_DOCUMENT_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_PAGE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_RECTANGLES;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.HEADER_LOCATION;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.VALUE_COLOR;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.VALUE_HIGHLIGHT;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.VALUE_TEXT;
 
 class AnnotationSetScenariosTest extends BaseTest {
-
-    // ===== Constants to avoid string duplication =====
-    private static final String API_ANNOTATION_SETS = "/api/annotation-sets";
-    private static final String API_ANNOTATIONS = "/api/annotations";
-
-    private static final String FIELD_ID = "id";
-    private static final String FIELD_DOCUMENT_ID = "documentId";
-    private static final String FIELD_ANNOTATION_SET_ID = "annotationSetId";
-    private static final String FIELD_ANNOTATIONS = "annotations";
-    private static final String FIELD_COMMENTS = "comments";
-    private static final String FIELD_RECTANGLES = "rectangles";
-    private static final String FIELD_ANNOTATION_TYPE = "annotationType";
-    private static final String FIELD_PAGE = "page";
-    private static final String FIELD_COLOR = "color";
-    private static final String FIELD_CONTENT = "content";
-    private static final String FIELD_ANNOTATION_ID = "annotationId";
-    private static final String HEADER_LOCATION = "Location";
-
-    private static final String VALUE_HIGHLIGHT = "highlight";
-    private static final String VALUE_COLOR = "d1d1d1";
-    private static final String VALUE_TEXT = "text";
 
     @Autowired
     public AnnotationSetScenariosTest(TestUtil testUtil) {
         super(testUtil);
     }
-
-    // ===== Tests =====
 
     @Test
     void shouldReturn201WhenCreateNewAnnotationSet() {

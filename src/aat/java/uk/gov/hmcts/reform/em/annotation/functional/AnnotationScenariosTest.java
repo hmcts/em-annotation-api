@@ -17,42 +17,37 @@ import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.ANNOTATION_TYPE_HIGHLIGHT;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATIONS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATION_SETS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.COLOR_DEFAULT;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.COLOR_SECOND_UPDATE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.COLOR_UPDATED;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.COMMENT_TEXT;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_SET_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_TYPE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_CASE_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_COLOR;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_COMMENTS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_COMMENT_HEADER;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_CONTENT;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_DOCUMENT_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_HEIGHT;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_JURISDICTION;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_PAGE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_RECTANGLES;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_WIDTH;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_X;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_Y;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.LOCATION_HEADER;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.PUBLIC_LAW;
 
 class AnnotationScenariosTest extends BaseTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
-    // 🔹 API Endpoints
-    private static final String API_ANNOTATIONS = "/api/annotations";
-    private static final String API_ANNOTATION_SETS = "/api/annotation-sets";
-
-    // 🔹 JSON field keys
-    private static final String FIELD_ID = "id";
-    private static final String FIELD_PAGE = "page";
-    private static final String FIELD_COLOR = "color";
-    private static final String FIELD_DOCUMENT_ID = "documentId";
-    private static final String FIELD_ANNOTATION_ID = "annotationId";
-    private static final String FIELD_ANNOTATION_SET_ID = "annotationSetId";
-    private static final String FIELD_ANNOTATION_TYPE = "annotationType";
-    private static final String FIELD_COMMENTS = "comments";
-    private static final String FIELD_RECTANGLES = "rectangles";
-    private static final String FIELD_CONTENT = "content";
-    private static final String FIELD_X = "x";
-    private static final String FIELD_Y = "y";
-    private static final String FIELD_WIDTH = "width";
-    private static final String FIELD_HEIGHT = "height";
-    private static final String FIELD_CASE_ID = "caseId";
-    private static final String FIELD_JURISDICTION = "jurisdiction";
-    private static final String FIELD_COMMENT_HEADER = "commentHeader";
-
-    // 🔹 Common values
-    private static final String COLOR_DEFAULT = "d1d1d1";
-    private static final String COLOR_UPDATED = "f1f1f1";
-    private static final String COLOR_SECOND_UPDATE = "e1e1e1";
-    private static final String ANNOTATION_TYPE_HIGHLIGHT = "highlight";
-    private static final String COMMENT_TEXT = "text";
-    private static final String LOCATION_HEADER = "Location";
-    private static final String PUBLIC_LAW = "PUBLICLAW";
 
     // 🔹 Test data JSON
     public static final String CASE_DATA = """
@@ -116,7 +111,7 @@ class AnnotationScenariosTest extends BaseTest {
                 .statusCode(201)
                 .log().all();
 
-        response
+        ValidatableResponse titleOwner = response
                 .statusCode(201)
                 .body(FIELD_ID, equalTo(annotationId))
                 .body(FIELD_PAGE, is(1))
