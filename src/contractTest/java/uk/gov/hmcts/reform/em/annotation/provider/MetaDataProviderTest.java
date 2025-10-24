@@ -2,11 +2,13 @@ package uk.gov.hmcts.reform.em.annotation.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.em.annotation.rest.MetaDataResource;
 import uk.gov.hmcts.reform.em.annotation.service.MetadataService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.MetadataDto;
@@ -23,14 +25,19 @@ import static org.mockito.Mockito.when;
 })
 public class MetaDataProviderTest extends BaseProviderTest {
 
-    @Autowired
-    private MetaDataResource metaDataResource;
+    private final MetaDataResource metaDataResource;
 
     @MockitoBean
     private MetadataService metadataService;
 
     private static final UUID EXAMPLE_DOCUMENT_ID = UUID.fromString("8c53579b-d935-4204-82c8-250329c29d91");
     private static final Integer EXAMPLE_ROTATION_ANGLE = 90;
+
+    @Autowired
+    public MetaDataProviderTest(MockMvc mockMvc, ObjectMapper objectMapper, MetaDataResource metaDataResource) {
+        super(mockMvc, objectMapper);
+        this.metaDataResource = metaDataResource;
+    }
 
     @Override
     protected Object[] getControllersUnderTest() {

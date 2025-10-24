@@ -74,7 +74,7 @@ public class IdamConsumerTest {
 
     @Test
     @PactTestFor(pactMethod = "executeGetIdamAccessTokenAndGet200")
-    public void should_post_to_token_endpoint_and_receive_access_token_with_200_response(MockServer mockServer)
+    public void shouldPostToTokenEndpointAndReceiveAccessTokenWith200Response(MockServer mockServer)
             throws JSONException {
         String actualResponseBody =
                 SerenityRest
@@ -130,7 +130,7 @@ public class IdamConsumerTest {
 
     @Test
     @PactTestFor(pactMethod = "executeGetUserDetailsAndGet200")
-    public void should_get_user_details_with_access_token(MockServer mockServer) throws JSONException {
+    public void shouldGetUserDetailsWithAccessToken(MockServer mockServer) throws JSONException {
 
         Map<String, String> headers = Maps.newHashMap();
         headers.put(HttpHeaders.AUTHORIZATION, "Bearer eyJ0eXAiOiJKV1QiLCJraWQiOiJiL082T3ZWdjEre");

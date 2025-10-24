@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.em.annotation.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.em.annotation.rest.RectangleResource;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
 import uk.gov.hmcts.reform.em.annotation.service.RectangleService;
@@ -31,8 +33,7 @@ import static org.mockito.Mockito.when;
 })
 public class RectangleProviderTest extends BaseProviderTest {
 
-    @Autowired
-    private RectangleResource rectangleResource;
+    private final RectangleResource rectangleResource;
 
     @MockitoBean
     private RectangleService rectangleService;
@@ -42,6 +43,15 @@ public class RectangleProviderTest extends BaseProviderTest {
 
     private static final UUID EXAMPLE_RECTANGLE_ID = UUID.fromString("a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d");
     private static final UUID EXAMPLE_ANNOTATION_ID = UUID.fromString("d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a");
+
+    @Autowired
+    public RectangleProviderTest(
+            MockMvc mockMvc,
+            ObjectMapper objectMapper,
+            RectangleResource rectangleResource) {
+        super(mockMvc, objectMapper);
+        this.rectangleResource = rectangleResource;
+    }
 
 
     @Override
