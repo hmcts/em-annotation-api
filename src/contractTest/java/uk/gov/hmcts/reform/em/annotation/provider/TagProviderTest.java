@@ -2,11 +2,13 @@ package uk.gov.hmcts.reform.em.annotation.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.em.annotation.rest.TagResource;
 import uk.gov.hmcts.reform.em.annotation.service.TagService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.TagDTO;
@@ -23,11 +25,16 @@ import static org.mockito.Mockito.when;
 })
 public class TagProviderTest extends BaseProviderTest {
 
-    @Autowired
-    private TagResource tagResource;
+    private final TagResource tagResource;
 
     @MockitoBean
     private TagService tagService;
+
+    @Autowired
+    public TagProviderTest(MockMvc mockMvc, ObjectMapper objectMapper, TagResource tagResource) {
+        super(mockMvc, objectMapper);
+        this.tagResource = tagResource;
+    }
 
     @Override
     protected Object[] getControllersUnderTest() {

@@ -22,9 +22,10 @@ import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
 class FilterAnnotationSetConsumerTest extends BaseConsumerTest {
 
     private static final String FILTER_ANNOTATION_SET_PROVIDER_NAME = "annotation_api_filter_annotation_set_provider";
-    private static final String FILTER_ANNOTATION_SET_API_PATH = "/api/annotation-sets/filter";
+    private static final String FILTER_ANNOTATION_SET_API_URI = "/api/annotation-sets/filter";
     private static final String EXAMPLE_DOCUMENT_ID = "f401727b-5a50-40bb-ac4d-87dc34910b6e";
     private static final UUID EXAMPLE_ANNOTATION_SET_ID = UUID.fromString("4f6fe7a2-b8a6-4f0a-9f7c-8d9e1b0c9b3a");
+    public static final String DOCUMENT_ID = "documentId";
 
     private final AnnotationsConsumerTest annotationsConsumerTestHelper = new AnnotationsConsumerTest();
 
@@ -33,9 +34,9 @@ class FilterAnnotationSetConsumerTest extends BaseConsumerTest {
         return builder
             .given("an annotation set exists for the given document id")
             .uponReceiving("A request to filter an annotation set by document id")
-            .path(FILTER_ANNOTATION_SET_API_PATH)
+            .path(FILTER_ANNOTATION_SET_API_URI)
             .method(HttpMethod.GET.toString())
-            .matchQuery("documentId", ".+", EXAMPLE_DOCUMENT_ID)
+            .matchQuery(DOCUMENT_ID, ".+", EXAMPLE_DOCUMENT_ID)
             .headers(getHeaders())
             .willRespondWith()
             .status(HttpStatus.OK.value())
@@ -49,8 +50,8 @@ class FilterAnnotationSetConsumerTest extends BaseConsumerTest {
         SerenityRest
             .given()
             .headers(getHeaders())
-            .queryParam("documentId", EXAMPLE_DOCUMENT_ID)
-            .get(mockServer.getUrl() + FILTER_ANNOTATION_SET_API_PATH)
+            .queryParam(DOCUMENT_ID, EXAMPLE_DOCUMENT_ID)
+            .get(mockServer.getUrl() + FILTER_ANNOTATION_SET_API_URI)
             .then()
             .statusCode(HttpStatus.OK.value());
     }
@@ -62,7 +63,7 @@ class FilterAnnotationSetConsumerTest extends BaseConsumerTest {
     private void buildAnnotationSetBody(LambdaDslObject body) {
         body
             .uuid("id", EXAMPLE_ANNOTATION_SET_ID)
-            .stringType("documentId", EXAMPLE_DOCUMENT_ID);
+            .stringType(DOCUMENT_ID, EXAMPLE_DOCUMENT_ID);
         buildAuditingFields(body);
         body.eachLike("annotations", annotationsConsumerTestHelper::getLambdaDslObject);
     }

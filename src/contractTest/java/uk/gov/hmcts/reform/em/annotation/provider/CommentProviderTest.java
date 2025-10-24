@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.em.annotation.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.em.annotation.rest.CommentResource;
 import uk.gov.hmcts.reform.em.annotation.service.CommentService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
@@ -29,14 +31,19 @@ import static org.mockito.Mockito.when;
 })
 public class CommentProviderTest extends BaseProviderTest {
 
-    @Autowired
-    private CommentResource commentResource;
+    private final CommentResource commentResource;
 
     @MockitoBean
     private CommentService commentService;
 
     private static final UUID EXAMPLE_COMMENT_ID = UUID.fromString("b3438f7d-0275-4063-9524-1a6d0b68636b");
     private static final UUID EXAMPLE_ANNOTATION_ID = UUID.fromString("a58e5f39-2b0f-48e2-b052-e932375b4f69");
+
+    @Autowired
+    public CommentProviderTest(MockMvc mockMvc, ObjectMapper objectMapper, CommentResource commentResource) {
+        super(mockMvc, objectMapper);
+        this.commentResource = commentResource;
+    }
 
     @Override
     protected Object[] getControllersUnderTest() {

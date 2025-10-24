@@ -25,7 +25,6 @@ import java.util.UUID;
 @IgnoreNoPactsToVerify
 @AutoConfigureMockMvc(addFilters = false)
 //Uncomment @PactFolder and comment the @PactBroker line to test local consumer.
-//using this, import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 //@PactFolder("target/pacts")
 @PactBroker(
     url = "${PACT_BROKER_FULL_URL:http://localhost:80}",
@@ -33,14 +32,17 @@ import java.util.UUID;
 )
 public abstract class BaseProviderTest {
 
-    @Autowired
-    protected MockMvc mockMvc;
-
-    @Autowired
-    protected ObjectMapper objectMapper;
+    protected final MockMvc mockMvc;
+    protected final ObjectMapper objectMapper;
 
     protected static final UUID EXAMPLE_USER_ID = UUID.fromString("c38fd29e-fa2e-43d4-a599-2d3f2908565b");
     protected static final Instant EXAMPLE_DATE = Instant.parse("2024-01-15T10:00:00.123Z");
+
+    @Autowired
+    protected BaseProviderTest(MockMvc mockMvc, ObjectMapper objectMapper) {
+        this.mockMvc = mockMvc;
+        this.objectMapper = objectMapper;
+    }
 
     @BeforeEach
     void setupPactVerification(PactVerificationContext context) {

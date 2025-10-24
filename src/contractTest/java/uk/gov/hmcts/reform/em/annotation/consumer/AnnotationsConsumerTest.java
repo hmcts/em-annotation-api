@@ -25,7 +25,7 @@ class AnnotationsConsumerTest extends BaseConsumerTest {
     private static final String ANNOTATIONS_PROVIDER_NAME = "annotation_api_annotation_provider";
     private static final String ANNOTATIONS_API_BASE_PATH = "/api/annotations";
 
-    private final String exampleAnnotationId = "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a";
+    private static final String EXAMPLE_ANNOTATION_ID = "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a";
 
     @Pact(provider = ANNOTATIONS_PROVIDER_NAME, consumer = "annotation_api")
     public V4Pact createAnnotation201(PactDslWithProvider builder) {
@@ -114,7 +114,7 @@ class AnnotationsConsumerTest extends BaseConsumerTest {
         return builder
             .given("gets the annotation by given id")
             .uponReceiving("A request to get a single annotation")
-            .path(ANNOTATIONS_API_BASE_PATH + "/" + exampleAnnotationId)
+            .path(ANNOTATIONS_API_BASE_PATH + "/" + EXAMPLE_ANNOTATION_ID)
             .method(HttpMethod.GET.toString())
             .headers(getHeaders())
             .willRespondWith()
@@ -130,7 +130,7 @@ class AnnotationsConsumerTest extends BaseConsumerTest {
             .given()
             .headers(getHeaders())
             .contentType(ContentType.JSON)
-            .get(mockServer.getUrl() + ANNOTATIONS_API_BASE_PATH + "/" + exampleAnnotationId)
+            .get(mockServer.getUrl() + ANNOTATIONS_API_BASE_PATH + "/" + EXAMPLE_ANNOTATION_ID)
             .then()
             .statusCode(HttpStatus.OK.value());
     }
@@ -140,7 +140,7 @@ class AnnotationsConsumerTest extends BaseConsumerTest {
         return builder
             .given("annotation exists for deletion")
             .uponReceiving("A request to delete an annotation")
-            .path(ANNOTATIONS_API_BASE_PATH + "/" + exampleAnnotationId)
+            .path(ANNOTATIONS_API_BASE_PATH + "/" + EXAMPLE_ANNOTATION_ID)
             .method(HttpMethod.DELETE.toString())
             .headers(getHeaders())
             .willRespondWith()
@@ -155,7 +155,7 @@ class AnnotationsConsumerTest extends BaseConsumerTest {
             .given()
             .headers(getHeaders())
             .contentType(ContentType.JSON)
-            .delete(mockServer.getUrl() + ANNOTATIONS_API_BASE_PATH + "/" + exampleAnnotationId)
+            .delete(mockServer.getUrl() + ANNOTATIONS_API_BASE_PATH + "/" + EXAMPLE_ANNOTATION_ID)
             .then()
             .statusCode(HttpStatus.OK.value());
     }
@@ -176,7 +176,7 @@ class AnnotationsConsumerTest extends BaseConsumerTest {
                 buildAuditingFields(comment);
                 comment
                     .uuid("id", UUID.randomUUID())
-                    .uuid("annotationId", UUID.fromString(exampleAnnotationId))
+                    .uuid("annotationId", UUID.fromString(EXAMPLE_ANNOTATION_ID))
                     .stringType("content", "This is a sample annotation comment text which can vary.");
             })
             .eachLike("rectangles", rectangle -> {
@@ -187,7 +187,7 @@ class AnnotationsConsumerTest extends BaseConsumerTest {
                     .numberType("width", 250.0)
                     .numberType("y", 55.2)
                     .uuid("id", UUID.randomUUID())
-                    .uuid("annotationId", UUID.fromString(exampleAnnotationId))
+                    .uuid("annotationId", UUID.fromString(EXAMPLE_ANNOTATION_ID))
                     .numberType("height", 80.7);
             });
 
@@ -205,7 +205,7 @@ class AnnotationsConsumerTest extends BaseConsumerTest {
                 .uuid("createdBy", EXAMPLE_USER_ID)
             )
             .uuid("annotationSetId", UUID.fromString("c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f"))
-            .uuid("id", UUID.fromString(exampleAnnotationId))
+            .uuid("id", UUID.fromString(EXAMPLE_ANNOTATION_ID))
             .integerType("page", 1);
     }
 }
