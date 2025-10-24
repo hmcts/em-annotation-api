@@ -12,31 +12,25 @@ import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATIONS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATION_SETS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_COMMENTS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.COLOR_CODE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_CONTENT;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_SET_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_TYPE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_COLOR;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_CONTENT;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_DOCUMENT_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_PAGE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.HIGHLIGHT;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.LOCATION_HEADER;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.NEW_CONTENT;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.UPDATED_CONTENT;
 
 class CommentScenariosTest extends BaseTest {
-
-    // === Common API paths ===
-    private static final String API_COMMENTS = "/api/comments";
-    private static final String API_ANNOTATIONS = "/api/annotations";
-    private static final String API_ANNOTATION_SETS = "/api/annotation-sets";
-
-    // === Common JSON field names ===
-    private static final String FIELD_ID = "id";
-    private static final String FIELD_CONTENT = "content";
-    private static final String FIELD_ANNOTATION_ID = "annotationId";
-    private static final String FIELD_DOCUMENT_ID = "documentId";
-    private static final String FIELD_ANNOTATION_SET_ID = "annotationSetId";
-    private static final String FIELD_ANNOTATION_TYPE = "annotationType";
-    private static final String FIELD_PAGE = "page";
-    private static final String FIELD_COLOR = "color";
-
-    // === Common values ===
-    private static final String DEFAULT_CONTENT = "text";
-    private static final String UPDATED_CONTENT = "updated text";
-    private static final String NEW_CONTENT = "new text";
-    private static final String LOCATION_HEADER = "Location";
-    private static final String HIGHLIGHT = "highlight";
-    private static final String COLOR_CODE = "d1d1d1";
 
     @Autowired
     public CommentScenariosTest(TestUtil testUtil) {

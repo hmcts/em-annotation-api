@@ -5,13 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATION_SETS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.CONTENT_TYPE_JSON;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_UNAUTHORIZED;
+
 class OpenIdConnectScenariosTest extends BaseTest {
-
-    private static final String API_ANNOTATION_SETS = "/api/annotation-sets";
-
-    private static final String CONTENT_TYPE_JSON = MediaType.APPLICATION_JSON_VALUE;
-
-    private static final int STATUS_UNAUTHORIZED = 401;
 
     @Autowired
     public OpenIdConnectScenariosTest(TestUtil testUtil) {

@@ -17,29 +17,28 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.notNullValue;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_BASE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_BOOKMARKS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_BOOKMARKS_MULTIPLE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.BOOKMARKS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.BOOKMARK_NAME;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.CREATED_BY_USER;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_COORD;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_PAGE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_CREATED_BY;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_DELETED;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_DOCUMENT_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_NAME;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_PAGE_NUMBER;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_PARENT;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_PREVIOUS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_X_COORD;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_Y_COORD;
 
 class BookmarkScenariosTest extends BaseTest {
 
     private UUID documentId;
-
-    public static final String BOOKMARKS = "/%s/bookmarks";
-    private static final String API_BASE = "/api";
-    private static final String API_BOOKMARKS = API_BASE + "/bookmarks";
-    private static final String API_BOOKMARKS_MULTIPLE = API_BASE + "/bookmarks_multiple";
-    private static final String FIELD_ID = "id";
-    private static final String FIELD_DOCUMENT_ID = "documentId";
-    private static final String FIELD_NAME = "name";
-    private static final String FIELD_CREATED_BY = "createdBy";
-    private static final String FIELD_PAGE_NUMBER = "pageNumber";
-    private static final String FIELD_X_COORD = "xCoordinate";
-    private static final String FIELD_Y_COORD = "yCoordinate";
-    private static final String FIELD_PARENT = "parent";
-    private static final String FIELD_PREVIOUS = "previous";
-    private static final String FIELD_DELETED = "deleted";
-    private static final String CREATED_BY_USER = "user";
-    private static final String BOOKMARK_NAME = "Bookmark for test";
-    private static final float DEFAULT_COORD = 100f;
-    private static final int DEFAULT_PAGE = 1;
 
     @Autowired
     public BookmarkScenariosTest(TestUtil testUtil) {

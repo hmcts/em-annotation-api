@@ -8,14 +8,12 @@ import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATION_SETS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_FILTER;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_DOCUMENT_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ID;
 
 class FilterAnnotationSetScenariosTest extends BaseTest {
-
-    // Constants to avoid string duplication
-    private static final String API_ANNOTATION_SETS = "/api/annotation-sets";
-    private static final String API_FILTER = API_ANNOTATION_SETS + "/filter";
-    private static final String FIELD_DOCUMENT_ID = "documentId";
-    private static final String FIELD_ID = "id";
 
     @Autowired
     public FilterAnnotationSetScenariosTest(TestUtil testUtil) {

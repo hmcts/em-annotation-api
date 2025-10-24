@@ -15,7 +15,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 
 class TagScenariosTest extends BaseTest {
 
-
     @Autowired
     public TagScenariosTest(TestUtil testUtil) {
         super(testUtil);

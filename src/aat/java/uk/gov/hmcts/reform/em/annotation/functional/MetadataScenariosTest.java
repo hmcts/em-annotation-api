@@ -14,35 +14,25 @@ import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_METADATA;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_ROTATION_ANGLE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_DOCUMENT_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ERRORS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ROTATION_ANGLE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.HEADER_LOCATION;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.MESSAGE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_BAD_REQUEST;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_CREATED;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_NO_CONTENT;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_OK;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_UNAUTHORIZED;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.VALIDATION_NOT_NULL;
 
 @EnableConfigurationProperties(ToggleProperties.class)
 class MetadataScenariosTest extends BaseTest {
 
     private final ToggleProperties toggleProperties;
-
-    // === Common API paths ===
-    private static final String API_METADATA = "/api/metadata/";
-
-    // === JSON field names ===
-    private static final String FIELD_ROTATION_ANGLE = "rotationAngle";
-    private static final String FIELD_DOCUMENT_ID = "documentId";
-    private static final String FIELD_ERRORS = "fieldErrors";
-    private static final String FIELD = "field";
-    private static final String MESSAGE = "message";
-
-    // === JSON field values ===
-    private static final int DEFAULT_ROTATION_ANGLE = 90;
-    private static final String VALIDATION_NOT_NULL = "NotNull";
-
-    // === Headers ===
-    private static final String HEADER_LOCATION = "Location";
-
-    // === HTTP Status Codes ===
-    private static final int STATUS_CREATED = 201;
-    private static final int STATUS_BAD_REQUEST = 400;
-    private static final int STATUS_UNAUTHORIZED = 401;
-    private static final int STATUS_OK = 200;
-    private static final int STATUS_NO_CONTENT = 204;
 
     @Autowired
     public MetadataScenariosTest(TestUtil testUtil, ToggleProperties toggleProperties) {
