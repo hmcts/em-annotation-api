@@ -13,6 +13,8 @@ public class TestConsts {
     public static final String API_COMMENTS = "/api/comments";
     public static final String API_FILTER = API_ANNOTATION_SETS + "/filter";
     public static final String API_METADATA = "/api/metadata/";
+    public static final String API_RECTANGLES = "/api/rectangles";
+    public static final String API_RECTANGLES_ID = API_RECTANGLES + "/";
 
     // 🔹 JSON field keys
     public static final String FIELD_ID = "id";
@@ -76,6 +78,17 @@ public class TestConsts {
     public static final String FIELD = "field";
     public static final String MESSAGE = "message";
 
+    public static final float DEFAULT_X = 1f;
+    public static final float DEFAULT_Y = 2f;
+    public static final float DEFAULT_WIDTH = 10f;
+    public static final float DEFAULT_HEIGHT = 11f;
+
+    public static final String DEFAULT_ANNOTATION_TYPE = "highlight";
+    public static final String DEFAULT_COLOR = "d1d1d1";
+
+    public static final String HEADER_LOCATION_TEMPLATE = API_RECTANGLES_ID;
+
+    public static final String CONTENT_TYPE_JSON = MediaType.APPLICATION_JSON_VALUE;
 
     // === HTTP Status Codes ===
     public static final int STATUS_CREATED = 201;
@@ -83,8 +96,8 @@ public class TestConsts {
     public static final int STATUS_UNAUTHORIZED = 401;
     public static final int STATUS_OK = 200;
     public static final int STATUS_NO_CONTENT = 204;
-
-    public static final String CONTENT_TYPE_JSON = MediaType.APPLICATION_JSON_VALUE;
+    public static final int STATUS_NOT_FOUND = 404;
+    public static final int STATUS_INTERNAL_SERVER_ERROR = 500;
 
     private TestConsts() {
     }

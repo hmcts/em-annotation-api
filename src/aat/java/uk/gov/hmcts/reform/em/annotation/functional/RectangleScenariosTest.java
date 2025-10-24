@@ -11,43 +11,33 @@ import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATIONS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATION_SETS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_RECTANGLES;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_RECTANGLES_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_ANNOTATION_TYPE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_COLOR;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_HEIGHT;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_PAGE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_WIDTH;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_X;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_Y;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_HEIGHT;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_WIDTH;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_X;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_Y;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.HEADER_LOCATION_TEMPLATE;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.LOCATION_HEADER;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_BAD_REQUEST;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_CREATED;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_INTERNAL_SERVER_ERROR;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_NOT_FOUND;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_OK;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_UNAUTHORIZED;
 
 class RectangleScenariosTest extends BaseTest {
-
-    // === API Paths ===
-    private static final String API_RECTANGLES = "/api/rectangles";
-    private static final String API_RECTANGLES_ID = API_RECTANGLES + "/";
-    private static final String API_ANNOTATIONS = "/api/annotations";
-    private static final String API_ANNOTATION_SETS = "/api/annotation-sets";
-
-    // === JSON Fields ===
-    private static final String FIELD_ID = "id";
-    private static final String FIELD_ANNOTATION_ID = "annotationId";
-    private static final String FIELD_X = "x";
-    private static final String FIELD_Y = "y";
-    private static final String FIELD_WIDTH = "width";
-    private static final String FIELD_HEIGHT = "height";
-
-    // === Common Values ===
-    private static final float DEFAULT_X = 1f;
-    private static final float DEFAULT_Y = 2f;
-    private static final float DEFAULT_WIDTH = 10f;
-    private static final float DEFAULT_HEIGHT = 11f;
-    private static final int DEFAULT_PAGE = 1;
-    private static final String DEFAULT_ANNOTATION_TYPE = "highlight";
-    private static final String DEFAULT_COLOR = "d1d1d1";
-
-    // === Status Codes ===
-    private static final int STATUS_OK = 200;
-    private static final int STATUS_CREATED = 201;
-    private static final int STATUS_BAD_REQUEST = 400;
-    private static final int STATUS_UNAUTHORIZED = 401;
-    private static final int STATUS_NOT_FOUND = 404;
-    private static final int STATUS_INTERNAL_SERVER_ERROR = 500;
-
-    // === JSON Matchers ===
-    private static final String LOCATION_HEADER = "Location";
-    private static final String HEADER_LOCATION_TEMPLATE = API_RECTANGLES_ID;
 
     @Autowired
     public RectangleScenariosTest(TestUtil testUtil) {
