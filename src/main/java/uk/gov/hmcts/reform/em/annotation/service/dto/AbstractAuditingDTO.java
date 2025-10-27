@@ -18,9 +18,9 @@ public abstract class AbstractAuditingDTO implements Serializable {
     private String createdBy;
 
     @ReadOnlyProperty
-    private transient IdamDetails createdByDetails;
+    private IdamDetails createdByDetails;
     @ReadOnlyProperty
-    private transient IdamDetails lastModifiedByDetails;
+    private IdamDetails lastModifiedByDetails;
 
     @ReadOnlyProperty
     private Instant createdDate = Instant.now();

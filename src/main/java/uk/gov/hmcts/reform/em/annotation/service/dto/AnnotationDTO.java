@@ -29,7 +29,7 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
 
     private Set<CommentDTO> comments = new HashSet<>();
 
-    private transient Set<TagDTO> tags = new HashSet<>();
+    private Set<TagDTO> tags = new HashSet<>();
 
     private Set<RectangleDTO> rectangles = new HashSet<>();
 
