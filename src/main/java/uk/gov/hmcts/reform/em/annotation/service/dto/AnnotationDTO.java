@@ -29,6 +29,7 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
 
     private Set<CommentDTO> comments = new HashSet<>();
 
+    @SuppressWarnings("java:S1948")
     private Set<TagDTO> tags = new HashSet<>();
 
     private Set<RectangleDTO> rectangles = new HashSet<>();
