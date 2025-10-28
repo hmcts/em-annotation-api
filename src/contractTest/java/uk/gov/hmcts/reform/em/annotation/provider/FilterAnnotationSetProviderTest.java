@@ -2,11 +2,13 @@ package uk.gov.hmcts.reform.em.annotation.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.em.annotation.rest.FilterAnnotationSet;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationSetService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
@@ -26,14 +28,23 @@ import static org.mockito.Mockito.when;
 })
 public class FilterAnnotationSetProviderTest extends BaseProviderTest {
 
-    @Autowired
-    private FilterAnnotationSet filterAnnotationSet;
+    private final FilterAnnotationSet filterAnnotationSet;
 
     @MockitoBean
     private AnnotationSetService annotationSetService;
 
     private static final String EXAMPLE_DOCUMENT_ID = "f401727b-5a50-40bb-ac4d-87dc34910b6e";
     private static final UUID EXAMPLE_ANNOTATION_SET_ID = UUID.fromString("4f6fe7a2-b8a6-4f0a-9f7c-8d9e1b0c9b3a");
+
+    @Autowired
+    public FilterAnnotationSetProviderTest(
+            MockMvc mockMvc,
+            ObjectMapper objectMapper,
+            FilterAnnotationSet filterAnnotationSet
+    ) {
+        super(mockMvc, objectMapper);
+        this.filterAnnotationSet = filterAnnotationSet;
+    }
 
     @Override
     protected Object[] getControllersUnderTest() {

@@ -19,7 +19,7 @@ import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
 class MetaDataConsumerTest extends BaseConsumerTest {
 
     private static final String METADATA_PROVIDER_NAME = "annotation_api_metadata_provider";
-    private static final String METADATA_API_BASE_PATH = "/api/metadata";
+    private static final String METADATA_API_BASE_URI = "/api/metadata/";
 
     private static final UUID EXAMPLE_DOCUMENT_ID = UUID.fromString("8c53579b-d935-4204-82c8-250329c29d91");
     private static final Integer EXAMPLE_ROTATION_ANGLE = 90;
@@ -29,7 +29,7 @@ class MetaDataConsumerTest extends BaseConsumerTest {
         return builder
             .given("metadata can be created for a document")
             .uponReceiving("A request to create metadata")
-            .path(METADATA_API_BASE_PATH + "/")
+            .path(METADATA_API_BASE_URI)
             .method(HttpMethod.POST.toString())
             .headers(getHeaders())
             .body(createMetaDataDsl())
@@ -47,14 +47,14 @@ class MetaDataConsumerTest extends BaseConsumerTest {
             .headers(getHeaders())
             .contentType(ContentType.JSON)
             .body(createMetaDataDsl().getBody().toString())
-            .post(mockServer.getUrl() + METADATA_API_BASE_PATH + "/")
+            .post(mockServer.getUrl() + METADATA_API_BASE_URI)
             .then()
             .statusCode(HttpStatus.CREATED.value());
     }
 
     @Pact(provider = METADATA_PROVIDER_NAME, consumer = ANNOTATION_CONSUMER)
     public V4Pact getMetaData200(PactDslWithProvider builder) {
-        String metadataPath = METADATA_API_BASE_PATH + "/" + EXAMPLE_DOCUMENT_ID;
+        String metadataPath = METADATA_API_BASE_URI + EXAMPLE_DOCUMENT_ID;
         return builder
             .given("metadata exists for a document")
             .uponReceiving("A request to get metadata for a document")
@@ -70,7 +70,7 @@ class MetaDataConsumerTest extends BaseConsumerTest {
     @Test
     @PactTestFor(pactMethod = "getMetaData200", providerName = METADATA_PROVIDER_NAME)
     void testGetMetaData200(MockServer mockServer) {
-        String metadataPath = METADATA_API_BASE_PATH + "/" + EXAMPLE_DOCUMENT_ID;
+        String metadataPath = METADATA_API_BASE_URI + EXAMPLE_DOCUMENT_ID;
         SerenityRest
             .given()
             .headers(getHeaders())
@@ -81,10 +81,10 @@ class MetaDataConsumerTest extends BaseConsumerTest {
     }
 
     private DslPart createMetaDataDsl() {
-        return newJsonBody(body -> {
-            body
-                .integerType("rotationAngle", EXAMPLE_ROTATION_ANGLE)
-                .uuid("documentId", EXAMPLE_DOCUMENT_ID);
-        }).build();
+        return newJsonBody(body ->
+                body
+                        .integerType("rotationAngle", EXAMPLE_ROTATION_ANGLE)
+                        .uuid("documentId", EXAMPLE_DOCUMENT_ID))
+                .build();
     }
 }

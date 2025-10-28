@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.em.annotation.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.em.annotation.rest.BookmarkResource;
 import uk.gov.hmcts.reform.em.annotation.service.BookmarkService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.BookmarkDTO;
@@ -31,8 +33,7 @@ import static org.mockito.Mockito.when;
 })
 public class BookmarkProviderTest extends BaseProviderTest {
 
-    @Autowired
-    private BookmarkResource bookmarkResource;
+    private final BookmarkResource bookmarkResource;
 
     @MockitoBean
     private BookmarkService bookmarkService;
@@ -42,6 +43,16 @@ public class BookmarkProviderTest extends BaseProviderTest {
     private static final UUID EXAMPLE_DOCUMENT_ID = UUID.fromString("2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d");
     private static final UUID EXAMPLE_PARENT_BOOKMARK_ID = UUID.fromString("3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d");
     private static final UUID EXAMPLE_PREVIOUS_BOOKMARK_ID = UUID.fromString("4a5b6c7d-8e9f-0a1b-2c3d-4e5f6a7b8c9d");
+    public static final String EXAMPLE_BOOKMARK_NAME = "My Important Bookmark";
+
+    @Autowired
+    public BookmarkProviderTest(
+            MockMvc mockMvc,
+            ObjectMapper objectMapper,
+            BookmarkResource bookmarkResource) {
+        super(mockMvc, objectMapper);
+        this.bookmarkResource = bookmarkResource;
+    }
 
 
     @Override
@@ -49,21 +60,15 @@ public class BookmarkProviderTest extends BaseProviderTest {
         return new Object[]{bookmarkResource};
     }
 
-    @State({"bookmark is created successfully"})
+    @State({"bookmark is created successfully", "bookmark is updated successfully"})
     public void createBookmark() {
-        BookmarkDTO bookmarkDto = createBookmarkDTO(EXAMPLE_BOOKMARK_ID, "My Important Bookmark", 5);
-        when(bookmarkService.save(any(BookmarkDTO.class))).thenReturn(bookmarkDto);
-    }
-
-    @State({"bookmark is updated successfully"})
-    public void updateBookmark() {
-        BookmarkDTO bookmarkDto = createBookmarkDTO(EXAMPLE_BOOKMARK_ID, "My Important Bookmark", 5);
+        BookmarkDTO bookmarkDto = createBookmarkDTO(EXAMPLE_BOOKMARK_ID, EXAMPLE_BOOKMARK_NAME, 5);
         when(bookmarkService.save(any(BookmarkDTO.class))).thenReturn(bookmarkDto);
     }
 
     @State({"bookmarks are updated successfully"})
     public void updateMultipleBookmarks() {
-        BookmarkDTO bookmark1 = createBookmarkDTO(EXAMPLE_BOOKMARK_ID, "My Important Bookmark", 5);
+        BookmarkDTO bookmark1 = createBookmarkDTO(EXAMPLE_BOOKMARK_ID, EXAMPLE_BOOKMARK_NAME, 5);
         BookmarkDTO bookmark2 = createBookmarkDTO(ANOTHER_EXAMPLE_BOOKMARK_ID, "Another Bookmark", 10);
 
         when(bookmarkService.save(argThat(dto ->
@@ -74,7 +79,7 @@ public class BookmarkProviderTest extends BaseProviderTest {
 
     @State({"bookmarks exist for a document"})
     public void getBookmarksForDocument() {
-        BookmarkDTO bookmark1 = createBookmarkDTO(EXAMPLE_BOOKMARK_ID, "My Important Bookmark", 5);
+        BookmarkDTO bookmark1 = createBookmarkDTO(EXAMPLE_BOOKMARK_ID, EXAMPLE_BOOKMARK_NAME, 5);
         BookmarkDTO bookmark2 = createBookmarkDTO(ANOTHER_EXAMPLE_BOOKMARK_ID, "Another Bookmark", 10);
         List<BookmarkDTO> bookmarks = List.of(bookmark1, bookmark2);
         Page<BookmarkDTO> page = new PageImpl<>(bookmarks);

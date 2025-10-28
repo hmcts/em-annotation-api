@@ -23,9 +23,9 @@ import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
 class BookmarkConsumerTest extends BaseConsumerTest {
 
     private static final String BOOKMARK_PROVIDER_NAME = "annotation_api_bookmark_provider";
-    private static final String BOOKMARKS_API_BASE_PATH = "/api/bookmarks";
-    private static final String BOOKMARKS_MULTIPLE_API_PATH = "/api/bookmarks_multiple";
-    private static final String DOCUMENT_BOOKMARKS_API_PATH_FORMAT = "/api/%s/bookmarks";
+    private static final String BOOKMARKS_API_BASE_URI = "/api/bookmarks";
+    private static final String BOOKMARKS_MULTIPLE_API_URI = "/api/bookmarks_multiple";
+    private static final String DOCUMENT_BOOKMARKS_API_URI_FORMAT = "/api/%s/bookmarks";
 
     private static final UUID EXAMPLE_BOOKMARK_ID = UUID.fromString("1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d");
     private static final UUID ANOTHER_EXAMPLE_BOOKMARK_ID = UUID.fromString("5a6b7c8d-9e0f-1a2b-3c4d-5e6f7a8b9c0a");
@@ -38,7 +38,7 @@ class BookmarkConsumerTest extends BaseConsumerTest {
         return builder
             .given("bookmark is created successfully")
             .uponReceiving("A request to create a bookmark")
-            .path(BOOKMARKS_API_BASE_PATH)
+            .path(BOOKMARKS_API_BASE_URI)
             .method(HttpMethod.POST.toString())
             .headers(getHeaders())
             .body(createBookmarkDsl(EXAMPLE_BOOKMARK_ID))
@@ -56,7 +56,7 @@ class BookmarkConsumerTest extends BaseConsumerTest {
             .headers(getHeaders())
             .contentType(ContentType.JSON)
             .body(createBookmarkDsl(EXAMPLE_BOOKMARK_ID).getBody().toString())
-            .post(mockServer.getUrl() + BOOKMARKS_API_BASE_PATH)
+            .post(mockServer.getUrl() + BOOKMARKS_API_BASE_URI)
             .then()
             .statusCode(HttpStatus.CREATED.value());
     }
@@ -66,7 +66,7 @@ class BookmarkConsumerTest extends BaseConsumerTest {
         return builder
             .given("bookmark is updated successfully")
             .uponReceiving("A request to update a bookmark")
-            .path(BOOKMARKS_API_BASE_PATH)
+            .path(BOOKMARKS_API_BASE_URI)
             .method(HttpMethod.PUT.toString())
             .headers(getHeaders())
             .body(createBookmarkDsl(EXAMPLE_BOOKMARK_ID))
@@ -84,7 +84,7 @@ class BookmarkConsumerTest extends BaseConsumerTest {
             .headers(getHeaders())
             .contentType(ContentType.JSON)
             .body(createBookmarkDsl(EXAMPLE_BOOKMARK_ID).getBody().toString())
-            .put(mockServer.getUrl() + BOOKMARKS_API_BASE_PATH)
+            .put(mockServer.getUrl() + BOOKMARKS_API_BASE_URI)
             .then()
             .statusCode(HttpStatus.OK.value());
     }
@@ -94,7 +94,7 @@ class BookmarkConsumerTest extends BaseConsumerTest {
         return builder
             .given("bookmarks are updated successfully")
             .uponReceiving("A request to update multiple bookmarks")
-            .path(BOOKMARKS_MULTIPLE_API_PATH)
+            .path(BOOKMARKS_MULTIPLE_API_URI)
             .method(HttpMethod.PUT.toString())
             .headers(getHeaders())
             .body(createBookmarkListDsl())
@@ -112,14 +112,14 @@ class BookmarkConsumerTest extends BaseConsumerTest {
             .headers(getHeaders())
             .contentType(ContentType.JSON)
             .body(createBookmarkListDsl().getBody().toString())
-            .put(mockServer.getUrl() + BOOKMARKS_MULTIPLE_API_PATH)
+            .put(mockServer.getUrl() + BOOKMARKS_MULTIPLE_API_URI)
             .then()
             .statusCode(HttpStatus.OK.value());
     }
 
     @Pact(provider = BOOKMARK_PROVIDER_NAME, consumer = ANNOTATION_CONSUMER)
     public V4Pact getAllDocumentBookmarks200(PactDslWithProvider builder) {
-        String documentBookmarksPath = String.format(DOCUMENT_BOOKMARKS_API_PATH_FORMAT, EXAMPLE_DOCUMENT_ID);
+        String documentBookmarksPath = String.format(DOCUMENT_BOOKMARKS_API_URI_FORMAT, EXAMPLE_DOCUMENT_ID);
         return builder
             .given("bookmarks exist for a document")
             .uponReceiving("A request to get all bookmarks for a document")
@@ -135,7 +135,7 @@ class BookmarkConsumerTest extends BaseConsumerTest {
     @Test
     @PactTestFor(pactMethod = "getAllDocumentBookmarks200", providerName = BOOKMARK_PROVIDER_NAME)
     void testGetAllDocumentBookmarks200(MockServer mockServer) {
-        String documentBookmarksPath = String.format(DOCUMENT_BOOKMARKS_API_PATH_FORMAT, EXAMPLE_DOCUMENT_ID);
+        String documentBookmarksPath = String.format(DOCUMENT_BOOKMARKS_API_URI_FORMAT, EXAMPLE_DOCUMENT_ID);
         SerenityRest
             .given()
             .headers(getHeaders())
@@ -147,11 +147,11 @@ class BookmarkConsumerTest extends BaseConsumerTest {
 
     @Pact(provider = BOOKMARK_PROVIDER_NAME, consumer = ANNOTATION_CONSUMER)
     public V4Pact deleteBookmark200(PactDslWithProvider builder) {
-        String bookmarkPath = BOOKMARKS_API_BASE_PATH + "/" + EXAMPLE_BOOKMARK_ID;
+        String bookmarkUri = BOOKMARKS_API_BASE_URI + "/" + EXAMPLE_BOOKMARK_ID;
         return builder
             .given("bookmark exists for deletion")
             .uponReceiving("A request to delete a bookmark")
-            .path(bookmarkPath)
+            .path(bookmarkUri)
             .method(HttpMethod.DELETE.toString())
             .headers(getHeaders())
             .willRespondWith()
@@ -162,12 +162,12 @@ class BookmarkConsumerTest extends BaseConsumerTest {
     @Test
     @PactTestFor(pactMethod = "deleteBookmark200", providerName = BOOKMARK_PROVIDER_NAME)
     void testDeleteBookmark200(MockServer mockServer) {
-        String bookmarkPath = BOOKMARKS_API_BASE_PATH + "/" + EXAMPLE_BOOKMARK_ID;
+        String bookmarkUri = BOOKMARKS_API_BASE_URI + "/" + EXAMPLE_BOOKMARK_ID;
         SerenityRest
             .given()
             .headers(getHeaders())
             .contentType(ContentType.JSON)
-            .delete(mockServer.getUrl() + bookmarkPath)
+            .delete(mockServer.getUrl() + bookmarkUri)
             .then()
             .statusCode(HttpStatus.OK.value());
     }
@@ -177,7 +177,7 @@ class BookmarkConsumerTest extends BaseConsumerTest {
         return builder
             .given("bookmarks exist for multiple deletion")
             .uponReceiving("A request to delete multiple bookmarks")
-            .path(BOOKMARKS_MULTIPLE_API_PATH)
+            .path(BOOKMARKS_MULTIPLE_API_URI)
             .method(HttpMethod.DELETE.toString())
             .headers(getHeaders())
             .body(createDeleteBookmarkRequestDsl())
@@ -194,7 +194,7 @@ class BookmarkConsumerTest extends BaseConsumerTest {
             .headers(getHeaders())
             .contentType(ContentType.JSON)
             .body(createDeleteBookmarkRequestDsl().getBody().toString())
-            .delete(mockServer.getUrl() + BOOKMARKS_MULTIPLE_API_PATH)
+            .delete(mockServer.getUrl() + BOOKMARKS_MULTIPLE_API_URI)
             .then()
             .statusCode(HttpStatus.OK.value());
     }
