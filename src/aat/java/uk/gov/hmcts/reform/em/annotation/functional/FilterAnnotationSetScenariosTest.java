@@ -2,20 +2,31 @@ package uk.gov.hmcts.reform.em.annotation.functional;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATION_SETS;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_FILTER;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_DOCUMENT_ID;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ID;
 
 class FilterAnnotationSetScenariosTest extends BaseTest {
+
+    @Autowired
+    public FilterAnnotationSetScenariosTest(TestUtil testUtil) {
+        super(testUtil);
+    }
 
     @Test
     void shouldReturn404WhenFilterAnnotationSetWithNonExistentDocumentId() {
         final UUID documentId = UUID.randomUUID();
 
         request
-                .param("documentId", documentId)
-                .get("/api/annotation-sets/filter")
+                .param(FIELD_DOCUMENT_ID, documentId)
+                .get(API_FILTER)
                 .then()
                 .assertThat()
                 .statusCode(204)
@@ -29,13 +40,13 @@ class FilterAnnotationSetScenariosTest extends BaseTest {
         createAnnotationSet(annotationSetId, documentId);
 
         request
-                .param("documentId", documentId)
-                .get("/api/annotation-sets/filter")
+                .param(FIELD_DOCUMENT_ID, documentId)
+                .get(API_FILTER)
                 .then()
                 .assertThat()
                 .statusCode(200)
-                .body("id", equalTo(annotationSetId.toString()))
-                .body("documentId", equalTo(documentId.toString()))
+                .body(FIELD_ID, equalTo(annotationSetId.toString()))
+                .body(FIELD_DOCUMENT_ID, equalTo(documentId.toString()))
                 .log().all();
     }
 
@@ -46,8 +57,8 @@ class FilterAnnotationSetScenariosTest extends BaseTest {
         createAnnotationSet(annotationSetId, documentId);
 
         unAuthenticatedRequest
-                .param("documentId", documentId)
-                .get("/api/annotation-sets/filter")
+                .param(FIELD_DOCUMENT_ID, documentId)
+                .get(API_FILTER)
                 .then()
                 .assertThat()
                 .statusCode(401)
@@ -58,21 +69,20 @@ class FilterAnnotationSetScenariosTest extends BaseTest {
         final JSONObject annotationSet = createAnnotationSetPayload(annotationSetId, documentId);
         request
                 .body(annotationSet.toString())
-                .post("/api/annotation-sets")
+                .post(API_ANNOTATION_SETS)
                 .then()
                 .assertThat()
                 .statusCode(201)
-                .body("id", equalTo(annotationSetId.toString()))
-                .body("documentId", equalTo(documentId.toString()))
-                .header("Location", equalTo("/api/annotation-sets/" + annotationSetId))
+                .body(FIELD_ID, equalTo(annotationSetId.toString()))
+                .body(FIELD_DOCUMENT_ID, equalTo(documentId.toString()))
+                .header("Location", equalTo(API_ANNOTATION_SETS + "/" + annotationSetId))
                 .log().all();
     }
 
     private JSONObject createAnnotationSetPayload(final UUID annotationSetId, final UUID documentId) {
         final JSONObject annotationSet = new JSONObject();
-        annotationSet.put("documentId", documentId);
-        annotationSet.put("id", annotationSetId.toString());
-
+        annotationSet.put(FIELD_DOCUMENT_ID, documentId);
+        annotationSet.put(FIELD_ID, annotationSetId.toString());
         return annotationSet;
     }
 }

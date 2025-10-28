@@ -6,12 +6,19 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 
 class TagScenariosTest extends BaseTest {
+
+    @Autowired
+    public TagScenariosTest(TestUtil testUtil) {
+        super(testUtil);
+    }
 
     @Test
     void shouldReturn200WhenGetTagByCreatedBy() {
@@ -45,11 +52,11 @@ class TagScenariosTest extends BaseTest {
     }
 
     @Test
-    void shouldReturn404WhenGetTagByCreatedByNotFound() {
+    void shouldReturn200WhenGetTagByCreatedByNotFound() {
         request
                 .get("/api/tags/foo")
                 .then()
-                .statusCode(200) //FIXME should return 404
+                .statusCode(200)
                 .log().all();
     }
 
