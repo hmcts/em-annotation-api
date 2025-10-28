@@ -111,7 +111,7 @@ class AnnotationScenariosTest extends BaseTest {
                 .statusCode(201)
                 .log().all();
 
-        ValidatableResponse titleOwner = response
+        response
                 .statusCode(201)
                 .body(FIELD_ID, equalTo(annotationId))
                 .body(FIELD_PAGE, is(1))
