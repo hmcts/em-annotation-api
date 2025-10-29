@@ -2,10 +2,12 @@ package uk.gov.hmcts.reform.em.annotation.service.dto;
 
 import jakarta.validation.constraints.Size;
 
+import java.io.Serializable;
+
 /**
  * A DTO for the Tag entity.
  */
-public class TagDTO {
+public class TagDTO implements Serializable {
 
     @Size(max = 35)
     private String name;

@@ -18,10 +18,8 @@ public abstract class AbstractAuditingDTO implements Serializable {
     private String createdBy;
 
     @ReadOnlyProperty
-    @SuppressWarnings("java:S1948")
     private IdamDetails createdByDetails;
     @ReadOnlyProperty
-    @SuppressWarnings("java:S1948")
     private IdamDetails lastModifiedByDetails;
 
     @ReadOnlyProperty
