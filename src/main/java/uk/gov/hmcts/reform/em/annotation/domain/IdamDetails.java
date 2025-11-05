@@ -5,11 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.io.Serializable;
+
 
 @Entity
 @Table(name = "idam_details")
-public class IdamDetails {
-
+public class IdamDetails implements Serializable {
     @Id
     @JsonIgnore
     private String id;
