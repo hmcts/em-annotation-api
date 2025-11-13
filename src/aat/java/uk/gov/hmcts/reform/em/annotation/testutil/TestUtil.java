@@ -16,6 +16,8 @@ import uk.gov.hmcts.reform.em.test.s2s.S2sHelper;
 
 import java.util.stream.Stream;
 
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.ANNOTATION_TEST_USER_EMAIL;
+
 @Service
 @ComponentScan({"uk.gov.hmcts.reform.em.test.idam",
     "uk.gov.hmcts.reform.em.test.s2s",
@@ -34,8 +36,6 @@ public class TestUtil {
     private String idamAuth;
     private String s2sAuth;
 
-    private static final String ANNOTATION_TEST_USER_TEST_LOCAL = "emAnnotationTestUser@test.local";
-
     @Autowired
     public TestUtil(IdamHelper idamHelper, S2sHelper s2sHelper, CcdDataHelper ccdDataHelper) {
         this.idamHelper = idamHelper;
@@ -47,21 +47,21 @@ public class TestUtil {
     void postConstruct() {
         SerenityRest.useRelaxedHTTPSValidation();
         idamHelper
-                .createUser(ANNOTATION_TEST_USER_TEST_LOCAL,
+                .createUser(ANNOTATION_TEST_USER_EMAIL,
                         Stream.of("caseworker", "caseworker-publiclaw").toList());
-        idamAuth = idamHelper.authenticateUser(ANNOTATION_TEST_USER_TEST_LOCAL);
+        idamAuth = idamHelper.authenticateUser(ANNOTATION_TEST_USER_EMAIL);
         s2sAuth = s2sHelper.getS2sToken();
     }
 
     @PreDestroy
     void preDestroy() {
-        idamHelper.deleteUser(ANNOTATION_TEST_USER_TEST_LOCAL);
+        idamHelper.deleteUser(ANNOTATION_TEST_USER_EMAIL);
     }
 
     public RequestSpecification authRequest() {
         return SerenityRest
                 .given()
-                .header(AUTHORIZATION, idamHelper.authenticateUser(ANNOTATION_TEST_USER_TEST_LOCAL))
+                .header(AUTHORIZATION, idamHelper.authenticateUser(ANNOTATION_TEST_USER_EMAIL))
                 .header(SERVICE_AUTHORIZATION, s2sHelper.getS2sToken());
     }
 
@@ -117,7 +117,7 @@ public class TestUtil {
     }
 
     public CaseDetails createCase(String jurisdiction, String caseType, Object data) {
-        return ccdDataHelper.createCase(ANNOTATION_TEST_USER_TEST_LOCAL, jurisdiction, caseType, "createCase", data);
+        return ccdDataHelper.createCase(ANNOTATION_TEST_USER_EMAIL, jurisdiction, caseType, "createCase", data);
     }
 
 }

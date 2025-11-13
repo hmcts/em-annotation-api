@@ -11,31 +11,11 @@ import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATIONS;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATION_SETS;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_RECTANGLES;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_RECTANGLES_ID;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_ANNOTATION_TYPE;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_COLOR;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_HEIGHT;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_PAGE;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_WIDTH;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_X;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_Y;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_ID;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_HEIGHT;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ID;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_WIDTH;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_X;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_Y;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.HEADER_LOCATION_TEMPLATE;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.LOCATION_HEADER;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_BAD_REQUEST;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_CREATED;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_INTERNAL_SERVER_ERROR;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_NOT_FOUND;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_OK;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.STATUS_UNAUTHORIZED;
+import static org.hamcrest.CoreMatchers.notNullValue;
+
+// CHECKSTYLE:OFF: AvoidStarImport - Test Constants class.
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.*;
+// CHECKSTYLE:ON: AvoidStarImport
 
 class RectangleScenariosTest extends BaseTest {
 
@@ -43,6 +23,7 @@ class RectangleScenariosTest extends BaseTest {
     public RectangleScenariosTest(TestUtil testUtil) {
         super(testUtil);
     }
+
 
     @Test
     void shouldReturn201WhenCreateNewRectangle() {
@@ -113,15 +94,19 @@ class RectangleScenariosTest extends BaseTest {
         final String id = extractJsonObjectFromResponse(response).getString(FIELD_ID);
 
         request
-                .get(API_RECTANGLES_ID + id)
-                .then()
-                .statusCode(STATUS_OK)
-                .body(FIELD_X, equalTo(DEFAULT_X))
-                .body(FIELD_Y, equalTo(DEFAULT_Y))
-                .body(FIELD_WIDTH, equalTo(DEFAULT_WIDTH))
-                .body(FIELD_HEIGHT, equalTo(DEFAULT_HEIGHT))
-                .body(FIELD_ANNOTATION_ID, equalTo(annotationId))
-                .log().all();
+            .get(API_RECTANGLES_ID + id)
+            .then()
+            .statusCode(STATUS_OK)
+            .body(FIELD_X, equalTo(DEFAULT_X))
+            .body(FIELD_Y, equalTo(DEFAULT_Y))
+            .body(FIELD_WIDTH, equalTo(DEFAULT_WIDTH))
+            .body(FIELD_HEIGHT, equalTo(DEFAULT_HEIGHT))
+            .body(FIELD_ANNOTATION_ID, equalTo(annotationId))
+            .body(FIELD_CREATED_DATE, notNullValue())
+            .body(FIELD_LAST_MODIFIED_DATE, notNullValue())
+            .body(CREATED_BY_DETAILS_EMAIL_PATH, equalTo(ANNOTATION_TEST_USER_EMAIL))
+            .body(LAST_MODIFIED_BY_DETAILS_EMAIL_PATH, equalTo(ANNOTATION_TEST_USER_EMAIL))
+            .log().all();
     }
 
     @Test
