@@ -17,32 +17,11 @@ import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.ANNOTATION_TYPE_HIGHLIGHT;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATIONS;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATION_SETS;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.COLOR_DEFAULT;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.COLOR_SECOND_UPDATE;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.COLOR_UPDATED;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.COMMENT_TEXT;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_ID;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_SET_ID;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_TYPE;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_CASE_ID;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_COLOR;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_COMMENTS;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_COMMENT_HEADER;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_CONTENT;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_DOCUMENT_ID;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_HEIGHT;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ID;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_JURISDICTION;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_PAGE;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_RECTANGLES;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_WIDTH;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_X;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_Y;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.LOCATION_HEADER;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.PUBLIC_LAW;
+import static org.hamcrest.CoreMatchers.notNullValue;
+
+// CHECKSTYLE:OFF: AvoidStarImport - Test Constants class.
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.*;
+// CHECKSTYLE:ON: AvoidStarImport
 
 class AnnotationScenariosTest extends BaseTest {
 
@@ -71,21 +50,25 @@ class AnnotationScenariosTest extends BaseTest {
         final ValidatableResponse response = createAnnotation(annotationId, annotationSetId);
 
         response
-                .statusCode(201)
-                .body(FIELD_ID, equalTo(annotationId))
-                .body(FIELD_PAGE, is(1))
-                .body(FIELD_COLOR, is(COLOR_DEFAULT))
-                .body(FIELD_COMMENTS, Matchers.hasSize(1))
-                .body(FIELD_COMMENTS + "[0]." + FIELD_CONTENT, is(COMMENT_TEXT))
-                .body(FIELD_COMMENTS + "[0]." + FIELD_ANNOTATION_ID, is(annotationId))
-                .body(FIELD_RECTANGLES, Matchers.hasSize(1))
-                .body(FIELD_RECTANGLES + "[0]." + FIELD_ANNOTATION_ID, is(annotationId))
-                .body(FIELD_RECTANGLES + "[0]." + FIELD_X, is(0f))
-                .body(FIELD_RECTANGLES + "[0]." + FIELD_Y, is(0f))
-                .body(FIELD_RECTANGLES + "[0]." + FIELD_WIDTH, is(10f))
-                .body(FIELD_RECTANGLES + "[0]." + FIELD_HEIGHT, is(11f))
-                .header(LOCATION_HEADER, equalTo(API_ANNOTATIONS + "/" + annotationId))
-                .log().all();
+            .statusCode(201)
+            .body(FIELD_ID, equalTo(annotationId))
+            .body(FIELD_PAGE, is(1))
+            .body(FIELD_COLOR, is(COLOR_DEFAULT))
+            .body(FIELD_COMMENTS, Matchers.hasSize(1))
+            .body(FIELD_COMMENTS + "[0]." + FIELD_CONTENT, is(COMMENT_TEXT))
+            .body(FIELD_COMMENTS + "[0]." + FIELD_ANNOTATION_ID, is(annotationId))
+            .body(FIELD_RECTANGLES, Matchers.hasSize(1))
+            .body(FIELD_RECTANGLES + "[0]." + FIELD_ANNOTATION_ID, is(annotationId))
+            .body(FIELD_RECTANGLES + "[0]." + FIELD_X, is(0f))
+            .body(FIELD_RECTANGLES + "[0]." + FIELD_Y, is(0f))
+            .body(FIELD_RECTANGLES + "[0]." + FIELD_WIDTH, is(10f))
+            .body(FIELD_RECTANGLES + "[0]." + FIELD_HEIGHT, is(11f))
+            .body(FIELD_CREATED_DATE, notNullValue())
+            .body(FIELD_LAST_MODIFIED_DATE, notNullValue())
+            .body(CREATED_BY_DETAILS_EMAIL_PATH, equalTo(ANNOTATION_TEST_USER_EMAIL))
+            .body(LAST_MODIFIED_BY_DETAILS_EMAIL_PATH, equalTo(ANNOTATION_TEST_USER_EMAIL))
+            .header(LOCATION_HEADER, equalTo(API_ANNOTATIONS + "/" + annotationId))
+            .log().all();
     }
 
     @Test
@@ -173,26 +156,29 @@ class AnnotationScenariosTest extends BaseTest {
     void shouldReturn200WhenGetAnnotationById() {
         final String annotationSetId = createAnnotationSet();
         final String annotationId = UUID.randomUUID().toString();
-        final ValidatableResponse response = createAnnotation(annotationId, annotationSetId);
-        final String id = extractJsonObjectFromResponse(response).getString(FIELD_ID);
+        createAnnotation(annotationId, annotationSetId);
 
         request
-                .get(API_ANNOTATIONS + "/" + id)
-                .then()
-                .statusCode(200)
-                .body(FIELD_ID, equalTo(annotationId))
-                .body(FIELD_PAGE, is(1))
-                .body(FIELD_COLOR, is(COLOR_DEFAULT))
-                .body(FIELD_COMMENTS, Matchers.hasSize(1))
-                .body(FIELD_COMMENTS + "[0]." + FIELD_CONTENT, is(COMMENT_TEXT))
-                .body(FIELD_COMMENTS + "[0]." + FIELD_ANNOTATION_ID, is(annotationId))
-                .body(FIELD_RECTANGLES, Matchers.hasSize(1))
-                .body(FIELD_RECTANGLES + "[0]." + FIELD_ANNOTATION_ID, is(annotationId))
-                .body(FIELD_RECTANGLES + "[0]." + FIELD_X, is(0f))
-                .body(FIELD_RECTANGLES + "[0]." + FIELD_Y, is(0f))
-                .body(FIELD_RECTANGLES + "[0]." + FIELD_WIDTH, is(10f))
-                .body(FIELD_RECTANGLES + "[0]." + FIELD_HEIGHT, is(11f))
-                .log().all();
+            .get(API_ANNOTATIONS + "/" + annotationId)
+            .then()
+            .statusCode(200)
+            .body(FIELD_ID, equalTo(annotationId))
+            .body(FIELD_PAGE, is(1))
+            .body(FIELD_COLOR, is(COLOR_DEFAULT))
+            .body(FIELD_COMMENTS, Matchers.hasSize(1))
+            .body(FIELD_COMMENTS + "[0]." + FIELD_CONTENT, is(COMMENT_TEXT))
+            .body(FIELD_COMMENTS + "[0]." + FIELD_ANNOTATION_ID, is(annotationId))
+            .body(FIELD_RECTANGLES, Matchers.hasSize(1))
+            .body(FIELD_RECTANGLES + "[0]." + FIELD_ANNOTATION_ID, is(annotationId))
+            .body(FIELD_RECTANGLES + "[0]." + FIELD_X, is(0f))
+            .body(FIELD_RECTANGLES + "[0]." + FIELD_Y, is(0f))
+            .body(FIELD_RECTANGLES + "[0]." + FIELD_WIDTH, is(10f))
+            .body(FIELD_RECTANGLES + "[0]." + FIELD_HEIGHT, is(11f))
+            .body(FIELD_CREATED_DATE, notNullValue())
+            .body(FIELD_LAST_MODIFIED_DATE, notNullValue())
+            .body(CREATED_BY_DETAILS_EMAIL_PATH, equalTo(ANNOTATION_TEST_USER_EMAIL))
+            .body(LAST_MODIFIED_BY_DETAILS_EMAIL_PATH, equalTo(ANNOTATION_TEST_USER_EMAIL))
+            .log().all();
     }
 
     @Test

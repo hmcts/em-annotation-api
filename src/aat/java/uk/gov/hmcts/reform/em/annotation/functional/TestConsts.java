@@ -42,6 +42,15 @@ public final class TestConsts {
 
     public static final String FIELD_NAME = "name";
     public static final String FIELD_CREATED_BY = "createdBy";
+    public static final String FIELD_CREATED_BY_DETAILS = "createdByDetails";
+    public static final String FIELD_CREATED_DATE = "createdDate";
+    public static final String FIELD_LAST_MODIFIED_BY_DETAILS = "lastModifiedByDetails";
+    public static final String FIELD_LAST_MODIFIED_DATE = "lastModifiedDate";
+    public static final String FIELD_EMAIL = "email";
+    public static final String LAST_MODIFIED_BY_DETAILS_EMAIL_PATH =
+        String.format("%s.%s", FIELD_LAST_MODIFIED_BY_DETAILS, FIELD_EMAIL);
+    public static final String CREATED_BY_DETAILS_EMAIL_PATH =
+        String.format("%s.%s", FIELD_CREATED_BY_DETAILS, FIELD_EMAIL);
     public static final String FIELD_PAGE_NUMBER = "pageNumber";
     public static final String FIELD_X_COORD = "xCoordinate";
     public static final String FIELD_Y_COORD = "yCoordinate";
@@ -61,6 +70,7 @@ public final class TestConsts {
     public static final String NEW_CONTENT = "new text";
     public static final String HIGHLIGHT = "highlight";
     public static final String COLOR_CODE = "d1d1d1";
+
 
 
     // 🔹 Common values
@@ -89,6 +99,8 @@ public final class TestConsts {
     public static final String HEADER_LOCATION_TEMPLATE = API_RECTANGLES_ID;
 
     public static final String CONTENT_TYPE_JSON = MediaType.APPLICATION_JSON_VALUE;
+
+    public static final String ANNOTATION_TEST_USER_EMAIL = "emAnnotationTestUser@test.local";
 
     // === HTTP Status Codes ===
     public static final int STATUS_CREATED = 201;

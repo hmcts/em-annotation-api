@@ -11,24 +11,12 @@ import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATIONS;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATION_SETS;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_COMMENTS;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.COLOR_CODE;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.DEFAULT_CONTENT;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_ID;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_SET_ID;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_TYPE;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_COLOR;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_CONTENT;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_DOCUMENT_ID;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ID;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_PAGE;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.HIGHLIGHT;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.LOCATION_HEADER;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.NEW_CONTENT;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.UPDATED_CONTENT;
+
+// CHECKSTYLE:OFF: AvoidStarImport - Test Constants class.
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.*;
+// CHECKSTYLE:ON: AvoidStarImport
 
 class CommentScenariosTest extends BaseTest {
 
@@ -45,12 +33,12 @@ class CommentScenariosTest extends BaseTest {
         final ValidatableResponse response = createComment(annotationId, commentId);
 
         response
-                .statusCode(201)
-                .body(FIELD_ID, equalTo(commentId))
-                .body(FIELD_CONTENT, equalTo(DEFAULT_CONTENT))
-                .body(FIELD_ANNOTATION_ID, equalTo(annotationId))
-                .header(LOCATION_HEADER, equalTo(API_COMMENTS + "/" + commentId))
-                .log().all();
+            .statusCode(201)
+            .body(FIELD_ID, equalTo(commentId))
+            .body(FIELD_CONTENT, equalTo(DEFAULT_CONTENT))
+            .body(FIELD_ANNOTATION_ID, equalTo(annotationId))
+            .header(LOCATION_HEADER, equalTo(API_COMMENTS + "/" + commentId))
+            .log().all();
     }
 
     @Test
@@ -61,11 +49,11 @@ class CommentScenariosTest extends BaseTest {
         comment.put(FIELD_ANNOTATION_ID, annotationId);
 
         request
-                .body(comment.toString())
-                .post(API_COMMENTS)
-                .then()
-                .statusCode(400)
-                .log().all();
+            .body(comment.toString())
+            .post(API_COMMENTS)
+            .then()
+            .statusCode(400)
+            .log().all();
     }
 
     @Test
@@ -76,11 +64,11 @@ class CommentScenariosTest extends BaseTest {
         comment.put(FIELD_ID, commentId);
 
         request
-                .body(comment.toString())
-                .post(API_COMMENTS)
-                .then()
-                .statusCode(400)
-                .log().all();
+            .body(comment.toString())
+            .post(API_COMMENTS)
+            .then()
+            .statusCode(400)
+            .log().all();
     }
 
     @Test
@@ -91,11 +79,11 @@ class CommentScenariosTest extends BaseTest {
         final JSONObject comment = createCommentPayload(annotationId, commentId);
 
         unAuthenticatedRequest
-                .body(comment.toString())
-                .post(API_COMMENTS)
-                .then()
-                .statusCode(401)
-                .log().all();
+            .body(comment.toString())
+            .post(API_COMMENTS)
+            .then()
+            .statusCode(401)
+            .log().all();
     }
 
     @Test
@@ -105,11 +93,11 @@ class CommentScenariosTest extends BaseTest {
         final JSONObject comment = createCommentPayload(nonExistentAnnotationId, commentId);
 
         request
-                .body(comment.toString())
-                .post(API_COMMENTS)
-                .then()
-                .statusCode(500)
-                .log().all();
+            .body(comment.toString())
+            .post(API_COMMENTS)
+            .then()
+            .statusCode(500)
+            .log().all();
     }
 
     @Test
@@ -117,37 +105,41 @@ class CommentScenariosTest extends BaseTest {
         final String newAnnotationSetId = createAnnotationSet();
         final String annotationId = createAnnotation(newAnnotationSetId);
         final String commentId = UUID.randomUUID().toString();
-        final ValidatableResponse response = createComment(annotationId, commentId);
-        final String id = extractJsonObjectFromResponse(response).getString(FIELD_ID);
+
+        createComment(annotationId, commentId);
 
         request
-                .get(API_COMMENTS + "/" + id)
-                .then()
-                .statusCode(200)
-                .body(FIELD_ID, equalTo(commentId))
-                .body(FIELD_CONTENT, equalTo(DEFAULT_CONTENT))
-                .body(FIELD_ANNOTATION_ID, equalTo(annotationId))
-                .log().all();
+            .get(API_COMMENTS + "/" + commentId)
+            .then()
+            .statusCode(200)
+            .body(FIELD_ID, equalTo(commentId))
+            .body(FIELD_CONTENT, equalTo(DEFAULT_CONTENT))
+            .body(FIELD_ANNOTATION_ID, equalTo(annotationId))
+            .body(FIELD_CREATED_DATE, notNullValue())
+            .body(FIELD_LAST_MODIFIED_DATE, notNullValue())
+            .body(CREATED_BY_DETAILS_EMAIL_PATH, equalTo(ANNOTATION_TEST_USER_EMAIL))
+            .body(LAST_MODIFIED_BY_DETAILS_EMAIL_PATH, equalTo(ANNOTATION_TEST_USER_EMAIL))
+            .log().all();
     }
 
     @Test
     void shouldReturn404WhenGetCommentNotFoundById() {
         final String commentId = UUID.randomUUID().toString();
         request
-                .get(API_COMMENTS + "/" + commentId)
-                .then()
-                .statusCode(404)
-                .log().all();
+            .get(API_COMMENTS + "/" + commentId)
+            .then()
+            .statusCode(404)
+            .log().all();
     }
 
     @Test
     void shouldReturn401WhenUnAuthenticatedUserGetCommentById() {
         final String commentId = UUID.randomUUID().toString();
         unAuthenticatedRequest
-                .get(API_COMMENTS + "/" + commentId)
-                .then()
-                .statusCode(401)
-                .log().all();
+            .get(API_COMMENTS + "/" + commentId)
+            .then()
+            .statusCode(401)
+            .log().all();
     }
 
     @Test
@@ -160,20 +152,20 @@ class CommentScenariosTest extends BaseTest {
         assertNotNull(id);
 
         request
-                .get(API_COMMENTS)
-                .then()
-                .statusCode(200)
-                .body("size()", Matchers.greaterThanOrEqualTo(1))
-                .log().all();
+            .get(API_COMMENTS)
+            .then()
+            .statusCode(200)
+            .body("size()", Matchers.greaterThanOrEqualTo(1))
+            .log().all();
     }
 
     @Test
     void shouldReturn401WhenUnAuthenticatedUserGetAllComments() {
         unAuthenticatedRequest
-                .get(API_COMMENTS)
-                .then()
-                .statusCode(401)
-                .log().all();
+            .get(API_COMMENTS)
+            .then()
+            .statusCode(401)
+            .log().all();
     }
 
     @Test
@@ -186,14 +178,14 @@ class CommentScenariosTest extends BaseTest {
         comment.put(FIELD_CONTENT, UPDATED_CONTENT);
 
         request
-                .body(comment.toString())
-                .put(API_COMMENTS)
-                .then()
-                .statusCode(200)
-                .body(FIELD_ID, equalTo(commentId))
-                .body(FIELD_CONTENT, equalTo(UPDATED_CONTENT))
-                .body(FIELD_ANNOTATION_ID, equalTo(annotationId))
-                .log().all();
+            .body(comment.toString())
+            .put(API_COMMENTS)
+            .then()
+            .statusCode(200)
+            .body(FIELD_ID, equalTo(commentId))
+            .body(FIELD_CONTENT, equalTo(UPDATED_CONTENT))
+            .body(FIELD_ANNOTATION_ID, equalTo(annotationId))
+            .log().all();
     }
 
     @Test
@@ -203,11 +195,11 @@ class CommentScenariosTest extends BaseTest {
         final JSONObject comment = createCommentPayload(nonExistentAnnotationId, commentId);
 
         request
-                .body(comment.toString())
-                .put(API_COMMENTS)
-                .then()
-                .statusCode(500)
-                .log().all();
+            .body(comment.toString())
+            .put(API_COMMENTS)
+            .then()
+            .statusCode(500)
+            .log().all();
     }
 
     @Test
@@ -217,11 +209,11 @@ class CommentScenariosTest extends BaseTest {
         comment.put(FIELD_ANNOTATION_ID, UUID.randomUUID());
 
         request
-                .body(comment.toString())
-                .put(API_COMMENTS)
-                .then()
-                .statusCode(400)
-                .log().all();
+            .body(comment.toString())
+            .put(API_COMMENTS)
+            .then()
+            .statusCode(400)
+            .log().all();
     }
 
     @Test
@@ -231,11 +223,11 @@ class CommentScenariosTest extends BaseTest {
         comment.put(FIELD_ID, UUID.randomUUID());
 
         request
-                .body(comment.toString())
-                .put(API_COMMENTS)
-                .then()
-                .statusCode(400)
-                .log().all();
+            .body(comment.toString())
+            .put(API_COMMENTS)
+            .then()
+            .statusCode(400)
+            .log().all();
     }
 
     @Test
@@ -245,11 +237,11 @@ class CommentScenariosTest extends BaseTest {
         comment.put(FIELD_ANNOTATION_ID, UUID.randomUUID());
 
         unAuthenticatedRequest
-                .body(comment.toString())
-                .put(API_COMMENTS)
-                .then()
-                .statusCode(401)
-                .log().all();
+            .body(comment.toString())
+            .put(API_COMMENTS)
+            .then()
+            .statusCode(401)
+            .log().all();
     }
 
     @Test
@@ -275,10 +267,10 @@ class CommentScenariosTest extends BaseTest {
     @Test
     void shouldReturn401WhenUnAuthenticatedUserDeleteComment() {
         unAuthenticatedRequest
-                .delete(API_COMMENTS + "/" + UUID.randomUUID())
-                .then()
-                .statusCode(401)
-                .log().all();
+            .delete(API_COMMENTS + "/" + UUID.randomUUID())
+            .then()
+            .statusCode(401)
+            .log().all();
     }
 
     @Test
@@ -293,31 +285,31 @@ class CommentScenariosTest extends BaseTest {
         comment.put(FIELD_CONTENT, NEW_CONTENT);
 
         request
-                .body(comment.toString())
-                .put(API_COMMENTS)
-                .then()
-                .statusCode(200)
-                .body(FIELD_ID, equalTo(id))
-                .body(FIELD_CONTENT, equalTo(NEW_CONTENT))
-                .body(FIELD_ANNOTATION_ID, equalTo(annotationId))
-                .log().all();
+            .body(comment.toString())
+            .put(API_COMMENTS)
+            .then()
+            .statusCode(200)
+            .body(FIELD_ID, equalTo(id))
+            .body(FIELD_CONTENT, equalTo(NEW_CONTENT))
+            .body(FIELD_ANNOTATION_ID, equalTo(annotationId))
+            .log().all();
     }
 
     private ValidatableResponse deleteCommentById(String commentId) {
         return request
-                .delete(API_COMMENTS + "/" + commentId)
-                .then()
-                .log().all();
+            .delete(API_COMMENTS + "/" + commentId)
+            .then()
+            .log().all();
     }
 
     @NotNull
     private ValidatableResponse createComment(String annotationId, String commentId) {
         final JSONObject comment = createCommentPayload(annotationId, commentId);
         return request.log().all()
-                .body(comment.toString())
-                .post(API_COMMENTS)
-                .then()
-                .statusCode(201);
+            .body(comment.toString())
+            .post(API_COMMENTS)
+            .then()
+            .statusCode(201);
     }
 
     @NotNull
@@ -331,16 +323,16 @@ class CommentScenariosTest extends BaseTest {
         createAnnotations.put(FIELD_COLOR, COLOR_CODE);
 
         return request
-                .body(createAnnotations)
-                .post(API_ANNOTATIONS)
-                .then()
-                .statusCode(201)
-                .body(FIELD_ID, equalTo(annotationId.toString()))
-                .extract()
-                .response()
-                .getBody()
-                .jsonPath()
-                .get(FIELD_ID);
+            .body(createAnnotations)
+            .post(API_ANNOTATIONS)
+            .then()
+            .statusCode(201)
+            .body(FIELD_ID, equalTo(annotationId.toString()))
+            .extract()
+            .response()
+            .getBody()
+            .jsonPath()
+            .get(FIELD_ID);
     }
 
     @NotNull
@@ -351,16 +343,16 @@ class CommentScenariosTest extends BaseTest {
         jsonObject.put(FIELD_ID, newAnnotationSetId.toString());
 
         return request
-                .body(jsonObject.toString())
-                .post(API_ANNOTATION_SETS)
-                .then()
-                .statusCode(201)
-                .body(FIELD_ID, equalTo(newAnnotationSetId.toString()))
-                .extract()
-                .response()
-                .getBody()
-                .jsonPath()
-                .get(FIELD_ID);
+            .body(jsonObject.toString())
+            .post(API_ANNOTATION_SETS)
+            .then()
+            .statusCode(201)
+            .body(FIELD_ID, equalTo(newAnnotationSetId.toString()))
+            .extract()
+            .response()
+            .getBody()
+            .jsonPath()
+            .get(FIELD_ID);
     }
 
     @NotNull

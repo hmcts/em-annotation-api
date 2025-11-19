@@ -13,24 +13,12 @@ import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATIONS;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.API_ANNOTATION_SETS;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATIONS;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_ID;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_SET_ID;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ANNOTATION_TYPE;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_COLOR;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_COMMENTS;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_CONTENT;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_DOCUMENT_ID;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_ID;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_PAGE;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.FIELD_RECTANGLES;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.HEADER_LOCATION;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.VALUE_COLOR;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.VALUE_HIGHLIGHT;
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.VALUE_TEXT;
+
+// CHECKSTYLE:OFF: AvoidStarImport - Test Constants class.
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.*;
+// CHECKSTYLE:ON: AvoidStarImport
 
 class AnnotationSetScenariosTest extends BaseTest {
 
@@ -87,17 +75,20 @@ class AnnotationSetScenariosTest extends BaseTest {
     void shouldReturn200WhenGetAnnotationSetById() {
         final UUID annotationSetId = UUID.randomUUID();
         final UUID documentId = UUID.randomUUID();
-        final ValidatableResponse response = createAnnotationSet(annotationSetId, documentId);
-        final JSONObject annotationSet = extractJsonObjectFromResponse(response);
-        final String id = annotationSet.getString(FIELD_ID);
+        createAnnotationSet(annotationSetId, documentId);
+
 
         request
-                .get(API_ANNOTATION_SETS + "/" + id)
-                .then()
-                .statusCode(200)
-                .body(FIELD_ID, equalTo(annotationSetId.toString()))
-                .body(FIELD_DOCUMENT_ID, is(documentId.toString()))
-                .log().all();
+            .get(API_ANNOTATION_SETS + "/" + annotationSetId)
+            .then()
+            .statusCode(200)
+            .body(FIELD_ID, equalTo(annotationSetId.toString()))
+            .body(FIELD_DOCUMENT_ID, is(documentId.toString()))
+            .body(FIELD_CREATED_DATE, notNullValue())
+            .body(FIELD_LAST_MODIFIED_DATE, notNullValue())
+            .body(CREATED_BY_DETAILS_EMAIL_PATH, equalTo(ANNOTATION_TEST_USER_EMAIL))
+            .body(LAST_MODIFIED_BY_DETAILS_EMAIL_PATH, equalTo(ANNOTATION_TEST_USER_EMAIL))
+            .log().all();
     }
 
     @Test
@@ -299,7 +290,7 @@ class AnnotationSetScenariosTest extends BaseTest {
         annotationSet.put(FIELD_ID, annotationSetId.toString());
         final JSONArray annotations = new JSONArray();
         final JSONObject annotation = extractJsonObjectFromResponse(
-                createAnnotation(UUID.randomUUID().toString(), annotationSetId.toString()));
+            createAnnotation(UUID.randomUUID().toString(), annotationSetId.toString()));
         annotations.put(0, annotation);
         annotationSet.put(FIELD_ANNOTATIONS, annotations);
         return annotationSet;
