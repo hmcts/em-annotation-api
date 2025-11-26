@@ -59,8 +59,7 @@ withNightlyPipeline(type, product, component) {
 
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
-    // TODO enable when docker issue resolved
-    //enableMutationTest()
+    enableMutationTest()
     enableFortifyScan('em-anno-aat')
     enableFullFunctionalTest()
     enableSecurityScan()
