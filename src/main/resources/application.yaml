@@ -176,3 +176,6 @@ task:
 
 scheduling:
   enabled: true
+
+delete-document-data:
+  s2s-whitelist: ${DELETE_DOCUMENT_DATA_WHITELIST:em_gw,dm_store}
