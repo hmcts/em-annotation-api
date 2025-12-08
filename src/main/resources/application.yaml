@@ -135,6 +135,7 @@ app-insights:
 
 endpoint-toggles:
   metadata: ${ENABLE_METADATA_ENDPOINT:true}
+  document-data-deletion: ${ENABLE_DOCUMENT_DELETE_ENDPOINT:true}
 
 # OpenId Connect
 oidc:

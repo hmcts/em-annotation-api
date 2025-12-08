@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,6 +53,7 @@ public class DocumentDataResource {
             description = "Forbidden - Calling service is not whitelisted to perform this operation"),
     })
     @DeleteMapping("/documents/{docId}/data")
+    @ConditionalOnProperty("endpoint-toggles.document-data-deletion")
     public ResponseEntity<Void> deleteDocumentData(@PathVariable UUID docId) {
         log.debug("REST request to delete data for document: {}", docId);
         documentDataService.deleteDocumentData(docId);

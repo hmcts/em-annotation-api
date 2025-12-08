@@ -4,3 +4,4 @@ java:
   ingressHost: ${SERVICE_FQDN}
   environment:
     DELETE_DOCUMENT_DATA_WHITELIST: dm_store,em_gw
+    ENABLE_DOCUMENT_DELETE_ENDPOINT: true
