@@ -40,6 +40,8 @@ java:
     ENABLE_IDAM_HEALTH_CHECK: false
     ENABLE_S2S_HEALTH_CHECK: false
     ENABLE_METADATA_ENDPOINT: true
+    DELETE_DOCUMENT_DATA_WHITELIST: dm_store
+    ENABLE_DOCUMENT_DELETE_ENDPOINT: false
     SERVER_PORT: 8080
 xui-webapp:
   enabled: false
