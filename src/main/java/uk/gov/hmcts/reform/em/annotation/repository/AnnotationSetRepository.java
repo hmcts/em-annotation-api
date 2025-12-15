@@ -19,7 +19,7 @@ import java.util.UUID;
 public interface AnnotationSetRepository extends JpaRepository<AnnotationSet, UUID> {
 
     Optional<AnnotationSet> findByDocumentIdAndCreatedBy(String documentId, String createdBy);
-    
+
     @Query("SELECT a.id FROM AnnotationSet a WHERE a.documentId = :documentId")
     List<UUID> findAllIdsByDocumentId(@Param("documentId") String documentId);
 

@@ -53,44 +53,47 @@ public class DocumentDataService {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
-        bookmarkRepository.deleteAllByDocumentId(documentId);
-        metadataRepository.deleteAllByDocumentId(documentId);
+        try {
+            bookmarkRepository.deleteAllByDocumentId(documentId);
+            metadataRepository.deleteAllByDocumentId(documentId);
 
-        List<UUID> annotationSetIds = annotationSetRepository.findAllIdsByDocumentId(documentId.toString());
+            List<UUID> annotationSetIds = annotationSetRepository.findAllIdsByDocumentId(documentId.toString());
 
-        if (annotationSetIds.isEmpty()) {
-            log.info("No annotation sets found for documentId: {}", documentId);
-            return;
+            if (!annotationSetIds.isEmpty()) {
+                List<UUID> auditIdsToDelete = new ArrayList<>(annotationSetIds);
+
+                List<UUID> annotationIds = annotationRepository.findAllIdsByAnnotationSetIdIn(annotationSetIds);
+
+                if (!annotationIds.isEmpty()) {
+                    auditIdsToDelete.addAll(annotationIds);
+
+                    List<UUID> rectangleIds = rectangleRepository.findAllIdsByAnnotationIdIn(annotationIds);
+                    auditIdsToDelete.addAll(rectangleIds);
+
+                    List<UUID> commentIds = commentRepository.findAllIdsByAnnotationIdIn(annotationIds);
+                    auditIdsToDelete.addAll(commentIds);
+
+                    rectangleRepository.deleteAllByIdIn(rectangleIds);
+                    commentRepository.deleteAllByIdIn(commentIds);
+                    annotationRepository.deleteAllByIdIn(annotationIds);
+                }
+
+                annotationSetRepository.deleteAllByIdIn(annotationSetIds);
+
+                if (!auditIdsToDelete.isEmpty()) {
+                    entityAuditEventRepository.deleteAllByEntityIdIn(auditIdsToDelete);
+                    log.debug("Deleted audit entries for {} entities.", auditIdsToDelete.size());
+                }
+            } else {
+                log.info("No annotation sets found for documentId: {}", documentId);
+            }
+
+        } finally {
+            if (stopWatch.isStarted()) {
+                stopWatch.stop();
+            }
+            log.info("Delete execution for documentId: {} completed in {} ms",
+                documentId, stopWatch.getDuration().toMillis());
         }
-
-        List<UUID> auditIdsToDelete = new ArrayList<>(annotationSetIds);
-
-        List<UUID> annotationIds = annotationRepository.findAllIdsByAnnotationSetIdIn(annotationSetIds);
-
-        if (!annotationIds.isEmpty()) {
-            auditIdsToDelete.addAll(annotationIds);
-
-            List<UUID> rectangleIds = rectangleRepository.findAllIdsByAnnotationIdIn(annotationIds);
-            auditIdsToDelete.addAll(rectangleIds);
-
-            List<UUID> commentIds = commentRepository.findAllIdsByAnnotationIdIn(annotationIds);
-            auditIdsToDelete.addAll(commentIds);
-
-            rectangleRepository.deleteAllByIdIn(rectangleIds);
-            commentRepository.deleteAllByIdIn(commentIds);
-            annotationRepository.deleteAllByIdIn(annotationIds);
-        }
-
-        annotationSetRepository.deleteAllByIdIn(annotationSetIds);
-
-        if (!auditIdsToDelete.isEmpty()) {
-            entityAuditEventRepository.deleteAllByEntityIdIn(auditIdsToDelete);
-            log.debug("Deleted audit entries for {} entities.", auditIdsToDelete.size());
-        }
-
-        stopWatch.stop();
-
-        log.info("Deleting data and audit logs for documentId: {} took {} ms",
-            documentId, stopWatch.getDuration().toMillis());
     }
 }
