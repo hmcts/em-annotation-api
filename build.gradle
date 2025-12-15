@@ -14,7 +14,7 @@ plugins {
     id 'uk.gov.hmcts.java' version '0.12.67'
     id 'org.owasp.dependencycheck' version '12.1.6'
     id 'com.github.ben-manes.versions' version '0.53.0'
-    id 'org.sonarqube' version '7.1.0.6387'
+    id 'org.sonarqube' version '7.2.1.6560'
     id 'jacoco'
     id 'checkstyle'
     id 'au.com.dius.pact' version '4.6.18'
@@ -51,7 +51,7 @@ def versions = [
         sonarPitest        : '0.5',
         serenity           : '4.3.4',
         pact_version       : '4.6.18',
-        hibernate          : '6.6.38.Final',
+        hibernate          : '6.6.39.Final',
         logging            : '6.1.9',
         junit5             : '6.0.1',
         log4JVersion       : '2.20.0',
@@ -178,8 +178,8 @@ dependencies {
     testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-junit5', version: versions.serenity
 
-    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.21'
-    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.21'
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.22'
+    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.22'
 
     testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.10', classifier: 'all', {
         exclude group: 'commons-io', module: 'commons-io'
@@ -228,7 +228,7 @@ dependencyManagement {
         }
 
         //CVE-2023-6378
-        dependencySet(group: 'ch.qos.logback', version: '1.5.21') {
+        dependencySet(group: 'ch.qos.logback', version: '1.5.22') {
             entry 'logback-classic'
             entry 'logback-core'
         }
@@ -320,7 +320,7 @@ configurations {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '12.2.0'
+    toolVersion = '12.3.0'
     reportsDir = layout.buildDirectory.file('reports/checkstyle').get().asFile
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
