@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.reform.em.annotation.domain.Bookmark;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -17,8 +16,6 @@ import java.util.UUID;
 @Repository
 public interface BookmarkRepository extends JpaRepository<Bookmark, UUID> {
     Page<Bookmark> findByDocumentIdAndCreatedBy(UUID documentId, String createdBy, Pageable pageable);
-
-    List<Bookmark> findAllByDocumentId(UUID documentId);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("DELETE FROM Bookmark b WHERE b.documentId = :documentId")
