@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.hmcts.reform.em.annotation.domain.AnnotationSet;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationRepository;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationSetRepository;
 import uk.gov.hmcts.reform.em.annotation.repository.BookmarkRepository;
@@ -57,16 +56,13 @@ public class DocumentDataService {
         bookmarkRepository.deleteAllByDocumentId(documentId);
         metadataRepository.deleteAllByDocumentId(documentId);
 
-        List<AnnotationSet> annotationSets = annotationSetRepository.findAllByDocumentId(documentId.toString());
+        List<UUID> annotationSetIds = annotationSetRepository.findAllIdsByDocumentId(documentId.toString());
 
-        if (annotationSets.isEmpty()) {
+        if (annotationSetIds.isEmpty()) {
             log.info("No annotation sets found for documentId: {}", documentId);
             return;
         }
 
-        List<UUID> annotationSetIds = annotationSets.stream()
-            .map(AnnotationSet::getId)
-            .toList();
         List<UUID> auditIdsToDelete = new ArrayList<>(annotationSetIds);
 
         List<UUID> annotationIds = annotationRepository.findAllIdsByAnnotationSetIdIn(annotationSetIds);
