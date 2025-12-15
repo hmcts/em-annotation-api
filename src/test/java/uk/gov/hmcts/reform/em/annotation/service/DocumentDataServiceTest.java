@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.hmcts.reform.em.annotation.domain.AnnotationSet;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationRepository;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationSetRepository;
 import uk.gov.hmcts.reform.em.annotation.repository.BookmarkRepository;
@@ -55,12 +54,9 @@ class DocumentDataServiceTest {
     @Test
     void shouldDeleteAllDataWhenSetsExist() {
         UUID annotationSetId = UUID.randomUUID();
-        AnnotationSet annotationSet = new AnnotationSet();
-        annotationSet.setId(annotationSetId);
-        List<AnnotationSet> annotationSets = List.of(annotationSet);
 
-        when(annotationSetRepository.findAllByDocumentId(documentId.toString()))
-            .thenReturn(annotationSets);
+        when(annotationSetRepository.findAllIdsByDocumentId(documentId.toString()))
+            .thenReturn(List.of(annotationSetId));
 
         when(annotationRepository.findAllIdsByAnnotationSetIdIn(anyList()))
             .thenReturn(Collections.emptyList());
@@ -83,12 +79,8 @@ class DocumentDataServiceTest {
         final UUID rectangleId2 = UUID.randomUUID();
         final UUID commentId = UUID.randomUUID();
 
-        AnnotationSet annotationSet = new AnnotationSet();
-        annotationSet.setId(annotationSetId);
-        List<AnnotationSet> annotationSets = List.of(annotationSet);
-
-        when(annotationSetRepository.findAllByDocumentId(documentId.toString()))
-            .thenReturn(annotationSets);
+        when(annotationSetRepository.findAllIdsByDocumentId(documentId.toString()))
+            .thenReturn(List.of(annotationSetId));
 
         when(annotationRepository.findAllIdsByAnnotationSetIdIn(List.of(annotationSetId)))
             .thenReturn(List.of(annotationId1, annotationId2));
@@ -122,7 +114,7 @@ class DocumentDataServiceTest {
 
     @Test
     void shouldDeleteIndependentEntitiesButSkipSetsWhenNoneFound() {
-        when(annotationSetRepository.findAllByDocumentId(documentId.toString()))
+        when(annotationSetRepository.findAllIdsByDocumentId(documentId.toString()))
             .thenReturn(Collections.emptyList());
 
         documentDataService.deleteDocumentData(documentId);
@@ -140,12 +132,9 @@ class DocumentDataServiceTest {
     @Test
     void shouldDeleteAnnotationSetsWithoutChildrenWhenNoAnnotationsExist() {
         UUID annotationSetId = UUID.randomUUID();
-        AnnotationSet annotationSet = new AnnotationSet();
-        annotationSet.setId(annotationSetId);
-        List<AnnotationSet> annotationSets = List.of(annotationSet);
 
-        when(annotationSetRepository.findAllByDocumentId(documentId.toString()))
-            .thenReturn(annotationSets);
+        when(annotationSetRepository.findAllIdsByDocumentId(documentId.toString()))
+            .thenReturn(List.of(annotationSetId));
 
         when(annotationRepository.findAllIdsByAnnotationSetIdIn(List.of(annotationSetId)))
             .thenReturn(Collections.emptyList());

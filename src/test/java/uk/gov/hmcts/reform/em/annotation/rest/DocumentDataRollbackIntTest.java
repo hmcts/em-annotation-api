@@ -74,7 +74,7 @@ class DocumentDataRollbackIntTest extends BaseTest {
         when(authTokenValidator.getServiceName(anyString())).thenReturn("em_gw");
 
         doThrow(new RuntimeException("Simulated DB Failure"))
-            .when(annotationSetRepository).findAllByDocumentId(anyString());
+            .when(annotationSetRepository).findAllIdsByDocumentId(anyString());
 
         restLogoutMockMvc.perform(delete("/api/documents/{docId}/data", documentId)
                 .header("ServiceAuthorization", MOCK_TOKEN))
