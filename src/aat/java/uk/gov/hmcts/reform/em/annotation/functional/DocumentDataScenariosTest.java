@@ -14,10 +14,7 @@ import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
-// CHECKSTYLE:OFF: AvoidStarImport - Test Constants class.
 import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.*;
-// CHECKSTYLE:ON: AvoidStarImport
 
 class DocumentDataScenariosTest extends BaseTest {
 
@@ -34,7 +31,6 @@ class DocumentDataScenariosTest extends BaseTest {
     @Test
     @DisplayName("Unauthorized Service should receive 403 Forbidden")
     void shouldReturn403WhenUnauthorizedServiceDeletesData() {
-
         String unauthorizedS2sToken = ccdS2sHelper.getS2sToken();
 
         SerenityRest.given()
@@ -91,6 +87,29 @@ class DocumentDataScenariosTest extends BaseTest {
 
         verifyAnnotationSetIsDeleted(annotationSetId);
         verifyBookmarksAreDeleted(documentId);
+    }
+
+    @Test
+    @DisplayName("Authorized Service can delete document with Annotations having Tags")
+    void shouldReturn204WhenDeletingDocumentWithTags() {
+        final UUID documentId = UUID.randomUUID();
+        final UUID annotationSetId = UUID.randomUUID();
+        final UUID annotationId = UUID.randomUUID();
+
+        createAnnotationSet(annotationSetId, documentId);
+        createAnnotationWithTags(annotationId, annotationSetId);
+
+        request.get(API_ANNOTATIONS + "/" + annotationId)
+            .then()
+            .statusCode(STATUS_OK)
+            .body("tags", Matchers.not(Matchers.empty()));
+        
+        request
+            .delete(String.format(API_DELETE_DATA, documentId))
+            .then()
+            .statusCode(STATUS_NO_CONTENT);
+
+        verifyAnnotationSetIsDeleted(annotationSetId);
     }
 
     @Test
@@ -175,14 +194,38 @@ class DocumentDataScenariosTest extends BaseTest {
         final JSONObject rectangle = new JSONObject();
         rectangle.put(FIELD_ID, UUID.randomUUID().toString());
         rectangle.put(FIELD_ANNOTATION_ID, annotationId);
-        rectangle.put("x", 0f);
-        rectangle.put("y", 0f);
-        rectangle.put("width", 10f);
-        rectangle.put("height", 11f);
+        rectangle.put(FIELD_X, 0f);
+        rectangle.put(FIELD_Y, 0f);
+        rectangle.put(FIELD_WIDTH, 10f);
+        rectangle.put(FIELD_HEIGHT, 11f);
         rectangles.put(0, rectangle);
         annotation.put(FIELD_RECTANGLES, rectangles);
 
         request.body(annotation.toString()).post(API_ANNOTATIONS).then().statusCode(201);
+    }
+
+    private void createAnnotationWithTags(UUID annotationId, UUID annotationSetId) {
+        final JSONObject annotation = new JSONObject();
+        annotation.put(FIELD_ANNOTATION_SET_ID, annotationSetId.toString());
+        annotation.put(FIELD_ID, annotationId.toString());
+        annotation.put(FIELD_ANNOTATION_TYPE, VALUE_HIGHLIGHT);
+        annotation.put(FIELD_PAGE, 1);
+        annotation.put(FIELD_COLOR, VALUE_COLOR);
+
+        annotation.put(FIELD_CREATED_BY, CREATED_BY_USER);
+
+        final JSONArray tags = new JSONArray();
+        final JSONObject tag = new JSONObject();
+        tag.put(FIELD_NAME, "ScenarioTestTag");
+        tag.put(FIELD_LABEL, "Test Label");
+        tag.put(FIELD_COLOR, VALUE_COLOR);
+        tags.put(0, tag);
+        annotation.put(FIELD_TAGS, tags);
+
+        request.body(annotation.toString())
+            .post(API_ANNOTATIONS)
+            .then()
+            .statusCode(STATUS_CREATED);
     }
 
     private void createBookmark(final UUID bookmarkId, final UUID docId) {
