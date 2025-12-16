@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.service;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,11 @@ import java.util.UUID;
 public class DocumentDataService {
 
     private final Logger log = LoggerFactory.getLogger(DocumentDataService.class);
+
+    /**
+     * Batch size for deleting audit entries to balance performance and stability.
+     */
+    private static final int AUDIT_DELETE_BATCH_SIZE = 1000;
 
     private final AnnotationSetRepository annotationSetRepository;
     private final AnnotationRepository annotationRepository;
@@ -84,7 +90,9 @@ public class DocumentDataService {
                 annotationSetRepository.deleteAllByIdIn(annotationSetIds);
 
                 if (!auditIdsToDelete.isEmpty()) {
-                    entityAuditEventRepository.deleteAllByEntityIdIn(auditIdsToDelete);
+                    Lists.partition(auditIdsToDelete, AUDIT_DELETE_BATCH_SIZE)
+                        .forEach(entityAuditEventRepository::deleteAllByEntityIdIn);
+
                     log.debug("Deleted audit entries for {} entities.", auditIdsToDelete.size());
                 }
             } else {
