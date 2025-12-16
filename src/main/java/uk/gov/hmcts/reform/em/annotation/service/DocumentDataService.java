@@ -75,6 +75,9 @@ public class DocumentDataService {
 
                     rectangleRepository.deleteAllByIdIn(rectangleIds);
                     commentRepository.deleteAllByIdIn(commentIds);
+
+                    // The annotation_tags join table entries are deleted automatically by
+                    // Hibernate as part of this operation due to the @JoinTable mapping.
                     annotationRepository.deleteAllByIdIn(annotationIds);
                 }
 
