@@ -14,7 +14,10 @@ import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
+// CHECKSTYLE:OFF: AvoidStarImport - Test Constants class.
 import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.*;
+// CHECKSTYLE:ON: AvoidStarImport
 
 class DocumentDataScenariosTest extends BaseTest {
 
