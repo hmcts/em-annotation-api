@@ -188,7 +188,7 @@ dependencies {
         exclude group: 'ch.qos.logback', module: 'logback-core'
     }
 
-    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.21.3'
+    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.21.4'
 
     testImplementation group: 'org.mockito', name: 'mockito-inline', version: '5.2.0'
 
