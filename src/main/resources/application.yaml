@@ -135,6 +135,7 @@ app-insights:
 
 endpoint-toggles:
   metadata: ${ENABLE_METADATA_ENDPOINT:true}
+  document-data-deletion: ${ENABLE_DOCUMENT_DELETE_ENDPOINT:true}
 
 # OpenId Connect
 oidc:
@@ -176,3 +177,6 @@ task:
 
 scheduling:
   enabled: true
+
+delete-document-data:
+  s2s-whitelist: ${DELETE_DOCUMENT_DATA_WHITELIST:em_gw,dm_store}
