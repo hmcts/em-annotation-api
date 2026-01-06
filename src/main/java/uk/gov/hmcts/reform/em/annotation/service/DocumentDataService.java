@@ -89,12 +89,10 @@ public class DocumentDataService {
 
                 annotationSetRepository.deleteAllByIdIn(annotationSetIds);
 
-                if (!auditIdsToDelete.isEmpty()) {
-                    Lists.partition(auditIdsToDelete, AUDIT_DELETE_BATCH_SIZE)
-                        .forEach(entityAuditEventRepository::deleteAllByEntityIdIn);
+                Lists.partition(auditIdsToDelete, AUDIT_DELETE_BATCH_SIZE)
+                    .forEach(entityAuditEventRepository::deleteAllByEntityIdIn);
+                log.debug("Deleted audit entries for {} entities.", auditIdsToDelete.size());
 
-                    log.debug("Deleted audit entries for {} entities.", auditIdsToDelete.size());
-                }
             } else {
                 log.info("No annotation sets found for documentId: {}", documentId);
             }
