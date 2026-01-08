@@ -45,12 +45,10 @@ class CustomAuditEventRepositoryTest {
     @Test
     @DisplayName("add() should save event when data is valid and user is not anonymous")
     void addAuditEvent() {
-        // Arrange
         Instant now = Instant.now();
         Map<String, Object> data = new HashMap<>();
         data.put("test-key", "test-value");
 
-        // Fixed Constructor: Timestamp comes first
         AuditEvent event = new AuditEvent(now, "test-user", "test-type", data);
 
         Map<String, String> convertedData = new HashMap<>();
@@ -58,10 +56,8 @@ class CustomAuditEventRepositoryTest {
 
         when(auditEventConverter.convertDataToStrings(data)).thenReturn(convertedData);
 
-        // Act
         customAuditEventRepository.add(event);
 
-        // Assert
         verify(persistenceAuditEventRepository).save(persistentEventCaptor.capture());
         PersistentAuditEvent capturedEvent = persistentEventCaptor.getValue();
 
@@ -74,7 +70,6 @@ class CustomAuditEventRepositoryTest {
     @Test
     @DisplayName("add() should truncate data values exceeding max column length")
     void addAuditEventTruncateLargeData() {
-        // Arrange
         Map<String, Object> data = new HashMap<>();
         String largeString = "a".repeat(EVENT_DATA_COLUMN_MAX_LENGTH + 20);
         data.put("large-key", largeString);
@@ -85,10 +80,8 @@ class CustomAuditEventRepositoryTest {
 
         when(auditEventConverter.convertDataToStrings(data)).thenReturn(convertedData);
 
-        // Act
         customAuditEventRepository.add(event);
 
-        // Assert
         verify(persistenceAuditEventRepository).save(persistentEventCaptor.capture());
         PersistentAuditEvent capturedEvent = persistentEventCaptor.getValue();
 
@@ -100,33 +93,26 @@ class CustomAuditEventRepositoryTest {
     @Test
     @DisplayName("add() should not save event when user is Anonymous")
     void addAuditEventWithAnonymousUser() {
-        // Arrange
         AuditEvent event = new AuditEvent(Constants.ANONYMOUS_USER, "test-type", Collections.emptyMap());
 
-        // Act
         customAuditEventRepository.add(event);
 
-        // Assert
         verify(persistenceAuditEventRepository, never()).save(any(PersistentAuditEvent.class));
     }
 
     @Test
     @DisplayName("add() should not save event when type is AUTHORIZATION_FAILURE")
     void addAuditEventWithAuthorizationFailureType() {
-        // Arrange
         AuditEvent event = new AuditEvent("test-user", "AUTHORIZATION_FAILURE", Collections.emptyMap());
 
-        // Act
         customAuditEventRepository.add(event);
 
-        // Assert
         verify(persistenceAuditEventRepository, never()).save(any(PersistentAuditEvent.class));
     }
 
     @Test
     @DisplayName("add() should handle null values in data map gracefully")
     void addAuditEventWithNullDataValues() {
-        // Arrange
         Map<String, Object> data = new HashMap<>();
         data.put("null-key", null);
         AuditEvent event = new AuditEvent("test-user", "test-type", data);
@@ -136,10 +122,8 @@ class CustomAuditEventRepositoryTest {
 
         when(auditEventConverter.convertDataToStrings(anyMap())).thenReturn(convertedData);
 
-        // Act
         customAuditEventRepository.add(event);
 
-        // Assert
         verify(persistenceAuditEventRepository).save(persistentEventCaptor.capture());
         PersistentAuditEvent capturedEvent = persistentEventCaptor.getValue();
 
@@ -150,7 +134,6 @@ class CustomAuditEventRepositoryTest {
     @Test
     @DisplayName("find() should retrieve events from repository and convert them")
     void findAuditEvent() {
-        // Arrange
         String principal = "test-user";
         String type = "test-type";
         Instant after = Instant.now().minusSeconds(3600);
@@ -167,12 +150,10 @@ class CustomAuditEventRepositoryTest {
             .thenReturn(persistentList);
         when(auditEventConverter.convertToAuditEvent(persistentList)).thenReturn(convertedList);
 
-        // Act
         List<AuditEvent> result = customAuditEventRepository.find(principal, after, type);
 
-        // Assert
         assertThat(result).hasSize(1);
-        assertThat(result.get(0)).isEqualTo(expectedEvent);
+        assertThat(result.getFirst()).isEqualTo(expectedEvent);
         verify(persistenceAuditEventRepository)
             .findByPrincipalAndAuditEventDateAfterAndAuditEventType(principal, after, type);
         verify(auditEventConverter).convertToAuditEvent(persistentList);
