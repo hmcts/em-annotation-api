@@ -220,7 +220,7 @@ class CommentResourceIntTest extends BaseTest {
         // Validate the Comment in the database
         List<Comment> commentList = commentRepository.findAll();
         assertThat(commentList).hasSize(databaseSizeBeforeUpdate);
-        Comment testComment = commentList.get(commentList.size() - 1);
+        Comment testComment = commentList.getLast();
         assertThat(testComment.getContent()).isEqualTo(UPDATED_CONTENT);
     }
 
