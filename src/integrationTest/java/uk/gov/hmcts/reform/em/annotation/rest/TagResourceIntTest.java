@@ -7,9 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
@@ -17,9 +15,6 @@ import uk.gov.hmcts.reform.em.annotation.BaseTest;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 import uk.gov.hmcts.reform.em.annotation.domain.Tag;
 import uk.gov.hmcts.reform.em.annotation.repository.TagRepository;
-import uk.gov.hmcts.reform.em.annotation.rest.errors.ExceptionTranslator;
-import uk.gov.hmcts.reform.em.annotation.service.TagService;
-import uk.gov.hmcts.reform.em.annotation.service.mapper.TagMapper;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -40,21 +35,6 @@ class TagResourceIntTest extends BaseTest {
 
     @Autowired
     private TagRepository tagRepository;
-
-    @Autowired
-    private TagMapper tagMapper;
-
-    @Autowired
-    private TagService tagService;
-
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
 
     @Autowired
     private EntityManager em;

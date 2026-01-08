@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.em.annotation.repository;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -91,7 +90,7 @@ class CustomAuditEventRepositoryIntTest {
         customAuditEventRepository.add(event);
         List<PersistentAuditEvent> persistentAuditEvents = persistenceAuditEventRepository.findAll();
         assertThat(persistentAuditEvents).hasSize(1);
-        PersistentAuditEvent persistentAuditEvent = persistentAuditEvents.get(0);
+        PersistentAuditEvent persistentAuditEvent = persistentAuditEvents.getFirst();
         assertThat(persistentAuditEvent.getPrincipal()).isEqualTo(event.getPrincipal());
         assertThat(persistentAuditEvent.getAuditEventType()).isEqualTo(event.getType());
         assertThat(persistentAuditEvent.getData()).containsKey("test-key");
@@ -109,7 +108,7 @@ class CustomAuditEventRepositoryIntTest {
         List<AuditEvent> auditEvents = customAuditEventRepository.find(event.getPrincipal(),
                 oneHourAgo, event.getType());
 
-        AuditEvent auditEvent = auditEvents.get(0);
+        AuditEvent auditEvent = auditEvents.getFirst();
         assertThat(auditEvents).hasSize(1);
         assertThat(auditEvent.getPrincipal()).isEqualTo(event.getPrincipal());
         assertThat(auditEvent.getType()).isEqualTo(event.getType());
@@ -126,7 +125,7 @@ class CustomAuditEventRepositoryIntTest {
         customAuditEventRepository.add(event);
         List<PersistentAuditEvent> persistentAuditEvents = persistenceAuditEventRepository.findAll();
         assertThat(persistentAuditEvents).hasSize(1);
-        PersistentAuditEvent persistentAuditEvent = persistentAuditEvents.get(0);
+        PersistentAuditEvent persistentAuditEvent = persistentAuditEvents.getFirst();
         assertThat(persistentAuditEvent.getPrincipal()).isEqualTo(event.getPrincipal());
         assertThat(persistentAuditEvent.getAuditEventType()).isEqualTo(event.getType());
         assertThat(persistentAuditEvent.getData()).containsKey("test-key");
@@ -141,14 +140,14 @@ class CustomAuditEventRepositoryIntTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setSession(session);
         request.setRemoteAddr("1.2.3.4");
-        WebAuthenticationDetails details = new WebAuthenticationDetails((HttpServletRequest) request);
+        WebAuthenticationDetails details = new WebAuthenticationDetails(request);
         Map<String, Object> data = new HashMap<>();
         data.put("test-key", details);
         AuditEvent event = new AuditEvent("test-user", "test-type", data);
         customAuditEventRepository.add(event);
         List<PersistentAuditEvent> persistentAuditEvents = persistenceAuditEventRepository.findAll();
         assertThat(persistentAuditEvents).hasSize(1);
-        PersistentAuditEvent persistentAuditEvent = persistentAuditEvents.get(0);
+        PersistentAuditEvent persistentAuditEvent = persistentAuditEvents.getFirst();
         assertThat(persistentAuditEvent.getData()).containsEntry("remoteAddress", "1.2.3.4");
         assertThat(persistentAuditEvent.getData()).containsEntry("sessionId","test-session-id");
     }
@@ -161,7 +160,7 @@ class CustomAuditEventRepositoryIntTest {
         customAuditEventRepository.add(event);
         List<PersistentAuditEvent> persistentAuditEvents = persistenceAuditEventRepository.findAll();
         assertThat(persistentAuditEvents).hasSize(1);
-        PersistentAuditEvent persistentAuditEvent = persistentAuditEvents.get(0);
+        PersistentAuditEvent persistentAuditEvent = persistentAuditEvents.getFirst();
         assertThat(persistentAuditEvent.getData()).containsEntry("test-key","null");
     }
 
@@ -209,7 +208,7 @@ class CustomAuditEventRepositoryIntTest {
         Pageable pageable = PageRequest.of(0, 8);
 
         Page<AuditEvent> events = auditEventService.findAll(pageable);
-        AuditEvent auditEvent = events.toList().get(0);
+        AuditEvent auditEvent = events.toList().getFirst();
         assertThat(auditEvent.getType()).isEqualTo(event.getType());
         assertThat(auditEvent.getData()).isEqualTo(event.getData());
         assertThat(auditEvent.getPrincipal()).isEqualTo(event.getPrincipal());
@@ -229,7 +228,7 @@ class CustomAuditEventRepositoryIntTest {
         Pageable pageable = PageRequest.of(0, 8);
 
         Page<AuditEvent> events = auditEventService.findByDates(oneHourAgo, oneHourAhead, pageable);
-        AuditEvent auditEvent = events.toList().get(0);
+        AuditEvent auditEvent = events.toList().getFirst();
         assertThat(auditEvent.getType()).isEqualTo(event.getType());
         assertThat(auditEvent.getData()).isEqualTo(event.getData());
         assertThat(auditEvent.getPrincipal()).isEqualTo(event.getPrincipal());
@@ -245,7 +244,7 @@ class CustomAuditEventRepositoryIntTest {
         AuditEvent event = new AuditEvent("test-user", "test-type", data);
         customAuditEventRepository.add(event);
         List<PersistentAuditEvent> persistentAuditEvents = persistenceAuditEventRepository.findByPrincipal("test-user");
-        PersistentAuditEvent persistentAuditEvent = persistentAuditEvents.get(0);
+        PersistentAuditEvent persistentAuditEvent = persistentAuditEvents.getFirst();
 
         Optional<AuditEvent> events = auditEventService.find(persistentAuditEvent.getId());
         AuditEvent auditEvent = events.get();

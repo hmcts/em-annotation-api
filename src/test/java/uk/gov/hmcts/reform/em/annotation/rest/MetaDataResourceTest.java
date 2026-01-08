@@ -2,109 +2,87 @@ package uk.gov.hmcts.reform.em.annotation.rest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.WebDataBinder;
 import uk.gov.hmcts.reform.em.annotation.service.MetadataService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.MetadataDto;
 
 import java.net.URISyntaxException;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class MetaDataResourceTest {
-
-    @InjectMocks
-    private MetaDataResource metaDataResource;
 
     @Mock
     private MetadataService metadataService;
 
-    @Mock
-    private WebDataBinder webDataBinder;
+    @InjectMocks
+    private MetaDataResource metaDataResource;
 
-    private UUID documentId =  UUID.randomUUID();
+    private MetadataDto metadataDto;
+    private UUID documentId;
+
+    private static final String ENTITY_CREATION_ALERT = "X-emannotationapp-alert";
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        documentId = UUID.randomUUID();
+        metadataDto = new MetadataDto();
+        metadataDto.setDocumentId(documentId);
+        metadataDto.setRotationAngle(90);
     }
 
     @Test
     void createMetaDataSuccess() throws URISyntaxException {
+        when(metadataService.save(any(MetadataDto.class))).thenReturn(metadataDto);
 
-        MetadataDto metadataDto = createMetadataDto();
-        Mockito.when(metadataService.save(metadataDto)).thenReturn(metadataDto);
+        ResponseEntity<MetadataDto> response = metaDataResource.createMetaData(metadataDto);
 
-        ResponseEntity<MetadataDto> responseEntity = metaDataResource.createMetaData(metadataDto);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody()).isEqualTo(metadataDto);
+        assertThat(response.getHeaders().getFirst(ENTITY_CREATION_ALERT)).isNotNull();
+        assertThat(response.getHeaders().getLocation()).hasPath("/api/metadata/" + documentId);
 
-        MetadataDto response = responseEntity.getBody();
-        assertEquals(metadataDto.getDocumentId(), response.getDocumentId());
-        assertEquals(metadataDto.getRotationAngle(), response.getRotationAngle());
-
-        Mockito.verify(metadataService, Mockito.atLeast(1)).save(metadataDto);
+        verify(metadataService).save(metadataDto);
     }
 
     @Test
     void getMetadataSuccess() {
-        MetadataDto metadataDto = createMetadataDto();
-        Mockito.when(metadataService.findByDocumentId(metadataDto.getDocumentId())).thenReturn(metadataDto);
+        when(metadataService.findByDocumentId(documentId)).thenReturn(metadataDto);
 
-        metaDataResource.getMetadata(metadataDto.getDocumentId());
+        ResponseEntity<MetadataDto> response = metaDataResource.getMetadata(documentId);
 
-        Mockito.verify(metadataService, Mockito.atLeast(1)).findByDocumentId(metadataDto.getDocumentId());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo(metadataDto);
     }
 
     @Test
-    void getMetaDataFailure() {
+    void getMetadataReturnsNoContentWhenDtoIsNull() {
+        when(metadataService.findByDocumentId(documentId)).thenReturn(null);
 
-        MetadataDto metadataDto = new MetadataDto();
-        Mockito.when(metadataService.findByDocumentId(metadataDto.getDocumentId())).thenReturn(metadataDto);
+        ResponseEntity<MetadataDto> response = metaDataResource.getMetadata(documentId);
 
-        ResponseEntity<MetadataDto> responseEntity = metaDataResource.getMetadata(metadataDto.getDocumentId());
-
-        assertNotNull(responseEntity);
-        assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
-        assertNull(responseEntity.getBody());
-
-        Mockito.verify(metadataService, Mockito.atLeast(1)).findByDocumentId(metadataDto.getDocumentId());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(response.getBody()).isNull();
     }
 
     @Test
-    void getMetaDataFailure2() {
+    void getMetadataReturnsNoContentWhenRotationAngleIsNull() {
+        metadataDto.setRotationAngle(null);
+        when(metadataService.findByDocumentId(documentId)).thenReturn(metadataDto);
 
-        MetadataDto metadataDto = new MetadataDto();
-        Mockito.when(metadataService.findByDocumentId(metadataDto.getDocumentId())).thenReturn(null);
+        ResponseEntity<MetadataDto> response = metaDataResource.getMetadata(documentId);
 
-        ResponseEntity<MetadataDto> responseEntity = metaDataResource.getMetadata(metadataDto.getDocumentId());
-
-        assertNotNull(responseEntity);
-        assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
-        assertNull(responseEntity.getBody());
-
-        Mockito.verify(metadataService, Mockito.atLeast(1)).findByDocumentId(metadataDto.getDocumentId());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(response.getBody()).isNull();
     }
-
-    @Test
-    void testInitBinder() {
-        metaDataResource.initBinder(webDataBinder);
-        Mockito.verify(webDataBinder, Mockito.atLeast(1)).setDisallowedFields(Mockito.anyString());
-    }
-
-    private MetadataDto createMetadataDto() {
-
-        MetadataDto metadataDto = new MetadataDto();
-        metadataDto.setRotationAngle(90);
-        metadataDto.setDocumentId(documentId);
-
-        return metadataDto;
-    }
-
 }

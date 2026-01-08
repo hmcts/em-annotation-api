@@ -8,9 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +18,6 @@ import uk.gov.hmcts.reform.em.annotation.domain.Annotation;
 import uk.gov.hmcts.reform.em.annotation.domain.Comment;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 import uk.gov.hmcts.reform.em.annotation.repository.CommentRepository;
-import uk.gov.hmcts.reform.em.annotation.rest.errors.ExceptionTranslator;
-import uk.gov.hmcts.reform.em.annotation.service.CommentService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
@@ -57,18 +53,6 @@ class CommentResourceIntTest extends BaseTest {
 
     @Autowired
     private CommentMapper commentMapper;
-    
-    @Autowired
-    private CommentService commentService;
-
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
 
     @Autowired
     private EntityManager em;
@@ -220,7 +204,7 @@ class CommentResourceIntTest extends BaseTest {
         // Validate the Comment in the database
         List<Comment> commentList = commentRepository.findAll();
         assertThat(commentList).hasSize(databaseSizeBeforeUpdate);
-        Comment testComment = commentList.get(commentList.size() - 1);
+        Comment testComment = commentList.getLast();
         assertThat(testComment.getContent()).isEqualTo(UPDATED_CONTENT);
     }
 

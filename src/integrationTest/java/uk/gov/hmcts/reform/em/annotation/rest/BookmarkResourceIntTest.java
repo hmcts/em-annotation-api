@@ -7,9 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +17,12 @@ import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
 import uk.gov.hmcts.reform.em.annotation.domain.Bookmark;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 import uk.gov.hmcts.reform.em.annotation.repository.BookmarkRepository;
-import uk.gov.hmcts.reform.em.annotation.rest.errors.ExceptionTranslator;
-import uk.gov.hmcts.reform.em.annotation.service.BookmarkService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.BookmarkDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.DeleteBookmarkDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.BookmarkMapper;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -55,18 +52,6 @@ class BookmarkResourceIntTest extends BaseTest {
 
     @Autowired
     private BookmarkMapper bookmarkMapper;
-
-    @Autowired
-    private BookmarkService bookmarkService;
-
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
 
     @Autowired
     private EntityManager em;
@@ -203,7 +188,7 @@ class BookmarkResourceIntTest extends BaseTest {
         // Validate the Comment in the database
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeUpdate);
-        Bookmark testBookmark = bookmarkList.get(bookmarkList.size() - 1);
+        Bookmark testBookmark = bookmarkList.getLast();
         assertThat(testBookmark.getName()).isEqualTo("Updated Bookmark");
     }
 
@@ -269,7 +254,7 @@ class BookmarkResourceIntTest extends BaseTest {
 
         restLogoutMockMvc.perform(put("/api/bookmarks_multiple")
                         .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                        .content(TestUtil.convertObjectToJsonBytes(Arrays.asList(bookmarkDTO))))
+                        .content(TestUtil.convertObjectToJsonBytes(Collections.singletonList(bookmarkDTO))))
                 .andExpect(status().isBadRequest());
 
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
@@ -384,7 +369,7 @@ class BookmarkResourceIntTest extends BaseTest {
         bookmark.setId(null);
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
         DeleteBookmarkDTO deleteBookmarkDTO = new DeleteBookmarkDTO();
-        deleteBookmarkDTO.setDeleted(Arrays.asList(bookmarkDTO.getId()));
+        deleteBookmarkDTO.setDeleted(Collections.singletonList(bookmarkDTO.getId()));
 
         restLogoutMockMvc.perform(delete("/api/bookmarks_multiple")
                         .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -403,7 +388,7 @@ class BookmarkResourceIntTest extends BaseTest {
         bookmark.setId(UUID.randomUUID());
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
         DeleteBookmarkDTO deleteBookmarkDTO = new DeleteBookmarkDTO();
-        deleteBookmarkDTO.setDeleted(Arrays.asList(bookmarkDTO.getId()));
+        deleteBookmarkDTO.setDeleted(Collections.singletonList(bookmarkDTO.getId()));
 
         restLogoutMockMvc.perform(delete("/api/bookmarks_multiple")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
