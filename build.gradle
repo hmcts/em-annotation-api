@@ -68,6 +68,12 @@ sourceSets {
     test {
         java.srcDir 'src/test/java'
     }
+    integrationTest {
+        java {
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+        }
+    }
     contractTest {
         java {
             compileClasspath += main.output
@@ -209,10 +215,17 @@ dependencies {
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
 
+    integrationTestImplementation sourceSets.main.runtimeClasspath
+    integrationTestImplementation sourceSets.test.runtimeClasspath
+
     cftlibImplementation 'org.springframework.boot:spring-boot-devtools'
 }
 
 processAatResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+processIntegrationTestResources {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
@@ -241,6 +254,16 @@ dependencyManagement {
     }
 }
 
+tasks.register('integration', Test) {
+    failFast = true
+    useJUnitPlatform()
+    description = "Runs integration tests"
+    group = "Verification"
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+
 bootJar {
     getArchiveFileName().set(provider {
         'em-annotation-app.jar'
@@ -260,15 +283,13 @@ def coverageExclusionList = [
 ]
 
 jacocoTestReport {
-    executionData(test)
+    dependsOn test, integration
+    executionData(test, integration)
 
     reports {
         xml.required = true
         csv.required = false
-
-        xml.outputLocation = layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml")
-    }
-
+        xml.outputLocation = layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml")    }
 }
 
 pitest {

@@ -7,9 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.Application;
@@ -17,8 +15,6 @@ import uk.gov.hmcts.reform.em.annotation.BaseTest;
 import uk.gov.hmcts.reform.em.annotation.domain.AnnotationSet;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationSetRepository;
-import uk.gov.hmcts.reform.em.annotation.rest.errors.ExceptionTranslator;
-import uk.gov.hmcts.reform.em.annotation.service.AnnotationSetService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationSetDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationSetMapper;
 
@@ -51,18 +47,6 @@ class AnnotationSetResourceIntTest extends BaseTest {
 
     @Autowired
     private AnnotationSetMapper annotationSetMapper;
-    
-    @Autowired
-    private AnnotationSetService annotationSetService;
-
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
 
     @Autowired
     private EntityManager em;
@@ -193,7 +177,7 @@ class AnnotationSetResourceIntTest extends BaseTest {
         // Validate the AnnotationSet in the database
         List<AnnotationSet> annotationSetList = annotationSetRepository.findAll();
         assertThat(annotationSetList).hasSize(databaseSizeBeforeUpdate);
-        AnnotationSet testAnnotationSet = annotationSetList.get(annotationSetList.size() - 1);
+        AnnotationSet testAnnotationSet = annotationSetList.getLast();
         assertThat(testAnnotationSet.getDocumentId()).isEqualTo(UPDATED_DOCUMENT_ID);
     }
 

@@ -1,127 +1,79 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
-import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
-import uk.gov.hmcts.reform.em.annotation.Application;
-import uk.gov.hmcts.reform.em.annotation.BaseTest;
-import uk.gov.hmcts.reform.em.annotation.domain.AnnotationSet;
-import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
-import uk.gov.hmcts.reform.em.annotation.repository.AnnotationSetRepository;
-import uk.gov.hmcts.reform.em.annotation.rest.errors.ExceptionTranslator;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import uk.gov.hmcts.reform.em.annotation.rest.errors.EmptyResponseException;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationSetService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationSetDTO;
-import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationSetMapper;
 
 import java.util.Optional;
-import java.util.UUID;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-/**
- * Test class for the FilterAnnotationSet REST controller.
- *
- * @see FilterAnnotationSet
- */
+@ExtendWith(MockitoExtension.class)
+class FilterAnnotationSetTest {
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
-class FilterAnnotationSetTest  extends BaseTest {
-
-    @Autowired
-    private AnnotationSetMapper annotationSetMapper;
-
-    @MockitoBean
+    @Mock
     private AnnotationSetService annotationSetService;
 
-    @Autowired
-    private AnnotationSetRepository annotationSetRepository;
+    @InjectMocks
+    private FilterAnnotationSet filterAnnotationSet;
 
-    @Autowired
-    private EntityManager em;
+    @Test
+    void getAllAnnotationSetsSuccess() {
+        String documentId = "doc123";
+        AnnotationSetDTO annotationSetDTO = new AnnotationSetDTO();
+        annotationSetDTO.setDocumentId(documentId);
 
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
+        when(annotationSetService.findOneByDocumentId(documentId)).thenReturn(Optional.of(annotationSetDTO));
 
-    private AnnotationSet annotationSet;
+        ResponseEntity<AnnotationSetDTO> response = filterAnnotationSet.getAllAnnotationSets(documentId);
 
-    @BeforeEach
-    void setup() {
-        MockitoAnnotations.openMocks(this);
-        em.persist(new IdamDetails("system"));
-        em.persist(new IdamDetails("anonymous"));
-    }
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo(annotationSetDTO);
 
-    /**
-     * Create an entity for this test.
-     *
-     * <p>This is a static method, as tests for other entities might also need it,</p>
-     * if they test an entity which requires the current entity.
-     */
-
-    public static AnnotationSet createEntity() {
-        AnnotationSet annotationSet = new AnnotationSet();
-        annotationSet.setId(UUID.randomUUID());
-        annotationSet.setDocumentId("Test");
-        annotationSet.setCreatedBy("user");
-        annotationSet.setId(UUID.randomUUID());
-
-        return annotationSet;
-    }
-
-    @BeforeEach
-    void initTest() {
-        annotationSet = createEntity();
+        verify(annotationSetService).findOneByDocumentId(documentId);
     }
 
     @Test
-    @Transactional
-    void testGetAllAnnotationSets() throws Exception {
-        annotationSetRepository.saveAndFlush(annotationSet);
-        AnnotationSetDTO annotationSetDTO = annotationSetMapper.toDto(annotationSet);
-        Optional<AnnotationSetDTO> annotationSetDTOs = Optional.of(annotationSetDTO);
+    void getAllAnnotationSetsThrowsEmptyResponseExceptionWhenNotFound() {
+        String documentId = "doc123";
+        when(annotationSetService.findOneByDocumentId(documentId)).thenReturn(Optional.empty());
 
-        Mockito.when(annotationSetService.findOneByDocumentId("Test")).thenReturn(annotationSetDTOs);
-
-        restLogoutMockMvc.perform(get("/api/annotation-sets/filter?documentId=Test")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(annotationSetDTOs)))
-                .andExpect(status().isOk());
+        assertThatThrownBy(() -> filterAnnotationSet.getAllAnnotationSets(documentId))
+            .isInstanceOf(EmptyResponseException.class)
+            .hasMessage("Could not find annotation set for this document id#doc123");
     }
 
     @Test
-    @Transactional
-    void testGetNonExistingAnnotationSet() throws Exception {
-        Optional<AnnotationSetDTO> annotationSetDTOs = Optional.empty();
+    void getAllAnnotationSetsReturnsBadRequestOnConstraintViolation() {
+        String documentId = "doc123";
+        when(annotationSetService.findOneByDocumentId(documentId))
+            .thenThrow(new ConstraintViolationException("Violation", null));
 
-        Mockito.when(annotationSetService.findOneByDocumentId("Test")).thenReturn(annotationSetDTOs);
+        ResponseEntity<AnnotationSetDTO> response = filterAnnotationSet.getAllAnnotationSets(documentId);
 
-        restLogoutMockMvc.perform(get("/api/annotation-sets/filter?documentId=Test")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(annotationSetDTOs)))
-                .andExpect(status().isNoContent());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     @Test
-    @Transactional
-    void testGetAnnotationSetConstraintViolation() throws Exception {
-        Optional<AnnotationSetDTO> annotationSetDTOs = Optional.empty();
+    void getAllAnnotationSetsReturnsBadRequestOnDataIntegrityViolation() {
+        String documentId = "doc123";
+        when(annotationSetService.findOneByDocumentId(documentId))
+            .thenThrow(new DataIntegrityViolationException("Data integrity violation"));
 
-        Mockito.when(annotationSetService.findOneByDocumentId("Test")).thenThrow(ConstraintViolationException.class);
+        ResponseEntity<AnnotationSetDTO> response = filterAnnotationSet.getAllAnnotationSets(documentId);
 
-        restLogoutMockMvc.perform(get("/api/annotation-sets/filter?documentId=Test")
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                        .content(TestUtil.convertObjectToJsonBytes(annotationSetDTOs)))
-                .andExpect(status().isBadRequest());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 }

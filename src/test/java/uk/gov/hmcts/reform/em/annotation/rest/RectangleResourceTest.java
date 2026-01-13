@@ -4,11 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import uk.gov.hmcts.reform.em.annotation.rest.errors.BadRequestAlertException;
@@ -27,7 +26,6 @@ import static org.mockito.ArgumentMatchers.any;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest(classes = {TestSecurityConfiguration.class})
 class RectangleResourceTest {
 
     @Mock
@@ -39,13 +37,13 @@ class RectangleResourceTest {
     @Mock
     private WebDataBinder webDataBinder;
 
+    @InjectMocks
     private RectangleResource rectangleResource;
 
     private static final String ENTITY_NAME = "rectangle";
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         rectangleResource = new RectangleResource(annotationService, rectangleService);
     }
 
