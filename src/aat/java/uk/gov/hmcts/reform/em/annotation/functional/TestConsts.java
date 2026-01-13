@@ -41,6 +41,8 @@ public final class TestConsts {
     public static final String VALUE_TEXT = "text";
 
     public static final String FIELD_NAME = "name";
+    public static final String FIELD_LABEL = "label";
+    public static final String FIELD_TAGS = "tags";
     public static final String FIELD_CREATED_BY = "createdBy";
     public static final String FIELD_CREATED_BY_DETAILS = "createdByDetails";
     public static final String FIELD_CREATED_DATE = "createdDate";
