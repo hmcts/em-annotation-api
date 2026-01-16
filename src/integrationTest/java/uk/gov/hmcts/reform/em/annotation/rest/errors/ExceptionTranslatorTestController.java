@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import org.hibernate.exception.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
 import org.postgresql.util.PSQLState;
+import org.springframework.context.annotation.Profile;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 @RestController
+@Profile("exception-test-controller-enabled")
 public class ExceptionTranslatorTestController {
 
     @GetMapping("/test/concurrency-failure")
