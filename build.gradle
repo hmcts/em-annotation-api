@@ -45,7 +45,7 @@ application {
 def versions = [
         postgresql         : '42.7.9',
         springSecurity     : '6.5.7',
-        fasterXmlJackson   : '2.20.1',
+        fasterXmlJackson   : '2.21.0',
         pitest             : '1.5.1',
         gradlePitest       : '1.3.0',
         sonarPitest        : '0.5',
@@ -119,7 +119,7 @@ dependencies {
     implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version: versions.fasterXmlJackson
     implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.fasterXmlJackson
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate6', version: versions.fasterXmlJackson
-    implementation group:'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.20'
+    implementation group:'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.21'
     implementation group:'com.fasterxml.jackson.core', name: 'jackson-databind',version: versions.fasterXmlJackson
     implementation group:'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
     implementation group:'com.fasterxml.jackson.module', name: 'jackson-module-blackbird', version: versions.fasterXmlJackson
