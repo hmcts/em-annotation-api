@@ -25,11 +25,15 @@ Requires docker desktop running
 ./gradlew build
 ```
 
-#### To run the application:
-At the moment java version must be set to 17 as 21 is not supported for local setup by CFTLib
+#### To run the application locally:
 
 ```
 ./gradlew bootWithCCD
+```
+and in another terminal window you can run functional tests
+
+```
+ ./gradlew functional
 ```
 
 #### To remove docker containers after stopping the run:
