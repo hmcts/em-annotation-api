@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Test class for the CommentResource REST controller.
+ * Test class for the BookmarkResource REST controller.
  *
  * @see BookmarkResource
  */
@@ -61,6 +61,8 @@ class BookmarkResourceIntTest extends BaseTest {
 
     private Bookmark bookmark;
 
+    private static final String DEFAULT_USER = "user123";
+
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
@@ -72,7 +74,7 @@ class BookmarkResourceIntTest extends BaseTest {
         Bookmark bookmark = new Bookmark();
         bookmark.setId(UUID.randomUUID());
         bookmark.setDocumentId(UUID.randomUUID());
-        bookmark.setCreatedBy("bob");
+        bookmark.setCreatedBy(DEFAULT_USER);
         bookmark.setName("My Bookmark");
         bookmark.setPageNumber(426);
         bookmark.setxCoordinate(32.7);
@@ -83,6 +85,7 @@ class BookmarkResourceIntTest extends BaseTest {
     @BeforeEach
     void initTest() {
         bookmark = createEntity();
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DEFAULT_USER));
     }
 
     @Test
@@ -90,15 +93,15 @@ class BookmarkResourceIntTest extends BaseTest {
     void createBookmarkUuidNull() throws Exception {
         int databaseSizeBeforeCreate = bookmarkRepository.findAll().size();
 
-        // Create the Comment
+        // Create the Bookmark
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
         bookmarkDTO.setId(null);
         restLogoutMockMvc.perform(post("/api/bookmarks")
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                        .content(TestUtil.convertObjectToJsonBytes(bookmarkDTO)))
-                .andExpect(status().isBadRequest());
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(bookmarkDTO)))
+            .andExpect(status().isBadRequest());
 
-        // Validate the Comment in the database
+        // Validate the Bookmark in the database
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeCreate);
     }
@@ -108,13 +111,13 @@ class BookmarkResourceIntTest extends BaseTest {
     void createBookmarkFailsPageNumberValidation() throws Exception {
         int databaseSizeBeforeCreate = bookmarkRepository.findAll().size();
 
-        // Create the Comment
+        // Create the Bookmark
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
         bookmarkDTO.setPageNumber(-1);
         restLogoutMockMvc.perform(post("/api/bookmarks")
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                        .content(TestUtil.convertObjectToJsonBytes(bookmarkDTO)))
-                .andExpect(status().isBadRequest())
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(bookmarkDTO)))
+            .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.entityName").value("bookmark"))
             .andExpect(jsonPath("$.errorKey").value("invalidPageNumber"))
             .andExpect(jsonPath("$.type").value("/problem-with-message"))
@@ -123,7 +126,7 @@ class BookmarkResourceIntTest extends BaseTest {
             .andExpect(jsonPath("$.message").value("error.invalidPageNumber"))
             .andExpect(jsonPath("$.params").value("bookmark"));
 
-        // Validate the Comment in the database
+        // Validate the Bookmark in the database
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeCreate);
     }
@@ -132,21 +135,23 @@ class BookmarkResourceIntTest extends BaseTest {
     @Transactional
     void createBookmarkCreatedByNull() throws Exception {
         int databaseSizeBeforeCreate = bookmarkRepository.findAll().size();
-        assertThat(databaseSizeBeforeCreate).isZero();
-        bookmark.setCreatedBy(null);
-        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("fabio"));
 
-        // Create the Comment
+        bookmark.setCreatedBy(null);
+
+        // Create the Bookmark
         bookmark.setId(UUID.randomUUID());
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
         restLogoutMockMvc.perform(post("/api/bookmarks")
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                        .content(TestUtil.convertObjectToJsonBytes(bookmarkDTO)))
-                .andExpect(status().isCreated());
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(bookmarkDTO)))
+            .andExpect(status().isCreated());
 
-        // Validate the Comment in the database
+        // Validate the Bookmark in the database
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeCreate + 1);
+
+        Bookmark savedBookmark = bookmarkList.getLast();
+        assertThat(savedBookmark.getCreatedBy()).isEqualTo(DEFAULT_USER);
     }
 
     @Test
@@ -158,9 +163,9 @@ class BookmarkResourceIntTest extends BaseTest {
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
 
         restLogoutMockMvc.perform(post("/api/bookmarks")
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                        .content(TestUtil.convertObjectToJsonBytes(bookmarkDTO)))
-                .andExpect(status().isCreated());
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(bookmarkDTO)))
+            .andExpect(status().isCreated());
 
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeCreate + 1);
@@ -176,20 +181,35 @@ class BookmarkResourceIntTest extends BaseTest {
         Bookmark updatedBookmark = bookmarkRepository.findById(bookmark.getId()).get();
 
         em.detach(updatedBookmark);
-        updatedBookmark
-                .setName("Updated Bookmark");
+        updatedBookmark.setName("Updated Bookmark");
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(updatedBookmark);
 
         restLogoutMockMvc.perform(put("/api/bookmarks")
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                        .content(TestUtil.convertObjectToJsonBytes(bookmarkDTO)))
-                .andExpect(status().isOk());
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(bookmarkDTO)))
+            .andExpect(status().isOk());
 
-        // Validate the Comment in the database
+        // Validate the Bookmark in the database
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeUpdate);
         Bookmark testBookmark = bookmarkList.getLast();
         assertThat(testBookmark.getName()).isEqualTo("Updated Bookmark");
+    }
+
+    @Test
+    @Transactional
+    void updateBookmarkWithDifferentUser() throws Exception {
+        bookmarkRepository.saveAndFlush(bookmark);
+
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("different_user"));
+
+        BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
+        bookmarkDTO.setName("Different Bookmark");
+
+        restLogoutMockMvc.perform(put("/api/bookmarks")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(bookmarkDTO)))
+            .andExpect(status().isNotFound());
     }
 
     @Test
@@ -201,9 +221,9 @@ class BookmarkResourceIntTest extends BaseTest {
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
 
         restLogoutMockMvc.perform(put("/api/bookmarks")
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                        .content(TestUtil.convertObjectToJsonBytes(bookmarkDTO)))
-                .andExpect(status().isBadRequest());
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(bookmarkDTO)))
+            .andExpect(status().isBadRequest());
 
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeUpdate);
@@ -230,12 +250,12 @@ class BookmarkResourceIntTest extends BaseTest {
         bookmarkDTO2.setName("Another new Bookmark");
 
         restLogoutMockMvc.perform(put("/api/bookmarks_multiple")
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                        .content(TestUtil.convertObjectToJsonBytes(Arrays.asList(
-                                bookmarkDTO, bookmarkDTO1, bookmarkDTO2))))
-                .andExpect(status().isOk());
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(Arrays.asList(
+                    bookmarkDTO, bookmarkDTO1, bookmarkDTO2))))
+            .andExpect(status().isOk());
 
-        // Validate the Comment in the database
+        // Validate the Bookmark in the database
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeUpdate + 2);
         Bookmark testBookmark = bookmarkList.get(bookmarkList.size() - 2);
@@ -253,9 +273,9 @@ class BookmarkResourceIntTest extends BaseTest {
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
 
         restLogoutMockMvc.perform(put("/api/bookmarks_multiple")
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                        .content(TestUtil.convertObjectToJsonBytes(Collections.singletonList(bookmarkDTO))))
-                .andExpect(status().isBadRequest());
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(Collections.singletonList(bookmarkDTO))))
+            .andExpect(status().isBadRequest());
 
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeUpdate);
@@ -265,19 +285,21 @@ class BookmarkResourceIntTest extends BaseTest {
     @Transactional
     void getBookmarksByDocumentId() throws Exception {
         bookmark = bookmarkRepository.saveAndFlush(bookmark);
-        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("bob"));
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DEFAULT_USER));
 
         restLogoutMockMvc.perform(get("/api/" + bookmark.getDocumentId() + "/bookmarks"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.[*].id").value(hasItem(bookmark.getId().toString())))
-                .andExpect(jsonPath("$.[*].name").value(hasItem(bookmark.getName())));
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(bookmark.getId().toString())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(bookmark.getName())));
     }
 
     @Test
     @Transactional
     void getBookmarksByDocumentIdNoUser() throws Exception {
         bookmark = bookmarkRepository.saveAndFlush(bookmark);
+
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.empty());
 
         restLogoutMockMvc.perform(get("/api/" + bookmark.getDocumentId() + "/bookmarks")
                         .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -289,10 +311,10 @@ class BookmarkResourceIntTest extends BaseTest {
     @Transactional
     void getBookmarksByDocumentIdNotFound() throws Exception {
         bookmark = bookmarkRepository.saveAndFlush(bookmark);
-        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("fabio"));
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("different_user"));
 
         restLogoutMockMvc.perform(get("/api/" + bookmark.getDocumentId() + "/bookmarks"))
-                .andExpect(status().isNoContent());
+            .andExpect(status().isNoContent());
     }
 
     @Test
@@ -302,11 +324,28 @@ class BookmarkResourceIntTest extends BaseTest {
 
         int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
         restLogoutMockMvc.perform(delete("/api/bookmarks/{id}", bookmark.getId())
-                        .accept(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk());
+                .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk());
 
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    void deleteBookmarkWithDifferentUser() throws Exception {
+        bookmarkRepository.saveAndFlush(bookmark);
+
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("different_user"));
+
+        int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
+
+        restLogoutMockMvc.perform(delete("/api/bookmarks/{id}", bookmark.getId())
+                .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isNotFound());
+
+        List<Bookmark> bookmarkList = bookmarkRepository.findAll();
+        assertThat(bookmarkList).hasSize(databaseSizeBeforeDelete);
     }
 
     @Test
@@ -316,7 +355,7 @@ class BookmarkResourceIntTest extends BaseTest {
         int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
         restLogoutMockMvc.perform(delete("/api/bookmarks/{id}", UUID.randomUUID())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeDelete);
@@ -334,17 +373,23 @@ class BookmarkResourceIntTest extends BaseTest {
         BookmarkDTO bookmarkDTO1 = bookmarkMapper.toDto(updatedBookmark);
         bookmarkDTO1.setId(UUID.randomUUID());
         bookmarkDTO1.setName("New Bookmark");
-        bookmarkRepository.saveAndFlush(bookmarkMapper.toEntity(bookmarkDTO1));
+        Bookmark b1 = bookmarkMapper.toEntity(bookmarkDTO1);
+        b1.setCreatedBy(DEFAULT_USER);
+        bookmarkRepository.saveAndFlush(b1);
 
         BookmarkDTO bookmarkDTO2 = bookmarkMapper.toDto(updatedBookmark);
         bookmarkDTO2.setId(UUID.randomUUID());
         bookmarkDTO2.setName("Another new Bookmark");
-        bookmarkRepository.saveAndFlush(bookmarkMapper.toEntity(bookmarkDTO2));
+        Bookmark b2 = bookmarkMapper.toEntity(bookmarkDTO2);
+        b2.setCreatedBy(DEFAULT_USER);
+        bookmarkRepository.saveAndFlush(b2);
 
         BookmarkDTO bookmarkDTO3 = bookmarkMapper.toDto(updatedBookmark);
         bookmarkDTO3.setId(UUID.randomUUID());
         bookmarkDTO3.setName("A Bookmark");
-        bookmarkRepository.saveAndFlush(bookmarkMapper.toEntity(bookmarkDTO3));
+        Bookmark b3 = bookmarkMapper.toEntity(bookmarkDTO3);
+        b3.setCreatedBy(DEFAULT_USER);
+        bookmarkRepository.saveAndFlush(b3);
 
         int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
         assertThat(databaseSizeBeforeDelete).isPositive();
@@ -353,9 +398,9 @@ class BookmarkResourceIntTest extends BaseTest {
         deleteBookmarkDTO.setDeleted(Arrays.asList(bookmarkDTO.getId(), bookmarkDTO1.getId(), bookmarkDTO2.getId()));
 
         restLogoutMockMvc.perform(delete("/api/bookmarks_multiple")
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                        .content(TestUtil.convertObjectToJsonBytes(deleteBookmarkDTO)))
-                .andExpect(status().isOk());
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(deleteBookmarkDTO)))
+            .andExpect(status().isOk());
 
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeDelete - 3);
@@ -365,16 +410,15 @@ class BookmarkResourceIntTest extends BaseTest {
     @Transactional
     void deleteMultipleNullBookmarkId() throws Exception {
         int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
-        assertThat(databaseSizeBeforeDelete).isZero();
         bookmark.setId(null);
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
         DeleteBookmarkDTO deleteBookmarkDTO = new DeleteBookmarkDTO();
         deleteBookmarkDTO.setDeleted(Collections.singletonList(bookmarkDTO.getId()));
 
         restLogoutMockMvc.perform(delete("/api/bookmarks_multiple")
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                        .content(TestUtil.convertObjectToJsonBytes(deleteBookmarkDTO)))
-                .andExpect(status().isBadRequest());
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(deleteBookmarkDTO)))
+            .andExpect(status().isBadRequest());
 
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();
         assertThat(bookmarkList).hasSize(databaseSizeBeforeDelete);
@@ -391,8 +435,8 @@ class BookmarkResourceIntTest extends BaseTest {
         deleteBookmarkDTO.setDeleted(Collections.singletonList(bookmarkDTO.getId()));
 
         restLogoutMockMvc.perform(delete("/api/bookmarks_multiple")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(deleteBookmarkDTO)))
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(deleteBookmarkDTO)))
             .andExpect(status().isOk());
 
         List<Bookmark> bookmarkList = bookmarkRepository.findAll();

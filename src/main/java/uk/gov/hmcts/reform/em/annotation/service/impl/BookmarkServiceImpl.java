@@ -10,17 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
 import uk.gov.hmcts.reform.em.annotation.domain.Bookmark;
 import uk.gov.hmcts.reform.em.annotation.repository.BookmarkRepository;
+import uk.gov.hmcts.reform.em.annotation.rest.errors.ResourceNotFoundException;
 import uk.gov.hmcts.reform.em.annotation.service.BookmarkService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.BookmarkDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.BookmarkMapper;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.UUID;
 
-/**
- * Service Implementation for managing Bookmarks.
- */
 @Service
 @Transactional
 public class BookmarkServiceImpl implements BookmarkService {
@@ -28,9 +26,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     private final Logger log = LoggerFactory.getLogger(BookmarkServiceImpl.class);
 
     private final BookmarkRepository bookmarkRepository;
-
     private final BookmarkMapper bookmarkMapper;
-
     private final SecurityUtils securityUtils;
 
     public BookmarkServiceImpl(BookmarkRepository bookmarkRepository,
@@ -41,64 +37,65 @@ public class BookmarkServiceImpl implements BookmarkService {
         this.securityUtils = securityUtils;
     }
 
-    /**
-     * Save a bookmark.
-     *
-     * @param bookmarkDTO the entity to save
-     * @return the persisted entity
-     */
+    private String getCurrentUser() {
+        return securityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new BadCredentialsException("User not found in security context."));
+    }
+
     @Override
     public BookmarkDTO save(BookmarkDTO bookmarkDTO) {
-        log.debug("Request to save Bookmark : {}", bookmarkDTO);
-        if (bookmarkDTO.getCreatedBy() == null) {
-            bookmarkDTO.setCreatedBy(
-                securityUtils.getCurrentUserLogin()
-                    .orElseThrow(() -> {
-                        log.error(String.format("User not found for Bookmark with Id : %s ", bookmarkDTO.getId()));
-                        return new BadCredentialsException("Bad credentials.");
-                    })
-            );
+        String currentUser = getCurrentUser();
+
+        if (Objects.nonNull(bookmarkDTO.getId())) {
+            bookmarkRepository.findById(bookmarkDTO.getId()).ifPresent(existingBookmark -> {
+                if (!existingBookmark.getCreatedBy().equals(currentUser)) {
+                    throw new ResourceNotFoundException("Bookmark not found");
+                }
+            });
         }
+
+        bookmarkDTO.setCreatedBy(currentUser);
 
         Bookmark bookmark = bookmarkMapper.toEntity(bookmarkDTO);
         bookmark = bookmarkRepository.save(bookmark);
         return bookmarkMapper.toDto(bookmark);
     }
 
-    /**
-     * Find all document by Id.
-     *
-     * @param pageable pageable
-     * @param documentId given documentId
-     * @return bookmark Repository
-     */
     @Override
+    @Transactional(readOnly = true)
     public Page<BookmarkDTO> findAllByDocumentId(UUID documentId, Pageable pageable) {
-        Optional<String> user = securityUtils.getCurrentUserLogin();
-        if (user.isPresent()) {
-            return bookmarkRepository.findByDocumentIdAndCreatedBy(documentId, user.get(), pageable)
-                    .map(bookmarkMapper::toDto);
-        } else {
-            String errorMessage = String.format("User not found for Document with Id : %s ", documentId);
-            log.error(errorMessage);
-            throw new BadCredentialsException("Bad credentials.");
-        }
+        String currentUser = getCurrentUser();
+        return bookmarkRepository.findByDocumentIdAndCreatedBy(documentId, currentUser, pageable)
+            .map(bookmarkMapper::toDto);
     }
 
-    /**
-     * Delete the "id" bookmark.
-     *
-     * @param id the id of the entity
-     */
     @Override
     public void delete(UUID id) {
-        log.debug("Request to delete Bookmark : {}", id);
-        bookmarkRepository.deleteById(id);
+        String currentUser = getCurrentUser();
+        log.debug("Request to delete Bookmark : {} by user {}", id, currentUser);
+
+        bookmarkRepository.findById(id).ifPresent(bookmark -> {
+            if (!bookmark.getCreatedBy().equals(currentUser)) {
+                throw new ResourceNotFoundException("Bookmark not found");
+            }
+            bookmarkRepository.deleteById(id);
+        });
     }
 
     @Override
     public void deleteAllById(List<UUID> ids) {
-        log.debug("Request to delete Bookmarks : {}", ids);
+        String currentUser = getCurrentUser();
+        log.debug("Request to delete Bookmarks : {} by user {}", ids, currentUser);
+
+        List<Bookmark> bookmarks = bookmarkRepository.findAllById(ids);
+
+        boolean unauthorized = bookmarks.stream()
+            .anyMatch(bookmark -> !bookmark.getCreatedBy().equals(currentUser));
+
+        if (unauthorized) {
+            throw new ResourceNotFoundException("One or more bookmarks not found");
+        }
+
         bookmarkRepository.deleteAllById(ids);
     }
 }
