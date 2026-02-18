@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Service Implementation for managing Bookmarks.
+ */
 @Service
 @Transactional
 public class BookmarkServiceImpl implements BookmarkService {
@@ -42,6 +45,12 @@ public class BookmarkServiceImpl implements BookmarkService {
             .orElseThrow(() -> new BadCredentialsException("User not found in security context."));
     }
 
+    /**
+     * Save a bookmark.
+     *
+     * @param bookmarkDTO the entity to save
+     * @return the persisted entity
+     */
     @Override
     public BookmarkDTO save(BookmarkDTO bookmarkDTO) {
         String currentUser = getCurrentUser();
@@ -61,6 +70,13 @@ public class BookmarkServiceImpl implements BookmarkService {
         return bookmarkMapper.toDto(bookmark);
     }
 
+    /**
+     * Find all document by Id.
+     *
+     * @param pageable pageable
+     * @param documentId given documentId
+     * @return bookmark Repository
+     */
     @Override
     @Transactional(readOnly = true)
     public Page<BookmarkDTO> findAllByDocumentId(UUID documentId, Pageable pageable) {
@@ -69,6 +85,11 @@ public class BookmarkServiceImpl implements BookmarkService {
             .map(bookmarkMapper::toDto);
     }
 
+    /**
+     * Delete the "id" bookmark.
+     *
+     * @param id the id of the entity
+     */
     @Override
     public void delete(UUID id) {
         String currentUser = getCurrentUser();
