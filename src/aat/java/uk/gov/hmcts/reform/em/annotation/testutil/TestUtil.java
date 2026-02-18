@@ -16,8 +16,8 @@ import uk.gov.hmcts.reform.em.test.s2s.S2sHelper;
 
 import java.util.stream.Stream;
 
-import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.ANNOTATION_TEST_USER_EMAIL;
 import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.ANNOTATION_TEST_USER2_EMAIL;
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.ANNOTATION_TEST_USER_EMAIL;
 
 @Service
 @ComponentScan({"uk.gov.hmcts.reform.em.test.idam",
