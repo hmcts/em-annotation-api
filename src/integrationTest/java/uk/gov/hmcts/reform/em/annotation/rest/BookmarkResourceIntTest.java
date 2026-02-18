@@ -134,7 +134,7 @@ class BookmarkResourceIntTest extends BaseTest {
     @Test
     @Transactional
     void createBookmarkCreatedByNull() throws Exception {
-        int databaseSizeBeforeCreate = bookmarkRepository.findAll().size();
+        final int databaseSizeBeforeCreate = bookmarkRepository.findAll().size();
 
         bookmark.setCreatedBy(null);
 
@@ -409,7 +409,7 @@ class BookmarkResourceIntTest extends BaseTest {
     @Test
     @Transactional
     void deleteMultipleNullBookmarkId() throws Exception {
-        int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
+        final int databaseSizeBeforeDelete = bookmarkRepository.findAll().size();
         bookmark.setId(null);
         BookmarkDTO bookmarkDTO = bookmarkMapper.toDto(bookmark);
         DeleteBookmarkDTO deleteBookmarkDTO = new DeleteBookmarkDTO();

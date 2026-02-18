@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.BadCredentialsException;
 import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
 import uk.gov.hmcts.reform.em.annotation.domain.Bookmark;
 import uk.gov.hmcts.reform.em.annotation.repository.BookmarkRepository;
@@ -112,7 +113,7 @@ class BookmarkServiceImplTest {
         BookmarkDTO bookmarkDTO = new BookmarkDTO();
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> bookmarkService.save(bookmarkDTO));
+        assertThrows(BadCredentialsException.class, () -> bookmarkService.save(bookmarkDTO));
     }
 
     @Test
@@ -158,14 +159,14 @@ class BookmarkServiceImplTest {
 
     @Test
     void testDeleteAllByIdSuccess() {
-        UUID id1 = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        List<UUID> ids = Arrays.asList(id1, id2);
-
         Bookmark b1 = new Bookmark();
         b1.setCreatedBy(CURRENT_USER);
         Bookmark b2 = new Bookmark();
         b2.setCreatedBy(CURRENT_USER);
+
+        UUID id1 = UUID.randomUUID();
+        UUID id2 = UUID.randomUUID();
+        List<UUID> ids = Arrays.asList(id1, id2);
 
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(CURRENT_USER));
         when(bookmarkRepository.findAllById(ids)).thenReturn(Arrays.asList(b1, b2));
@@ -177,14 +178,15 @@ class BookmarkServiceImplTest {
 
     @Test
     void testDeleteAllByIdForbidden() {
-        UUID id1 = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        List<UUID> ids = Arrays.asList(id1, id2);
 
         Bookmark b1 = new Bookmark();
         b1.setCreatedBy(CURRENT_USER);
         Bookmark b2 = new Bookmark();
         b2.setCreatedBy(OTHER_USER);
+
+        UUID id1 = UUID.randomUUID();
+        UUID id2 = UUID.randomUUID();
+        List<UUID> ids = Arrays.asList(id1, id2);
 
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(CURRENT_USER));
         when(bookmarkRepository.findAllById(ids)).thenReturn(Arrays.asList(b1, b2));
