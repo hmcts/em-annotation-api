@@ -103,6 +103,8 @@ public final class TestConsts {
     public static final String CONTENT_TYPE_JSON = MediaType.APPLICATION_JSON_VALUE;
 
     public static final String ANNOTATION_TEST_USER_EMAIL = "emAnnotationTestUser@test.local";
+    public static final String ANNOTATION_TEST_USER2_EMAIL = "emAnnotationTestUser2@test.local";
+
 
     // === HTTP Status Codes ===
     public static final int STATUS_CREATED = 201;
