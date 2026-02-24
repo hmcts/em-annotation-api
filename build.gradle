@@ -157,7 +157,7 @@ dependencies {
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.3'
     implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.5'
     
-    implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.10.0'
+    implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '3.0.0'
 
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.3.1'
 
