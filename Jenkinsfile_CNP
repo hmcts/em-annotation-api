@@ -60,6 +60,13 @@ withPipeline(type , product, component) {
     loadVaultSecrets(secrets)
     disableLegacyDeployment()
     enableAksStagingDeployment()
+    onMaster {
+        enableFortifyScan('em-anno-aat')
+
+        afterAlways('fortify-scan') {
+            steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
+        }
+    }
   afterSuccess('test') {
         sh '''
         curl https://raw.githubusercontent.com/hmcts/reform-api-docs/master/bin/publish-swagger-docs.sh > publish-swagger-docs.sh
@@ -69,10 +76,7 @@ withPipeline(type , product, component) {
 
     enablePactAs([AppPipelineDsl.PactRoles.CONSUMER, AppPipelineDsl.PactRoles.PROVIDER])
 
-    enableFortifyScan('em-anno-aat')
-    afterAlways('fortify-scan') {
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
-    }
+
     afterAlways('test') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/checkstyle/**/*'
