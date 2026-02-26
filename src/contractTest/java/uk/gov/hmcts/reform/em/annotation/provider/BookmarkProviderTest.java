@@ -66,7 +66,7 @@ public class BookmarkProviderTest extends BaseProviderTest {
         when(bookmarkService.save(any(BookmarkDTO.class))).thenReturn(bookmarkDto);
     }
 
-    @State( {"bookmark is updated successfully"})
+    @State({"bookmark is updated successfully"})
     public void updateBookmark() {
         BookmarkDTO bookmarkDto = createBookmarkDTO(EXAMPLE_BOOKMARK_ID, EXAMPLE_BOOKMARK_NAME, 5);
         when(bookmarkService.update(any(BookmarkDTO.class))).thenReturn(bookmarkDto);
