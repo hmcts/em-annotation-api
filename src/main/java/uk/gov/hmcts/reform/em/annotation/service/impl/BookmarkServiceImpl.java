@@ -53,8 +53,22 @@ public class BookmarkServiceImpl implements BookmarkService {
      */
     @Override
     public BookmarkDTO save(BookmarkDTO bookmarkDTO) {
-        String currentUser = getCurrentUser();
+        bookmarkDTO.setCreatedBy(getCurrentUser());
+        Bookmark bookmark = bookmarkMapper.toEntity(bookmarkDTO);
+        bookmark = bookmarkRepository.save(bookmark);
+        return bookmarkMapper.toDto(bookmark);
+    }
 
+
+    /**
+     * Update a bookmark.
+     *
+     * @param bookmarkDTO the entity to update
+     * @return the persisted entity
+     */
+    @Override
+    public BookmarkDTO update(BookmarkDTO bookmarkDTO) {
+        String currentUser = getCurrentUser();
         if (Objects.nonNull(bookmarkDTO.getId())) {
             bookmarkRepository.findById(bookmarkDTO.getId()).ifPresent(existingBookmark -> {
                 if (!existingBookmark.getCreatedBy().equals(currentUser)) {
@@ -62,9 +76,7 @@ public class BookmarkServiceImpl implements BookmarkService {
                 }
             });
         }
-
         bookmarkDTO.setCreatedBy(currentUser);
-
         Bookmark bookmark = bookmarkMapper.toEntity(bookmarkDTO);
         bookmark = bookmarkRepository.save(bookmark);
         return bookmarkMapper.toDto(bookmark);
@@ -107,16 +119,12 @@ public class BookmarkServiceImpl implements BookmarkService {
     public void deleteAllById(List<UUID> ids) {
         String currentUser = getCurrentUser();
         log.debug("Request to delete Bookmarks : {} by user {}", ids, currentUser);
-
-        List<Bookmark> bookmarks = bookmarkRepository.findAllById(ids);
-
-        boolean unauthorized = bookmarks.stream()
-            .anyMatch(bookmark -> !bookmark.getCreatedBy().equals(currentUser));
-
-        if (unauthorized) {
+        long unauthorizedCount = bookmarkRepository.countByIdInAndCreatedByNot(ids, currentUser);
+        if (unauthorizedCount > 0) {
             throw new ResourceNotFoundException("One or more bookmarks not found");
         }
-
+        // Perform deletion in DB to avoid loading entities into memory.
         bookmarkRepository.deleteAllById(ids);
+
     }
 }

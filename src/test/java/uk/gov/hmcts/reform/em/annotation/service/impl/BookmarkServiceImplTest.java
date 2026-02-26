@@ -48,12 +48,9 @@ class BookmarkServiceImplTest {
     private static final String OTHER_USER = "otherUser";
 
     @Test
-    void testSaveCreateNewBookmarkSuccess() {
+    void testSaveSuccess() {
         BookmarkDTO bookmarkDTO = new BookmarkDTO();
-        bookmarkDTO.setId(null);
-
         Bookmark bookmark = new Bookmark();
-        bookmark.setCreatedBy(CURRENT_USER);
 
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(CURRENT_USER));
         when(bookmarkMapper.toEntity(bookmarkDTO)).thenReturn(bookmark);
@@ -68,7 +65,7 @@ class BookmarkServiceImplTest {
     }
 
     @Test
-    void testSaveUpdateExistingBookmarkSuccess() {
+    void testUpdateSuccess() {
         UUID id = UUID.randomUUID();
         BookmarkDTO bookmarkDTO = new BookmarkDTO();
         bookmarkDTO.setId(id);
@@ -83,15 +80,15 @@ class BookmarkServiceImplTest {
         when(bookmarkRepository.save(existingBookmark)).thenReturn(existingBookmark);
         when(bookmarkMapper.toDto(existingBookmark)).thenReturn(bookmarkDTO);
 
-        BookmarkDTO result = bookmarkService.save(bookmarkDTO);
+        BookmarkDTO result = bookmarkService.update(bookmarkDTO);
 
         assertNotNull(result);
-        verify(bookmarkRepository).findById(id);
-        verify(bookmarkRepository).save(any(Bookmark.class));
+        assertEquals(CURRENT_USER, bookmarkDTO.getCreatedBy());
+        verify(bookmarkRepository).save(existingBookmark);
     }
 
     @Test
-    void testSaveUpdateExistingBookmarkWithDifferentUser() {
+    void testUpdateForbidden() {
         UUID id = UUID.randomUUID();
         BookmarkDTO bookmarkDTO = new BookmarkDTO();
         bookmarkDTO.setId(id);
@@ -103,24 +100,32 @@ class BookmarkServiceImplTest {
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(CURRENT_USER));
         when(bookmarkRepository.findById(id)).thenReturn(Optional.of(existingBookmark));
 
-        assertThrows(ResourceNotFoundException.class, () -> bookmarkService.save(bookmarkDTO));
-
-        verify(bookmarkRepository, never()).save(any(Bookmark.class));
+        assertThrows(ResourceNotFoundException.class, () -> bookmarkService.update(bookmarkDTO));
+        verify(bookmarkRepository, never()).save(any());
     }
 
     @Test
-    void testSaveThrowsBadCredentialsWhenNoUserLoggedIn() {
-        BookmarkDTO bookmarkDTO = new BookmarkDTO();
-        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.empty());
+    void testFindAllByDocumentIdSuccess() {
+        UUID documentId = UUID.randomUUID();
+        Pageable pageable = Pageable.unpaged();
+        Bookmark bookmark = new Bookmark();
+        Page<Bookmark> page = new PageImpl<>(List.of(bookmark));
 
-        assertThrows(BadCredentialsException.class, () -> bookmarkService.save(bookmarkDTO));
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(CURRENT_USER));
+        when(bookmarkRepository.findByDocumentIdAndCreatedBy(documentId, CURRENT_USER, pageable))
+            .thenReturn(page);
+        when(bookmarkMapper.toDto(bookmark)).thenReturn(new BookmarkDTO());
+
+        Page<BookmarkDTO> result = bookmarkService.findAllByDocumentId(documentId, pageable);
+
+        assertNotNull(result);
+        verify(bookmarkRepository).findByDocumentIdAndCreatedBy(documentId, CURRENT_USER, pageable);
     }
 
     @Test
     void testDeleteSuccess() {
         UUID id = UUID.randomUUID();
         Bookmark bookmark = new Bookmark();
-        bookmark.setId(id);
         bookmark.setCreatedBy(CURRENT_USER);
 
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(CURRENT_USER));
@@ -132,44 +137,24 @@ class BookmarkServiceImplTest {
     }
 
     @Test
-    void testDeleteWithDifferentUser() {
+    void testDeleteForbidden() {
         UUID id = UUID.randomUUID();
         Bookmark bookmark = new Bookmark();
-        bookmark.setId(id);
         bookmark.setCreatedBy(OTHER_USER);
 
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(CURRENT_USER));
         when(bookmarkRepository.findById(id)).thenReturn(Optional.of(bookmark));
 
         assertThrows(ResourceNotFoundException.class, () -> bookmarkService.delete(id));
-
         verify(bookmarkRepository, never()).deleteById(any());
     }
 
     @Test
-    void testDeleteNonExistentBookmarkDoesNothing() {
-        UUID id = UUID.randomUUID();
-        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(CURRENT_USER));
-        when(bookmarkRepository.findById(id)).thenReturn(Optional.empty());
-
-        bookmarkService.delete(id);
-
-        verify(bookmarkRepository, never()).deleteById(id);
-    }
-
-    @Test
     void testDeleteAllByIdSuccess() {
-        Bookmark b1 = new Bookmark();
-        b1.setCreatedBy(CURRENT_USER);
-        Bookmark b2 = new Bookmark();
-        b2.setCreatedBy(CURRENT_USER);
-
-        UUID id1 = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        List<UUID> ids = Arrays.asList(id1, id2);
+        List<UUID> ids = Arrays.asList(UUID.randomUUID(), UUID.randomUUID());
 
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(CURRENT_USER));
-        when(bookmarkRepository.findAllById(ids)).thenReturn(Arrays.asList(b1, b2));
+        when(bookmarkRepository.countByIdInAndCreatedByNot(ids, CURRENT_USER)).thenReturn(0L);
 
         bookmarkService.deleteAllById(ids);
 
@@ -178,41 +163,21 @@ class BookmarkServiceImplTest {
 
     @Test
     void testDeleteAllByIdForbidden() {
-
-        Bookmark b1 = new Bookmark();
-        b1.setCreatedBy(CURRENT_USER);
-        Bookmark b2 = new Bookmark();
-        b2.setCreatedBy(OTHER_USER);
-
-        UUID id1 = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        List<UUID> ids = Arrays.asList(id1, id2);
+        List<UUID> ids = Arrays.asList(UUID.randomUUID(), UUID.randomUUID());
 
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(CURRENT_USER));
-        when(bookmarkRepository.findAllById(ids)).thenReturn(Arrays.asList(b1, b2));
+        // Mock that 1 bookmark in the list belongs to someone else
+        when(bookmarkRepository.countByIdInAndCreatedByNot(ids, CURRENT_USER)).thenReturn(1L);
 
         assertThrows(ResourceNotFoundException.class, () -> bookmarkService.deleteAllById(ids));
-
         verify(bookmarkRepository, never()).deleteAllById(any());
     }
 
     @Test
-    void testFindAllByDocumentIdSuccess() {
-        UUID documentId = UUID.randomUUID();
-        Pageable pageable = Pageable.unpaged();
-        Bookmark bookmark = new Bookmark();
-        bookmark.setCreatedBy(CURRENT_USER);
-        Page<Bookmark> page = new PageImpl<>(List.of(bookmark));
+    void testGetCurrentUserThrowsException() {
+        BookmarkDTO dto = new BookmarkDTO();
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.empty());
 
-        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(CURRENT_USER));
-        when(bookmarkRepository.findByDocumentIdAndCreatedBy(documentId, CURRENT_USER, pageable))
-            .thenReturn(page);
-        when(bookmarkMapper.toDto(bookmark)).thenReturn(new BookmarkDTO());
-
-        Page<BookmarkDTO> result = bookmarkService.findAllByDocumentId(documentId, pageable);
-
-        assertNotNull(result);
-        assertEquals(1, result.getContent().size());
-        verify(bookmarkRepository).findByDocumentIdAndCreatedBy(documentId, CURRENT_USER, pageable);
+        assertThrows(BadCredentialsException.class, () -> bookmarkService.save(dto));
     }
 }

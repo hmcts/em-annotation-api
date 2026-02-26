@@ -99,7 +99,7 @@ class BookmarkResourceTest {
 
     @Test
     void updateBookmarkSuccess() {
-        when(bookmarkService.save(any(BookmarkDTO.class))).thenReturn(bookmarkDTO);
+        when(bookmarkService.update(any(BookmarkDTO.class))).thenReturn(bookmarkDTO);
 
         ResponseEntity<BookmarkDTO> response = bookmarkResource.updateBookmark(bookmarkDTO);
 
@@ -107,7 +107,7 @@ class BookmarkResourceTest {
         assertThat(response.getBody()).isEqualTo(bookmarkDTO);
         assertThat(response.getHeaders().getFirst(ENTITY_UPDATE_ALERT)).isNotNull();
 
-        verify(bookmarkService).save(bookmarkDTO);
+        verify(bookmarkService).update(bookmarkDTO);
     }
 
     @Test
@@ -122,7 +122,7 @@ class BookmarkResourceTest {
     @Test
     void updateMultipleBookmarksSuccess() {
         List<BookmarkDTO> bookmarks = List.of(bookmarkDTO);
-        when(bookmarkService.save(any(BookmarkDTO.class))).thenReturn(bookmarkDTO);
+        when(bookmarkService.update(any(BookmarkDTO.class))).thenReturn(bookmarkDTO);
 
         ResponseEntity<List<BookmarkDTO>> response = bookmarkResource.updateMultipleBookmarks(bookmarks);
 
@@ -131,7 +131,7 @@ class BookmarkResourceTest {
         assertThat(response.getBody().getFirst()).isEqualTo(bookmarkDTO);
         assertThat(response.getHeaders().getFirst(ENTITY_UPDATE_ALERT)).isNotNull();
 
-        verify(bookmarkService).save(bookmarkDTO);
+        verify(bookmarkService).update(bookmarkDTO);
     }
 
     @Test

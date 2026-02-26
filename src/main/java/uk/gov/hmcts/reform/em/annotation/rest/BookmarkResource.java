@@ -139,7 +139,7 @@ public class BookmarkResource {
         if (bookmarkDTO.getId() == null) {
             throw new BadRequestAlertException(INVALID_ID, ENTITY_NAME, NULL_ENTITY);
         }
-        BookmarkDTO result = bookmarkService.save(bookmarkDTO);
+        BookmarkDTO result = bookmarkService.update(bookmarkDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, bookmarkDTO.getId().toString()))
             .body(result);
@@ -186,7 +186,7 @@ public class BookmarkResource {
         log.debug("REST request to update list of Bookmark objects : {}", sanitisedList);
 
         List<BookmarkDTO> result = bookmarkDTOList.stream()
-            .map(bookmarkService::save)
+            .map(bookmarkService::update)
             .toList();
 
         return ResponseEntity.ok()
