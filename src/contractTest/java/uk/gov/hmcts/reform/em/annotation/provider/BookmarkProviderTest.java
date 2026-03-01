@@ -60,10 +60,16 @@ public class BookmarkProviderTest extends BaseProviderTest {
         return new Object[]{bookmarkResource};
     }
 
-    @State({"bookmark is created successfully", "bookmark is updated successfully"})
+    @State({"bookmark is created successfully"})
     public void createBookmark() {
         BookmarkDTO bookmarkDto = createBookmarkDTO(EXAMPLE_BOOKMARK_ID, EXAMPLE_BOOKMARK_NAME, 5);
         when(bookmarkService.save(any(BookmarkDTO.class))).thenReturn(bookmarkDto);
+    }
+
+    @State({"bookmark is updated successfully"})
+    public void updateBookmark() {
+        BookmarkDTO bookmarkDto = createBookmarkDTO(EXAMPLE_BOOKMARK_ID, EXAMPLE_BOOKMARK_NAME, 5);
+        when(bookmarkService.update(any(BookmarkDTO.class))).thenReturn(bookmarkDto);
     }
 
     @State({"bookmarks are updated successfully"})
@@ -71,9 +77,9 @@ public class BookmarkProviderTest extends BaseProviderTest {
         BookmarkDTO bookmark1 = createBookmarkDTO(EXAMPLE_BOOKMARK_ID, EXAMPLE_BOOKMARK_NAME, 5);
         BookmarkDTO bookmark2 = createBookmarkDTO(ANOTHER_EXAMPLE_BOOKMARK_ID, "Another Bookmark", 10);
 
-        when(bookmarkService.save(argThat(dto ->
+        when(bookmarkService.update(argThat(dto ->
             Objects.nonNull(dto) && dto.getId().equals(EXAMPLE_BOOKMARK_ID)))).thenReturn(bookmark1);
-        when(bookmarkService.save(argThat(dto ->
+        when(bookmarkService.update(argThat(dto ->
             Objects.nonNull(dto) && dto.getId().equals(ANOTHER_EXAMPLE_BOOKMARK_ID)))).thenReturn(bookmark2);
     }
 

@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.em.test.s2s.S2sHelper;
 
 import java.util.stream.Stream;
 
+import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.ANNOTATION_TEST_USER2_EMAIL;
 import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.ANNOTATION_TEST_USER_EMAIL;
 
 @Service
@@ -34,6 +35,7 @@ public class TestUtil {
     private final CcdDataHelper ccdDataHelper;
 
     private String idamAuth;
+    private String idamAuth2;  // Second user auth token
     private String s2sAuth;
 
     @Autowired
@@ -46,23 +48,38 @@ public class TestUtil {
     @PostConstruct
     void postConstruct() {
         SerenityRest.useRelaxedHTTPSValidation();
+
         idamHelper
-                .createUser(ANNOTATION_TEST_USER_EMAIL,
-                        Stream.of("caseworker", "caseworker-publiclaw").toList());
+            .createUser(ANNOTATION_TEST_USER_EMAIL,
+                Stream.of("caseworker", "caseworker-publiclaw").toList());
         idamAuth = idamHelper.authenticateUser(ANNOTATION_TEST_USER_EMAIL);
+
+        idamHelper
+            .createUser(ANNOTATION_TEST_USER2_EMAIL,
+                Stream.of("caseworker", "caseworker-publiclaw").toList());
+        idamAuth2 = idamHelper.authenticateUser(ANNOTATION_TEST_USER2_EMAIL);
+
         s2sAuth = s2sHelper.getS2sToken();
     }
 
     @PreDestroy
     void preDestroy() {
         idamHelper.deleteUser(ANNOTATION_TEST_USER_EMAIL);
+        idamHelper.deleteUser(ANNOTATION_TEST_USER2_EMAIL);
     }
 
     public RequestSpecification authRequest() {
         return SerenityRest
-                .given()
-                .header(AUTHORIZATION, idamHelper.authenticateUser(ANNOTATION_TEST_USER_EMAIL))
-                .header(SERVICE_AUTHORIZATION, s2sHelper.getS2sToken());
+            .given()
+            .header(AUTHORIZATION, idamHelper.authenticateUser(ANNOTATION_TEST_USER_EMAIL))
+            .header(SERVICE_AUTHORIZATION, s2sHelper.getS2sToken());
+    }
+
+    public RequestSpecification authRequestWithDifferentUser() {
+        return SerenityRest
+            .given()
+            .header(AUTHORIZATION, idamAuth2)
+            .header(SERVICE_AUTHORIZATION, s2sHelper.getS2sToken());
     }
 
     public RequestSpecification unauthenticatedRequest() {
@@ -71,14 +88,14 @@ public class TestUtil {
 
     public RequestSpecification emptyIdamAuthRequest() {
         return s2sAuthRequest()
-                .header(new Header(AUTHORIZATION, null));
+            .header(new Header(AUTHORIZATION, null));
     }
 
     public RequestSpecification emptyIdamAuthAndEmptyS2SAuth() {
         return SerenityRest
-                .given()
-                .header(new Header(SERVICE_AUTHORIZATION, null))
-                .header(new Header(AUTHORIZATION, null));
+            .given()
+            .header(new Header(SERVICE_AUTHORIZATION, null))
+            .header(new Header(AUTHORIZATION, null));
     }
 
     public RequestSpecification validAuthRequestWithEmptyS2SAuth() {
@@ -112,8 +129,8 @@ public class TestUtil {
 
     private RequestSpecification s2sAuthRequest() {
         return SerenityRest
-                .given()
-                .header(SERVICE_AUTHORIZATION, s2sAuth);
+            .given()
+            .header(SERVICE_AUTHORIZATION, s2sAuth);
     }
 
     public CaseDetails createCase(String jurisdiction, String caseType, Object data) {
