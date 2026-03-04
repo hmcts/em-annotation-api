@@ -102,7 +102,7 @@ public class BookmarkProviderTest extends BaseProviderTest {
         doNothing().when(bookmarkService).deleteAllById(anyList());
 
         BookmarkDTO updatedBookmark = createBookmarkDTO(EXAMPLE_PARENT_BOOKMARK_ID, "Updated Parent Bookmark", 3);
-        when(bookmarkService.save(argThat(dto ->
+        when(bookmarkService.update(argThat(dto ->
             Objects.nonNull(dto) && dto.getId().equals(EXAMPLE_PARENT_BOOKMARK_ID)))).thenReturn(updatedBookmark);
     }
 

@@ -295,7 +295,7 @@ public class BookmarkResource {
         bookmarkService.deleteAllById(deleteBookmarkDTO.getDeleted());
 
         if (!Objects.isNull(deleteBookmarkDTO.getUpdated())) {
-            bookmarkService.save(deleteBookmarkDTO.getUpdated());
+            bookmarkService.update(deleteBookmarkDTO.getUpdated());
         }
 
         return ResponseEntity.ok()

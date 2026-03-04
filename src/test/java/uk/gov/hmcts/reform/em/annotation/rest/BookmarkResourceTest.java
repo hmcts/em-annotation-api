@@ -194,7 +194,7 @@ class BookmarkResourceTest {
         assertThat(response.getHeaders().getFirst(ENTITY_DELETION_ALERT)).isNotNull();
 
         verify(bookmarkService).deleteAllById(deleteDTO.getDeleted());
-        verify(bookmarkService).save(bookmarkDTO);
+        verify(bookmarkService).update(bookmarkDTO);
     }
 
     @Test
