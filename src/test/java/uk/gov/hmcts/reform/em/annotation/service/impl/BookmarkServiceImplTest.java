@@ -105,6 +105,27 @@ class BookmarkServiceImplTest {
     }
 
     @Test
+    void testUpdateWithNullId() {
+        BookmarkDTO bookmarkDTO = new BookmarkDTO();
+        bookmarkDTO.setId(null);
+
+        Bookmark bookmark = new Bookmark();
+
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(CURRENT_USER));
+        when(bookmarkMapper.toEntity(bookmarkDTO)).thenReturn(bookmark);
+        when(bookmarkRepository.save(any(Bookmark.class))).thenReturn(bookmark);
+        when(bookmarkMapper.toDto(bookmark)).thenReturn(bookmarkDTO);
+
+        BookmarkDTO result = bookmarkService.update(bookmarkDTO);
+
+        assertNotNull(result);
+        assertEquals(CURRENT_USER, bookmarkDTO.getCreatedBy());
+
+        verify(bookmarkRepository, never()).findById(any());
+        verify(bookmarkRepository).save(any(Bookmark.class));
+    }
+
+    @Test
     void testFindAllByDocumentIdSuccess() {
         UUID documentId = UUID.randomUUID();
         Pageable pageable = Pageable.unpaged();
