@@ -18,6 +18,14 @@ public interface BookmarkService {
     BookmarkDTO save(BookmarkDTO bookmarkDTO);
 
     /**
+     * Update a bookmark.
+     *
+     * @param bookmarkDTO the entity to update
+     * @return the persisted entity
+     */
+    BookmarkDTO update(BookmarkDTO bookmarkDTO);
+
+    /**
      * Find document by documentId.
      * @param pageable pageable
      * @param documentId documentId

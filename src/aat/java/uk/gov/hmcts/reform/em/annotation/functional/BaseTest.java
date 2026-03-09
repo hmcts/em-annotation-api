@@ -33,6 +33,7 @@ public abstract class BaseTest {
 
     protected RequestSpecification request;
     protected RequestSpecification unAuthenticatedRequest;
+    protected RequestSpecification differentUserRequest;
 
     @Autowired
     protected BaseTest(TestUtil testUtil) {
@@ -48,6 +49,11 @@ public abstract class BaseTest {
 
         unAuthenticatedRequest = testUtil
             .unauthenticatedRequest()
+            .baseUri(testUrl)
+            .contentType(APPLICATION_JSON_VALUE);
+
+        differentUserRequest = testUtil
+            .authRequestWithDifferentUser()
             .baseUri(testUrl)
             .contentType(APPLICATION_JSON_VALUE);
     }
