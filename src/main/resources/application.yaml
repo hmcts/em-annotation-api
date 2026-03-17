@@ -44,9 +44,8 @@ spring:
             client-secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
   main:
     allow-circular-references: true # Need this for the Mapper library to work
-#  flyway:
-#    enabled: ${RUN_DB_MIGRATION_ON_STARTUP:true}
-#    locations: classpath:db.migration
+  lifecycle:
+    timeout-per-shutdown-phase: ${TIMEOUT_SERVER_SHUTDOWN_PHASE:1m}
 
 management:
   endpoint:
