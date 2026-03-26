@@ -24,7 +24,11 @@ brew install jq
 ```
 
 #### To run the application locally:
-Requires docker desktop running
+Requires docker desktop running.
+
+You need to be logged in to Azure and have access to the ACR registry to pull the necessary containers for the application to run.
+If you are not logged in, you can do so by running `az login` in your terminal.
+Followed by `az acr login --name hmctsprod` to log in to the ACR registry.
 
 ```
 ./gradlew bootWithCCD
@@ -49,7 +53,7 @@ Disable AirPlay receiver
 
 Authentication issues causing containers to not start:
 ```
-docker logout hmctspublic.azurecr.io
+docker logout hmctsprod.azurecr.io
 ```
 
 ### Swagger UI
