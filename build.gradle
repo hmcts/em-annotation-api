@@ -19,7 +19,7 @@ plugins {
     id 'checkstyle'
     id 'au.com.dius.pact' version '4.6.20'
     id 'info.solidsoft.pitest' version '1.19.0'
-    id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.7'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.9'
     id 'com.github.hmcts.rse-cft-lib' version '0.19.2049'
     id 'org.flywaydb.flyway' version '12.2.0'
 }
@@ -49,7 +49,7 @@ def versions = [
         pitest             : '1.5.1',
         gradlePitest       : '1.3.0',
         sonarPitest        : '0.5',
-        serenity           : '5.3.7',
+        serenity           : '5.3.10',
         pact_version       : '4.6.20',
         hibernate          : '6.6.45.Final',
         logging            : '8.0.0',
@@ -341,7 +341,7 @@ configurations {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '13.3.0'
+    toolVersion = '13.4.0'
     reportsDir = layout.buildDirectory.file('reports/checkstyle').get().asFile
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
