@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.em.annotation.service.dto;
 
 import org.springframework.data.annotation.ReadOnlyProperty;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
+import uk.gov.hmcts.reform.em.annotation.util.Identifer;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -10,7 +11,7 @@ import java.time.Instant;
  * Base abstract class for DTO which will hold definitions for created, last modified by and created,
  * last modified by date.
  */
-public abstract class AbstractAuditingDTO implements Serializable {
+public abstract class AbstractAuditingDTO implements Serializable, Identifer {
 
     private static final long serialVersionUID = 1L;
 

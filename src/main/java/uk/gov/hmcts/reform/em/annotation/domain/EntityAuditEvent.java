@@ -8,6 +8,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.UuidGenerator;
+import uk.gov.hmcts.reform.em.annotation.service.util.ObjectUtilities;
+import uk.gov.hmcts.reform.em.annotation.util.Identifer;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -17,7 +19,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "jhi_entity_audit_event")
 
-public class EntityAuditEvent implements Serializable {
+public class EntityAuditEvent implements Serializable, Identifer {
 
     private static final long serialVersionUID = 1L;
 
@@ -121,14 +123,7 @@ public class EntityAuditEvent implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        EntityAuditEvent entityAuditEvent = (EntityAuditEvent) o;
-        return Objects.equals(id, entityAuditEvent.id);
+        return ObjectUtilities.equals(this, o);
     }
 
     @Override

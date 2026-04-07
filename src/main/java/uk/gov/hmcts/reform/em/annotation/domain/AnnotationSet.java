@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import uk.gov.hmcts.reform.em.annotation.service.util.ObjectUtilities;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -84,17 +85,7 @@ public class AnnotationSet extends AbstractAuditingEntity implements Serializabl
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        AnnotationSet annotationSet = (AnnotationSet) o;
-        if (annotationSet.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), annotationSet.getId());
+        return ObjectUtilities.equals(this, o);
     }
 
     @Override

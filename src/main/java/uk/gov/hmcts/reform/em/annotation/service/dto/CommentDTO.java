@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.em.annotation.service.dto;
 
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Size;import uk.gov.hmcts.reform.em.annotation.service.util.ObjectUtilities;import uk.gov.hmcts.reform.em.annotation.util.Identifer;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,7 +9,7 @@ import java.util.UUID;
 /**
  * A DTO for the Comment entity.
  */
-public class CommentDTO extends AbstractAuditingDTO implements Serializable {
+public class CommentDTO extends AbstractAuditingDTO implements Serializable, Identifer {
 
     private UUID id;
 
@@ -44,18 +44,7 @@ public class CommentDTO extends AbstractAuditingDTO implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        CommentDTO commentDTO = (CommentDTO) o;
-        if (commentDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), commentDTO.getId());
+        return ObjectUtilities.equals(this, o);
     }
 
     @Override

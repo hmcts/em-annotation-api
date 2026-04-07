@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import uk.gov.hmcts.reform.em.annotation.service.util.ObjectUtilities;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -117,17 +118,7 @@ public class Rectangle extends AbstractAuditingEntity implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Rectangle rectangle = (Rectangle) o;
-        if (rectangle.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), rectangle.getId());
+        return ObjectUtilities.equals(this, o);
     }
 
     @Override
