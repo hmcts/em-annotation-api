@@ -15,6 +15,7 @@ properties([
 ])
 
 @Library("Infrastructure")
+import java.util.UUID
 
 def type = "java"
 def product = "em"
@@ -56,6 +57,7 @@ withNightlyPipeline(type, product, component) {
     env.CCD_DATA_API_URL = 'http://ccd-data-store-api-aat.service.core-compute-aat.internal'
 
     env.TEST_URL = "http://em-anno-aat.service.core-compute-aat.internal"
+    env.TEST_USER_PASSWORD = 'S!' + UUID.randomUUID().toString().replace('-', '').take(20)
 
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
