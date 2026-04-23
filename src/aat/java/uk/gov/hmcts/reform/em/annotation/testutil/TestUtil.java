@@ -6,6 +6,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import net.serenitybdd.rest.SerenityRest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,9 @@ public class TestUtil {
 
     private final CcdDataHelper ccdDataHelper;
 
+    @Value("${test.user.password}")
+    private String testUserPassword;
+
     private String idamAuth;
     private String idamAuth2;  // Second user auth token
     private String s2sAuth;
@@ -50,14 +54,14 @@ public class TestUtil {
         SerenityRest.useRelaxedHTTPSValidation();
 
         idamHelper
-            .createUser(ANNOTATION_TEST_USER_EMAIL,
+            .createUser(ANNOTATION_TEST_USER_EMAIL, testUserPassword,
                 Stream.of("caseworker", "caseworker-publiclaw").toList());
-        idamAuth = idamHelper.authenticateUser(ANNOTATION_TEST_USER_EMAIL);
+        idamAuth = idamHelper.authenticateUser(ANNOTATION_TEST_USER_EMAIL, testUserPassword);
 
         idamHelper
-            .createUser(ANNOTATION_TEST_USER2_EMAIL,
+            .createUser(ANNOTATION_TEST_USER2_EMAIL, testUserPassword,
                 Stream.of("caseworker", "caseworker-publiclaw").toList());
-        idamAuth2 = idamHelper.authenticateUser(ANNOTATION_TEST_USER2_EMAIL);
+        idamAuth2 = idamHelper.authenticateUser(ANNOTATION_TEST_USER2_EMAIL, testUserPassword);
 
         s2sAuth = s2sHelper.getS2sToken();
     }
@@ -71,7 +75,7 @@ public class TestUtil {
     public RequestSpecification authRequest() {
         return SerenityRest
             .given()
-            .header(AUTHORIZATION, idamHelper.authenticateUser(ANNOTATION_TEST_USER_EMAIL))
+            .header(AUTHORIZATION, idamHelper.authenticateUser(ANNOTATION_TEST_USER_EMAIL, testUserPassword))
             .header(SERVICE_AUTHORIZATION, s2sHelper.getS2sToken());
     }
 
@@ -134,7 +138,8 @@ public class TestUtil {
     }
 
     public CaseDetails createCase(String jurisdiction, String caseType, Object data) {
-        return ccdDataHelper.createCase(ANNOTATION_TEST_USER_EMAIL, jurisdiction, caseType, "createCase", data);
+        return ccdDataHelper.createCase(
+            ANNOTATION_TEST_USER_EMAIL, testUserPassword, jurisdiction, caseType, "createCase", data);
     }
 
 }

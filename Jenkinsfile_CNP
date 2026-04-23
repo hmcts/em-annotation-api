@@ -1,5 +1,6 @@
 #!groovy
 import uk.gov.hmcts.contino.AppPipelineDsl
+import java.util.UUID
 
 properties([
     [
@@ -47,6 +48,7 @@ env.IDAM_WEBSHOW_WHITELIST = 'https://em-show-aat.service.core-compute-aat.inter
 env.DM_STORE_APP_URL = 'http://dm-store-aat.service.core-compute-aat.internal'
 env.PACT_BROKER_FULL_URL = 'https://pact-broker.platform.hmcts.net'
 env.CCD_DATA_API_URL = 'http://ccd-data-store-api-aat.service.core-compute-aat.internal'
+env.TEST_USER_PASSWORD = 'A!' + UUID.randomUUID().toString().replace('-', '').take(20)
 
 
 def vaultOverrides = [
