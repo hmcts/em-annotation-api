@@ -13,6 +13,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uk.gov.hmcts.reform.em.annotation.config.audit.EntityAuditEventListener;
+import uk.gov.hmcts.reform.em.annotation.util.Identifer;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -25,7 +26,7 @@ import java.util.UUID;
 @MappedSuperclass
 @Audited
 @EntityListeners({AuditingEntityListener.class, EntityAuditEventListener.class})
-public abstract class AbstractAuditingEntity implements Serializable {
+public abstract class AbstractAuditingEntity implements Serializable, Identifer {
 
     private static final long serialVersionUID = 1L;
 

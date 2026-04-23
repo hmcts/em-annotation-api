@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.em.annotation.service.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
+import uk.gov.hmcts.reform.em.annotation.service.util.ObjectUtilities;
+import uk.gov.hmcts.reform.em.annotation.util.Identifer;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -13,7 +15,7 @@ import java.util.UUID;
 /**
  * A DTO for the Annotation entity.
  */
-public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
+public class AnnotationDTO extends AbstractAuditingDTO implements Serializable, Identifer {
 
     private UUID id;
 
@@ -140,18 +142,7 @@ public class AnnotationDTO extends AbstractAuditingDTO implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        AnnotationDTO annotationDTO = (AnnotationDTO) o;
-        if (annotationDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), annotationDTO.getId());
+        return ObjectUtilities.equals(this,o);
     }
 
     @Override

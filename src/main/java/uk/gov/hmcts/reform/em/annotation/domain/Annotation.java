@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import uk.gov.hmcts.reform.em.annotation.service.util.ObjectUtilities;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -222,17 +223,7 @@ public class Annotation extends AbstractAuditingEntity implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Annotation annotation = (Annotation) o;
-        if (annotation.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), annotation.getId());
+        return ObjectUtilities.equals(this, o);
     }
 
     @Override

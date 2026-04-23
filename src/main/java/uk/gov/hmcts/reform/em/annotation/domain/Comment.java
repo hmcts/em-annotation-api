@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
+import uk.gov.hmcts.reform.em.annotation.service.util.ObjectUtilities;
+import uk.gov.hmcts.reform.em.annotation.util.Identifer;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -18,7 +20,7 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "comment")
-public class Comment extends AbstractAuditingEntity implements Serializable {
+public class Comment extends AbstractAuditingEntity implements Serializable, Identifer {
 
     private static final long serialVersionUID = 1L;
 
@@ -72,17 +74,7 @@ public class Comment extends AbstractAuditingEntity implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Comment comment = (Comment) o;
-        if (comment.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), comment.getId());
+        return ObjectUtilities.equals(this, o);
     }
 
     @Override

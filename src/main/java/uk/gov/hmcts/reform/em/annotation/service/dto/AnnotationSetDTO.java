@@ -1,5 +1,8 @@
 package uk.gov.hmcts.reform.em.annotation.service.dto;
 
+import uk.gov.hmcts.reform.em.annotation.service.util.ObjectUtilities;
+import uk.gov.hmcts.reform.em.annotation.util.Identifer;
+
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
@@ -8,7 +11,7 @@ import java.util.UUID;
 /**
  * A DTO for the AnnotationSet entity.
  */
-public class AnnotationSetDTO extends AbstractAuditingDTO implements Serializable {
+public class AnnotationSetDTO extends AbstractAuditingDTO implements Serializable, Identifer {
 
     private UUID id;
 
@@ -42,18 +45,7 @@ public class AnnotationSetDTO extends AbstractAuditingDTO implements Serializabl
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        AnnotationSetDTO annotationSetDTO = (AnnotationSetDTO) o;
-        if (annotationSetDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), annotationSetDTO.getId());
+        return ObjectUtilities.equals(this, o);
     }
 
     @Override
