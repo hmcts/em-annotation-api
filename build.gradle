@@ -43,7 +43,7 @@ application {
 }
 
 def versions = [
-        postgresql         : '42.7.10',
+        postgresql         : '42.7.11',
         springSecurity     : '6.5.10',
         fasterXmlJackson   : '2.21.3',
         pitest             : '1.5.1',
