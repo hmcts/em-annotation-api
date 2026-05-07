@@ -11,11 +11,14 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.BadCredentialsException;
+import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
 import uk.gov.hmcts.reform.em.annotation.domain.Annotation;
 import uk.gov.hmcts.reform.em.annotation.domain.Comment;
 import uk.gov.hmcts.reform.em.annotation.domain.Rectangle;
 import uk.gov.hmcts.reform.em.annotation.domain.Tag;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationRepository;
+import uk.gov.hmcts.reform.em.annotation.rest.errors.ResourceNotFoundException;
 import uk.gov.hmcts.reform.em.annotation.service.TagService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationSetDTO;
@@ -32,9 +35,12 @@ import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -54,15 +60,20 @@ class AnnotationServiceImplTest {
     private AnnotationSetServiceImpl annotationSetService;
 
     @Mock
+    private SecurityUtils securityUtils;
+
+    @Mock
     private EntityManager entityManager;
 
     @InjectMocks
     private AnnotationServiceImpl annotationServiceImpl;
 
+    private static final String CURRENT_USER = "testUser";
+    private static final String OTHER_USER = "otherUser";
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        // Fix: set annotationService field to the test instance
         try {
             Field field = AnnotationServiceImpl.class.getDeclaredField("annotationService");
             field.setAccessible(true);
@@ -70,6 +81,7 @@ class AnnotationServiceImplTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(CURRENT_USER));
     }
 
     @Test
@@ -92,36 +104,61 @@ class AnnotationServiceImplTest {
     }
 
     @Test
-    void findOneReturnsAnnotationWhenExists() {
+    void findOneReturnsAnnotationWhenOwner() {
         UUID id = UUID.randomUUID();
         Annotation annotation = new Annotation();
-        when(annotationRepository.findById(id)).thenReturn(Optional.of(annotation));
+        when(annotationRepository.findByIdAndCreatedBy(id, CURRENT_USER)).thenReturn(Optional.of(annotation));
         when(annotationMapper.toDto(annotation)).thenReturn(new AnnotationDTO());
 
         Optional<AnnotationDTO> result = annotationServiceImpl.findOne(id);
 
         assertTrue(result.isPresent());
-        verify(annotationRepository).findById(id);
+        verify(annotationRepository).findByIdAndCreatedBy(id, CURRENT_USER);
+    }
+
+    @Test
+    void findOneReturnsEmptyWhenNotOwner() {
+        UUID id = UUID.randomUUID();
+        when(annotationRepository.findByIdAndCreatedBy(id, CURRENT_USER)).thenReturn(Optional.empty());
+
+        Optional<AnnotationDTO> result = annotationServiceImpl.findOne(id);
+
+        assertFalse(result.isPresent());
+        verify(annotationRepository).findByIdAndCreatedBy(id, CURRENT_USER);
     }
 
     @Test
     void findOneReturnsEmptyWhenAnnotationDoesNotExist() {
         UUID id = UUID.randomUUID();
-        when(annotationRepository.findById(id)).thenReturn(Optional.empty());
+        when(annotationRepository.findByIdAndCreatedBy(id, CURRENT_USER)).thenReturn(Optional.empty());
 
         Optional<AnnotationDTO> result = annotationServiceImpl.findOne(id);
 
         assertFalse(result.isPresent());
-        verify(annotationRepository).findById(id);
+        verify(annotationRepository).findByIdAndCreatedBy(id, CURRENT_USER);
     }
 
     @Test
     void deleteAnnotationDeletesSuccessfully() {
         UUID id = UUID.randomUUID();
+        Annotation annotation = new Annotation();
+        annotation.setCreatedBy(CURRENT_USER);
+        when(annotationRepository.findById(id)).thenReturn(Optional.of(annotation));
 
         annotationServiceImpl.delete(id);
 
         verify(annotationRepository).deleteById(id);
+    }
+
+    @Test
+    void deleteAnnotationThrowsWhenNotOwner() {
+        UUID id = UUID.randomUUID();
+        Annotation annotation = new Annotation();
+        annotation.setCreatedBy(OTHER_USER);
+        when(annotationRepository.findById(id)).thenReturn(Optional.of(annotation));
+
+        assertThrows(ResourceNotFoundException.class, () -> annotationServiceImpl.delete(id));
+        verify(annotationRepository, never()).deleteById(any());
     }
 
     @Test
@@ -147,7 +184,6 @@ class AnnotationServiceImplTest {
 
     @Test
     void saveAnnotationPersistsRectangles() throws Exception {
-
         RectangleDTO rectangleDTO = new RectangleDTO();
         rectangleDTO.setId(UUID.randomUUID());
         rectangleDTO.setX(10.0);
@@ -203,11 +239,12 @@ class AnnotationServiceImplTest {
     }
 
     @Test
-    void findAllReturnsPageOfAnnotationsWhenDataExists() {
+    void findAllReturnsPageOfAnnotationsForCurrentUser() {
         Pageable pageable = Pageable.unpaged();
         Annotation annotation = new Annotation();
         AnnotationDTO annotationDTO = new AnnotationDTO();
-        when(annotationRepository.findAll(pageable)).thenReturn(new PageImpl<>(List.of(annotation)));
+        when(annotationRepository.findByCreatedBy(eq(CURRENT_USER), eq(pageable)))
+            .thenReturn(new PageImpl<>(List.of(annotation)));
         when(annotationMapper.toDto(annotation)).thenReturn(annotationDTO);
 
         Page<AnnotationDTO> result = annotationServiceImpl.findAll(pageable);
@@ -215,22 +252,34 @@ class AnnotationServiceImplTest {
         Assertions.assertNotNull(result);
         Assertions.assertFalse(result.isEmpty());
         Assertions.assertEquals(1, result.getTotalElements());
-        verify(annotationRepository).findAll(pageable);
+        verify(annotationRepository).findByCreatedBy(CURRENT_USER, pageable);
         verify(annotationMapper).toDto(annotation);
     }
 
     @Test
-    void findOneWithoutRefreshReturnsAnnotationWhenExists() {
+    void findOneWithoutRefreshReturnsAnnotationWhenOwner() {
         UUID id = UUID.randomUUID();
         Annotation annotation = new Annotation();
-        when(annotationRepository.findById(id)).thenReturn(Optional.of(annotation));
+        when(annotationRepository.findByIdAndCreatedBy(id, CURRENT_USER)).thenReturn(Optional.of(annotation));
         when(annotationMapper.toDto(annotation)).thenReturn(new AnnotationDTO());
 
         Optional<AnnotationDTO> result = annotationServiceImpl.findOne(id, false);
 
         assertTrue(result.isPresent());
-        verify(annotationRepository).findById(id);
+        verify(annotationRepository).findByIdAndCreatedBy(id, CURRENT_USER);
         verify(annotationMapper).toDto(annotation);
+        verifyNoInteractions(entityManager);
+    }
+
+    @Test
+    void findOneWithoutRefreshReturnsEmptyWhenNotOwner() {
+        UUID id = UUID.randomUUID();
+        when(annotationRepository.findByIdAndCreatedBy(id, CURRENT_USER)).thenReturn(Optional.empty());
+
+        Optional<AnnotationDTO> result = annotationServiceImpl.findOne(id, false);
+
+        assertFalse(result.isPresent());
+        verify(annotationRepository).findByIdAndCreatedBy(id, CURRENT_USER);
         verifyNoInteractions(entityManager);
     }
 
@@ -238,14 +287,21 @@ class AnnotationServiceImplTest {
     void findOneWithRefreshHandlesEntityNotFoundException() {
         UUID id = UUID.randomUUID();
         Annotation annotation = new Annotation();
-        when(annotationRepository.findById(id)).thenReturn(Optional.of(annotation));
+        when(annotationRepository.findByIdAndCreatedBy(id, CURRENT_USER)).thenReturn(Optional.of(annotation));
         doThrow(new EntityNotFoundException()).when(entityManager).refresh(annotation);
 
         Optional<AnnotationDTO> result = annotationServiceImpl.findOne(id, true);
 
         assertFalse(result.isPresent());
         verify(entityManager).refresh(annotation);
-        verify(annotationRepository).findById(id);
+        verify(annotationRepository).findByIdAndCreatedBy(id, CURRENT_USER);
         verify(annotationMapper).toDto(annotation);
+    }
+
+    @Test
+    void getCurrentUserThrowsWhenNotAuthenticated() {
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.empty());
+
+        assertThrows(BadCredentialsException.class, () -> annotationServiceImpl.findAll(Pageable.unpaged()));
     }
 }

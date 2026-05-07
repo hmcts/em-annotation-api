@@ -4,10 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
 import uk.gov.hmcts.reform.em.annotation.domain.Rectangle;
 import uk.gov.hmcts.reform.em.annotation.repository.RectangleRepository;
+import uk.gov.hmcts.reform.em.annotation.rest.errors.ResourceNotFoundException;
 import uk.gov.hmcts.reform.em.annotation.service.RectangleService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.RectangleDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.RectangleMapper;
@@ -28,9 +31,19 @@ public class RectangleServiceImpl implements RectangleService {
 
     private final RectangleMapper rectangleMapper;
 
-    public RectangleServiceImpl(RectangleRepository rectangleRepository, RectangleMapper rectangleMapper) {
+    private final SecurityUtils securityUtils;
+
+    public RectangleServiceImpl(RectangleRepository rectangleRepository,
+                                RectangleMapper rectangleMapper,
+                                SecurityUtils securityUtils) {
         this.rectangleRepository = rectangleRepository;
         this.rectangleMapper = rectangleMapper;
+        this.securityUtils = securityUtils;
+    }
+
+    private String getCurrentUser() {
+        return securityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new BadCredentialsException("User not found in security context."));
     }
 
     /**
@@ -57,7 +70,7 @@ public class RectangleServiceImpl implements RectangleService {
     @Transactional(readOnly = true)
     public Page<RectangleDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Rectangles");
-        return rectangleRepository.findAll(pageable)
+        return rectangleRepository.findByCreatedBy(getCurrentUser(), pageable)
             .map(rectangleMapper::toDto);
     }
 
@@ -72,7 +85,7 @@ public class RectangleServiceImpl implements RectangleService {
     @Transactional(readOnly = true)
     public Optional<RectangleDTO> findOne(UUID id) {
         log.debug("Request to get Rectangle : {}", id);
-        return rectangleRepository.findById(id)
+        return rectangleRepository.findByIdAndCreatedBy(id, getCurrentUser())
             .map(rectangleMapper::toDto);
     }
 
@@ -83,7 +96,13 @@ public class RectangleServiceImpl implements RectangleService {
      */
     @Override
     public void delete(UUID id) {
-        log.debug("Request to delete Rectangle : {}", id);
-        rectangleRepository.deleteById(id);
+        String currentUser = getCurrentUser();
+        log.debug("Request to delete Rectangle : {} by user {}", id, currentUser);
+        rectangleRepository.findById(id).ifPresent(rectangle -> {
+            if (!rectangle.getCreatedBy().equals(currentUser)) {
+                throw new ResourceNotFoundException("Rectangle not found");
+            }
+            rectangleRepository.deleteById(id);
+        });
     }
 }
