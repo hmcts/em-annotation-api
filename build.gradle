@@ -20,7 +20,7 @@ plugins {
     id 'au.com.dius.pact' version '4.7.1'
     id 'info.solidsoft.pitest' version '1.19.0'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.9'
-    id 'com.github.hmcts.rse-cft-lib' version '0.19.2123'
+    id 'com.github.hmcts.rse-cft-lib' version '0.19.2133'
     id 'org.flywaydb.flyway' version '12.5.0'
 }
 
@@ -51,7 +51,7 @@ def versions = [
         sonarPitest        : '0.5',
         serenity           : '5.3.10',
         pact_version       : '4.7.1',
-        hibernate          : '6.6.49.Final',
+        hibernate          : '6.6.50.Final',
         logging            : '8.0.0',
         junit5             : '6.0.3',
         log4JVersion       : '2.20.0',
@@ -173,7 +173,7 @@ dependencies {
     testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
 
     aatRuntimeOnly group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.5'
-    aatRuntimeOnly group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.7'
+    aatRuntimeOnly group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.8'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version:versions.junit5
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit5
 
@@ -343,7 +343,7 @@ configurations {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '13.4.1'
+    toolVersion = '13.4.2'
     reportsDir = layout.buildDirectory.file('reports/checkstyle').get().asFile
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
