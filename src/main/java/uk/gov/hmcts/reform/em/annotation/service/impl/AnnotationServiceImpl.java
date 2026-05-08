@@ -83,9 +83,7 @@ public class AnnotationServiceImpl implements AnnotationService {
         log.debug("Request to save Annotation : {}", annotationDTO);
         final Annotation annotation = annotationMapper.toEntity(annotationDTO);
 
-        Optional<AnnotationSetDTO> existingAnnotationSet =
-                annotationSetService.findOne(annotationDTO.getAnnotationSetId());
-        if (!existingAnnotationSet.isPresent()) {
+        if (!annotationSetService.existsById(annotationDTO.getAnnotationSetId())) {
             AnnotationSetDTO annotationSetDTO = new AnnotationSetDTO();
             annotationSetDTO.setId(annotationDTO.getAnnotationSetId());
             annotationSetDTO.setDocumentId(annotationDTO.getDocumentId());

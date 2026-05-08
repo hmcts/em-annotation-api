@@ -46,4 +46,6 @@ public interface AnnotationSetService {
 
 
     Optional<AnnotationSetDTO> findOneByDocumentId(String documentId);
+
+    boolean existsById(UUID id);
 }
