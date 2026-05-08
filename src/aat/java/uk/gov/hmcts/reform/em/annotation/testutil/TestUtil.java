@@ -142,4 +142,11 @@ public class TestUtil {
             ANNOTATION_TEST_USER_EMAIL, testUserPassword, jurisdiction, caseType, "createCase", data);
     }
 
+    public String getTestUserId() {
+        return idamHelper.getUserId(ANNOTATION_TEST_USER_EMAIL, testUserPassword);
+    }
+
+    public String getTestUser2Id() {
+        return idamHelper.getUserId(ANNOTATION_TEST_USER2_EMAIL, testUserPassword);
+    }
 }

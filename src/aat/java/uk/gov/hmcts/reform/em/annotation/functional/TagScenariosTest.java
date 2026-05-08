@@ -22,42 +22,49 @@ class TagScenariosTest extends BaseTest {
 
     @Test
     void shouldReturn200WhenGetTagByCreatedBy() {
+        final String userId = testUtil.getTestUserId();
         final String annotationSetId = createAnnotationSet();
         final String annotationId = UUID.randomUUID().toString();
-        createAnnotation(annotationId, annotationSetId);
+
+        createAnnotation(annotationId, annotationSetId, userId);
 
         request
-                .get("/api/tags/bob")
-                .then()
-                .statusCode(200)
-                .body("size()", Matchers.greaterThanOrEqualTo(1))
-                .body("[0].name", equalTo("test tag"))
-                .body("[0].createdBy", equalTo("bob"))
-                .body("[0].label", equalTo("test label"))
-                .body("[0].color", equalTo("yellow"))
-                .log().all();
+            .get("/api/tags/" + userId)
+            .then()
+            .statusCode(200)
+            .body("size()", Matchers.greaterThanOrEqualTo(1))
+            .body("[0].name", equalTo("test tag"))
+            .body("[0].createdBy", equalTo(userId))
+            .body("[0].label", equalTo("test label"))
+            .body("[0].color", equalTo("yellow"))
+            .log().all();
     }
 
     @Test
     void shouldReturn401WhenUnAuthenticatedUserGetTagByCreatedBy() {
+        final String userId = testUtil.getTestUserId();
         final String annotationSetId = createAnnotationSet();
         final String annotationId = UUID.randomUUID().toString();
-        createAnnotation(annotationId, annotationSetId);
+
+        createAnnotation(annotationId, annotationSetId, userId);
 
         unAuthenticatedRequest
-                .get("/api/tags/bob")
-                .then()
-                .statusCode(401)
-                .log().all();
+            .get("/api/tags/" + userId)
+            .then()
+            .statusCode(401)
+            .log().all();
     }
 
     @Test
-    void shouldReturn200WhenGetTagByCreatedByNotFound() {
+    void shouldReturn404WhenGetTagByCreatedByDoesNotMatchCurrentUser() {
+        // Authenticated as User 1 (in 'request'), but trying to fetch User 2's tags.
+        final String mismatchUserId = testUtil.getTestUser2Id();
+
         request
-                .get("/api/tags/foo")
-                .then()
-                .statusCode(200)
-                .log().all();
+            .get("/api/tags/" + mismatchUserId)
+            .then()
+            .statusCode(404)
+            .log().all();
     }
 
     @NotNull
@@ -68,38 +75,38 @@ class TagScenariosTest extends BaseTest {
         jsonObject.put("id", newAnnotationSetId.toString());
 
         return request
-                .body(jsonObject.toString())
-                .post("/api/annotation-sets")
-                .then()
-                .statusCode(201)
-                .body("id", equalTo(newAnnotationSetId.toString()))
-                .extract()
-                .response()
-                .getBody()
-                .jsonPath()
-                .get("id");
+            .body(jsonObject.toString())
+            .post("/api/annotation-sets")
+            .then()
+            .statusCode(201)
+            .body("id", equalTo(newAnnotationSetId.toString()))
+            .extract()
+            .response()
+            .getBody()
+            .jsonPath()
+            .get("id");
     }
 
     @NotNull
-    private ValidatableResponse createAnnotation(String annotationId, String annotationSetId) {
-        final JSONObject annotation = createAnnotationPayload(annotationId, annotationSetId);
+    private ValidatableResponse createAnnotation(String annotationId, String annotationSetId, String createdBy) {
+        final JSONObject annotation = createAnnotationPayload(annotationId, annotationSetId, createdBy);
         return request
-                .body(annotation)
-                .post("/api/annotations")
-                .then()
-                .statusCode(201)
-                .log().all();
+            .body(annotation)
+            .post("/api/annotations")
+            .then()
+            .statusCode(201)
+            .log().all();
     }
 
     @NotNull
-    private JSONObject createAnnotationPayload(String annotationId, String annotationSetId) {
+    private JSONObject createAnnotationPayload(String annotationId, String annotationSetId, String createdBy) {
         final JSONObject createAnnotations = new JSONObject();
         createAnnotations.put("annotationSetId", annotationSetId);
         createAnnotations.put("id", annotationId);
         createAnnotations.put("annotationType", "highlight");
         createAnnotations.put("page", 1);
         createAnnotations.put("color", "d1d1d1");
-        createAnnotations.put("createdBy", "bob");
+        createAnnotations.put("createdBy", createdBy);
 
         final JSONArray comments = new JSONArray();
         final JSONObject comment = new JSONObject();
@@ -123,7 +130,7 @@ class TagScenariosTest extends BaseTest {
         final JSONArray tags = new JSONArray();
         final JSONObject tag = new JSONObject();
         tag.put("name", "test tag");
-        tag.put("createdBy", "bob");
+        tag.put("createdBy", createdBy);
         tag.put("label", "test label");
         tag.put("color", "yellow");
         tags.put(0, tag);
