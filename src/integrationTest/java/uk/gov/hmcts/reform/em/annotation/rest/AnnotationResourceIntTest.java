@@ -239,9 +239,12 @@ class AnnotationResourceIntTest extends BaseTest {
     @Test
     @Transactional
     void getAnnotationOfAnotherUserReturnsNotFound() throws Exception {
-        annotation.setCreatedBy("otherUser");
+        em.persist(new IdamDetails("otherUser"));
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("otherUser"));
+        annotation.getTags().clear();
         annotationRepository.saveAndFlush(annotation);
 
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("system"));
         restLogoutMockMvc.perform(get("/api/annotations/{id}", annotation.getId()))
             .andExpect(status().isNotFound());
     }
