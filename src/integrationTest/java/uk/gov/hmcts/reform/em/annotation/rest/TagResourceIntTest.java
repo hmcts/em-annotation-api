@@ -40,6 +40,7 @@ class TagResourceIntTest extends BaseTest {
     private static final String API_TAGS_BY_USER = "/api/tags/{createdBy}";
     private static final String INVALID_USER = "invalid_user";
     private static final String SYSTEM_USER = "system";
+    private static final String OTHER_USER = "other_user";
 
     private final TagRepository tagRepository;
     private final EntityManager em;
@@ -58,8 +59,8 @@ class TagResourceIntTest extends BaseTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        em.persist(new IdamDetails("system"));
-        em.persist(new IdamDetails("anonymous"));
+        em.persist(new IdamDetails(SYSTEM_USER));
+        em.persist(new IdamDetails(OTHER_USER));
         tag = createEntity();
 
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(SYSTEM_USER));
@@ -94,9 +95,17 @@ class TagResourceIntTest extends BaseTest {
     void getTagsFailsOnUserMismatch() throws Exception {
         tagRepository.saveAndFlush(tag);
 
-        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("other_user"));
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(OTHER_USER));
 
         restLogoutMockMvc.perform(get(API_TAGS_BY_USER, tag.getCreatedBy()))
             .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getTagsForUnauthenticatedUser() throws Exception {
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.empty());
+
+        restLogoutMockMvc.perform(get(API_TAGS_BY_USER, SYSTEM_USER))
+            .andExpect(status().isUnauthorized());
     }
 }
