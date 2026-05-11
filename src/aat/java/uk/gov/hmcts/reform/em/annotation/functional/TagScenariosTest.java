@@ -43,11 +43,6 @@ class TagScenariosTest extends BaseTest {
     @Test
     void shouldReturn401WhenUnAuthenticatedUserGetTagByCreatedBy() {
         final String userId = testUtil.getTestUserId();
-        final String annotationSetId = createAnnotationSet();
-        final String annotationId = UUID.randomUUID().toString();
-
-        createAnnotation(annotationId, annotationSetId, userId);
-
         unAuthenticatedRequest
             .get("/api/tags/" + userId)
             .then()
