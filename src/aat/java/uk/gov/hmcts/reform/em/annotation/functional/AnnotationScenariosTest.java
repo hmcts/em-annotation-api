@@ -120,7 +120,7 @@ class AnnotationScenariosTest extends BaseTest {
         final String annotationSetId = createAnnotationSet();
         final String annotationId = UUID.randomUUID().toString();
         final JSONObject annotation = createAnnotationPayload(annotationId, annotationSetId);
-        annotation.put(FIELD_CREATED_BY, ANNOTATION_TEST_USER2_EMAIL);
+        annotation.put(FIELD_CREATED_BY, testUtil.getTestUser2Id());
 
         request
             .body(annotation)
