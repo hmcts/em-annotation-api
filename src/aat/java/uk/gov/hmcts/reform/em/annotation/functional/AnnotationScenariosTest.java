@@ -139,6 +139,41 @@ class AnnotationScenariosTest extends BaseTest {
     }
 
     @Test
+    void shouldUseAuthenticatedUserAsTagCreatedByEvenWhenPayloadForgesCreatedBy() {
+        final String annotationSetId = createAnnotationSet();
+        final String annotationId = UUID.randomUUID().toString();
+        final JSONObject annotation = createAnnotationPayload(annotationId, annotationSetId);
+
+        final String user2Id = testUtil.getTestUser2Id();
+        annotation.put(FIELD_CREATED_BY, user2Id);
+
+        final JSONArray tags = new JSONArray();
+        final JSONObject tag = new JSONObject();
+        tag.put(FIELD_NAME, "test-tag");
+        tag.put(FIELD_LABEL, "Test Tag");
+        tag.put(FIELD_CREATED_BY, user2Id);
+        tags.put(tag);
+        annotation.put(FIELD_TAGS, tags);
+
+        final String user1Id = testUtil.getTestUserId();
+
+        request
+            .body(annotation)
+            .post(API_ANNOTATIONS)
+            .then()
+            .statusCode(201)
+            .body(FIELD_TAGS + "[0]." + FIELD_CREATED_BY, equalTo(user1Id))
+            .log().all();
+
+        request
+            .get(API_ANNOTATIONS + "/" + annotationId)
+            .then()
+            .statusCode(200)
+            .body(FIELD_TAGS + "[0]." + FIELD_CREATED_BY, equalTo(user1Id))
+            .log().all();
+    }
+
+    @Test
     void shouldReturn400WhenCreateNewAnnotationWithBadPayload() {
         final String annotationSetId = createAnnotationSet();
         final JSONObject annotation = new JSONObject();
