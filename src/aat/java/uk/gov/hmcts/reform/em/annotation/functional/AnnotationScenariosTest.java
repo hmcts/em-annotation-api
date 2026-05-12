@@ -116,6 +116,22 @@ class AnnotationScenariosTest extends BaseTest {
     }
 
     @Test
+    void shouldUseAuthenticatedUserAsCreatedByEvenWhenPayloadForgesCreatedBy() {
+        final String annotationSetId = createAnnotationSet();
+        final String annotationId = UUID.randomUUID().toString();
+        final JSONObject annotation = createAnnotationPayload(annotationId, annotationSetId);
+        annotation.put(FIELD_CREATED_BY, ANNOTATION_TEST_USER2_EMAIL);
+
+        request
+            .body(annotation)
+            .post(API_ANNOTATIONS)
+            .then()
+            .statusCode(201)
+            .body(CREATED_BY_DETAILS_EMAIL_PATH, equalTo(ANNOTATION_TEST_USER_EMAIL))
+            .log().all();
+    }
+
+    @Test
     void shouldReturn400WhenCreateNewAnnotationWithBadPayload() {
         final String annotationSetId = createAnnotationSet();
         final JSONObject annotation = new JSONObject();
