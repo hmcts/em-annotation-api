@@ -129,6 +129,13 @@ class AnnotationScenariosTest extends BaseTest {
             .statusCode(201)
             .body(CREATED_BY_DETAILS_EMAIL_PATH, equalTo(ANNOTATION_TEST_USER_EMAIL))
             .log().all();
+
+        request
+            .get(API_ANNOTATIONS + "/" + annotationId)
+            .then()
+            .statusCode(200)
+            .body(FIELD_CREATED_BY, equalTo(testUtil.getTestUserId()))
+            .log().all();
     }
 
     @Test
