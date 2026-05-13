@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
 import uk.gov.hmcts.reform.em.annotation.domain.Annotation;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationRepository;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
@@ -42,6 +43,8 @@ public class AnnotationServiceImpl implements AnnotationService {
 
     private final AnnotationMapper annotationMapper;
 
+    private final SecurityUtils securityUtils;
+
     @PersistenceContext
     private final EntityManager entityManager;
 
@@ -49,11 +52,13 @@ public class AnnotationServiceImpl implements AnnotationService {
                                  AnnotationMapper annotationMapper,
                                  AnnotationSetService annotationSetService,
                                  TagService tagService,
+                                 SecurityUtils securityUtils,
                                  EntityManager entityManager) {
         this.annotationRepository = annotationRepository;
         this.annotationMapper = annotationMapper;
         this.annotationSetService = annotationSetService;
         this.tagService = tagService;
+        this.securityUtils = securityUtils;
         this.entityManager = entityManager;
     }
 
@@ -81,8 +86,9 @@ public class AnnotationServiceImpl implements AnnotationService {
             annotationSetService.save(annotationSetDTO);
         }
 
+        final String currentUser = securityUtils.getCurrentUserLogin().orElse(null);
         for (TagDTO tag : annotationDTO.getTags()) {
-            tag.setCreatedBy(annotationDTO.getCreatedBy());
+            tag.setCreatedBy(currentUser);
         }
 
         if (!annotationDTO.getRectangles().isEmpty()) {
@@ -101,7 +107,7 @@ public class AnnotationServiceImpl implements AnnotationService {
         }
         if (!annotationDTO.getTags().isEmpty()) {
             annotation.getTags().forEach(t -> {
-                t.setCreatedBy(annotationDTO.getCreatedBy());
+                t.setCreatedBy(currentUser);
                 tagService.persistTag(t);
             });
         }
