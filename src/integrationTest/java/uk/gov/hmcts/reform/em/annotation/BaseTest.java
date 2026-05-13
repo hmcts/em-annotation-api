@@ -12,11 +12,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.reform.em.annotation.config.security.JwtGrantedAuthoritiesConverter;
+import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
 import uk.gov.hmcts.reform.em.annotation.repository.IdamRepository;
 import uk.gov.hmcts.reform.idam.client.IdamApi;
 import uk.gov.hmcts.reform.idam.client.IdamClient;
 
+import java.util.Optional;
+
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 public abstract class BaseTest {
 
@@ -35,6 +39,9 @@ public abstract class BaseTest {
     @MockitoBean
     private IdamRepository idamRepository;
 
+    @MockitoBean
+    protected SecurityUtils securityUtils;
+
     protected MockMvc restLogoutMockMvc;
 
     @Mock
@@ -50,6 +57,7 @@ public abstract class BaseTest {
 
         doReturn(authentication).when(securityContext).getAuthentication();
         SecurityContextHolder.setContext(securityContext);
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("system"));
         restLogoutMockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 }
