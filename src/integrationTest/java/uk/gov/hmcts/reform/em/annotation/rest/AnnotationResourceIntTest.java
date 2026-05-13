@@ -10,8 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uk.gov.hmcts.reform.em.annotation.Application;
 import uk.gov.hmcts.reform.em.annotation.BaseTest;
+import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
 import uk.gov.hmcts.reform.em.annotation.domain.Annotation;
 import uk.gov.hmcts.reform.em.annotation.domain.Comment;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
@@ -25,11 +27,13 @@ import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -65,6 +69,9 @@ class AnnotationResourceIntTest extends BaseTest {
     @Autowired
     private EntityManager em;
 
+    @MockitoBean
+    private SecurityUtils securityUtils;
+
     private Annotation annotation;
 
 
@@ -73,6 +80,7 @@ class AnnotationResourceIntTest extends BaseTest {
         MockitoAnnotations.openMocks(this);
         em.persist(new IdamDetails("system"));
         em.persist(new IdamDetails("anonymous"));
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("system"));
     }
 
     /**
