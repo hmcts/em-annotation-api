@@ -242,6 +242,12 @@ dependencyManagement {
             entry 'log4j-slf4j-impl'
             entry 'log4j-slf4j2-impl'
         }
+
+        dependencySet(group: 'org.junit.platform', version: '6.0.3') {
+            entry 'junit-platform-commons'
+            entry 'junit-platform-engine'
+            entry 'junit-platform-launcher'
+        }
     }
 }
 
