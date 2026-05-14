@@ -54,7 +54,7 @@ def versions = [
         hibernate          : '6.6.50.Final',
         logging            : '8.0.0',
         junit5             : '6.0.3',
-        log4JVersion       : '2.20.0',
+        log4JVersion       : '2.25.4',
         mapstruct          : '1.6.3',
 ]
 
@@ -246,6 +246,16 @@ dependencyManagement {
         dependencySet(group: 'ch.qos.logback', version: '1.5.32') {
             entry 'logback-classic'
             entry 'logback-core'
+        }
+
+        //CVE-2026-34477, CVE-2026-34479
+        dependencySet(group: 'org.apache.logging.log4j', version: versions.log4JVersion) {
+            entry 'log4j-api'
+            entry 'log4j-core'
+            entry 'log4j-1.2-api'
+            entry 'log4j-to-slf4j'
+            entry 'log4j-slf4j-impl'
+            entry 'log4j-slf4j2-impl'
         }
 
         dependencySet(group: 'org.junit.platform', version: '6.0.3') {
