@@ -233,7 +233,14 @@ processIntegrationTestResources {
 
 dependencyManagement {
     dependencies {
-
+        //CVE-2026-34477, CVE-2026-34479
+        dependencySet(group: 'org.apache.logging.log4j', version: versions.log4JVersion) {
+            entry 'log4j-core'
+            entry 'log4j-1.2-api'
+            entry 'log4j-to-slf4j'
+            entry 'log4j-slf4j-impl'
+            entry 'log4j-slf4j2-impl'
+        }
     }
 }
 
