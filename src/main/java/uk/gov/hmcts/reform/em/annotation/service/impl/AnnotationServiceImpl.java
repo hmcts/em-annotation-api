@@ -86,7 +86,8 @@ public class AnnotationServiceImpl implements AnnotationService {
             annotationSetService.save(annotationSetDTO);
         }
 
-        final String currentUser = securityUtils.getCurrentUserLogin().orElse(null);
+        final String currentUser = securityUtils.getCurrentUserLogin()
+                .orElseThrow(() -> new IllegalStateException("No authenticated user found"));
         for (TagDTO tag : annotationDTO.getTags()) {
             tag.setCreatedBy(currentUser);
         }

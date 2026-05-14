@@ -130,6 +130,22 @@ class AnnotationServiceImplTest {
     }
 
     @Test
+    void saveAnnotationThrowsWhenNoAuthenticatedUser() {
+        AnnotationDTO annotationDTO = new AnnotationDTO();
+        TagDTO tagDTO = new TagDTO();
+        tagDTO.setName("test-tag");
+        annotationDTO.setTags(Set.of(tagDTO));
+        Annotation annotation = new Annotation();
+        Tag tag = new Tag();
+        tag.setName(tagDTO.getName());
+        annotation.addTag(tag);
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.empty());
+        when(annotationMapper.toEntity(annotationDTO)).thenReturn(annotation);
+
+        Assertions.assertThrows(IllegalStateException.class, () -> annotationServiceImpl.save(annotationDTO));
+    }
+
+    @Test
     void saveAnnotationPersistsTagsWithCreatedBy() throws Exception {
         AnnotationDTO annotationDTO = new AnnotationDTO();
         TagDTO tagDTO = new TagDTO();
