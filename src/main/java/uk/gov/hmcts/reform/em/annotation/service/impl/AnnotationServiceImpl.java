@@ -91,8 +91,10 @@ public class AnnotationServiceImpl implements AnnotationService {
             annotationSetService.save(annotationSetDTO);
         }
 
+        final String currentUser = securityUtils.getCurrentUserLogin()
+                .orElseThrow(() -> new IllegalStateException("No authenticated user found"));
         for (TagDTO tag : annotationDTO.getTags()) {
-            tag.setCreatedBy(annotationDTO.getCreatedBy());
+            tag.setCreatedBy(currentUser);
         }
 
         if (!annotationDTO.getRectangles().isEmpty()) {
@@ -111,7 +113,7 @@ public class AnnotationServiceImpl implements AnnotationService {
         }
         if (!annotationDTO.getTags().isEmpty()) {
             annotation.getTags().forEach(t -> {
-                t.setCreatedBy(annotationDTO.getCreatedBy());
+                t.setCreatedBy(currentUser);
                 tagService.persistTag(t);
             });
         }

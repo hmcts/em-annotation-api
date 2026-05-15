@@ -26,13 +26,15 @@ class TagScenariosTest extends BaseTest {
         final String annotationId = UUID.randomUUID().toString();
         createAnnotation(annotationId, annotationSetId);
 
+        final String userId = testUtil.getTestUserId();
+
         request
-                .get("/api/tags/bob")
+                .get("/api/tags/" + userId)
                 .then()
                 .statusCode(200)
                 .body("size()", Matchers.greaterThanOrEqualTo(1))
                 .body("[0].name", equalTo("test tag"))
-                .body("[0].createdBy", equalTo("bob"))
+                .body("[0].createdBy", equalTo(userId))
                 .body("[0].label", equalTo("test label"))
                 .body("[0].color", equalTo("yellow"))
                 .log().all();

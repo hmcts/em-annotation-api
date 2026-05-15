@@ -65,6 +65,9 @@ class AnnotationServiceImplTest {
     @Mock
     private EntityManager entityManager;
 
+    @Mock
+    private SecurityUtils securityUtils;
+
     @InjectMocks
     private AnnotationServiceImpl annotationServiceImpl;
 
@@ -90,6 +93,7 @@ class AnnotationServiceImplTest {
         annotationDTO.setAnnotationSetId(UUID.randomUUID());
         annotationDTO.setDocumentId("doc123");
         annotationDTO.setTags(new HashSet<>());
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("user1"));
         when(annotationSetService.findOne(annotationDTO.getAnnotationSetId())).thenReturn(Optional.empty());
         when(annotationSetService.save(any(AnnotationSetDTO.class))).thenReturn(new AnnotationSetDTO());
         when(annotationRepository.save(any(Annotation.class))).thenReturn(new Annotation());
@@ -159,6 +163,23 @@ class AnnotationServiceImplTest {
 
         assertThrows(ResourceNotFoundException.class, () -> annotationServiceImpl.delete(id));
         verify(annotationRepository, never()).deleteById(any());
+
+    }
+  
+    @Test
+    void saveAnnotationThrowsWhenNoAuthenticatedUser() {
+        AnnotationDTO annotationDTO = new AnnotationDTO();
+        TagDTO tagDTO = new TagDTO();
+        tagDTO.setName("test-tag");
+        annotationDTO.setTags(Set.of(tagDTO));
+        Annotation annotation = new Annotation();
+        Tag tag = new Tag();
+        tag.setName(tagDTO.getName());
+        annotation.addTag(tag);
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.empty());
+        when(annotationMapper.toEntity(annotationDTO)).thenReturn(annotation);
+
+        Assertions.assertThrows(IllegalStateException.class, () -> annotationServiceImpl.save(annotationDTO));
     }
 
     @Test
@@ -166,19 +187,21 @@ class AnnotationServiceImplTest {
         AnnotationDTO annotationDTO = new AnnotationDTO();
         TagDTO tagDTO = new TagDTO();
         tagDTO.setName("test-tag");
+        tagDTO.setCreatedBy("forgedUser");
         annotationDTO.setTags(Set.of(tagDTO));
-        annotationDTO.setCreatedBy("user123");
+        annotationDTO.setCreatedBy("forgedUser");
         Annotation annotation = new Annotation();
         Tag tag = new Tag();
         tag.setName(tagDTO.getName());
         annotation.addTag(tag);
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("user1"));
         when(annotationMapper.toEntity(annotationDTO)).thenReturn(annotation);
         when(annotationRepository.save(annotation)).thenReturn(annotation);
         when(annotationMapper.toDto(annotation)).thenReturn(annotationDTO);
 
-        AnnotationDTO result = annotationServiceImpl.save(annotationDTO);
+        annotationServiceImpl.save(annotationDTO);
 
-        Assertions.assertNotNull(result);
+        Assertions.assertEquals("user1", tagDTO.getCreatedBy());
         verify(tagService).persistTag(any());
     }
 
@@ -192,7 +215,6 @@ class AnnotationServiceImplTest {
         rectangleDTO.setHeight(200.0);
         AnnotationDTO annotationDTO = new AnnotationDTO();
         annotationDTO.setRectangles(Set.of(rectangleDTO));
-        annotationDTO.setCreatedBy("user123");
 
         Rectangle rectangle = new Rectangle();
         rectangle.setId(rectangleDTO.getId());
@@ -203,6 +225,7 @@ class AnnotationServiceImplTest {
         Annotation annotation = new Annotation();
         annotation.setRectangles(new HashSet<>(Set.of(rectangle)));
 
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("user1"));
         when(annotationMapper.toEntity(annotationDTO)).thenReturn(annotation);
         when(annotationRepository.save(annotation)).thenReturn(annotation);
         when(annotationMapper.toDto(annotation)).thenReturn(annotationDTO);
@@ -220,7 +243,6 @@ class AnnotationServiceImplTest {
         commentsDTO.setId(UUID.randomUUID());
         commentsDTO.setContent("Test comment");
         annotationDTO.setComments(Set.of(commentsDTO));
-        annotationDTO.setCreatedBy("user123");
 
         Annotation annotation = new Annotation();
         Comment comment = new Comment();
@@ -228,6 +250,7 @@ class AnnotationServiceImplTest {
         comment.setContent(commentsDTO.getContent());
         annotation.setComments(new HashSet<>(Set.of(comment)));
 
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("user1"));
         when(annotationMapper.toEntity(annotationDTO)).thenReturn(annotation);
         when(annotationRepository.save(annotation)).thenReturn(annotation);
         when(annotationMapper.toDto(annotation)).thenReturn(annotationDTO);
