@@ -149,4 +149,5 @@ public class TestUtil {
     public String getTestUser2Id() {
         return idamHelper.getUserId(ANNOTATION_TEST_USER2_EMAIL, testUserPassword);
     }
+
 }
