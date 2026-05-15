@@ -265,6 +265,40 @@ class RectangleScenariosTest extends BaseTest {
                 .log().all();
     }
 
+    @Test
+    void shouldReturn404WhenDifferentUserGetsRectangleById() {
+        final String newAnnotationSetId = createAnnotationSet();
+        final String annotationId = createAnnotation(newAnnotationSetId);
+        final ValidatableResponse response = createRectangle(annotationId, UUID.randomUUID().toString());
+        final String id = extractJsonObjectFromResponse(response).getString(FIELD_ID);
+
+        differentUserRequest
+                .get(API_RECTANGLES_ID + id)
+                .then()
+                .statusCode(STATUS_NOT_FOUND)
+                .log().all();
+    }
+
+    @Test
+    void shouldReturn404WhenDifferentUserDeletesRectangle() {
+        final String newAnnotationSetId = createAnnotationSet();
+        final String annotationId = createAnnotation(newAnnotationSetId);
+        final ValidatableResponse response = createRectangle(annotationId, UUID.randomUUID().toString());
+        final String id = extractJsonObjectFromResponse(response).getString(FIELD_ID);
+
+        differentUserRequest
+                .delete(API_RECTANGLES_ID + id)
+                .then()
+                .statusCode(STATUS_NOT_FOUND)
+                .log().all();
+
+        request
+                .get(API_RECTANGLES_ID + id)
+                .then()
+                .statusCode(STATUS_OK)
+                .log().all();
+    }
+
     @NotNull
     private ValidatableResponse deleteRectangleById(String rectangleId) {
         return request

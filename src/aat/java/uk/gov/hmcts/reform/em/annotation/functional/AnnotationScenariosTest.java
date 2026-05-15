@@ -398,6 +398,38 @@ class AnnotationScenariosTest extends BaseTest {
                 .log().all();
     }
 
+    @Test
+    void shouldReturn404WhenDifferentUserGetsAnnotationById() {
+        final String annotationSetId = createAnnotationSet();
+        final String annotationId = UUID.randomUUID().toString();
+        createAnnotation(annotationId, annotationSetId);
+
+        differentUserRequest
+                .get(API_ANNOTATIONS + "/" + annotationId)
+                .then()
+                .statusCode(404)
+                .log().all();
+    }
+
+    @Test
+    void shouldReturn404WhenDifferentUserDeletesAnnotation() {
+        final String annotationSetId = createAnnotationSet();
+        final String annotationId = UUID.randomUUID().toString();
+        createAnnotation(annotationId, annotationSetId);
+
+        differentUserRequest
+                .delete(API_ANNOTATIONS + "/" + annotationId)
+                .then()
+                .statusCode(404)
+                .log().all();
+
+        request
+                .get(API_ANNOTATIONS + "/" + annotationId)
+                .then()
+                .statusCode(200)
+                .log().all();
+    }
+
     @NotNull
     private ValidatableResponse deleteAnnotationById(String annotationId) {
         return request
