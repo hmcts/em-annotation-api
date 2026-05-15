@@ -248,6 +248,13 @@ dependencyManagement {
             entry 'junit-platform-engine'
             entry 'junit-platform-launcher'
         }
+
+        //CVE-2026-41284, CVE-2026-42498, CVE-2026-43514
+        dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.55') {
+            entry 'tomcat-embed-core'
+            entry 'tomcat-embed-websocket'
+            entry 'tomcat-embed-el'
+        }
     }
 }
 
