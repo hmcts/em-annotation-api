@@ -65,9 +65,6 @@ class AnnotationServiceImplTest {
     @Mock
     private EntityManager entityManager;
 
-    @Mock
-    private SecurityUtils securityUtils;
-
     @InjectMocks
     private AnnotationServiceImpl annotationServiceImpl;
 
