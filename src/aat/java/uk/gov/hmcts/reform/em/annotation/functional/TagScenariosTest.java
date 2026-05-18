@@ -28,6 +28,8 @@ class TagScenariosTest extends BaseTest {
 
         createAnnotation(annotationId, annotationSetId, userId);
 
+        final String userId = testUtil.getTestUserId();
+
         request
             .get("/api/tags/" + userId)
             .then()

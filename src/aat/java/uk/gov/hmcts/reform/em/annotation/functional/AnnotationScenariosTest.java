@@ -162,14 +162,14 @@ class AnnotationScenariosTest extends BaseTest {
             .post(API_ANNOTATIONS)
             .then()
             .statusCode(201)
-            .body(FIELD_TAGS + "[0]." + FIELD_CREATED_BY, equalTo(user2Id))
+            .body(FIELD_TAGS + "[0]." + FIELD_CREATED_BY, equalTo(user1Id))
             .log().all();
 
         request
             .get(API_ANNOTATIONS + "/" + annotationId)
             .then()
             .statusCode(200)
-            .body(FIELD_TAGS + "[0]." + FIELD_CREATED_BY, equalTo(user2Id))
+            .body(FIELD_TAGS + "[0]." + FIELD_CREATED_BY, equalTo(user1Id))
             .log().all();
     }
 
