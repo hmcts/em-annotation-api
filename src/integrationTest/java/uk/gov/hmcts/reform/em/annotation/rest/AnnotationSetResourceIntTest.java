@@ -19,10 +19,12 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationSetDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationSetMapper;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -77,6 +79,7 @@ class AnnotationSetResourceIntTest extends BaseTest {
     @BeforeEach
     void initTest() {
         annotationSet = createEntity();
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("system"));
     }
 
     @Test

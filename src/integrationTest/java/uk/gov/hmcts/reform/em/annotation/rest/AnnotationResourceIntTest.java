@@ -25,11 +25,13 @@ import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -98,6 +100,7 @@ class AnnotationResourceIntTest extends BaseTest {
     @BeforeEach
     void initTest() {
         annotation = createEntity();
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("system"));
     }
 
     @Test
@@ -226,6 +229,19 @@ class AnnotationResourceIntTest extends BaseTest {
             .andExpect(jsonPath("$.id").value(annotation.getId().toString()))
             .andExpect(jsonPath("$.type").value(DEFAULT_ANNOTATION_TYPE.toString()))
             .andExpect(jsonPath("$.page").value(DEFAULT_PAGE));
+    }
+
+    @Test
+    @Transactional
+    void getAnnotationOfAnotherUserReturnsNotFound() throws Exception {
+        em.persist(new IdamDetails("otherUser"));
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("otherUser"));
+        annotation.getTags().clear();
+        annotationRepository.saveAndFlush(annotation);
+
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("system"));
+        restLogoutMockMvc.perform(get("/api/annotations/{id}", annotation.getId()))
+            .andExpect(status().isNotFound());
     }
 
     @Test

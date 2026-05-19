@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.em.annotation.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +19,10 @@ import java.util.UUID;
  */
 @Repository
 public interface AnnotationSetRepository extends JpaRepository<AnnotationSet, UUID> {
+
+    Page<AnnotationSet> findByCreatedBy(String createdBy, Pageable pageable);
+
+    Optional<AnnotationSet> findByIdAndCreatedBy(UUID id, String createdBy);
 
     Optional<AnnotationSet> findByDocumentIdAndCreatedBy(String documentId, String createdBy);
 

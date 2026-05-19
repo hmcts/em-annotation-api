@@ -24,10 +24,12 @@ import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.CommentMapper;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -85,6 +87,7 @@ class CommentResourceIntTest extends BaseTest {
     @BeforeEach
     void initTest() {
         comment = createEntity();
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("system"));
     }
 
     @Test
