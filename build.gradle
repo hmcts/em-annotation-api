@@ -53,7 +53,7 @@ def versions = [
         pact_version       : '4.7.1',
         hibernate          : '6.6.50.Final',
         logging            : '8.0.0',
-        junit5             : '6.0.3',
+        junit5             : '6.1.0',
         log4JVersion       : '2.26.0',
         mapstruct          : '1.6.3',
 ]
@@ -243,7 +243,7 @@ dependencyManagement {
             entry 'log4j-slf4j2-impl'
         }
 
-        dependencySet(group: 'org.junit.platform', version: '6.0.3') {
+        dependencySet(group: 'org.junit.platform', version: '6.1.0') {
             entry 'junit-platform-commons'
             entry 'junit-platform-engine'
             entry 'junit-platform-launcher'
