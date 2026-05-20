@@ -262,6 +262,38 @@ class AnnotationSetScenariosTest extends BaseTest {
                 .log().all();
     }
 
+    @Test
+    void shouldReturn204WhenDifferentUserGetsAnnotationSetById() {
+        final UUID annotationSetId = UUID.randomUUID();
+        final UUID documentId = UUID.randomUUID();
+        createAnnotationSet(annotationSetId, documentId);
+
+        differentUserRequest
+                .get(API_ANNOTATION_SETS + "/" + annotationSetId)
+                .then()
+                .statusCode(204)
+                .log().all();
+    }
+
+    @Test
+    void shouldReturn404WhenDifferentUserDeletesAnnotationSet() {
+        final UUID annotationSetId = UUID.randomUUID();
+        final UUID documentId = UUID.randomUUID();
+        createAnnotationSet(annotationSetId, documentId);
+
+        differentUserRequest
+                .delete(API_ANNOTATION_SETS + "/" + annotationSetId)
+                .then()
+                .statusCode(404)
+                .log().all();
+
+        request
+                .get(API_ANNOTATION_SETS + "/" + annotationSetId)
+                .then()
+                .statusCode(200)
+                .log().all();
+    }
+
     // ===== Helper methods =====
 
     @NotNull

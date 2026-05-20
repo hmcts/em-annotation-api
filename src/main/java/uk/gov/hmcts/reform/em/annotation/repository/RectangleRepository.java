@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.em.annotation.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.reform.em.annotation.domain.Rectangle;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -16,6 +19,10 @@ import java.util.UUID;
  */
 @Repository
 public interface RectangleRepository extends JpaRepository<Rectangle, UUID> {
+
+    Page<Rectangle> findByCreatedBy(String createdBy, Pageable pageable);
+
+    Optional<Rectangle> findByIdAndCreatedBy(UUID id, String createdBy);
 
     @Query("SELECT r.id FROM Rectangle r WHERE r.annotation.id IN :annotationIds")
     List<UUID> findAllIdsByAnnotationIdIn(@Param("annotationIds") List<UUID> annotationIds);
