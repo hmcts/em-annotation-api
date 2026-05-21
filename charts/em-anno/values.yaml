@@ -31,6 +31,8 @@ java:
     CCD_DATA_API_URL: http://ccd-data-store-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
     IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
     S2S_NAMES_WHITELIST: em_gw,xui_webapp
+    IDAM_SECURITY_ALLOWED_ISSUERS_0: https://forgerock-am.service.core-compute-idam-aat2.internal:8443/openam/oauth2/realms/root/realms/hmcts
+
 
     REFORM_SERVICE_NAME: rpa-em-annotation-api
     REFORM_TEAM: rpa-em-annotation-api

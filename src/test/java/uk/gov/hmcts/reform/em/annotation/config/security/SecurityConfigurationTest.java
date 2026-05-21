@@ -3,53 +3,145 @@ package uk.gov.hmcts.reform.em.annotation.config.security;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SecurityConfigurationTest {
 
-    @Mock
-    private ServiceAuthFilter serviceAuthFilter;
+    private static final String VALID_ISSUER = "https://valid.example.com";
+    private static final String INVALID_ISSUER = "https://invalid.example.com";
 
     @Mock
-    private JwtAuthenticationConverter jwtAuthenticationConverter;
+    private ServiceAuthFilter authFilter;
 
     @Mock
     private JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
 
-    @InjectMocks
-    private SecurityConfiguration securityConfiguration;
+    @Mock
+    private IdamSecurityProperties securityProperties;
+
+    private SecurityConfiguration config;
 
     @BeforeEach
     void setUp() {
-        ReflectionTestUtils.setField(securityConfiguration, "issuerUri", "");
-        ReflectionTestUtils.setField(securityConfiguration, "issuerOverride", "");
+        config = new SecurityConfiguration(jwtGrantedAuthoritiesConverter, authFilter);
+        ReflectionTestUtils.setField(config, "issuerUri", VALID_ISSUER);
     }
 
     @Test
-    void jwtDecoderSetsValidator() {
-        NimbusJwtDecoder nimbusJwtDecoder = mock(NimbusJwtDecoder.class);
-        try (MockedStatic<JwtDecoders> jwtDecoderMockedStatic = Mockito.mockStatic(JwtDecoders.class)) {
-            jwtDecoderMockedStatic.when(() ->
-                    JwtDecoders.fromOidcIssuerLocation(anyString())).thenReturn(nimbusJwtDecoder);
-            assertEquals(nimbusJwtDecoder, securityConfiguration.jwtDecoder());
-            verify(nimbusJwtDecoder, times(1)).setJwtValidator(any());
+    void validIssuer() {
+        OAuth2TokenValidator<Jwt> validator = config.allowedIssuersValidator(List.of(VALID_ISSUER));
+        Jwt jwt = Jwt.withTokenValue("token")
+            .header("alg", "none")
+            .claim("iss", VALID_ISSUER)
+            .build();
+
+        assertFalse(validator.validate(jwt).hasErrors());
+    }
+
+    @Test
+    void invalidIssuer() {
+        OAuth2TokenValidator<Jwt> validator = config.allowedIssuersValidator(List.of(VALID_ISSUER));
+        Jwt jwt = Jwt.withTokenValue("token")
+            .header("alg", "none")
+            .claim("iss", INVALID_ISSUER)
+            .build();
+
+        assertTrue(validator.validate(jwt).hasErrors());
+    }
+
+    @Test
+    void missingIssuer() {
+        OAuth2TokenValidator<Jwt> validator = config.allowedIssuersValidator(List.of(VALID_ISSUER));
+        Jwt jwt = Jwt.withTokenValue("token")
+            .header("alg", "none")
+            .claim("sub", "user")
+            .build();
+
+        assertTrue(validator.validate(jwt).hasErrors());
+    }
+
+    @Test
+    void decoderCreated() {
+        when(securityProperties.getAllowedIssuers()).thenReturn(List.of(VALID_ISSUER));
+        NimbusJwtDecoder mockDecoder = mock(NimbusJwtDecoder.class);
+
+        try (MockedStatic<JwtDecoders> mocked = mockStatic(JwtDecoders.class)) {
+            mocked.when(() -> JwtDecoders.fromOidcIssuerLocation(VALID_ISSUER))
+                .thenReturn(mockDecoder);
+
+            JwtDecoder result = config.jwtDecoder(securityProperties);
+
+            assertNotNull(result);
+            verify(mockDecoder).setJwtValidator(any());
         }
+    }
+
+    @Test
+    void oneOfMultipleAllowedIssuersAccepted() {
+        OAuth2TokenValidator<Jwt> validator = config.allowedIssuersValidator(
+            List.of(VALID_ISSUER, "https://other-valid.example.com")
+        );
+        Jwt jwt = Jwt.withTokenValue("token")
+            .header("alg", "none")
+            .claim("iss", "https://other-valid.example.com")
+            .build();
+
+        assertFalse(validator.validate(jwt).hasErrors());
+    }
+
+    @Test
+    void emptyAllowedIssuersRejectsEverything() {
+        OAuth2TokenValidator<Jwt> validator = config.allowedIssuersValidator(List.of());
+        Jwt jwt = Jwt.withTokenValue("token")
+            .header("alg", "none")
+            .claim("iss", VALID_ISSUER)
+            .build();
+
+        assertTrue(validator.validate(jwt).hasErrors());
+    }
+
+    @Test
+    void webSecurityCustomized() {
+        WebSecurityCustomizer customizer = config.webSecurityCustomizer();
+        WebSecurity webSecurity = mock(WebSecurity.class, RETURNS_DEEP_STUBS);
+
+        customizer.customize(webSecurity);
+
+        verify(webSecurity.ignoring()).requestMatchers(
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/swagger-resources/**",
+            "/v3/**",
+            "/health",
+            "/health/liveness",
+            "/health/readiness",
+            "/status/health",
+            "/loggers/**",
+            "/"
+        );
     }
 }

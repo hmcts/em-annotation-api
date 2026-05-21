@@ -107,6 +107,9 @@ auth:
 
 # service-auth-provider-client lib
 idam:
+  security:
+    allowed-issuers:
+      - http://localhost:5062/o
   s2s-auth:
     url: ${S2S_BASE_URI:http://localhost:8489}
     totp_secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
