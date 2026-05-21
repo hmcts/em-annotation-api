@@ -20,10 +20,12 @@ import uk.gov.hmcts.reform.em.annotation.service.dto.RectangleDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.RectangleMapper;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -72,6 +74,7 @@ class RectangleResourceIntTest extends BaseTest {
         em.persist(new IdamDetails("system"));
         em.persist(new IdamDetails("anonymous"));
         rectangle = createEntity();
+        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of("system"));
     }
 
     /**

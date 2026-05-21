@@ -9,11 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
 import uk.gov.hmcts.reform.em.annotation.domain.Annotation;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationRepository;
+import uk.gov.hmcts.reform.em.annotation.rest.errors.ResourceNotFoundException;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationService;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationSetService;
 import uk.gov.hmcts.reform.em.annotation.service.TagService;
@@ -62,6 +64,11 @@ public class AnnotationServiceImpl implements AnnotationService {
         this.entityManager = entityManager;
     }
 
+    private String getCurrentUser() {
+        return securityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new BadCredentialsException("User not found in security context."));
+    }
+
     @Resource
     private AnnotationServiceImpl annotationService;
 
@@ -76,9 +83,7 @@ public class AnnotationServiceImpl implements AnnotationService {
         log.debug("Request to save Annotation : {}", annotationDTO);
         final Annotation annotation = annotationMapper.toEntity(annotationDTO);
 
-        Optional<AnnotationSetDTO> existingAnnotationSet =
-                annotationSetService.findOne(annotationDTO.getAnnotationSetId());
-        if (!existingAnnotationSet.isPresent()) {
+        if (!annotationSetService.existsById(annotationDTO.getAnnotationSetId())) {
             AnnotationSetDTO annotationSetDTO = new AnnotationSetDTO();
             annotationSetDTO.setId(annotationDTO.getAnnotationSetId());
             annotationSetDTO.setDocumentId(annotationDTO.getDocumentId());
@@ -126,7 +131,7 @@ public class AnnotationServiceImpl implements AnnotationService {
     @Transactional(readOnly = true)
     public Page<AnnotationDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Annotations");
-        return annotationRepository.findAll(pageable)
+        return annotationRepository.findByCreatedBy(getCurrentUser(), pageable)
             .map(annotationMapper::toDto);
     }
 
@@ -146,7 +151,7 @@ public class AnnotationServiceImpl implements AnnotationService {
     @Override
     @Transactional(readOnly = true)
     public Optional<AnnotationDTO> findOne(UUID id, boolean refresh) {
-        Optional<Annotation> annotation = annotationRepository.findById(id);
+        Optional<Annotation> annotation = annotationRepository.findByIdAndCreatedBy(id, getCurrentUser());
         if (refresh) {
             annotation.ifPresent(a -> {
                 try {
@@ -166,7 +171,13 @@ public class AnnotationServiceImpl implements AnnotationService {
      */
     @Override
     public void delete(UUID id) {
-        log.debug("Request to delete Annotation : {}", id);
-        annotationRepository.deleteById(id);
+        String currentUser = getCurrentUser();
+        log.debug("Request to delete Annotation : {} by user {}", id, currentUser);
+        annotationRepository.findById(id).ifPresent(annotation -> {
+            if (!annotation.getCreatedBy().equals(currentUser)) {
+                throw new ResourceNotFoundException("Annotation not found");
+            }
+            annotationRepository.deleteById(id);
+        });
     }
 }

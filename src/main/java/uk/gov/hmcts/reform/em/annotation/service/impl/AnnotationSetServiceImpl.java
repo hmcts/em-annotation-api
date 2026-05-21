@@ -4,11 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.em.annotation.config.security.SecurityUtils;
 import uk.gov.hmcts.reform.em.annotation.domain.AnnotationSet;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationSetRepository;
+import uk.gov.hmcts.reform.em.annotation.rest.errors.ResourceNotFoundException;
 import uk.gov.hmcts.reform.em.annotation.service.AnnotationSetService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationSetDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationSetMapper;
@@ -39,6 +41,11 @@ public class AnnotationSetServiceImpl implements AnnotationSetService {
         this.securityUtils = securityUtils;
     }
 
+    private String getCurrentUser() {
+        return securityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new BadCredentialsException("User not found in security context."));
+    }
+
     /**
      * Save a annotationSet.
      *
@@ -63,7 +70,7 @@ public class AnnotationSetServiceImpl implements AnnotationSetService {
     @Transactional(readOnly = true)
     public Page<AnnotationSetDTO> findAll(Pageable pageable) {
         log.debug("Request to get all AnnotationSets");
-        return annotationSetRepository.findAll(pageable)
+        return annotationSetRepository.findByCreatedBy(getCurrentUser(), pageable)
             .map(annotationSetMapper::toDto);
     }
 
@@ -78,7 +85,7 @@ public class AnnotationSetServiceImpl implements AnnotationSetService {
     @Transactional(readOnly = true)
     public Optional<AnnotationSetDTO> findOne(UUID id) {
         log.debug("Request to get AnnotationSet : {}", id);
-        return annotationSetRepository.findById(id)
+        return annotationSetRepository.findByIdAndCreatedBy(id, getCurrentUser())
             .map(annotationSetMapper::toDto);
     }
 
@@ -89,8 +96,19 @@ public class AnnotationSetServiceImpl implements AnnotationSetService {
      */
     @Override
     public void delete(UUID id) {
-        log.debug("Request to delete AnnotationSet : {}", id);
-        annotationSetRepository.deleteById(id);
+        String currentUser = getCurrentUser();
+        log.debug("Request to delete AnnotationSet : {} by user {}", id, currentUser);
+        annotationSetRepository.findById(id).ifPresent(annotationSet -> {
+            if (!annotationSet.getCreatedBy().equals(currentUser)) {
+                throw new ResourceNotFoundException("AnnotationSet not found");
+            }
+            annotationSetRepository.deleteById(id);
+        });
+    }
+
+    @Override
+    public boolean existsById(UUID id) {
+        return annotationSetRepository.existsById(id);
     }
 
     @Override
