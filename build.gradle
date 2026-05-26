@@ -51,7 +51,7 @@ def versions = [
         sonarPitest        : '0.5',
         serenity           : '5.3.10',
         pact_version       : '4.7.1',
-        hibernate          : '6.6.50.Final',
+        hibernate          : '6.6.51.Final',
         logging            : '8.0.0',
         junit5             : '6.1.0',
         log4JVersion       : '2.26.0',
