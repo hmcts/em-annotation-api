@@ -239,7 +239,6 @@ dependencyManagement {
         // CVE-2025-7962
         dependencySet(group: 'org.eclipse.angus', version: '2.0.5') {
             entry 'angus-mail'
-            entry 'angus-activation'
         }
         //CVE-2026-34477, CVE-2026-34479
         dependencySet(group: 'org.apache.logging.log4j', version: versions.log4JVersion) {
