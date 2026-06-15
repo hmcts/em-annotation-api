@@ -233,7 +233,8 @@ processIntegrationTestResources {
 
 //CVE-2026-41840, CVE-2026-41841, CVE-2026-41842, CVE-2026-41843, CVE-2026-41850, CVE-2026-41851
 ext['spring-framework.version'] = '6.2.19'
-
+//CVE-2026-40988, CVE-2026-41003, CVE-2026-41694
+ext['spring-security.version'] = '6.5.11'
 dependencyManagement {
     dependencies {
         // CVE-2025-7962
