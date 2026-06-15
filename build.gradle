@@ -237,7 +237,7 @@ ext['spring-framework.version'] = '6.2.19'
 dependencyManagement {
     dependencies {
         // CVE-2025-7962
-        dependencySet(group: 'oorg.eclipse.angus', version: '2.0.5') {
+        dependencySet(group: 'org.eclipse.angus', version: '2.0.5') {
             entry 'angus-mail'
         }
         //CVE-2026-34477, CVE-2026-34479
