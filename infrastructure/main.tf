@@ -83,12 +83,19 @@ resource "azurerm_key_vault_secret" "POSTGRES-USER" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
 }
 
+resource "time_offset" "secret_expiration" {
+  offset_hours = 8760
+  triggers = {
+    password = module.db-v15.password
+  }
+}
+
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   name            = "${var.component}-POSTGRES-PASS"
   value           = module.db-v15.password
   key_vault_id    = data.azurerm_key_vault.key_vault.id
   content_type    = "text/plain"
-  expiration_date = timeadd(timestamp(), "8760h")
+  expiration_date = time_offset.secret_expiration.rfc3339
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
