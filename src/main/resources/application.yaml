@@ -99,7 +99,7 @@ info:
 auth:
   idam:
     client:
-      baseUrl: ${IDAM_API_BASE_URI:http://localhost:5000}
+      baseUrl: ${IDAM_WEB_API_BASE_URI:http://localhost:5000}
   provider:
     service:
       client:
@@ -117,7 +117,7 @@ idam:
   s2s-authorised:
     services: ${S2S_NAMES_WHITELIST:em_gw,xui_webapp}
   api:
-    url: ${IDAM_API_BASE_URI:http://localhost:5000}
+    url: ${IDAM_WEB_API_BASE_URI:http://localhost:5000}
     client:
       id: microservicekey-em-annotation-app
       secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
