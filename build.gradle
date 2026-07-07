@@ -128,7 +128,7 @@ dependencies {
     implementation group: 'org.zalando', name: 'jackson-datatype-problem', version: '0.27.1'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.17'
     implementation group: 'com.google.guava', name: 'guava', version: '33.6.0-jre'
-    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
+    implementation group: 'io.github.openfeign', name: 'feign-hc5', version: '13.12'
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '12.9.0'
     runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '12.9.0'
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
@@ -154,8 +154,12 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
 
     implementation group: 'com.github.hmcts', name: 'core-case-data-store-client', version: '5.3.0'
-    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.4'
-    implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.5'
+    implementation(group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.4') {
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+    }
+    implementation(group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.5') {
+        exclude group: 'io.github.openfeign', module: 'feign-httpclient'
+    }
     
     implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '3.0.0'
 
