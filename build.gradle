@@ -156,9 +156,7 @@ dependencies {
     implementation(group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.4') {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
-    implementation(group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.5') {
-        exclude group: 'io.github.openfeign', module: 'feign-httpclient'
-    }
+    implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.5'
     
     implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '3.0.0'
 
