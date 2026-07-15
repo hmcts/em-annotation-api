@@ -54,7 +54,7 @@ def versions = [
         hibernate          : '6.6.54.Final',
         logging            : '8.0.0',
         junit5             : '6.1.0',
-        log4JVersion       : '2.26.0',
+        log4JVersion       : '2.26.1',
         mapstruct          : '1.6.3',
 ]
 
@@ -236,7 +236,7 @@ dependencyManagement {
         dependencySet(group: 'org.eclipse.angus', version: '2.0.5') {
             entry 'angus-mail'
         }
-        //CVE-2026-34477, CVE-2026-34479
+        //CVE-2026-34477, CVE-2026-34479, CVE-2026-49844
         dependencySet(group: 'org.apache.logging.log4j', version: versions.log4JVersion) {
             entry 'log4j-api'
             entry 'log4j-core'
