@@ -54,7 +54,7 @@ def versions = [
         hibernate          : '6.6.54.Final',
         logging            : '8.0.0',
         junit5             : '6.1.0',
-        log4JVersion       : '2.26.0',
+        log4JVersion       : '2.26.1',
         mapstruct          : '1.6.3',
 ]
 
