@@ -92,6 +92,16 @@ configurations.configureEach {
     exclude group: 'org.springframework.security', module: 'spring-security-rsa'
 }
 
+configurations.all {
+    resolutionStrategy {
+        eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'net.bytebuddy') {
+                details.useVersion '1.17.0'
+            }
+        }
+    }
+}
+
 dependencies {
 
     def withoutStuff = {
@@ -325,7 +335,7 @@ pitest {
     failWhenNoMutations = false
     detectInlinedCode = true
     junit5PluginVersion = '1.2.1'
-    pitestVersion = '1.17.3'
+    pitestVersion = '1.22.1'
 }
 
 sonarqube {
