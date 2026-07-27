@@ -548,3 +548,7 @@ tasks.register('migratePostgresDatabase', FlywayMigrateTask) {
         url = "jdbc:postgresql://${dburl}"
     }
 }
+
+tasks.register('printVersionInit') {
+    doLast { println project.version }
+}
