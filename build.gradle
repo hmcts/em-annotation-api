@@ -34,7 +34,7 @@ version ='1.0.0'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -377,6 +377,10 @@ tasks.register('functional', Test) {
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 
     useJUnitPlatform()
+
+    doFirst() {
+        environment 'TEST_USER_PASSWORD', 'A!' + UUID.randomUUID().toString().replace('-', '').take(20)
+    }
 }
 
 // Serenity Reporting
