@@ -34,7 +34,7 @@ version ='1.0.0'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -325,7 +325,7 @@ pitest {
     failWhenNoMutations = false
     detectInlinedCode = true
     junit5PluginVersion = '1.2.1'
-    pitestVersion = '1.17.3'
+    pitestVersion = '1.22.1'
 }
 
 sonarqube {
