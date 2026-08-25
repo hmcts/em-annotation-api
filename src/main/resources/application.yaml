@@ -139,6 +139,9 @@ endpoint-toggles:
   metadata: ${ENABLE_METADATA_ENDPOINT:true}
   document-data-deletion: ${ENABLE_DOCUMENT_DELETE_ENDPOINT:true}
 
+toggle:
+  includeidamhealth: ${ENABLE_IDAM_HEALTH_CHECK:false}
+
 # OpenId Connect
 oidc:
   issuer: ${OIDC_ISSUER_BASE_URI:http://localhost:8080/openam/oauth2/hmcts}
