@@ -138,8 +138,8 @@ class ExceptionTranslatorTest {
         ResponseEntity<Problem> response = translator.handleBadRequestAlertException(ex, request);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getHeaders()).containsKey("X-emannotationapp-error");
-        assertThat(response.getHeaders()).containsKey("X-emannotationapp-params");
+        assertThat(response.getHeaders().containsHeader("X-emannotationapp-error")).isTrue();
+        assertThat(response.getHeaders().containsHeader("X-emannotationapp-params")).isTrue();
     }
 
     @Test
@@ -193,7 +193,7 @@ class ExceptionTranslatorTest {
 
         ResponseEntity<Problem> response = translator.handleConstraintViolation(ex, request);
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_CONTENT);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getParameters())
             .containsEntry("message", ErrorConstants.ERR_CONSTRAINT_VIOLATION);
