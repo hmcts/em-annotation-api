@@ -20,6 +20,7 @@ import uk.gov.hmcts.reform.em.annotation.domain.Tag;
 import uk.gov.hmcts.reform.em.annotation.domain.enumeration.AnnotationType;
 import uk.gov.hmcts.reform.em.annotation.repository.AnnotationRepository;
 import uk.gov.hmcts.reform.em.annotation.repository.TagRepository;
+import uk.gov.hmcts.reform.em.annotation.rest.errors.ErrorConstants;
 import uk.gov.hmcts.reform.em.annotation.service.dto.AnnotationDTO;
 import uk.gov.hmcts.reform.em.annotation.service.mapper.AnnotationMapper;
 
@@ -148,21 +149,23 @@ class AnnotationResourceIntTest extends BaseTest {
     void createAnnotationFailsPageNumberValidation() throws Exception {
         int databaseSizeBeforeCreate = annotationRepository.findAll().size();
 
-        // Create the Comment
         AnnotationDTO annotationDTO = annotationMapper.toDto(annotation);
         annotationDTO.setPage(-1);
 
-        // An entity with an existing ID cannot be created, so this API call must fail
         restLogoutMockMvc.perform(post("/api/annotations")
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                        .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("{\"type\":\"/constraint-violation\","
-                        + "\"title\":\"Method argument not valid\",\"status\":400,\"path\":\"/api/annotations\","
-                        + "\"message\":\"error.validation\",\"fieldErrors\":[{\"field\":\"page\","
-                        + "\"message\":\"Min\",\"objectName\":\"annotationDTO\"}]}"));
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(annotationDTO)))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+            .andExpect(jsonPath("$.type").value("/constraint-violation"))
+            .andExpect(jsonPath("$.title").value("Method argument not valid"))
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.instance").value("/api/annotations"))
+            .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_VALIDATION))
+            .andExpect(jsonPath("$.fieldErrors[0].field").value("page"))
+            .andExpect(jsonPath("$.fieldErrors[0].message").value("Min"))
+            .andExpect(jsonPath("$.fieldErrors[0].objectName").value("annotationDTO"));
 
-        // Validate the Comment in the database
         List<Annotation> annotationList = annotationRepository.findAll();
         assertThat(annotationList).hasSize(databaseSizeBeforeCreate);
     }
