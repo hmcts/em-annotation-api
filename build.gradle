@@ -56,6 +56,7 @@ def versions = [
         sonarPitest        : '0.5',
         serenity           : '5.3.11',
         pact_version       : '4.7.5',
+        pact_spring_version: '4.7.3',
         hibernate          : '7.4.1.Final',
         logging            : '8.0.0',
         junit5             : '6.1.3',
@@ -118,6 +119,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-flyway'
     implementation group: 'org.springframework.boot', name: 'spring-boot-jackson2'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-security-oauth2-client'
 
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '5.0.2'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-openfeign', version: '5.0.2'
@@ -213,7 +215,8 @@ dependencies {
 
     contractTestImplementation group: 'au.com.dius.pact', name: 'provider', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
-    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring6', version: versions.pact_version
+    // Spring Boot 4 uses Spring Framework 7; spring6 is for Spring 6 / Boot 3.
+    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring7', version: versions.pact_spring_version
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
 
     contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version:versions.junit5
