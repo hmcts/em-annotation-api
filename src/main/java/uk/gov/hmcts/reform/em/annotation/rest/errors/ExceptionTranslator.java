@@ -145,14 +145,8 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BadRequestAlertException.class)
     public ResponseEntity<Object> handleBadRequestAlertException(BadRequestAlertException ex,
                                                                  NativeWebRequest request) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "");
-        problemDetail.setProperty(MESSAGE_FIELD, "error." + ex.getErrorKey());
-
-        HttpHeaders headers = HeaderUtil.createFailureAlert(ex.getEntityName(),
-            ex.getErrorKey(),
-            ex.getMessage());
-
-        return new ResponseEntity<>(problemDetail, headers, problemDetail.getStatus());
+        HttpHeaders headers = HeaderUtil.createFailureAlert(ex.getEntityName(), ex.getErrorKey(), ex.getMessage());
+        return new ResponseEntity<>(ex.getBody(), headers, ex.getStatusCode());
     }
 
     @ExceptionHandler(BindException.class)

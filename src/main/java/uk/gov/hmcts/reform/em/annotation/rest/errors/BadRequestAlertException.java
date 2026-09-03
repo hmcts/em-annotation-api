@@ -24,13 +24,11 @@ public class BadRequestAlertException extends RuntimeException implements ErrorR
         this.entityName = entityName;
         this.errorKey = errorKey;
 
-        this.problemDetail = ProblemDetail.forStatusAndDetail(
-            HttpStatus.BAD_REQUEST,
-            defaultMessage
-        );
-
+        this.problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, defaultMessage);
         this.problemDetail.setType(type);
-
+        this.problemDetail.setTitle(defaultMessage);
+        this.problemDetail.setProperty("entityName", entityName);
+        this.problemDetail.setProperty("errorKey", errorKey);
         this.problemDetail.setProperty("message", "error." + errorKey);
         this.problemDetail.setProperty("params", entityName);
     }
@@ -50,6 +48,6 @@ public class BadRequestAlertException extends RuntimeException implements ErrorR
 
     @Override
     public ProblemDetail getBody() {
-        return this.problemDetail;
+        return problemDetail;
     }
 }
