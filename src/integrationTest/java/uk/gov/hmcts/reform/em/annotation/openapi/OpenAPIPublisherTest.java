@@ -14,8 +14,8 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.em.annotation.config.security.SecurityConfiguration;
 
-import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -56,8 +56,11 @@ class OpenAPIPublisherTest {
             .getResponse()
             .getContentAsByteArray();
 
-        try (OutputStream outputStream = Files.newOutputStream(Paths.get("/tmp/openapi-specs.json"))) {
-            outputStream.write(specs);
-        }
+        Path outputPath = Paths.get(
+            System.getProperty("java.io.tmpdir"), // platform-agnostic approach (/tmp for unix)
+            "openapi-specs.json"
+        );
+
+        Files.write(outputPath, specs);
     }
 }
