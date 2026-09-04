@@ -134,6 +134,7 @@ dependencies {
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.9.0'
     implementation group: 'com.google.guava', name: 'guava', version: '33.7.1-jre'
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '13.5.0'
+    implementation group: 'org.flywaydb', name: 'flyway-core-utilities', version: '13.5.0'
     runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '13.5.0'
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.20.0'
