@@ -328,7 +328,7 @@ class RectangleScenariosTest extends BaseTest {
         annotation.put("color", DEFAULT_COLOR);
 
         return request
-                .body(annotation)
+                .body(annotation.toString())
                 .post(API_ANNOTATIONS)
                 .then()
                 .statusCode(STATUS_CREATED)
@@ -374,6 +374,6 @@ class RectangleScenariosTest extends BaseTest {
 
     @NotNull
     private JSONObject extractJsonObjectFromResponse(final ValidatableResponse response) {
-        return response.extract().response().as(JSONObject.class);
+        return new JSONObject(response.extract().asString());
     }
 }

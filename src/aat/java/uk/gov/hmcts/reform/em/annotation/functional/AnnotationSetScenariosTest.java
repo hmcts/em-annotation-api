@@ -332,7 +332,7 @@ class AnnotationSetScenariosTest extends BaseTest {
     private ValidatableResponse createAnnotation(String annotationId, String annotationSetId) {
         final JSONObject annotation = createAnnotationPayload(annotationId, annotationSetId);
         return request
-                .body(annotation)
+                .body(annotation.toString())
                 .post(API_ANNOTATIONS)
                 .then()
                 .statusCode(201)
@@ -372,6 +372,6 @@ class AnnotationSetScenariosTest extends BaseTest {
 
     @NotNull
     private JSONObject extractJsonObjectFromResponse(final ValidatableResponse response) {
-        return response.extract().response().as(JSONObject.class);
+        return new JSONObject(response.extract().asString());
     }
 }

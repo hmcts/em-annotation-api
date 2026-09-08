@@ -102,8 +102,16 @@ public class TestUtil {
             .header(new Header(AUTHORIZATION, null));
     }
 
+    public RequestSpecification invalidIdamAuthAndInvalidS2SAuth() {
+        return invalidAuthHeaders();
+    }
+
     public RequestSpecification validAuthRequestWithEmptyS2SAuth() {
         return emptyS2sAuthRequest().header(AUTHORIZATION, idamAuth);
+    }
+
+    public RequestSpecification validAuthRequestWithInvalidS2SAuth() {
+        return invalidS2sAuthRequest().header(AUTHORIZATION, idamAuth);
     }
 
     public RequestSpecification validS2SAuthWithEmptyIdamAuth() {
@@ -112,7 +120,6 @@ public class TestUtil {
     }
 
     private RequestSpecification emptyS2sAuthRequest() {
-
         return SerenityRest.given().header(new Header(SERVICE_AUTHORIZATION, null));
     }
 
@@ -127,8 +134,21 @@ public class TestUtil {
     }
 
     private RequestSpecification invalidS2sAuthRequest() {
+        return SerenityRest.given().header(SERVICE_AUTHORIZATION, invalidS2sToken());
+    }
 
-        return SerenityRest.given().header(SERVICE_AUTHORIZATION, "invalidS2SAuthorization");
+    /**
+     * Creates a request with malformed IDAM and S2S bearer tokens so both
+     * authentication filters reject the request as unauthorised.
+     */
+    public RequestSpecification invalidAuthHeaders() {
+        return SerenityRest.given()
+            .header(AUTHORIZATION, "invalidIDAMAuthRequest")
+            .header(SERVICE_AUTHORIZATION, invalidS2sToken());
+    }
+
+    private String invalidS2sToken() {
+        return "Bearer eyJ.invalid.token";
     }
 
     private RequestSpecification s2sAuthRequest() {

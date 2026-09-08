@@ -47,14 +47,25 @@ class DocumentDataScenariosTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Missing ServiceAuthorization header should return 401 Unauthorized")
-    void shouldReturn401WhenS2SHeaderIsMissing() {
-        testUtil.validAuthRequestWithEmptyS2SAuth()
+    @DisplayName("Invalid ServiceAuthorization header should return 401 Unauthorized")
+    void shouldReturn401WhenS2SHeaderIsInvalid() {
+        testUtil.validAuthRequestWithInvalidS2SAuth()
             .baseUri(testUrl)
             .contentType(APPLICATION_JSON_VALUE)
             .delete(String.format(API_DELETE_DATA, UUID.randomUUID()))
             .then()
             .statusCode(401);
+    }
+
+    @Test
+    @DisplayName("Missing ServiceAuthorization header should return 403 Forbidden")
+    void shouldReturn403WhenS2SHeaderIsMissing() {
+        testUtil.validAuthRequestWithEmptyS2SAuth()
+            .baseUri(testUrl)
+            .contentType(APPLICATION_JSON_VALUE)
+            .delete(String.format(API_DELETE_DATA, UUID.randomUUID()))
+            .then()
+            .statusCode(403);
     }
 
     @Test
