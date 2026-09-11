@@ -13,7 +13,7 @@ properties([
     ])
 ])
 
-@Library("Infrastructure@2.5.4") _
+@Library("Infrastructure@2.7.0") _
 
 def type = "java"
 def product = "em"
@@ -57,6 +57,7 @@ def vaultOverrides = [
 ]
 
 withPipeline(type , product, component) {
+    enableBuildCache()
     enableDbMigration('em-anno')
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
