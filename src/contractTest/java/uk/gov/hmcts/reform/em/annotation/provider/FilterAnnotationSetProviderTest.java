@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
 import org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientAutoConfiguration;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,6 +27,7 @@ import static org.mockito.Mockito.when;
     SecurityAutoConfiguration.class,
     OAuth2ClientAutoConfiguration.class
 })
+@AutoConfigureMockMvc(addFilters = false)
 public class FilterAnnotationSetProviderTest extends BaseProviderTest {
 
     private final FilterAnnotationSet filterAnnotationSet;
