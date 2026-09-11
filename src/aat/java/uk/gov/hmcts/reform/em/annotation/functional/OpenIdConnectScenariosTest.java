@@ -36,7 +36,7 @@ class OpenIdConnectScenariosTest extends BaseTest {
                 .contentType(CONTENT_TYPE_JSON)
                 .get(API_ANNOTATION_SETS)
                 .then()
-                .statusCode(403);
+                .statusCode(STATUS_UNAUTHORIZED);
     }
 
     @Test
@@ -72,7 +72,7 @@ class OpenIdConnectScenariosTest extends BaseTest {
                 .contentType(CONTENT_TYPE_JSON)
                 .get(API_ANNOTATION_SETS)
                 .then()
-                .statusCode(403);
+                .statusCode(STATUS_UNAUTHORIZED);
     }
 
     @Test
