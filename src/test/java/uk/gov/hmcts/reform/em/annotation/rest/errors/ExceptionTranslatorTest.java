@@ -390,7 +390,7 @@ class ExceptionTranslatorTest {
 
         ProblemDetail body = bodyOf(response);
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_CONTENT);
         assertThat(body.getProperties()).containsEntry("message", ErrorConstants.ERR_CONSTRAINT_VIOLATION);
     }
 
