@@ -33,10 +33,9 @@ class TagScenariosTest extends BaseTest {
             .then()
             .statusCode(200)
             .body("size()", Matchers.greaterThanOrEqualTo(1))
-            .body("[0].name", equalTo("test tag"))
-            .body("[0].createdBy", equalTo(userId))
-            .body("[0].label", equalTo("test label"))
-            .body("[0].color", equalTo("yellow"))
+            .body("find { it.name == 'test tag' }.createdBy", equalTo(userId))
+            .body("find { it.name == 'test tag' }.label", equalTo("test label"))
+            .body("find { it.name == 'test tag' }.color", equalTo("yellow"))
             .log().all();
     }
 
@@ -86,7 +85,7 @@ class TagScenariosTest extends BaseTest {
     private ValidatableResponse createAnnotation(String annotationId, String annotationSetId, String createdBy) {
         final JSONObject annotation = createAnnotationPayload(annotationId, annotationSetId, createdBy);
         return request
-            .body(annotation)
+            .body(annotation.toString())
             .post("/api/annotations")
             .then()
             .statusCode(201)

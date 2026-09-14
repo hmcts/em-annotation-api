@@ -88,7 +88,7 @@ class AnnotationScenariosTest extends BaseTest {
         annotation.put(FIELD_CASE_ID, caseId);
 
         final ValidatableResponse response = request
-                .body(annotation)
+                .body(annotation.toString())
                 .post(API_ANNOTATIONS)
                 .then()
                 .statusCode(201)
@@ -123,7 +123,7 @@ class AnnotationScenariosTest extends BaseTest {
         annotation.put(FIELD_CREATED_BY, testUtil.getTestUser2Id());
 
         request
-            .body(annotation)
+            .body(annotation.toString())
             .post(API_ANNOTATIONS)
             .then()
             .statusCode(201)
@@ -158,7 +158,7 @@ class AnnotationScenariosTest extends BaseTest {
         final String user1Id = testUtil.getTestUserId();
 
         request
-            .body(annotation)
+            .body(annotation.toString())
             .post(API_ANNOTATIONS)
             .then()
             .statusCode(201)
@@ -183,7 +183,7 @@ class AnnotationScenariosTest extends BaseTest {
         annotation.put(FIELD_COLOR, COLOR_DEFAULT);
 
         request
-                .body(annotation)
+                .body(annotation.toString())
                 .post(API_ANNOTATIONS)
                 .then()
                 .statusCode(400)
@@ -462,7 +462,7 @@ class AnnotationScenariosTest extends BaseTest {
     private ValidatableResponse createAnnotation(String annotationId, String annotationSetId) {
         final JSONObject annotation = createAnnotationPayload(annotationId, annotationSetId);
         return request
-                .body(annotation)
+                .body(annotation.toString())
                 .post(API_ANNOTATIONS)
                 .then()
                 .statusCode(201)
@@ -502,6 +502,6 @@ class AnnotationScenariosTest extends BaseTest {
 
     @NotNull
     private JSONObject extractJsonObjectFromResponse(final ValidatableResponse response) {
-        return response.extract().response().as(JSONObject.class);
+        return new JSONObject(response.extract().asString());
     }
 }

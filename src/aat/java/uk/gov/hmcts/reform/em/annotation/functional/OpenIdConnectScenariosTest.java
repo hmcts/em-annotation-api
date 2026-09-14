@@ -40,6 +40,18 @@ class OpenIdConnectScenariosTest extends BaseTest {
     }
 
     @Test
+    void testWithInvalidS2SAuth() {
+        // Invalid S2SAuth
+        testUtil
+                .validAuthRequestWithInvalidS2SAuth()
+                .baseUri(testUrl)
+                .contentType(CONTENT_TYPE_JSON)
+                .get(API_ANNOTATION_SETS)
+                .then()
+                .statusCode(STATUS_UNAUTHORIZED);
+    }
+
+    @Test
     void testWithEmptyIdamAuthAndValidS2SAuth() {
         // Empty IdamAuth and Valid S2S Auth
         testUtil
@@ -56,6 +68,18 @@ class OpenIdConnectScenariosTest extends BaseTest {
         // Empty IdamAuth and Empty S2SAuth
         testUtil
                 .emptyIdamAuthAndEmptyS2SAuth()
+                .baseUri(testUrl)
+                .contentType(CONTENT_TYPE_JSON)
+                .get(API_ANNOTATION_SETS)
+                .then()
+                .statusCode(STATUS_UNAUTHORIZED);
+    }
+
+    @Test
+    void testIdamAuthAndS2SAuthAreInvalid() {
+        // Invalid IdamAuth and invalid S2SAuth
+        testUtil
+                .invalidIdamAuthAndInvalidS2SAuth()
                 .baseUri(testUrl)
                 .contentType(CONTENT_TYPE_JSON)
                 .get(API_ANNOTATION_SETS)
