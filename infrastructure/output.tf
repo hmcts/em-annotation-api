@@ -9,6 +9,3 @@ output "idam_webshow_whitelist" {
   value = "https://em-show-aat.service.core-compute-aat.internal/oauth2/callback"
 }
 
-output "enable_idam_healthcheck" {
-  value = var.enable_idam_healthcheck
-}
