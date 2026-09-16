@@ -32,7 +32,6 @@ import static org.mockito.Mockito.when;
     SecurityAutoConfiguration.class,
     OAuth2ClientAutoConfiguration.class
 })
-@AutoConfigureMockMvc(addFilters = false)
 public class AnnotationSetProviderTest extends BaseProviderTest {
 
     private final AnnotationSetResource annotationSetResource;

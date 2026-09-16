@@ -27,7 +27,6 @@ import static org.mockito.Mockito.when;
     SecurityAutoConfiguration.class,
     OAuth2ClientAutoConfiguration.class
 })
-@AutoConfigureMockMvc(addFilters = false)
 public class FilterAnnotationSetProviderTest extends BaseProviderTest {
 
     private final FilterAnnotationSet filterAnnotationSet;

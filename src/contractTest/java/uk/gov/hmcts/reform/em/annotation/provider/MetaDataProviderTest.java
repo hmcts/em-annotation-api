@@ -24,7 +24,6 @@ import static org.mockito.Mockito.when;
     SecurityAutoConfiguration.class,
     OAuth2ClientAutoConfiguration.class
 })
-@AutoConfigureMockMvc(addFilters = false)
 public class MetaDataProviderTest extends BaseProviderTest {
 
     private final MetaDataResource metaDataResource;

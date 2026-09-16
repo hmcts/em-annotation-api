@@ -117,12 +117,9 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-health'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-flyway'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-jackson2'
     implementation group: 'org.springframework.boot', name: 'spring-boot-security-oauth2-client'
 
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '5.0.2'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-openfeign', version: '5.0.2'
 
     implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: versions.fasterXmlJackson
     implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version: versions.fasterXmlJackson
@@ -133,8 +130,6 @@ dependencies {
     implementation group:'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
     implementation group:'com.fasterxml.jackson.module', name: 'jackson-module-blackbird', version: versions.fasterXmlJackson
 
-    implementation group: 'org.zalando', name: 'problem-spring-web', version: '0.29.1'
-    implementation group: 'org.zalando', name: 'jackson-datatype-problem', version: '0.27.1'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '3.1.0'
     implementation group: 'com.google.guava', name: 'guava', version: '33.7.1-jre'
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '13.5.0'
