@@ -118,6 +118,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
     implementation group: 'org.springframework.boot', name: 'spring-boot-security-oauth2-client'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-flyway'
 
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '5.0.2'
 
@@ -177,6 +178,7 @@ dependencies {
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-security-test'
     testImplementation group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
     testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
+    testImplementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8', version: versions.fasterXmlJackson
 
     aatRuntimeOnly group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.5'
     aatRuntimeOnly group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.9'
