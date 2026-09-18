@@ -199,7 +199,7 @@ dependencies {
 
     testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.21.4'
 
-    testImplementation group: 'com.h2database', name: 'h2', version: '2.4.240'
+    testImplementation group: 'com.h2database', name: 'h2', version: '2.5.250'
 
     testImplementation group: 'org.mockito', name: 'mockito-inline', version: '5.2.0'
 
