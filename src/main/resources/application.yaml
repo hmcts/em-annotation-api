@@ -46,6 +46,9 @@ spring:
     allow-circular-references: true # Need this for the Mapper library to work
   lifecycle:
     timeout-per-shutdown-phase: ${TIMEOUT_SERVER_SHUTDOWN_PHASE:1m}
+  http:
+    converters:
+      preferred-json-mapper: jackson2
 
 management:
   endpoint:
