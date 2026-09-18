@@ -70,13 +70,6 @@ variable "application_type" {
 ////////////////////////////////////////////////
 // Toggle Features
 ////////////////////////////////////////////////
-variable "enable_idam_healthcheck" {
-  default = "false"
-}
-
-variable "enable_s2s_healthcheck" {
-  default = "false"
-}
 
 /// v15 DB Details
 variable "aks_subscription_id" {}
