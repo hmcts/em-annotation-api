@@ -12,21 +12,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 
 import java.time.Instant;
 import java.util.UUID;
 
-@Import({
-    ContractTestProviderConfiguration.class,
-    ContractTestSecurityConfiguration.class
-})
-@ActiveProfiles("contract-test")
+@Import(ContractTestProviderConfiguration.class)
 @IgnoreNoPactsToVerify
+@AutoConfigureMockMvc(addFilters = false)
 //Uncomment @PactFolder and comment the @PactBroker line to test local consumer.
 //@PactFolder("target/pacts")
 @PactBroker(
