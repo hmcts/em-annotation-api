@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 
 import java.time.Instant;
@@ -55,7 +56,8 @@ public abstract class BaseProviderTest {
             context.setTarget(testTarget);
         }
 
-        testTarget.setMessageConverters(new JacksonJsonHttpMessageConverter((tools.jackson.databind.json.JsonMapper) objectMapper));
+        JsonMapper jsonMapper = (JsonMapper) objectMapper;
+        testTarget.setMessageConverters(new JacksonJsonHttpMessageConverter(jsonMapper));
     }
 
     protected abstract Object[] getControllersUnderTest();
