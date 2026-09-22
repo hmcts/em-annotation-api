@@ -55,7 +55,7 @@ public class AsyncEntityAuditEventWriter {
     private EntityAuditEvent prepareAuditEntity(final AbstractAuditingEntity entity, EntityAuditAction action) {
         EntityAuditEvent auditedEntity = new EntityAuditEvent();
         Class<?> entityClass = entity.getClass(); // Retrieve entity class with reflection
-        auditedEntity.setAction(action.value());
+        auditedEntity.setAction(action == null ? null : action.value());
         auditedEntity.setEntityType(entityClass.getName());
         String entityData;
         log.trace("Getting Entity Content");

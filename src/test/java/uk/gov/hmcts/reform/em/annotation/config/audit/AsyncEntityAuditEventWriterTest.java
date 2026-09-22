@@ -69,6 +69,17 @@ class AsyncEntityAuditEventWriterTest {
     }
 
     @Test
+    void writeAuditEventPersistsWhenActionIsNull() throws Exception {
+        when(objectMapper.writeValueAsString(mockEntity)).thenReturn("{\"id\":\"456\"}");
+        when(mockEntity.getLastModifiedBy()).thenReturn("modifier");
+        when(mockEntity.getLastModifiedDate()).thenReturn(Instant.now());
+
+        asyncEntityAuditEventWriter.writeAuditEvent(mockEntity, null);
+
+        verify(auditingEntityRepository).save(any(EntityAuditEvent.class));
+    }
+
+    @Test
     void writeAuditEventDoesNotPersistWhenSerializationFails() throws Exception {
         when(objectMapper.writeValueAsString(mockEntity)).thenThrow(new RuntimeException("Serialization failed"));
 
