@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.em.annotation.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
 import org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientAutoConfiguration;
@@ -13,6 +12,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.em.annotation.rest.CommentResource;
 import uk.gov.hmcts.reform.em.annotation.service.CommentService;
 import uk.gov.hmcts.reform.em.annotation.service.dto.CommentDTO;

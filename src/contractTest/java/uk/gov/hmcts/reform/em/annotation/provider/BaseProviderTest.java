@@ -7,15 +7,15 @@ import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
 import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors;
 import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
 import au.com.dius.pact.provider.spring.spring7.Spring7MockMvcTestTarget;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.em.annotation.domain.IdamDetails;
 
 import java.time.Instant;
@@ -55,7 +55,7 @@ public abstract class BaseProviderTest {
             context.setTarget(testTarget);
         }
 
-        testTarget.setMessageConverters(new MappingJackson2HttpMessageConverter(objectMapper));
+        testTarget.setMessageConverters(new JacksonJsonHttpMessageConverter((tools.jackson.databind.json.JsonMapper) objectMapper));
     }
 
     protected abstract Object[] getControllersUnderTest();

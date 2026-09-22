@@ -1,8 +1,5 @@
 package uk.gov.hmcts.reform.em.annotation.functional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.restassured.response.ValidatableResponse;
 import org.hamcrest.Matchers;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 import uk.gov.hmcts.reform.em.annotation.testutil.TestUtil;
 
@@ -25,7 +25,7 @@ import static uk.gov.hmcts.reform.em.annotation.functional.TestConsts.*;
 
 class AnnotationScenariosTest extends BaseTest {
 
-    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+    private final ObjectMapper objectMapper = JsonMapper.builder().build();
 
 
     // 🔹 Test data JSON
@@ -72,7 +72,7 @@ class AnnotationScenariosTest extends BaseTest {
     }
 
     @Test
-    void shouldReturn201WhenCreateNewAnnotationWithCaseId() throws JsonProcessingException {
+    void shouldReturn201WhenCreateNewAnnotationWithCaseId() throws JacksonException {
         CaseDetails caseDetails = testUtil.createCase(
                 PUBLIC_LAW,
                 "CCD_BUNDLE_MVP_TYPE_ASYNC",
