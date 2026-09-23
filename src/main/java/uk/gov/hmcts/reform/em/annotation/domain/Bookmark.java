@@ -89,19 +89,19 @@ public class Bookmark implements Serializable {
         this.pageNumber = pageNumber;
     }
 
-    public Double getxCoordinate() {
+    public Double getXCoordinate() {
         return xCoordinate;
     }
 
-    public void setxCoordinate(Double xCoordinate) {
+    public void setXCoordinate(Double xCoordinate) {
         this.xCoordinate = xCoordinate;
     }
 
-    public Double getyCoordinate() {
+    public Double getYCoordinate() {
         return yCoordinate;
     }
 
-    public void setyCoordinate(Double yCoordinate) {
+    public void setYCoordinate(Double yCoordinate) {
         this.yCoordinate = yCoordinate;
     }
 

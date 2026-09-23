@@ -115,8 +115,8 @@ public class BookmarkProviderTest extends BaseProviderTest {
         dto.setDocumentId(EXAMPLE_DOCUMENT_ID);
         dto.setCreatedBy(EXAMPLE_USER_ID.toString());
         dto.setPageNumber(pageNumber);
-        dto.setxCoordinate(100.5);
-        dto.setyCoordinate(200.75);
+        dto.setXCoordinate(100.5);
+        dto.setYCoordinate(200.75);
         dto.setParent(EXAMPLE_PARENT_BOOKMARK_ID);
         dto.setPrevious(EXAMPLE_PREVIOUS_BOOKMARK_ID);
         return dto;
