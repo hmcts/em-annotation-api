@@ -323,7 +323,7 @@ class CommentScenariosTest extends BaseTest {
         createAnnotations.put(FIELD_COLOR, COLOR_CODE);
 
         return request
-            .body(createAnnotations)
+            .body(createAnnotations.toString())
             .post(API_ANNOTATIONS)
             .then()
             .statusCode(201)
@@ -366,6 +366,6 @@ class CommentScenariosTest extends BaseTest {
 
     @NotNull
     private JSONObject extractJsonObjectFromResponse(final ValidatableResponse response) {
-        return response.extract().response().as(JSONObject.class);
+        return new JSONObject(response.extract().asString());
     }
 }

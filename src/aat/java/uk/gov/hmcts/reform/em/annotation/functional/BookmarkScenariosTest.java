@@ -586,6 +586,6 @@ class BookmarkScenariosTest extends BaseTest {
 
     @NotNull
     private JSONObject extractJsonObjectFromResponse(final ValidatableResponse response) {
-        return response.extract().response().as(JSONObject.class);
+        return new JSONObject(response.extract().asString());
     }
 }

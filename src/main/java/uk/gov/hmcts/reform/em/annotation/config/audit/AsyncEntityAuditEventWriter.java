@@ -1,15 +1,14 @@
 package uk.gov.hmcts.reform.em.annotation.config.audit;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.em.annotation.domain.AbstractAuditingEntity;
 import uk.gov.hmcts.reform.em.annotation.domain.EntityAuditEvent;
 import uk.gov.hmcts.reform.em.annotation.repository.EntityAuditEventRepository;
 
-import java.io.IOException;
 
 /**
  * Async Entity Audit Event writer.
@@ -56,15 +55,13 @@ public class AsyncEntityAuditEventWriter {
     private EntityAuditEvent prepareAuditEntity(final AbstractAuditingEntity entity, EntityAuditAction action) {
         EntityAuditEvent auditedEntity = new EntityAuditEvent();
         Class<?> entityClass = entity.getClass(); // Retrieve entity class with reflection
-        auditedEntity.setAction(action.value());
+        auditedEntity.setAction(action == null ? null : action.value());
         auditedEntity.setEntityType(entityClass.getName());
         String entityData;
         log.trace("Getting Entity Content");
         try {
             entityData = objectMapper.writeValueAsString(entity);
-        } catch (IllegalArgumentException
-                 | SecurityException
-                 | IOException e) {
+        } catch (Exception e) {
             log.error("Exception while getting entity content {}", e.getMessage(), e);
             // returning null as we dont want to raise an application exception here
             return null;

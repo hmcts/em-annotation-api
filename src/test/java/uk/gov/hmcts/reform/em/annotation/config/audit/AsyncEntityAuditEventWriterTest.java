@@ -1,11 +1,11 @@
 package uk.gov.hmcts.reform.em.annotation.config.audit;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.em.annotation.domain.AbstractAuditingEntity;
 import uk.gov.hmcts.reform.em.annotation.domain.EntityAuditEvent;
 import uk.gov.hmcts.reform.em.annotation.repository.EntityAuditEventRepository;
@@ -64,6 +64,17 @@ class AsyncEntityAuditEventWriterTest {
         when(mockEntity.getCreatedDate()).thenReturn(Instant.now());
 
         asyncEntityAuditEventWriter.writeAuditEvent(mockEntity, EntityAuditAction.CREATE);
+
+        verify(auditingEntityRepository).save(any(EntityAuditEvent.class));
+    }
+
+    @Test
+    void writeAuditEventPersistsWhenActionIsNull() throws Exception {
+        when(objectMapper.writeValueAsString(mockEntity)).thenReturn("{\"id\":\"456\"}");
+        when(mockEntity.getLastModifiedBy()).thenReturn("modifier");
+        when(mockEntity.getLastModifiedDate()).thenReturn(Instant.now());
+
+        asyncEntityAuditEventWriter.writeAuditEvent(mockEntity, null);
 
         verify(auditingEntityRepository).save(any(EntityAuditEvent.class));
     }
