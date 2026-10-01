@@ -1,18 +1,18 @@
 # Evidence Management Annotation App
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://travis-ci.org/hmcts/em-annotation-app.svg?branch=master)](https://travis-ci.org/hmcts/em-annotation-app)
-[![codecov](https://codecov.io/gh/hmcts/em-annotation-app/branch/master/graph/badge.svg)](https://codecov.io/gh/hmcts/em-annotation-app)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8a50dd2a7b9144029e8547bf019fe2c7)](https://www.codacy.com/app/HMCTS/em-annotation-app)
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/8a50dd2a7b9144029e8547bf019fe2c7)](https://www.codacy.com/app/HMCTS/em-annotation-app)
-[![Known Vulnerabilities](https://snyk.io/test/github/hmcts/em-annotation-app/badge.svg)](https://snyk.io/test/github/hmcts/em-annotation-app)
+[![Build Status](https://travis-ci.org/hmcts/em-annotation-api.svg?branch=master)](https://travis-ci.org/hmcts/em-annotation-api)
+[![codecov](https://codecov.io/gh/hmcts/em-annotation-api/branch/master/graph/badge.svg)](https://codecov.io/gh/hmcts/em-annotation-api)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8a50dd2a7b9144029e8547bf019fe2c7)](https://www.codacy.com/app/HMCTS/em-annotation-api)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/8a50dd2a7b9144029e8547bf019fe2c7)](https://www.codacy.com/app/HMCTS/em-annotation-api)
+[![Known Vulnerabilities](https://snyk.io/test/github/hmcts/em-annotation-api/badge.svg)](https://snyk.io/test/github/hmcts/em-annotation-api)
 
 Annotation API is a backend service to store and retrieve annotations.
 
 ## Quickstart.
 #### To clone repo and prepare to pull containers:
 ```bash
-git clone https://github.com/hmcts/em-annotation-app.git
-cd em-annotation-app/
+git clone https://github.com/hmcts/em-annotation-api.git
+cd em-annotation-api/
 brew install jq
 ```
 
@@ -94,8 +94,8 @@ and then using it to publish your tests:
 
 It uses:
 
-* Java11
-* Spring boot
+* Java 25
+* Spring Boot 4.1.x
 * Junit, Mockito and SpringBootTest and Powermockito
 * Gradle
 * [lombok project](https://projectlombok.org/) - Lombok project

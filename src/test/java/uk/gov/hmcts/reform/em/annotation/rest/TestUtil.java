@@ -1,15 +1,14 @@
 package uk.gov.hmcts.reform.em.annotation.rest;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.MediaType;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -42,11 +41,9 @@ public class TestUtil {
      */
     public static byte[] convertObjectToJsonBytes(Object object)
             throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_EMPTY);
-        mapper.registerModule(new Jdk8Module());
-        JavaTimeModule module = new JavaTimeModule();
-        mapper.registerModule(module);
+        ObjectMapper mapper = JsonMapper.builder()
+            .changeDefaultPropertyInclusion(value -> value.withValueInclusion(JsonInclude.Include.NON_EMPTY))
+            .build();
 
         return mapper.writeValueAsBytes(object);
     }
