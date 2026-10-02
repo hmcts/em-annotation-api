@@ -94,7 +94,7 @@ and then using it to publish your tests:
 
 It uses:
 
-* Java11
+* Java25
 * Spring boot
 * Junit, Mockito and SpringBootTest and Powermockito
 * Gradle
