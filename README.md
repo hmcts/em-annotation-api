@@ -94,8 +94,8 @@ and then using it to publish your tests:
 
 It uses:
 
-* Java 25
-* Spring Boot 4.1.x
+* Java25
+* Spring boot
 * Junit, Mockito and SpringBootTest and Powermockito
 * Gradle
 * [lombok project](https://projectlombok.org/) - Lombok project

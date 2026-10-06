@@ -14,7 +14,7 @@ properties([
         ])
 ])
 
-@Library("Infrastructure@2.7.0") _
+@Library("Infrastructure@2.9.1") _
 import java.util.UUID
 
 def type = "java"
