@@ -26,6 +26,8 @@ class AnnotationsConsumerTest extends BaseConsumerTest {
     private static final String ANNOTATIONS_API_BASE_PATH = "/api/annotations";
 
     private static final String EXAMPLE_ANNOTATION_ID = "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a";
+    private static final UUID EXAMPLE_COMMENT_ID = UUID.fromString("fe8395d8-ac8e-4c65-939b-c749c28a747f");
+    private static final UUID EXAMPLE_RECTANGLE_ID = UUID.fromString("8a26cfd9-8b7b-47f2-8788-e95370c6e44c");
 
     @Pact(provider = ANNOTATIONS_PROVIDER_NAME, consumer = "annotation_api")
     public V4Pact createAnnotation201(PactDslWithProvider builder) {
@@ -175,7 +177,7 @@ class AnnotationsConsumerTest extends BaseConsumerTest {
             .eachLike("comments", comment -> {
                 buildAuditingFields(comment);
                 comment
-                    .uuid("id", UUID.randomUUID())
+                    .uuid("id", EXAMPLE_COMMENT_ID)
                     .uuid("annotationId", UUID.fromString(EXAMPLE_ANNOTATION_ID))
                     .stringType("content", "This is a sample annotation comment text which can vary.");
             })
@@ -186,7 +188,7 @@ class AnnotationsConsumerTest extends BaseConsumerTest {
                     .numberType("x", 100.5)
                     .numberType("width", 250.0)
                     .numberType("y", 55.2)
-                    .uuid("id", UUID.randomUUID())
+                    .uuid("id", EXAMPLE_RECTANGLE_ID)
                     .uuid("annotationId", UUID.fromString(EXAMPLE_ANNOTATION_ID))
                     .numberType("height", 80.7);
             });
