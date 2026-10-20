@@ -20,7 +20,7 @@ plugins {
     id 'au.com.dius.pact' version '4.7.5'
     id 'info.solidsoft.pitest' version '1.19.0'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.9'
-    id 'com.github.hmcts.rse-cft-lib' version '0.19.2395'
+    id 'com.github.hmcts.rse-cft-lib' version '0.19.2439'
     id 'org.flywaydb.flyway' version '13.5.0'
 }
 
@@ -48,7 +48,7 @@ application {
 }
 
 def versions = [
-        postgresql         : '42.7.13',
+        postgresql         : '42.7.14',
         springSecurity     : '7.1.1',
         jackson3           : '3.2.2',
         jacksonAnnotations : '2.22',
@@ -129,13 +129,13 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jacksonAnnotations
 
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '3.1.0'
-    implementation group: 'com.google.guava', name: 'guava', version: '33.7.1-jre'
+    implementation group: 'com.google.guava', name: 'guava', version: '33.7.2-jre'
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '13.5.0'
     implementation group: 'org.flywaydb', name: 'flyway-core-utilities', version: '13.5.0'
     implementation group: 'org.json', name: 'json', version: '20250517'
     runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '13.5.0'
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.20.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.21.0'
     implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.11.0'
     implementation group: 'commons-validator', name: 'commons-validator', version: '1.11.0'
     implementation group: 'org.ehcache', name: 'ehcache', version: '3.12.0'
@@ -188,8 +188,8 @@ dependencies {
     testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-junit5', version: versions.serenity
 
-    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.6.3'
-    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.6.3'
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.6.5'
+    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.6.5'
 
     testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.10', classifier: 'all', {
         exclude group: 'commons-io', module: 'commons-io'
@@ -200,7 +200,7 @@ dependencies {
 
     testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.21.4'
 
-    testImplementation group: 'com.h2database', name: 'h2', version: '2.5.250'
+    testImplementation group: 'com.h2database', name: 'h2', version: '2.5.252'
 
     testImplementation group: 'org.mockito', name: 'mockito-inline', version: '5.2.0'
 
