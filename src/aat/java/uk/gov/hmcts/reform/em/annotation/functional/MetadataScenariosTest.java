@@ -101,7 +101,7 @@ class MetadataScenariosTest extends BaseTest {
         final JSONObject metadataPayload = createMetadataPayload(documentId);
 
         unAuthenticatedRequest
-                .body(metadataPayload)
+                .body(metadataPayload.toString())
                 .post(API_METADATA)
                 .then()
                 .statusCode(STATUS_UNAUTHORIZED)
