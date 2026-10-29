@@ -56,7 +56,7 @@ def versions = [
         gradlePitest       : '1.3.0',
         sonarPitest        : '0.5',
         serenity           : '5.4.1',
-        pact_version       : '4.7.5',
+        pact_version       : '4.7.6',
         pact_spring_version: '4.7.5',
         hibernate          : '7.4.14.Final',
         logging            : '8.0.0',
