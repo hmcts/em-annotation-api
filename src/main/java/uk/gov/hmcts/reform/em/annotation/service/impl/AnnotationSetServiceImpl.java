@@ -97,7 +97,6 @@ public class AnnotationSetServiceImpl implements AnnotationSetService {
     @Override
     public void delete(UUID id) {
         String currentUser = getCurrentUser();
-        log.debug("Request to delete AnnotationSet : {} by user {}", id, currentUser);
         annotationSetRepository.findById(id).ifPresent(annotationSet -> {
             if (!annotationSet.getCreatedBy().equals(currentUser)) {
                 throw new ResourceNotFoundException("AnnotationSet not found");

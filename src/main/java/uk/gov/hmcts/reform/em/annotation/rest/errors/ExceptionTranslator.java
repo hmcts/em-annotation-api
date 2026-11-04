@@ -239,15 +239,23 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(PSQLException.class)
     public ResponseEntity<Object> handlePsqlException(PSQLException ex, NativeWebRequest request) {
-        LOG.info("Em-Annotation SQL exception: {}", ex.getMessage());
+        // 23505 = PostgreSQL standard SQLState for unique_violation
+        boolean isDuplicateKey = "23505".equals(ex.getSQLState());
 
-        HttpStatus status = StringUtils.contains(ex.getMessage(),
-            "duplicate key value violates unique constraint")
-            ? HttpStatus.CONFLICT
-            : HttpStatus.INTERNAL_SERVER_ERROR;
+        HttpStatus status = isDuplicateKey ? HttpStatus.CONFLICT : HttpStatus.INTERNAL_SERVER_ERROR;
 
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, ex.getMessage());
-        problemDetail.setProperty(MESSAGE_FIELD, ex.getMessage());
+        if (isDuplicateKey) {
+            LOG.warn("Database unique constraint conflict occurred. SQLState: {}", ex.getSQLState());
+        } else {
+            LOG.error("Unexpected database exception occurred. SQLState: {}", ex.getSQLState(), ex);
+        }
+
+        String clientDetail = isDuplicateKey
+            ? "A resource with the specified identifier or unique field already exists."
+            : "An unexpected database error occurred. Please try again later.";
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, clientDetail);
+        problemDetail.setProperty(MESSAGE_FIELD, clientDetail);
 
         return new ResponseEntity<>(problemDetail, new HttpHeaders(), problemDetail.getStatus());
     }
