@@ -43,7 +43,8 @@ public class AsyncEntityAuditEventWriter {
             }
         } catch (Exception e) {
             log.error("Exception while persisting audit entity for [{} ID: {}] error: {}",
-                target.getClass().getSimpleName(), target.getId(), e.getMessage(), e);        }
+                target.getClass().getSimpleName(), target.getId(), e.getMessage(), e);
+        }
     }
 
     /**

@@ -490,7 +490,7 @@ class ExceptionTranslatorTest {
     void handlePsqlExceptionDuplicateKey() {
         PSQLException ex = new PSQLException(
             "ERROR: duplicate key value violates unique constraint",
-            PSQLState.UNKNOWN_STATE
+            PSQLState.UNIQUE_VIOLATION
         );
 
         ResponseEntity<Object> response = translator.handlePsqlException(ex, request);
@@ -498,7 +498,11 @@ class ExceptionTranslatorTest {
         ProblemDetail body = bodyOf(response);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
-        assertThat(body.getProperties()).containsEntry("message", ex.getMessage());
+
+        assertThat(body.getProperties()).containsEntry(
+            "message",
+            "A resource with the specified identifier or unique field already exists."
+        );
     }
 
     @Test
@@ -510,7 +514,10 @@ class ExceptionTranslatorTest {
         ProblemDetail body = bodyOf(response);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(body.getProperties()).containsEntry("message", ex.getMessage());
+        assertThat(body.getProperties()).containsEntry(
+            "message",
+            "An unexpected database error occurred. Please try again later."
+        );
     }
 
     @Test
