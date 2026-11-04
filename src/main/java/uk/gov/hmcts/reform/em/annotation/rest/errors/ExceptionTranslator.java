@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
+import org.postgresql.util.PSQLState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -239,8 +240,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(PSQLException.class)
     public ResponseEntity<Object> handlePsqlException(PSQLException ex, NativeWebRequest request) {
-        // 23505 = PostgreSQL standard SQLState for unique_violation
-        boolean isDuplicateKey = "23505".equals(ex.getSQLState());
+        boolean isDuplicateKey = PSQLState.UNIQUE_VIOLATION.getState().equals(ex.getSQLState());
 
         HttpStatus status = isDuplicateKey ? HttpStatus.CONFLICT : HttpStatus.INTERNAL_SERVER_ERROR;
 

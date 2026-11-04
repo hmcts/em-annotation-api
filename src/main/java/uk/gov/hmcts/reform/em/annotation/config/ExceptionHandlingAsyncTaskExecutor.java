@@ -34,8 +34,6 @@ import java.util.concurrent.Future;
 public class ExceptionHandlingAsyncTaskExecutor implements AsyncTaskExecutor,
     InitializingBean, DisposableBean {
 
-    static final String EXCEPTION_MESSAGE = "Caught async exception";
-
     private final Logger log = LoggerFactory.getLogger(ExceptionHandlingAsyncTaskExecutor.class);
 
     private final AsyncTaskExecutor executor;
