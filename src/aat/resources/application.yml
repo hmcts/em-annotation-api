@@ -16,7 +16,10 @@ spring:
     enabled: false
   batch:
     initialize-schema: never
-  autoconfigure.exclude: org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration
+      - uk.gov.hmcts.reform.document.DocumentManagementClientAutoConfiguration
 
 management:
   endpoint:
