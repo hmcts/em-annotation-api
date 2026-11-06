@@ -105,7 +105,6 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Override
     public void delete(UUID id) {
         String currentUser = getCurrentUser();
-        log.debug("Request to delete Bookmark : {} by user {}", id, currentUser);
 
         bookmarkRepository.findById(id).ifPresent(bookmark -> {
             if (!bookmark.getCreatedBy().equals(currentUser)) {
@@ -118,7 +117,6 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Override
     public void deleteAllById(List<UUID> ids) {
         String currentUser = getCurrentUser();
-        log.debug("Request to delete Bookmarks : {} by user {}", ids, currentUser);
         long unauthorizedCount = bookmarkRepository.countByIdInAndCreatedByNot(ids, currentUser);
         if (unauthorizedCount > 0) {
             throw new ResourceNotFoundException("One or more bookmarks not found");
