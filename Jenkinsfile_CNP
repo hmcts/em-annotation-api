@@ -62,13 +62,6 @@ withPipeline(type , product, component) {
     loadVaultSecrets(secrets)
     disableLegacyDeployment()
     enableAksStagingDeployment()
-    onMaster {
-        enableFortifyScan('em-anno-aat')
-
-        afterAlways('fortify-scan') {
-            steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
-        }
-    }
     enablePactAs([AppPipelineDsl.PactRoles.CONSUMER, AppPipelineDsl.PactRoles.PROVIDER])
 
 
