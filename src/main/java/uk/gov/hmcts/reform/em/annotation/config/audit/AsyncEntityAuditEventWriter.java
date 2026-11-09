@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ClassUtils;
 import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.em.annotation.domain.AbstractAuditingEntity;
 import uk.gov.hmcts.reform.em.annotation.domain.EntityAuditEvent;
@@ -65,7 +66,7 @@ public class AsyncEntityAuditEventWriter {
             entityData = objectMapper.writeValueAsString(entity);
         } catch (Exception e) {
             log.error("Could not serialize audit data for [{} ID: {}] due to [{}]. Root cause: {}",
-                entity.getClass().getSimpleName(),
+                ClassUtils.getUserClass(entity).getSimpleName(),
                 entity.getId(),
                 e.getClass().getSimpleName(),
                 NestedExceptionUtils.getMostSpecificCause(e).getClass().getSimpleName(),
