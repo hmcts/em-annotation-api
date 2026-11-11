@@ -12,6 +12,7 @@ import uk.gov.hmcts.reform.em.annotation.repository.EntityAuditEventRepository;
 
 import java.time.Instant;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -96,5 +97,21 @@ class AsyncEntityAuditEventWriterTest {
         asyncEntityAuditEventWriter.writeAuditEvent(mockEntity, EntityAuditAction.CREATE);
 
         verify(auditingEntityRepository, never()).save(any(EntityAuditEvent.class));
+    }
+
+    @Test
+    void writeAuditEventHandlesExceptionWhenPersistFails() throws Exception {
+        when(objectMapper.writeValueAsString(mockEntity)).thenReturn("{\"id\":\"789\"}");
+        when(mockEntity.getCreatedBy()).thenReturn("user");
+        when(mockEntity.getCreatedDate()).thenReturn(Instant.now());
+
+        when(auditingEntityRepository.save(any(EntityAuditEvent.class)))
+            .thenThrow(new RuntimeException("Database error during save"));
+
+        assertDoesNotThrow(() ->
+            asyncEntityAuditEventWriter.writeAuditEvent(mockEntity, EntityAuditAction.CREATE)
+        );
+
+        verify(auditingEntityRepository).save(any(EntityAuditEvent.class));
     }
 }

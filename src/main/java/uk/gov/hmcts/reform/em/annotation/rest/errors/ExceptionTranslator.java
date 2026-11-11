@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
+import org.postgresql.util.PSQLState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -239,15 +240,22 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(PSQLException.class)
     public ResponseEntity<Object> handlePsqlException(PSQLException ex, NativeWebRequest request) {
-        LOG.info("Em-Annotation SQL exception: {}", ex.getMessage());
+        boolean isDuplicateKey = PSQLState.UNIQUE_VIOLATION.getState().equals(ex.getSQLState());
 
-        HttpStatus status = StringUtils.contains(ex.getMessage(),
-            "duplicate key value violates unique constraint")
-            ? HttpStatus.CONFLICT
-            : HttpStatus.INTERNAL_SERVER_ERROR;
+        HttpStatus status = isDuplicateKey ? HttpStatus.CONFLICT : HttpStatus.INTERNAL_SERVER_ERROR;
 
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, ex.getMessage());
-        problemDetail.setProperty(MESSAGE_FIELD, ex.getMessage());
+        if (isDuplicateKey) {
+            LOG.warn("Database unique constraint conflict occurred. SQLState: {}", ex.getSQLState());
+        } else {
+            LOG.error("Unexpected database exception occurred. SQLState: {}", ex.getSQLState(), ex);
+        }
+
+        String clientDetail = isDuplicateKey
+            ? "A resource with the specified identifier or unique field already exists."
+            : "An unexpected database error occurred. Please try again later.";
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, clientDetail);
+        problemDetail.setProperty(MESSAGE_FIELD, clientDetail);
 
         return new ResponseEntity<>(problemDetail, new HttpHeaders(), problemDetail.getStatus());
     }

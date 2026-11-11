@@ -2,8 +2,10 @@ package uk.gov.hmcts.reform.em.annotation.config.audit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.NestedExceptionUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ClassUtils;
 import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.em.annotation.domain.AbstractAuditingEntity;
 import uk.gov.hmcts.reform.em.annotation.domain.EntityAuditEvent;
@@ -41,7 +43,8 @@ public class AsyncEntityAuditEventWriter {
                 auditingEntityRepository.save(auditedEntity);
             }
         } catch (Exception e) {
-            log.error("Exception while persisting audit entity for {} error: {}", target, e.getMessage(), e);
+            log.error("Exception while persisting audit entity for [{} ID: {}] error: {}",
+                target.getClass().getSimpleName(), target.getId(), e.getMessage(), e);
         }
     }
 
@@ -62,8 +65,13 @@ public class AsyncEntityAuditEventWriter {
         try {
             entityData = objectMapper.writeValueAsString(entity);
         } catch (Exception e) {
-            log.error("Exception while getting entity content {}", e.getMessage(), e);
-            // returning null as we dont want to raise an application exception here
+            log.error("Could not serialize audit data for [{} ID: {}] due to [{}]. Root cause: {}",
+                ClassUtils.getUserClass(entity).getSimpleName(),
+                entity.getId(),
+                e.getClass().getSimpleName(),
+                NestedExceptionUtils.getMostSpecificCause(e).getClass().getSimpleName(),
+                e
+            );
             return null;
         }
         auditedEntity.setEntityId(entity.getId());
@@ -77,7 +85,8 @@ public class AsyncEntityAuditEventWriter {
             auditedEntity.setModifiedDate(entity.getLastModifiedDate());
             calculateVersion(auditedEntity);
         }
-        log.trace("Audit Entity --> {} ", auditedEntity);
+        log.trace("Prepared audit entity for [{} ID: {}] with version {}",
+            auditedEntity.getEntityType(), auditedEntity.getEntityId(), auditedEntity.getCommitVersion());
         return auditedEntity;
     }
 

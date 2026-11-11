@@ -103,7 +103,7 @@ public class ExceptionTranslatorTestController {
 
     @GetMapping("/test/psql-key-violation")
     public void psqlException() throws PSQLException {
-        throw new PSQLException("duplicate key value violates unique constraint", PSQLState.CHECK_VIOLATION);
+        throw new PSQLException("duplicate key value violates unique constraint", PSQLState.UNIQUE_VIOLATION);
     }
 
     @GetMapping("/test/psql-exception")
