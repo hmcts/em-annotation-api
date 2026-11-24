@@ -66,8 +66,11 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
         problemDetail.setTitle("Method argument not valid");
         problemDetail.setProperty(FIELD_ERRORS, fieldErrors);
         problemDetail.setProperty(MESSAGE_FIELD, ErrorConstants.ERR_VALIDATION);
-        if (request instanceof ServletWebRequest servletWebRequest) {
-            problemDetail.setInstance(URI.create(servletWebRequest.getRequest().getRequestURI()));
+        if (request instanceof NativeWebRequest nativeWebRequest) {
+            HttpServletRequest servletRequest = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
+            if (servletRequest != null) {
+                problemDetail.setInstance(URI.create(servletRequest.getRequestURI()));
+            }
         }
 
         return new ResponseEntity<>(problemDetail, headers, status);
