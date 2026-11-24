@@ -34,6 +34,7 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import uk.gov.hmcts.reform.em.annotation.rest.util.HeaderUtil;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -65,6 +66,9 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
         problemDetail.setTitle("Method argument not valid");
         problemDetail.setProperty(FIELD_ERRORS, fieldErrors);
         problemDetail.setProperty(MESSAGE_FIELD, ErrorConstants.ERR_VALIDATION);
+        if (request instanceof ServletWebRequest servletWebRequest) {
+            problemDetail.setInstance(URI.create(servletWebRequest.getRequest().getRequestURI()));
+        }
 
         return new ResponseEntity<>(problemDetail, headers, status);
     }
